@@ -43,7 +43,7 @@ The development site is then available at `http://127.0.0.1:8000/`. The Django a
 
 ## SQ-001 – Swedish site
 
-The public application is named **Odlingskampanjen** and uses Swedish user-facing text. Django's own translated validation messages are activated in Swedish for public requests, while `/admin/` remains in English for now.
+The application is named **Odlingskampanjen** and uses Swedish throughout, including Django's built-in administration interface and translated validation messages.
 
 ## BA-001 – Django project
 
