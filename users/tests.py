@@ -80,7 +80,7 @@ class UserAccountTests(TestCase):
         self.assertContains(response, "Logga in")
         self.assertContains(response, "Lösenord")
 
-    def test_admin_remains_english(self):
+    def test_admin_is_swedish(self):
         response = self.client.get("/admin/login/")
 
-        self.assertContains(response, "Log in")
+        self.assertContains(response, "Logga in")
