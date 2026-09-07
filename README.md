@@ -51,17 +51,23 @@ The project uses its own `users.User` model, based on Django's `AbstractUser`. I
 
 BA-002 deliberately adds no application-specific user fields. Future tasks can extend the project-owned user model without replacing Django's built-in user model after database migrations have been established.
 
-For a new local database, apply migrations with:
+## BA-010 – User accounts
+
+Visitors can create an account with name, email address and password at `/accounts/register/`. The email address is used as the account's internal Django username, so users do not need a separate username.
+
+Registered users can log in with email and password at `/accounts/login/` and log out from their account page. `/account/` is login-protected and redirects anonymous visitors to the login page.
+
+Run the BA-010 account tests with:
 
 ```bash
-python manage.py migrate
+python manage.py test users
 ```
 
 ### Verification
 
-Run Django's system checks and confirm that no model changes are missing migrations:
+Run Django's system checks and the test suite:
 
 ```bash
 python manage.py check
-python manage.py makemigrations --check
+python manage.py test
 ```
