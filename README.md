@@ -1,4 +1,4 @@
-# SARF Breeder Award
+# Odlingskampanjen
 
 Breeder Award Program for multiple associations.
 
@@ -40,6 +40,10 @@ python manage.py runserver
 ```
 
 The development site is then available at `http://127.0.0.1:8000/`. The Django administration site is available at `/admin/`.
+
+## SQ-001 – Swedish site
+
+The public application is named **Odlingskampanjen** and uses Swedish user-facing text. Django's own translated validation messages are activated in Swedish for public requests, while `/admin/` remains in English for now.
 
 ## BA-001 – Django project
 
