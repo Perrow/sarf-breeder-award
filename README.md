@@ -51,6 +51,12 @@ The project uses its own `users.User` model, based on Django's `AbstractUser`. I
 
 BA-002 deliberately adds no application-specific user fields. Future tasks can extend the project-owned user model without replacing Django's built-in user model after database migrations have been established.
 
+## BA-003 – Basic templates and Bootstrap
+
+The project has a shared Django template structure with `templates/base.html`, a home page and reusable navigation, messages and footer includes. Bootstrap 5 is loaded by the base template, and the navigation collapses on smaller screens.
+
+Application templates inherit `base.html`. Django messages are rendered through the shared messages include.
+
 ## BA-010 – User accounts
 
 Visitors can create an account with name, email address and password at `/accounts/register/`. The email address is used as the account's internal Django username, so users do not need a separate username.
