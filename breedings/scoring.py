@@ -25,3 +25,24 @@ def points_for_registration(registration):
     if not registration.awarded_breeding_class:
         return None
     return points_for_breeding_class(registration.awarded_breeding_class)
+
+
+def career_points(user):
+    """Return career points, counting each species at most once."""
+    best_points_by_species = {}
+    registrations = BreedingRegistration.objects.filter(
+        owner=user,
+        status=BreedingRegistration.Status.APPROVED,
+        species__isnull=False,
+    ).only("species_id", "status", "awarded_breeding_class")
+
+    for registration in registrations:
+        points = points_for_registration(registration)
+        if points is None:
+            continue
+        best_points_by_species[registration.species_id] = max(
+            points,
+            best_points_by_species.get(registration.species_id, 0),
+        )
+
+    return sum(best_points_by_species.values())
