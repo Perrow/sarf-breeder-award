@@ -14,7 +14,10 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
-        if User.objects.filter(username__iexact=email).exists():
+        if (
+            User.objects.filter(username__iexact=email).exists()
+            or User.objects.filter(email__iexact=email).exists()
+        ):
             raise forms.ValidationError("Det finns redan ett konto med den e-postadressen.")
         return email
 
