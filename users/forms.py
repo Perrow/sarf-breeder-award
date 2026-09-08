@@ -36,3 +36,14 @@ class RegistrationForm(UserCreationForm):
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label="E-post")
+
+
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ("display_name", "location", "avatar_url")
+        labels = {
+            "display_name": "Visningsnamn",
+            "location": "Ort",
+            "avatar_url": "Profilbild (URL)",
+        }
