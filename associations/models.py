@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -11,6 +12,11 @@ class Association(models.Model):
     postal_code = models.CharField(max_length=20, blank=True)
     city = models.CharField(max_length=100, blank=True)
     description = models.TextField(blank=True)
+
+    def clean(self):
+        super().clean()
+        if self.name is not None and not self.name.strip():
+            raise ValidationError({"name": "Ange föreningens namn."})
 
     def __str__(self):
         return self.name
