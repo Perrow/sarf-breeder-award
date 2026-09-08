@@ -51,7 +51,7 @@ class UserAccountTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("_auth_user_id", self.client.session)
-        self.assertContains(response, "Ange en korrekt")
+        self.assertContains(response, "Ange ett korrekt")
 
     def test_account_page_is_not_accessible_anonymously(self):
         response = self.client.get(reverse("account"))
