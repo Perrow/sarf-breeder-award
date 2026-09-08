@@ -28,6 +28,7 @@ class Membership(models.Model):
         related_name="memberships",
     )
     member_number = models.CharField(max_length=100, blank=True)
+    phone = models.CharField(max_length=50, blank=True)
     association_data = models.TextField(blank=True)
 
     class Meta:
