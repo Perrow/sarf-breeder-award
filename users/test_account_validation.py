@@ -16,7 +16,7 @@ class AccountValidationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Ange en giltig e-postadress")
+        self.assertContains(response, "Fyll i en giltig e-postadress.")
         self.assertEqual(get_user_model().objects.count(), 0)
 
     def test_required_fields_cannot_be_bypassed_with_direct_post(self):
