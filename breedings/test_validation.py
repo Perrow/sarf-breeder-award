@@ -51,8 +51,9 @@ class BreedingValidationTests(TestCase):
 
     def test_other_association_cannot_be_selected_by_direct_post(self):
         response = self.client.post(reverse("breeding_create"), self._data(association=self.other_association.pk))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(BreedingRegistration.objects.count(), 0)
+        self.assertRedirects(response, reverse("breeding_list"))
+        registration = BreedingRegistration.objects.get()
+        self.assertEqual(registration.association, self.association)
 
     def test_inactive_species_cannot_be_selected_by_direct_post(self):
         response = self.client.post(reverse("breeding_create"), self._data(species=self.inactive_species.pk))
