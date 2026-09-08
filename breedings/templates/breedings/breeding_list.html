@@ -26,7 +26,10 @@
             </td>
             <td>{{ registration.association }}</td>
             <td>{{ registration.get_status_display }}</td>
-            <td>{% if registration.status == "draft" %}<a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>{% endif %}</td>
+            <td class="text-nowrap">
+                <a href="{% url 'breeding_detail' registration.pk %}">Visa</a>
+                {% if registration.status == "draft" %} · <a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>{% endif %}
+            </td>
         </tr>
     {% endfor %}
     </tbody>

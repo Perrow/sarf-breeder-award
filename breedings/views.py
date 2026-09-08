@@ -14,6 +14,20 @@ def breeding_list(request):
 
 
 @login_required
+def breeding_detail(request, pk):
+    registration = get_object_or_404(
+        BreedingRegistration,
+        pk=pk,
+        owner=request.user,
+    )
+    return render(
+        request,
+        "breedings/breeding_detail.html",
+        {"registration": registration},
+    )
+
+
+@login_required
 def breeding_create(request):
     return _edit_breeding(request)
 
