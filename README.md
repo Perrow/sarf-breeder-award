@@ -69,6 +69,22 @@ Run the BA-010 account tests with:
 python manage.py test users
 ```
 
+## BA-020 – Genera
+
+Scientific genera are stored separately in `taxonomy.Genus`. A genus has a required unique scientific name and an active/inactive flag. Inactivation preserves the genus record so it can remain referenced by historical data.
+
+Apply the BA-020 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the genus model tests with:
+
+```bash
+python manage.py test taxonomy
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:
