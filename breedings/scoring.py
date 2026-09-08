@@ -11,7 +11,6 @@ BREEDING_CLASS_POINTS = {
 
 
 def points_for_breeding_class(breeding_class):
-    """Return points for a valid breeding class."""
     try:
         return BREEDING_CLASS_POINTS[breeding_class]
     except KeyError as exc:
@@ -19,7 +18,6 @@ def points_for_breeding_class(breeding_class):
 
 
 def points_for_registration(registration):
-    """Return points for an approved registration, otherwise None."""
     if registration.status != BreedingRegistration.Status.APPROVED:
         return None
     if not registration.awarded_breeding_class:
@@ -28,7 +26,6 @@ def points_for_registration(registration):
 
 
 def career_points(user):
-    """Return career points, counting each species at most once."""
     best_points_by_species = {}
     registrations = BreedingRegistration.objects.filter(
         owner=user,
@@ -46,3 +43,17 @@ def career_points(user):
         )
 
     return sum(best_points_by_species.values())
+
+
+def competition_points(user, year):
+    registrations = BreedingRegistration.objects.filter(
+        owner=user,
+        status=BreedingRegistration.Status.APPROVED,
+        breeding_date__year=year,
+    ).only("status", "awarded_breeding_class")
+
+    return sum(
+        points
+        for registration in registrations
+        if (points := points_for_registration(registration)) is not None
+    )
