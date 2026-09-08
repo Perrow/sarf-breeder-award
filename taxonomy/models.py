@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
 
@@ -75,6 +76,16 @@ class Species(models.Model):
                 name="unique_genus_species_scientific_name",
             ),
         ]
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if self.scientific_name is not None and not self.scientific_name.strip():
+            errors["scientific_name"] = "Ange ett artnamn."
+        if self.common_name is not None and not self.common_name.strip():
+            errors["common_name"] = "Ange ett populärnamn."
+        if errors:
+            raise ValidationError(errors)
 
     def get_species_groups(self):
         return SpeciesGroup.objects.filter(
