@@ -32,6 +32,7 @@ class ReviewDecisionForm(forms.Form):
     review_comment = forms.CharField(
         label="Granskningskommentar",
         required=False,
+        max_length=2000,
         widget=forms.Textarea(attrs={"rows": 5}),
     )
 
