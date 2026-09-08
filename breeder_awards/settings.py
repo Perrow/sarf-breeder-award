@@ -20,6 +20,7 @@ INSTALLED_APPS = [
     "associations",
     "taxonomy",
     "breedings",
+    "progression",
 ]
 
 MIDDLEWARE = [
