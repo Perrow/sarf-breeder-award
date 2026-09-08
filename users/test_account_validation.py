@@ -66,6 +66,7 @@ class AccountValidationTests(TestCase):
             {
                 "name": "Test Person",
                 "email": "test@example.com",
+                "public_username": "testperson",
                 "password1": "Valid-password-123",
                 "password2": "Valid-password-123",
             },
