@@ -39,6 +39,7 @@ class SpeciesAdmin(admin.ModelAdmin):
         "common_name",
         "english_name",
         "synonyms__scientific_name",
+        "synonyms__common_name",
     )
     inlines = (SpeciesSynonymInline,)
 
@@ -52,6 +53,8 @@ class SpeciesSynonymAdmin(admin.ModelAdmin):
     list_display = ("scientific_name", "species")
     search_fields = (
         "scientific_name",
+        "common_name",
         "species__scientific_name",
+        "species__common_name",
         "species__genus__scientific_name",
     )

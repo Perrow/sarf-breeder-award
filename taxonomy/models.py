@@ -94,19 +94,38 @@ class SpeciesSynonym(models.Model):
     )
     scientific_name = models.CharField(
         max_length=200,
+        blank=True,
         verbose_name="vetenskapligt namn",
+    )
+    common_name = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="populärnamn",
     )
 
     class Meta:
-        ordering = ["scientific_name"]
+        ordering = ["scientific_name", "common_name"]
         verbose_name = "artsynonym"
         verbose_name_plural = "artsynonymer"
         constraints = [
+            models.CheckConstraint(
+                condition=(
+                    (Q(scientific_name="") & ~Q(common_name=""))
+                    | (~Q(scientific_name="") & Q(common_name=""))
+                ),
+                name="species_synonym_exactly_one_name",
+            ),
             models.UniqueConstraint(
                 fields=("species", "scientific_name"),
+                condition=~Q(scientific_name=""),
                 name="unique_species_synonym_scientific_name",
+            ),
+            models.UniqueConstraint(
+                fields=("species", "common_name"),
+                condition=~Q(common_name=""),
+                name="unique_species_synonym_common_name",
             ),
         ]
 
     def __str__(self):
-        return self.scientific_name
+        return self.scientific_name or self.common_name
