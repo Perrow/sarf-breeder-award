@@ -16,7 +16,14 @@
     {% for registration in registrations %}
         <tr>
             <td>{{ registration.breeding_date }}</td>
-            <td>{{ registration.species }}</td>
+            <td>
+                {% if registration.species %}
+                    {{ registration.species }}
+                {% else %}
+                    {{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}
+                    {% if registration.proposed_common_name %}<span class="text-body-secondary">({{ registration.proposed_common_name }})</span>{% endif %}
+                {% endif %}
+            </td>
             <td>{{ registration.association }}</td>
             <td>{{ registration.get_status_display }}</td>
             <td>{% if registration.status == "draft" %}<a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>{% endif %}</td>
