@@ -147,6 +147,24 @@ Run the taxonomy tests with:
 python manage.py test taxonomy
 ```
 
+## BA-024 – Species synonyms and previous scientific names
+
+Alternative and historical scientific names are stored in `taxonomy.SpeciesSynonym` and linked to the current `Species` record. A species can have multiple synonyms, and each synonym stores the complete historical scientific name so changes of genus can be represented.
+
+Synonyms are administered separately in Django Admin and can be searched by historical name. Removing a synonym does not change or remove the current species record.
+
+Apply the BA-024 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the taxonomy tests with:
+
+```bash
+python manage.py test taxonomy
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:

@@ -72,3 +72,30 @@ class Species(models.Model):
 
     def __str__(self):
         return f"{self.genus} {self.scientific_name}"
+
+
+class SpeciesSynonym(models.Model):
+    species = models.ForeignKey(
+        Species,
+        on_delete=models.CASCADE,
+        related_name="synonyms",
+        verbose_name="art",
+    )
+    scientific_name = models.CharField(
+        max_length=200,
+        verbose_name="vetenskapligt namn",
+    )
+
+    class Meta:
+        ordering = ["scientific_name"]
+        verbose_name = "artsynonym"
+        verbose_name_plural = "artsynonymer"
+        constraints = [
+            models.UniqueConstraint(
+                fields=("species", "scientific_name"),
+                name="unique_species_synonym_scientific_name",
+            ),
+        ]
+
+    def __str__(self):
+        return self.scientific_name
