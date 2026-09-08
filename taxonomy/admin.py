@@ -13,6 +13,8 @@ class GenusAdmin(admin.ModelAdmin):
 @admin.register(SpeciesGroup)
 class SpeciesGroupAdmin(admin.ModelAdmin):
     list_display = ("name",)
+    search_fields = ("name",)
+    filter_horizontal = ("genera", "species")
 
 
 class SpeciesSynonymInline(admin.TabularInline):
@@ -26,11 +28,11 @@ class SpeciesAdmin(admin.ModelAdmin):
         "genus",
         "scientific_name",
         "common_name",
-        "species_group",
+        "group_names",
         "breeding_class",
         "is_active",
     )
-    list_filter = ("is_active", "species_group", "breeding_class", "genus")
+    list_filter = ("is_active", "breeding_class", "genus")
     search_fields = (
         "scientific_name",
         "genus__scientific_name",
@@ -39,6 +41,10 @@ class SpeciesAdmin(admin.ModelAdmin):
         "synonyms__scientific_name",
     )
     inlines = (SpeciesSynonymInline,)
+
+    @admin.display(description="artgrupper")
+    def group_names(self, obj):
+        return ", ".join(obj.get_species_groups().values_list("name", flat=True))
 
 
 @admin.register(SpeciesSynonym)

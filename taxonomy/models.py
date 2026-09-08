@@ -1,4 +1,5 @@
 from django.db import models
+from django.db.models import Q
 
 
 class Genus(models.Model):
@@ -16,6 +17,18 @@ class Genus(models.Model):
 
 class SpeciesGroup(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="namn")
+    genera = models.ManyToManyField(
+        Genus,
+        blank=True,
+        related_name="species_groups",
+        verbose_name="släkten",
+    )
+    species = models.ManyToManyField(
+        "Species",
+        blank=True,
+        related_name="direct_species_groups",
+        verbose_name="arter",
+    )
 
     class Meta:
         ordering = ["name"]
@@ -45,13 +58,6 @@ class Species(models.Model):
         blank=True,
         verbose_name="engelskt namn",
     )
-    family = models.CharField(max_length=100, verbose_name="familj")
-    species_group = models.ForeignKey(
-        SpeciesGroup,
-        on_delete=models.PROTECT,
-        related_name="species",
-        verbose_name="artgrupp",
-    )
     breeding_class = models.CharField(
         max_length=6,
         choices=BreedingClass.choices,
@@ -69,6 +75,11 @@ class Species(models.Model):
                 name="unique_genus_species_scientific_name",
             ),
         ]
+
+    def get_species_groups(self):
+        return SpeciesGroup.objects.filter(
+            Q(genera=self.genus) | Q(species=self)
+        ).distinct()
 
     def __str__(self):
         return f"{self.genus} {self.scientific_name}"
