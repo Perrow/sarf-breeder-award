@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}{% if registration %}Redigera odling{% else %}Registrera odling{% endif %} | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>{% if registration %}Redigera odling{% else %}Registrera odling{% endif %}</h1>
+<form method="post">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+
+    {% if form.single_association %}
+        <p><strong>Förening:</strong> {{ form.single_association }} {{ form.association }}</p>
+    {% else %}
+        <p>{{ form.association.label_tag }} {{ form.association }} {{ form.association.errors }}</p>
+    {% endif %}
+    <p>{{ form.species.label_tag }} {{ form.species }} {{ form.species.errors }}</p>
+
+    <div id="free-text-taxonomy">
+        <p>{{ form.proposed_genus_name.label_tag }} {{ form.proposed_genus_name }} {{ form.proposed_genus_name.errors }}</p>
+        <p>{{ form.proposed_species_name.label_tag }} {{ form.proposed_species_name }} {{ form.proposed_species_name.errors }}</p>
+        <p>{{ form.proposed_common_name.label_tag }} {{ form.proposed_common_name }} {{ form.proposed_common_name.errors }}</p>
+    </div>
+
+    <p>{{ form.breeding_date.label_tag }} {{ form.breeding_date }} {{ form.breeding_date.errors }}</p>
+    <p>{{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}</p>
+
+    <div class="d-flex gap-2">
+        <button class="btn btn-outline-primary" type="submit" name="action" value="draft">Spara utkast</button>
+        <button class="btn btn-primary" type="submit" name="action" value="submit">Skicka in</button>
+    </div>
+</form>
+<p class="mt-3"><a href="{% url 'breeding_list' %}">Till mina odlingar</a></p>
+
+<script>
+(function () {
+    const speciesSelect = document.getElementById("id_species");
+    const freeTextContainer = document.getElementById("free-text-taxonomy");
+    const freeTextInputs = freeTextContainer.querySelectorAll("input");
+
+    function updateFreeTextTaxonomy() {
+        const speciesSelected = speciesSelect.value !== "";
+        freeTextContainer.hidden = speciesSelected;
+        freeTextInputs.forEach(function (input) {
+            input.disabled = speciesSelected;
+        });
+    }
+
+    speciesSelect.addEventListener("change", updateFreeTextTaxonomy);
+    updateFreeTextTaxonomy();
+})();
+</script>
+{% endblock %}

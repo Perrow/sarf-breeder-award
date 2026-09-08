@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Odlingsrapport | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Odlingsrapport</h1>
+    <div class="d-flex gap-2">
+        {% if registration.status == "draft" %}
+            <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera utkast</a>
+        {% elif registration.status == "submitted" %}
+            <form method="post" action="{% url 'breeding_return_to_draft' registration.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary" type="submit">Återgå till utkast</button>
+            </form>
+        {% endif %}
+    </div>
+</div>
+
+<dl class="row">
+    <dt class="col-sm-4">Användare</dt><dd class="col-sm-8">{{ registration.owner }}</dd>
+    <dt class="col-sm-4">Förening</dt><dd class="col-sm-8">{{ registration.association }}</dd>
+    <dt class="col-sm-4">Art</dt><dd class="col-sm-8">{% if registration.species %}{{ registration.species }}{% else %}Inte vald{% endif %}</dd>
+    <dt class="col-sm-4">Föreslaget släkte</dt><dd class="col-sm-8">{{ registration.proposed_genus_name|default:"–" }}</dd>
+    <dt class="col-sm-4">Föreslaget artnamn</dt><dd class="col-sm-8">{{ registration.proposed_species_name|default:"–" }}</dd>
+    <dt class="col-sm-4">Föreslaget populärnamn</dt><dd class="col-sm-8">{{ registration.proposed_common_name|default:"–" }}</dd>
+    <dt class="col-sm-4">Taxonomi behöver lösas</dt><dd class="col-sm-8">{{ registration.taxonomy_needs_resolution|yesno:"Ja,Nej" }}</dd>
+    <dt class="col-sm-4">Odlingsdatum</dt><dd class="col-sm-8">{{ registration.breeding_date }}</dd>
+    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|linebreaksbr }}</dd>
+    <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ registration.get_status_display }}</dd>
+    <dt class="col-sm-4">Inskickad</dt><dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
+    <dt class="col-sm-4">Godkänd</dt><dd class="col-sm-8">{{ registration.approved_at|default:"–" }}</dd>
+    <dt class="col-sm-4">Tilldelad odlingsklass</dt><dd class="col-sm-8">{{ registration.get_awarded_breeding_class_display|default:"–" }}</dd>
+    <dt class="col-sm-4">Tilldelade poäng</dt><dd class="col-sm-8">{{ registration.awarded_points|default_if_none:"–" }}</dd>
+    <dt class="col-sm-4">Granskare</dt><dd class="col-sm-8">{{ registration.reviewer|default:"–" }}</dd>
+    <dt class="col-sm-4">Granskningskommentar</dt><dd class="col-sm-8">{{ registration.review_comment|default:"–"|linebreaksbr }}</dd>
+</dl>
+
+<p><a href="{% url 'breeding_list' %}">Till mina odlingar</a></p>
+{% endblock %}

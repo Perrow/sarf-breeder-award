@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block title %}Mina odlingar | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Mina odlingar</h1>
+    <a class="btn btn-primary" href="{% url 'breeding_create' %}">Registrera odling</a>
+</div>
+
+{% if registrations %}
+<div class="table-responsive">
+<table class="table align-middle">
+    <thead><tr><th>Datum</th><th>Art</th><th>Förening</th><th>Status</th><th></th></tr></thead>
+    <tbody>
+    {% for registration in registrations %}
+        <tr>
+            <td>{{ registration.breeding_date }}</td>
+            <td>
+                {% if registration.species %}
+                    {{ registration.species }}
+                {% else %}
+                    {{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}
+                    {% if registration.proposed_common_name %}<span class="text-body-secondary">({{ registration.proposed_common_name }})</span>{% endif %}
+                {% endif %}
+            </td>
+            <td>{{ registration.association }}</td>
+            <td>{{ registration.get_status_display }}</td>
+            <td class="text-nowrap">
+                <a href="{% url 'breeding_detail' registration.pk %}">Visa</a>
+                {% if registration.status == "draft" %} · <a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>{% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Du har ännu inga odlingsregistreringar.</p>
+{% endif %}
+{% endblock %}
