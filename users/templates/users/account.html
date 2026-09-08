@@ -1,13 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Account | SARF Breeder Award{% endblock %}
+{% block title %}Konto | Odlingskampanjen{% endblock %}
 
 {% block content %}
-<h1>Account</h1>
+<h1>Konto</h1>
 <p>{{ user.get_full_name|default:user.email }}</p>
 <p>{{ user.email }}</p>
 <form method="post" action="{% url 'logout' %}">
     {% csrf_token %}
-    <button class="btn btn-outline-secondary" type="submit">Log out</button>
+    <button class="btn btn-outline-secondary" type="submit">Logga ut</button>
 </form>
 {% endblock %}

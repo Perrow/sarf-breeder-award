@@ -1,17 +1,17 @@
 {% extends "base.html" %}
 
-{% block title %}Create account | SARF Breeder Award{% endblock %}
+{% block title %}Skapa konto | Odlingskampanjen{% endblock %}
 
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-12 col-md-8 col-lg-6">
-        <h1>Create account</h1>
+        <h1>Skapa konto</h1>
         <form method="post">
             {% csrf_token %}
             {{ form.as_p }}
-            <button class="btn btn-primary" type="submit">Create account</button>
+            <button class="btn btn-primary" type="submit">Skapa konto</button>
         </form>
-        <p class="mt-3"><a href="{% url 'login' %}">Log in</a></p>
+        <p class="mt-3"><a href="{% url 'login' %}">Logga in</a></p>
     </div>
 </div>
 {% endblock %}
