@@ -2,9 +2,14 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q
+from django.utils import timezone
 
 from associations.models import Association
 from taxonomy.models import Genus, Species, SpeciesGroup
+
+
+def current_competition_year():
+    return timezone.localdate().year
 
 
 class BreedingRegistration(models.Model):
@@ -50,7 +55,47 @@ class BreedingRegistration(models.Model):
         return f"{self.owner} – {species_name} – {self.breeding_date}"
 
 
+class AssociationCompetitionSettings(models.Model):
+    effective_from_year = models.PositiveIntegerField(
+        default=current_competition_year,
+        unique=True,
+        verbose_name="gäller från och med år",
+    )
+    default_max_registrations_per_genus = models.PositiveIntegerField(
+        verbose_name="standard: max odlingar per medlem och genus"
+    )
+
+    class Meta:
+        ordering = ("-effective_from_year",)
+        verbose_name = "inställning för föreningstävling"
+        verbose_name_plural = "inställningar för föreningstävling"
+
+    def clean(self):
+        super().clean()
+        if (
+            self.default_max_registrations_per_genus is not None
+            and self.default_max_registrations_per_genus < 1
+        ):
+            raise ValidationError(
+                {"default_max_registrations_per_genus": "Maxantalet måste vara minst 1."}
+            )
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return (
+            f"Från {self.effective_from_year}: max "
+            f"{self.default_max_registrations_per_genus} per medlem och genus"
+        )
+
+
 class AssociationCompetitionLimit(models.Model):
+    effective_from_year = models.PositiveIntegerField(
+        default=current_competition_year,
+        verbose_name="gäller från och med år",
+    )
     genus = models.ForeignKey(
         Genus,
         on_delete=models.PROTECT,
@@ -82,6 +127,16 @@ class AssociationCompetitionLimit(models.Model):
                 ),
                 name="association_limit_exactly_one_taxonomy_target",
             ),
+            models.UniqueConstraint(
+                fields=("effective_from_year", "genus"),
+                condition=Q(genus__isnull=False),
+                name="unique_association_genus_limit_per_year",
+            ),
+            models.UniqueConstraint(
+                fields=("effective_from_year", "species_group"),
+                condition=Q(species_group__isnull=False),
+                name="unique_association_group_limit_per_year",
+            ),
         ]
 
     def clean(self):
@@ -92,8 +147,49 @@ class AssociationCompetitionLimit(models.Model):
             errors["species_group"] = "Ange exakt ett släkte eller en artgrupp."
         if self.max_registrations_per_member is not None and self.max_registrations_per_member < 1:
             errors["max_registrations_per_member"] = "Maxantalet måste vara minst 1."
-        if self.species_group_id and self.species_group.species.exists():
-            errors["species_group"] = "Artgrupper med direktkopplade arter kan inte användas som begränsning."
+
+        if self.species_group_id:
+            if self.species_group.species.exists():
+                errors["species_group"] = (
+                    "Artgrupper med direktkopplade arter kan inte användas som begränsning."
+                )
+            elif not self.species_group.genera.exists():
+                errors["species_group"] = (
+                    "Artgruppen måste innehålla minst ett släkte för att kunna användas."
+                )
+            else:
+                overlapping_genus = (
+                    AssociationCompetitionLimit.objects.filter(
+                        genus__in=self.species_group.genera.all(),
+                        effective_from_year__lte=self.effective_from_year,
+                    )
+                    .exclude(pk=self.pk)
+                    .select_related("genus")
+                    .order_by("-effective_from_year")
+                    .first()
+                )
+                if overlapping_genus:
+                    errors["species_group"] = (
+                        f"Artgruppen överlappar en regel för släktet {overlapping_genus.genus}."
+                    )
+
+        if self.genus_id:
+            overlapping_group = (
+                AssociationCompetitionLimit.objects.filter(
+                    species_group__genera=self.genus,
+                    effective_from_year__lte=self.effective_from_year,
+                )
+                .exclude(pk=self.pk)
+                .select_related("species_group")
+                .order_by("-effective_from_year")
+                .first()
+            )
+            if overlapping_group:
+                errors["genus"] = (
+                    f"Släktet ingår redan i artgruppen {overlapping_group.species_group}, "
+                    "som har en begränsningsregel."
+                )
+
         if errors:
             raise ValidationError(errors)
 
@@ -103,4 +199,7 @@ class AssociationCompetitionLimit(models.Model):
 
     def __str__(self):
         target = self.genus or self.species_group
-        return f"{target}: max {self.max_registrations_per_member} per medlem och år"
+        return (
+            f"{target}: max {self.max_registrations_per_member} per medlem och år "
+            f"(från {self.effective_from_year})"
+        )
