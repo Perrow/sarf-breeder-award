@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
-from .admin import GenusAdmin
-from .models import Genus
+from .admin import GenusAdmin, SpeciesGroupAdmin
+from .models import Genus, SpeciesGroup
 
 
 class GenusModelTests(TestCase):
@@ -102,3 +102,66 @@ class GenusAdminTests(TestCase):
 
         self.assertContains(response, "Betta")
         self.assertNotContains(response, "Corydoras")
+
+
+class SpeciesGroupModelTests(TestCase):
+    def test_name_is_required(self):
+        species_group = SpeciesGroup(name="")
+
+        with self.assertRaises(ValidationError):
+            species_group.full_clean()
+
+    def test_name_is_unique(self):
+        SpeciesGroup.objects.create(name="Ciklider")
+        duplicate = SpeciesGroup(name="Ciklider")
+
+        with self.assertRaises(ValidationError):
+            duplicate.full_clean()
+
+    def test_string_representation_is_name(self):
+        species_group = SpeciesGroup(name="Killifiskar")
+
+        self.assertEqual(str(species_group), "Killifiskar")
+
+
+class SpeciesGroupAdminTests(TestCase):
+    def setUp(self):
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="species-group-admin@example.com",
+            email="species-group-admin@example.com",
+            password="test-password",
+        )
+        self.client.force_login(self.admin_user)
+
+    def test_species_group_is_registered_in_admin(self):
+        model_admin = admin.site._registry[SpeciesGroup]
+
+        self.assertIsInstance(model_admin, SpeciesGroupAdmin)
+        self.assertEqual(model_admin.list_display, ("name",))
+
+    def test_admin_can_create_species_group(self):
+        response = self.client.post(
+            reverse("admin:taxonomy_speciesgroup_add"),
+            {
+                "name": "Labyrintfiskar",
+                "_save": "Spara",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(SpeciesGroup.objects.filter(name="Labyrintfiskar").exists())
+
+    def test_admin_can_edit_species_group(self):
+        species_group = SpeciesGroup.objects.create(name="Malar")
+
+        response = self.client.post(
+            reverse("admin:taxonomy_speciesgroup_change", args=(species_group.pk,)),
+            {
+                "name": "Malartade fiskar",
+                "_save": "Spara",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        species_group.refresh_from_db()
+        self.assertEqual(species_group.name, "Malartade fiskar")
