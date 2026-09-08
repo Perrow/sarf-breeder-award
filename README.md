@@ -73,6 +73,24 @@ Run the BA-010 account tests with:
 python manage.py test users
 ```
 
+## BA-011 – Associations and memberships
+
+The `associations` app contains the `Association` and `Membership` models. Associations store their name, organization number, contact details, address and description. A membership links one user to one association and can store a member number and association-specific information.
+
+A user can belong to multiple associations. The same user cannot have duplicate memberships in the same association.
+
+Apply the BA-011 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the BA-011 model tests with:
+
+```bash
+python manage.py test associations
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:
