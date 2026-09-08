@@ -1,9 +1,10 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.db.models import Q
 
 from associations.models import Association
-from taxonomy.models import Species
+from taxonomy.models import Genus, Species, SpeciesGroup
 
 
 class BreedingRegistration(models.Model):
@@ -47,3 +48,59 @@ class BreedingRegistration(models.Model):
     def __str__(self):
         species_name = self.species or f"{self.proposed_genus_name} {self.proposed_species_name}".strip()
         return f"{self.owner} – {species_name} – {self.breeding_date}"
+
+
+class AssociationCompetitionLimit(models.Model):
+    genus = models.ForeignKey(
+        Genus,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="association_competition_limits",
+        verbose_name="släkte",
+    )
+    species_group = models.ForeignKey(
+        SpeciesGroup,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="association_competition_limits",
+        verbose_name="artgrupp",
+    )
+    max_registrations_per_member = models.PositiveIntegerField(
+        verbose_name="max odlingar per medlem och år"
+    )
+
+    class Meta:
+        verbose_name = "begränsning för föreningstävling"
+        verbose_name_plural = "begränsningar för föreningstävling"
+        constraints = [
+            models.CheckConstraint(
+                condition=(
+                    Q(genus__isnull=False, species_group__isnull=True)
+                    | Q(genus__isnull=True, species_group__isnull=False)
+                ),
+                name="association_limit_exactly_one_taxonomy_target",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if (self.genus_id is None) == (self.species_group_id is None):
+            errors["genus"] = "Ange exakt ett släkte eller en artgrupp."
+            errors["species_group"] = "Ange exakt ett släkte eller en artgrupp."
+        if self.max_registrations_per_member is not None and self.max_registrations_per_member < 1:
+            errors["max_registrations_per_member"] = "Maxantalet måste vara minst 1."
+        if self.species_group_id and self.species_group.species.exists():
+            errors["species_group"] = "Artgrupper med direktkopplade arter kan inte användas som begränsning."
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        target = self.genus or self.species_group
+        return f"{target}: max {self.max_registrations_per_member} per medlem och år"
