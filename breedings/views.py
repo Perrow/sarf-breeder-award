@@ -28,6 +28,26 @@ def breeding_detail(request, pk):
 
 
 @login_required
+def breeding_return_to_draft(request, pk):
+    registration = get_object_or_404(
+        BreedingRegistration,
+        pk=pk,
+        owner=request.user,
+    )
+    if request.method != "POST":
+        return redirect("breeding_detail", pk=registration.pk)
+    if registration.status != BreedingRegistration.Status.SUBMITTED:
+        messages.error(request, "Endast en inskickad odlingsregistrering kan återgå till utkast.")
+        return redirect("breeding_detail", pk=registration.pk)
+
+    registration.status = BreedingRegistration.Status.DRAFT
+    registration.submitted_at = None
+    registration.save(update_fields=("status", "submitted_at"))
+    messages.success(request, "Odlingsregistreringen har återställts till utkast.")
+    return redirect("breeding_edit", pk=registration.pk)
+
+
+@login_required
 def breeding_create(request):
     return _edit_breeding(request)
 
