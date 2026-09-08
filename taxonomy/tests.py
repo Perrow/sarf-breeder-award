@@ -4,8 +4,8 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase
 from django.urls import reverse
 
-from .admin import GenusAdmin, SpeciesGroupAdmin
-from .models import Genus, Species, SpeciesGroup
+from .admin import GenusAdmin, SpeciesGroupAdmin, SpeciesSynonymAdmin
+from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
 
 
 class GenusModelTests(TestCase):
@@ -262,3 +262,122 @@ class SpeciesModelTests(TestCase):
         species = self.create_species()
 
         self.assertEqual(str(species), "Corydoras aeneus")
+
+
+class SpeciesSynonymTests(TestCase):
+    def setUp(self):
+        genus = Genus.objects.create(scientific_name="Trichogaster")
+        species_group = SpeciesGroup.objects.create(name="Labyrintfiskar")
+        self.species = Species.objects.create(
+            genus=genus,
+            scientific_name="trichopterus",
+            common_name="Blå gurami",
+            family="Osphronemidae",
+            species_group=species_group,
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+
+    def test_species_can_have_multiple_synonyms(self):
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Trichopodus trichopterus",
+        )
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Osphromenus trichopterus",
+        )
+
+        self.assertEqual(self.species.synonyms.count(), 2)
+
+    def test_synonym_does_not_replace_current_species_name(self):
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Trichopodus trichopterus",
+        )
+
+        self.species.refresh_from_db()
+        self.assertEqual(str(self.species), "Trichogaster trichopterus")
+
+    def test_deleting_synonym_does_not_delete_or_change_species(self):
+        synonym = SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Trichopodus trichopterus",
+        )
+
+        synonym.delete()
+
+        self.species.refresh_from_db()
+        self.assertEqual(str(self.species), "Trichogaster trichopterus")
+        self.assertFalse(self.species.synonyms.exists())
+
+    def test_string_representation_is_historical_scientific_name(self):
+        synonym = SpeciesSynonym(
+            species=self.species,
+            scientific_name="Trichopodus trichopterus",
+        )
+
+        self.assertEqual(str(synonym), "Trichopodus trichopterus")
+
+
+class SpeciesSynonymAdminTests(TestCase):
+    def setUp(self):
+        genus = Genus.objects.create(scientific_name="Trichogaster")
+        species_group = SpeciesGroup.objects.create(name="Labyrintfiskar")
+        self.species = Species.objects.create(
+            genus=genus,
+            scientific_name="trichopterus",
+            common_name="Blå gurami",
+            family="Osphronemidae",
+            species_group=species_group,
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="synonym-admin@example.com",
+            email="synonym-admin@example.com",
+            password="test-password",
+        )
+        self.client.force_login(self.admin_user)
+
+    def test_synonym_is_registered_in_admin(self):
+        model_admin = admin.site._registry[SpeciesSynonym]
+
+        self.assertIsInstance(model_admin, SpeciesSynonymAdmin)
+        self.assertEqual(model_admin.list_display, ("scientific_name", "species"))
+
+    def test_admin_can_create_synonym_without_changing_species_name(self):
+        response = self.client.post(
+            reverse("admin:taxonomy_speciessynonym_add"),
+            {
+                "species": self.species.pk,
+                "scientific_name": "Trichopodus trichopterus",
+                "_save": "Spara",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            SpeciesSynonym.objects.filter(
+                species=self.species,
+                scientific_name="Trichopodus trichopterus",
+            ).exists()
+        )
+        self.species.refresh_from_db()
+        self.assertEqual(str(self.species), "Trichogaster trichopterus")
+
+    def test_admin_searches_synonyms_by_historical_name(self):
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Trichopodus trichopterus",
+        )
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Osphromenus trichopterus",
+        )
+
+        response = self.client.get(
+            reverse("admin:taxonomy_speciessynonym_changelist"),
+            {"q": "Trichopodus"},
+        )
+
+        self.assertContains(response, "Trichopodus trichopterus")
+        self.assertNotContains(response, "Osphromenus trichopterus")
