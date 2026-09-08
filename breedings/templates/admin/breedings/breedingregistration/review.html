@@ -7,6 +7,7 @@
     <dt>Användare</dt><dd>{{ registration.owner }}</dd>
     <dt>Förening</dt><dd>{{ registration.association }}</dd>
     <dt>Art</dt><dd>{% if registration.species %}{{ registration.species }}{% else %}Inte vald{% endif %}</dd>
+    <dt>Odlingsklass</dt><dd>{% if registration.species %}{{ registration.species.get_breeding_class_display }}{% else %}–{% endif %}</dd>
     <dt>Föreslaget släkte</dt><dd>{{ registration.proposed_genus_name|default:"–" }}</dd>
     <dt>Föreslaget artnamn</dt><dd>{{ registration.proposed_species_name|default:"–" }}</dd>
     <dt>Föreslaget populärnamn</dt><dd>{{ registration.proposed_common_name|default:"–" }}</dd>

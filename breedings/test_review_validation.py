@@ -49,26 +49,10 @@ class BreedingReviewValidationTests(TestCase):
     def review_url(self):
         return reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
 
-    def test_invalid_breeding_class_is_rejected_without_partial_update(self):
-        response = self.client.post(
-            self.review_url(),
-            {"decision": "approve", "awarded_breeding_class": "platinum", "review_comment": "Kommentar"},
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.registration.refresh_from_db()
-        self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
-        self.assertIsNone(self.registration.reviewer)
-        self.assertIsNone(self.registration.awarded_points)
-
     def test_too_long_review_comment_is_rejected(self):
         response = self.client.post(
             self.review_url(),
-            {
-                "decision": "reject",
-                "awarded_breeding_class": "",
-                "review_comment": "x" * 2001,
-            },
+            {"decision": "reject", "review_comment": "x" * 2001},
         )
 
         self.assertEqual(response.status_code, 200)
@@ -86,7 +70,7 @@ class BreedingReviewValidationTests(TestCase):
 
         response = self.client.post(
             self.review_url(),
-            {"decision": "reject", "awarded_breeding_class": "", "review_comment": "Försök"},
+            {"decision": "reject", "review_comment": "Försök"},
         )
 
         self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
@@ -99,7 +83,7 @@ class BreedingReviewValidationTests(TestCase):
             self.review_url(),
             {
                 "decision": "approve",
-                "awarded_breeding_class": Species.BreedingClass.BRONZE,
+                "awarded_breeding_class": Species.BreedingClass.GOLD,
                 "review_comment": "Godkänd",
                 "reviewer": self.attacker.pk,
                 "status": BreedingRegistration.Status.REJECTED,
@@ -112,10 +96,11 @@ class BreedingReviewValidationTests(TestCase):
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.reviewer, self.reviewer)
         self.assertEqual(self.registration.status, BreedingRegistration.Status.APPROVED)
+        self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.BRONZE)
         self.assertEqual(self.registration.awarded_points, 1)
         self.assertGreater(self.registration.approved_at, timezone.now() - timedelta(minutes=1))
 
-    def test_each_valid_class_gets_consistent_points(self):
+    def test_each_species_class_gets_consistent_points(self):
         expected = {
             Species.BreedingClass.BRONZE: 1,
             Species.BreedingClass.SILVER: 2,
@@ -123,6 +108,8 @@ class BreedingReviewValidationTests(TestCase):
         }
         for breeding_class, points in expected.items():
             with self.subTest(breeding_class=breeding_class):
+                self.species.breeding_class = breeding_class
+                self.species.save(update_fields=("breeding_class",))
                 registration = BreedingRegistration.objects.create(
                     owner=self.owner,
                     association=self.association,
@@ -134,8 +121,9 @@ class BreedingReviewValidationTests(TestCase):
                 )
                 response = self.client.post(
                     reverse("admin:breedings_breedingregistration_review", args=[registration.pk]),
-                    {"decision": "approve", "awarded_breeding_class": breeding_class, "review_comment": ""},
+                    {"decision": "approve", "review_comment": ""},
                 )
                 self.assertEqual(response.status_code, 302)
                 registration.refresh_from_db()
+                self.assertEqual(registration.awarded_breeding_class, breeding_class)
                 self.assertEqual(registration.awarded_points, points)

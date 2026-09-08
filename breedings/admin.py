@@ -26,23 +26,12 @@ class ReviewDecisionForm(forms.Form):
         label="Beslut",
         choices=(("approve", "Godkänn"), ("reject", "Avslå")),
     )
-    awarded_breeding_class = forms.ChoiceField(
-        label="Tilldelad odlingsklass",
-        choices=(("", "---------"), *Species.BreedingClass.choices),
-        required=False,
-    )
     review_comment = forms.CharField(
         label="Granskningskommentar",
         required=False,
         max_length=2000,
         widget=forms.Textarea(attrs={"rows": 5}),
     )
-
-    def clean(self):
-        cleaned_data = super().clean()
-        if cleaned_data.get("decision") == "approve" and not cleaned_data.get("awarded_breeding_class"):
-            self.add_error("awarded_breeding_class", "Välj odlingsklass för en godkänd odling.")
-        return cleaned_data
 
 
 class TaxonomyResolutionForm(forms.Form):
@@ -127,7 +116,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         if registration.status != BreedingRegistration.Status.SUBMITTED:
             messages.error(request, "Endast inskickade odlingsregistreringar kan granskas.")
             return redirect("admin:breedings_breedingregistration_changelist")
-        if registration.taxonomy_needs_resolution:
+        if registration.taxonomy_needs_resolution or registration.species is None:
             messages.error(request, "Taxonomin måste lösas innan odlingsregistreringen kan behandlas.")
             return redirect("admin:breedings_breedingregistration_resolve_taxonomy", object_id=registration.pk)
 
@@ -138,7 +127,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
                 registration.reviewer = request.user
                 registration.review_comment = form.cleaned_data["review_comment"]
                 if decision == "approve":
-                    breeding_class = form.cleaned_data["awarded_breeding_class"]
+                    breeding_class = registration.species.breeding_class
                     registration.status = BreedingRegistration.Status.APPROVED
                     registration.approved_at = timezone.now()
                     registration.awarded_breeding_class = breeding_class
