@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+git switch main
+git pull
+git fetch --prune
+
+git branch --merged main \
+  | sed 's/^[[:space:]]*//' \
+  | grep -v '^main$' \
+  | xargs -r git branch -d
