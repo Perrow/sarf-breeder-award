@@ -25,7 +25,7 @@ class UserProfileValidationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Ange ett visningsnamn.")
+        self.assertContains(response, "Detta fält måste fyllas i.")
 
     def test_invalid_avatar_url_is_rejected(self):
         response = self.client.post(
@@ -34,7 +34,7 @@ class UserProfileValidationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Ange en giltig URL")
+        self.assertContains(response, "Fyll i en giltig URL.")
 
     def test_direct_post_cannot_update_another_user(self):
         response = self.client.post(
