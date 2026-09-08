@@ -3,8 +3,17 @@ from django.db import migrations, models
 
 def copy_species_groups(apps, schema_editor):
     Species = apps.get_model("taxonomy", "Species")
-    for species in Species.objects.exclude(species_group_id=None).iterator():
-        species.species_group.species.add(species)
+    SpeciesGroup = apps.get_model("taxonomy", "SpeciesGroup")
+    through_model = SpeciesGroup._meta.get_field("species").remote_field.through
+
+    memberships = [
+        through_model(
+            speciesgroup_id=species.species_group_id,
+            species_id=species.pk,
+        )
+        for species in Species.objects.exclude(species_group_id=None).iterator()
+    ]
+    through_model.objects.bulk_create(memberships)
 
 
 class Migration(migrations.Migration):
