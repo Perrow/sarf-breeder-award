@@ -1,3 +1,5 @@
+from urllib.parse import urlencode
+
 from django import forms
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
@@ -7,7 +9,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from associations.admin import is_association_admin, is_system_admin, managed_associations
-from taxonomy.models import Species
+from taxonomy.models import Genus, Species
 
 from .models import BreedingRegistration
 
@@ -196,12 +198,23 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         else:
             form = TaxonomyResolutionForm()
 
+        species_add_params = {
+            "scientific_name": registration.proposed_species_name,
+            "common_name": registration.proposed_common_name,
+            "source_genus": registration.proposed_genus_name,
+        }
+        matching_genus = Genus.objects.filter(
+            scientific_name=registration.proposed_genus_name
+        ).first()
+        if matching_genus:
+            species_add_params["genus"] = matching_genus.pk
+
         context = {
             **self.admin_site.each_context(request),
             "opts": self.model._meta,
             "title": "Lös taxonomi",
             "registration": registration,
             "form": form,
-            "species_add_url": reverse("admin:taxonomy_species_add"),
+            "species_add_url": f'{reverse("admin:taxonomy_species_add")}?{urlencode(species_add_params)}',
         }
         return render(request, "admin/breedings/breedingregistration/resolve_taxonomy.html", context)
