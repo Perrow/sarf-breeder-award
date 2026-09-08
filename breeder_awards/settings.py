@@ -1,6 +1,8 @@
 """Django settings for the Breeder Awards project."""
 from pathlib import Path
 
+from .email_config import get_email_settings
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = "django-insecure-development-only"
@@ -73,3 +75,5 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+globals().update(get_email_settings())
