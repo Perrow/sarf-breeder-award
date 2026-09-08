@@ -18,6 +18,7 @@ class Genus(models.Model):
 
 class SpeciesGroup(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="namn")
+    is_visible = models.BooleanField(default=True, verbose_name="synlig för användare")
     genera = models.ManyToManyField(
         Genus,
         blank=True,
@@ -87,10 +88,13 @@ class Species(models.Model):
         if errors:
             raise ValidationError(errors)
 
-    def get_species_groups(self):
-        return SpeciesGroup.objects.filter(
+    def get_species_groups(self, include_hidden=False):
+        groups = SpeciesGroup.objects.filter(
             Q(genera=self.genus) | Q(species=self)
         ).distinct()
+        if not include_hidden:
+            groups = groups.filter(is_visible=True)
+        return groups
 
     def __str__(self):
         return f"{self.genus} {self.scientific_name}"
