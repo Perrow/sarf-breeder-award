@@ -1,6 +1,10 @@
+from django.contrib import admin
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
+from django.urls import reverse
 
+from .admin import GenusAdmin
 from .models import Genus
 
 
@@ -35,3 +39,66 @@ class GenusModelTests(TestCase):
         genus = Genus(scientific_name="Betta")
 
         self.assertEqual(str(genus), "Betta")
+
+
+class GenusAdminTests(TestCase):
+    def setUp(self):
+        self.admin_user = get_user_model().objects.create_superuser(
+            username="admin@example.com",
+            email="admin@example.com",
+            password="test-password",
+        )
+        self.client.force_login(self.admin_user)
+
+    def test_genus_is_registered_with_expected_list_search_and_filter_configuration(self):
+        model_admin = admin.site._registry[Genus]
+
+        self.assertIsInstance(model_admin, GenusAdmin)
+        self.assertEqual(model_admin.list_display, ("scientific_name", "is_active"))
+        self.assertEqual(model_admin.search_fields, ("scientific_name",))
+        self.assertEqual(model_admin.list_filter, ("is_active",))
+
+    def test_admin_can_create_genus(self):
+        response = self.client.post(
+            reverse("admin:taxonomy_genus_add"),
+            {
+                "scientific_name": "Trichogaster",
+                "is_active": "on",
+                "_save": "Spara",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(
+            Genus.objects.filter(
+                scientific_name="Trichogaster",
+                is_active=True,
+            ).exists()
+        )
+
+    def test_admin_can_edit_and_inactivate_genus(self):
+        genus = Genus.objects.create(scientific_name="Poecilia")
+
+        response = self.client.post(
+            reverse("admin:taxonomy_genus_change", args=(genus.pk,)),
+            {
+                "scientific_name": "Poecilia",
+                "_save": "Spara",
+            },
+        )
+
+        self.assertEqual(response.status_code, 302)
+        genus.refresh_from_db()
+        self.assertFalse(genus.is_active)
+
+    def test_admin_searches_genera_by_scientific_name(self):
+        Genus.objects.create(scientific_name="Betta")
+        Genus.objects.create(scientific_name="Corydoras")
+
+        response = self.client.get(
+            reverse("admin:taxonomy_genus_changelist"),
+            {"q": "Betta"},
+        )
+
+        self.assertContains(response, "Betta")
+        self.assertNotContains(response, "Corydoras")

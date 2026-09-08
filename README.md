@@ -107,6 +107,12 @@ Run the genus model tests with:
 python manage.py test taxonomy
 ```
 
+## BA-021 – Administer genera
+
+`taxonomy.Genus` is registered in Django Admin. Administrators can create and edit genera, including marking them inactive instead of deleting historical records. The genus list shows scientific name and active status and supports filtering by active status and searching by scientific name.
+
+No database migration is required for BA-021.
+
 ### Verification
 
 Run Django's system checks and the test suite:
