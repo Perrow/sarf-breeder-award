@@ -9,9 +9,14 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from associations.admin import is_association_admin, is_system_admin, managed_associations
-from taxonomy.models import Genus, Species
+from taxonomy.models import Genus, Species, SpeciesGroup
 
-from .models import BreedingRegistration
+from .models import (
+    AssociationCompetitionLimit,
+    AssociationCompetitionSettings,
+    BreedingRegistration,
+    current_competition_year,
+)
 
 
 BREEDING_CLASS_POINTS = {
@@ -39,6 +44,88 @@ class TaxonomyResolutionForm(forms.Form):
         label="Art",
         queryset=Species.objects.all(),
     )
+
+
+class AssociationCompetitionLimitAdminForm(forms.ModelForm):
+    class Meta:
+        model = AssociationCompetitionLimit
+        fields = ("genus", "species_group", "max_registrations_per_member")
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["species_group"].queryset = (
+            SpeciesGroup.objects.filter(species__isnull=True, genera__isnull=False)
+            .distinct()
+            .order_by("name")
+        )
+
+
+@admin.register(AssociationCompetitionSettings)
+class AssociationCompetitionSettingsAdmin(admin.ModelAdmin):
+    list_display = ("effective_from_year", "default_max_registrations_per_genus")
+    fields = ("default_max_registrations_per_genus",)
+
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return (
+            is_system_admin(request.user)
+            and not AssociationCompetitionSettings.objects.filter(
+                effective_from_year=current_competition_year()
+            ).exists()
+        )
+
+    def has_change_permission(self, request, obj=None):
+        if not is_system_admin(request.user):
+            return False
+        return obj is None or obj.effective_from_year == current_competition_year()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.effective_from_year = current_competition_year()
+        super().save_model(request, obj, form, change)
+
+
+@admin.register(AssociationCompetitionLimit)
+class AssociationCompetitionLimitAdmin(admin.ModelAdmin):
+    form = AssociationCompetitionLimitAdminForm
+    list_display = ("target", "max_registrations_per_member", "effective_from_year")
+    list_filter = ("effective_from_year",)
+    list_select_related = ("genus", "species_group")
+    fields = ("genus", "species_group", "max_registrations_per_member")
+
+    @admin.display(description="begränsat område")
+    def target(self, obj):
+        return obj.genus or obj.species_group
+
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        if not is_system_admin(request.user):
+            return False
+        return obj is None or obj.effective_from_year == current_competition_year()
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def save_model(self, request, obj, form, change):
+        if not change:
+            obj.effective_from_year = current_competition_year()
+        super().save_model(request, obj, form, change)
 
 
 @admin.register(BreedingRegistration)

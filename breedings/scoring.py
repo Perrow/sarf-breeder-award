@@ -1,8 +1,13 @@
 from collections import defaultdict
 
+from associations.models import Association
 from taxonomy.models import Species
 
-from .models import BreedingRegistration
+from .models import (
+    AssociationCompetitionLimit,
+    AssociationCompetitionSettings,
+    BreedingRegistration,
+)
 
 
 BREEDING_CLASS_POINTS = {
@@ -65,17 +70,132 @@ def user_year_points(user, year):
     return competition_points(user, year)
 
 
+def _competition_limits(year):
+    candidates = list(
+        AssociationCompetitionLimit.objects.filter(effective_from_year__lte=year)
+        .select_related("genus", "species_group")
+        .prefetch_related("species_group__genera")
+        .order_by("-effective_from_year", "-pk")
+    )
+    latest_by_target = {}
+    for limit in candidates:
+        target = (
+            ("genus", limit.genus_id)
+            if limit.genus_id
+            else ("species_group", limit.species_group_id)
+        )
+        latest_by_target.setdefault(target, limit)
+
+    limits = list(latest_by_target.values())
+    group_genus_ids = {
+        limit.pk: {genus.pk for genus in limit.species_group.genera.all()}
+        for limit in limits
+        if limit.species_group_id
+    }
+    return limits, group_genus_ids
+
+
+def _default_genus_limit(year):
+    settings = (
+        AssociationCompetitionSettings.objects.filter(effective_from_year__lte=year)
+        .order_by("-effective_from_year", "-pk")
+        .first()
+    )
+    if settings is None:
+        return None
+    return settings.default_max_registrations_per_genus
+
+
+def _matching_limit_ids(registration, limits, group_genus_ids):
+    if not registration.species_id:
+        return []
+    genus_id = registration.species.genus_id
+    result = []
+    for limit in limits:
+        if limit.genus_id == genus_id:
+            result.append(limit.pk)
+        elif limit.species_group_id and genus_id in group_genus_ids.get(limit.pk, set()):
+            result.append(limit.pk)
+    return result
+
+
 def association_year_scores(association, year):
-    totals = defaultdict(int)
-    registrations = BreedingRegistration.objects.filter(
-        association=association,
-        status=BreedingRegistration.Status.APPROVED,
-        breeding_date__year=year,
-    ).only("owner_id", "status", "awarded_breeding_class")
+    limits, group_genus_ids = _competition_limits(year)
+    limits_by_id = {limit.pk: limit for limit in limits}
+    default_genus_limit = _default_genus_limit(year)
+    registrations_by_user = defaultdict(list)
+
+    registrations = (
+        BreedingRegistration.objects.filter(
+            association=association,
+            status=BreedingRegistration.Status.APPROVED,
+            breeding_date__year=year,
+        )
+        .select_related("species__genus")
+        .only(
+            "owner_id",
+            "species_id",
+            "species__genus_id",
+            "status",
+            "awarded_breeding_class",
+            "breeding_date",
+        )
+    )
 
     for registration in registrations:
         points = points_for_registration(registration)
         if points is not None:
-            totals[registration.owner_id] += points
+            registrations_by_user[registration.owner_id].append((registration, points))
 
-    return dict(totals)
+    totals = {}
+    for user_id, user_registrations in registrations_by_user.items():
+        user_registrations.sort(
+            key=lambda item: (-item[1], item[0].breeding_date, item[0].pk)
+        )
+        used_by_limit = defaultdict(int)
+        total = 0
+        for registration, points in user_registrations:
+            matching_limit_ids = _matching_limit_ids(
+                registration, limits, group_genus_ids
+            )
+
+            if matching_limit_ids:
+                if any(
+                    used_by_limit[("specific", limit_id)]
+                    >= limits_by_id[limit_id].max_registrations_per_member
+                    for limit_id in matching_limit_ids
+                ):
+                    continue
+                total += points
+                for limit_id in matching_limit_ids:
+                    used_by_limit[("specific", limit_id)] += 1
+                continue
+
+            if default_genus_limit is not None and registration.species_id:
+                default_key = ("default_genus", registration.species.genus_id)
+                if used_by_limit[default_key] >= default_genus_limit:
+                    continue
+                used_by_limit[default_key] += 1
+
+            total += points
+
+        if total:
+            totals[user_id] = total
+
+    return totals
+
+
+def association_competition_points(association, year):
+    return sum(association_year_scores(association, year).values())
+
+
+def association_leaderboard_scores(year):
+    associations = Association.objects.filter(
+        breeding_registrations__status=BreedingRegistration.Status.APPROVED,
+        breeding_registrations__breeding_date__year=year,
+    ).distinct()
+
+    return [
+        {"association": association, "points": association_competition_points(association, year)}
+        for association in associations
+    ]

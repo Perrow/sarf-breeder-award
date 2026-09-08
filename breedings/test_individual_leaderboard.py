@@ -133,4 +133,4 @@ class IndividualLeaderboardTests(TestCase):
         response = self.client.get(reverse("home"))
 
         self.assertContains(response, reverse("individual_leaderboard"))
-        self.assertContains(response, "Topplista")
+        self.assertContains(response, "Individuell topplista")

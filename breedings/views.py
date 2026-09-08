@@ -7,7 +7,7 @@ from django.utils import timezone
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
-from .scoring import points_for_registration
+from .scoring import association_leaderboard_scores, points_for_registration
 
 
 def _leaderboard_year(raw_year):
@@ -69,6 +69,38 @@ def individual_leaderboard(request):
     return render(
         request,
         "breedings/individual_leaderboard.html",
+        {
+            "leaderboard": leaderboard,
+            "selected_year": selected_year,
+            "available_years": sorted(available_years, reverse=True),
+        },
+    )
+
+
+def association_leaderboard(request):
+    current_year = timezone.localdate().year
+    selected_year = _leaderboard_year(request.GET.get("year"))
+    leaderboard = association_leaderboard_scores(selected_year)
+    leaderboard.sort(
+        key=lambda row: (
+            -row["points"],
+            row["association"].name.casefold(),
+            row["association"].pk,
+        )
+    )
+
+    available_years = {
+        date.year
+        for date in BreedingRegistration.objects.filter(
+            status=BreedingRegistration.Status.APPROVED
+        ).dates("breeding_date", "year", order="DESC")
+    }
+    available_years.add(current_year)
+    available_years.add(selected_year)
+
+    return render(
+        request,
+        "breedings/association_leaderboard.html",
         {
             "leaderboard": leaderboard,
             "selected_year": selected_year,
