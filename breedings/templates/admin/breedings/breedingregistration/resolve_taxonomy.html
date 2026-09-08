@@ -1,0 +1,18 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<p><strong>Ursprungligt släkte:</strong> {{ registration.proposed_genus_name|default:"–" }}</p>
+<p><strong>Ursprungligt artnamn:</strong> {{ registration.proposed_species_name|default:"–" }}</p>
+<p><strong>Ursprungligt populärnamn:</strong> {{ registration.proposed_common_name|default:"–" }}</p>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Koppla art">
+</form>
+
+<p><a href="{{ species_add_url }}">Skapa ny art i artregistret</a></p>
+<p><a href="{% url 'admin:breedings_breedingregistration_changelist' %}">Till odlingsregistreringar</a></p>
+{% endblock %}

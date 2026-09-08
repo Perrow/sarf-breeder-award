@@ -44,6 +44,13 @@ class SpeciesAdmin(admin.ModelAdmin):
     )
     inlines = (SpeciesSynonymInline,)
 
+    def get_form(self, request, obj=None, change=False, **kwargs):
+        form = super().get_form(request, obj, change, **kwargs)
+        source_genus = request.GET.get("source_genus", "").strip()
+        if obj is None and source_genus and not request.GET.get("genus"):
+            form.base_fields["genus"].help_text = f"Användaren angav släkte: {source_genus}"
+        return form
+
     @admin.display(description="artgrupper")
     def group_names(self, obj):
         return ", ".join(
