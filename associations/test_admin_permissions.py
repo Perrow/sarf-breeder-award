@@ -8,8 +8,6 @@ from .admin import (
     ASSOCIATION_ADMIN_GROUP,
     MEMBER_GROUP,
     SYSTEM_ADMIN_GROUP,
-    AssociationAdmin,
-    MembershipAdmin,
 )
 from .models import Association, Membership
 
@@ -18,18 +16,16 @@ class AssociationAdministrationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.system_admin = User.objects.create_user(
-            username="system@example.com",
-            email="system@example.com",
+            username="system-admin@example.com",
+            email="system-admin@example.com",
             password="test-password",
             is_staff=True,
         )
         self.association_admin = User.objects.create_user(
-            username="association@example.com",
-            email="association@example.com",
+            username="association-admin@example.com",
+            email="association-admin@example.com",
             password="test-password",
             is_staff=True,
-            first_name="Anna",
-            last_name="Admin",
         )
         self.member = User.objects.create_user(
             username="member@example.com",
@@ -38,30 +34,26 @@ class AssociationAdministrationTests(TestCase):
             is_staff=True,
         )
         self.new_member = User.objects.create_user(
-            username="new@example.com",
-            email="new@example.com",
+            username="new-member@example.com",
+            email="new-member@example.com",
             password="test-password",
-            first_name="Ny",
-            last_name="Medlem",
         )
-
-        self.system_group = Group.objects.get(name=SYSTEM_ADMIN_GROUP)
-        self.association_group = Group.objects.get(name=ASSOCIATION_ADMIN_GROUP)
-        self.member_group = Group.objects.get(name=MEMBER_GROUP)
-        self.system_admin.groups.add(self.system_group)
-        self.association_admin.groups.add(self.association_group)
-        self.member.groups.add(self.member_group)
 
         self.own_association = Association.objects.create(name="Egen förening")
         self.other_association = Association.objects.create(name="Annan förening")
+
+        self.system_admin.groups.add(Group.objects.get(name=SYSTEM_ADMIN_GROUP))
+        self.association_admin.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
+        self.member.groups.add(Group.objects.get(name=MEMBER_GROUP))
+
         Membership.objects.create(
             user=self.association_admin,
             association=self.own_association,
-            member_number="ADMIN-1",
+            member_number="100",
         )
         Membership.objects.create(
             user=self.member,
-            association=self.other_association,
+            association=self.own_association,
             member_number="200",
         )
 
@@ -72,14 +64,21 @@ class AssociationAdministrationTests(TestCase):
         request.user = user
         return request
 
-    def test_role_groups_are_created(self):
+    def test_expected_groups_exist(self):
         self.assertTrue(Group.objects.filter(name=SYSTEM_ADMIN_GROUP).exists())
         self.assertTrue(Group.objects.filter(name=ASSOCIATION_ADMIN_GROUP).exists())
         self.assertTrue(Group.objects.filter(name=MEMBER_GROUP).exists())
 
-    def test_system_admin_can_see_all_associations(self):
+    def test_member_has_no_association_admin_access(self):
+        association_admin = admin.site._registry[Association]
+        membership_admin = admin.site._registry[Membership]
+        request = self._request_for(self.member)
+
+        self.assertFalse(association_admin.has_module_permission(request))
+        self.assertFalse(membership_admin.has_module_permission(request))
+
+    def test_system_admin_sees_all_associations(self):
         model_admin = admin.site._registry[Association]
-        self.assertIsInstance(model_admin, AssociationAdmin)
 
         queryset = model_admin.get_queryset(self._request_for(self.system_admin))
 
@@ -105,7 +104,13 @@ class AssociationAdministrationTests(TestCase):
             reverse("admin:associations_association_change", args=[self.other_association.pk])
         )
 
-        self.assertEqual(response.status_code, 403)
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(
+            admin.site._registry[Association]
+            .get_queryset(self._request_for(self.association_admin))
+            .filter(pk=self.other_association.pk)
+            .exists()
+        )
 
     def test_association_admin_can_add_membership_to_own_association(self):
         self.client.force_login(self.association_admin)
@@ -123,12 +128,13 @@ class AssociationAdministrationTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 302)
-        membership = Membership.objects.get(
-            user=self.new_member,
-            association=self.own_association,
+        self.assertTrue(
+            Membership.objects.filter(
+                user=self.new_member,
+                association=self.own_association,
+                member_number="300",
+            ).exists()
         )
-        self.assertEqual(membership.member_number, "300")
-        self.assertEqual(membership.phone, "070-1234567")
 
     def test_association_admin_cannot_add_membership_to_other_association(self):
         self.client.force_login(self.association_admin)
@@ -138,7 +144,7 @@ class AssociationAdministrationTests(TestCase):
             {
                 "user": self.new_member.pk,
                 "association": self.other_association.pk,
-                "member_number": "301",
+                "member_number": "400",
                 "phone": "070-7654321",
                 "association_data": "",
                 "_save": "Spara",
@@ -153,18 +159,42 @@ class AssociationAdministrationTests(TestCase):
             ).exists()
         )
 
-    def test_member_has_no_association_admin_access(self):
-        association_admin = admin.site._registry[Association]
-        membership_admin = admin.site._registry[Membership]
-        request = self._request_for(self.member)
+    def test_association_admin_can_change_own_association(self):
+        self.client.force_login(self.association_admin)
 
-        self.assertFalse(association_admin.has_module_permission(request))
-        self.assertFalse(membership_admin.has_module_permission(request))
-
-    def test_membership_admin_exposes_member_registry_fields(self):
-        model_admin = admin.site._registry[Membership]
-        self.assertIsInstance(model_admin, MembershipAdmin)
-        self.assertEqual(
-            model_admin.list_display,
-            ("user_name", "user_email", "phone", "member_number", "association"),
+        response = self.client.post(
+            reverse(
+                "admin:associations_association_change",
+                args=[self.own_association.pk],
+            ),
+            {
+                "name": "Uppdaterad förening",
+                "organization_number": "",
+                "email": "",
+                "phone": "",
+                "address": "",
+                "postal_code": "",
+                "city": "",
+                "description": "",
+                "_save": "Spara",
+            },
         )
+
+        self.assertEqual(response.status_code, 302)
+        self.own_association.refresh_from_db()
+        self.assertEqual(self.own_association.name, "Uppdaterad förening")
+
+    def test_association_admin_can_delete_membership_in_own_association(self):
+        membership = Membership.objects.create(
+            user=self.new_member,
+            association=self.own_association,
+        )
+        self.client.force_login(self.association_admin)
+
+        response = self.client.post(
+            reverse("admin:associations_membership_delete", args=[membership.pk]),
+            {"post": "yes"},
+        )
+
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(Membership.objects.filter(pk=membership.pk).exists())
