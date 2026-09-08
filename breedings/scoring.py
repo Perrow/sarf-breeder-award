@@ -98,22 +98,11 @@ def association_year_scores(association, year):
     limits_by_id = {limit.pk: limit for limit in limits}
     registrations_by_user = defaultdict(list)
 
-    registrations = (
-        BreedingRegistration.objects.filter(
-            association=association,
-            status=BreedingRegistration.Status.APPROVED,
-            breeding_date__year=year,
-        )
-        .select_related("species__genus")
-        .only(
-            "owner_id",
-            "species_id",
-            "species__genus_id",
-            "status",
-            "awarded_breeding_class",
-            "breeding_date",
-        )
-    )
+    registrations = BreedingRegistration.objects.filter(
+        association=association,
+        status=BreedingRegistration.Status.APPROVED,
+        breeding_date__year=year,
+    ).select_related("species__genus")
 
     for registration in registrations:
         points = points_for_registration(registration)
