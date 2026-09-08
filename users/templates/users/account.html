@@ -10,6 +10,8 @@
 {% endif %}
 
 <p><strong>Namn:</strong> {{ user.display_name|default:user.get_full_name|default:user.email }}</p>
+<p><strong>Publikt användarnamn:</strong> {{ user.public_username|default:"Inte angivet" }}</p>
+<p class="text-body-secondary">Det publika användarnamnet visas offentligt, bland annat i topplistor.</p>
 <p><strong>E-post:</strong> {{ user.email }}</p>
 {% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
 

@@ -10,6 +10,7 @@ class UserAccountTests(TestCase):
             reverse("register"),
             {
                 "name": "Test User",
+                "public_username": "TestUser",
                 "email": "test@example.com",
                 "password1": "A-secure-test-password-123",
                 "password2": "A-secure-test-password-123",
@@ -19,6 +20,7 @@ class UserAccountTests(TestCase):
         self.assertRedirects(response, reverse("account"))
         user = User.objects.get(username="test@example.com")
         self.assertEqual(user.email, "test@example.com")
+        self.assertEqual(user.public_username, "TestUser")
         self.assertEqual(user.get_full_name(), "Test User")
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 

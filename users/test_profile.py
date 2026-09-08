@@ -11,6 +11,7 @@ class UserProfileTests(TestCase):
             password="test-password-123",
             first_name="Test",
             last_name="Person",
+            public_username="ProfileUser",
         )
         self.client.force_login(self.user)
 
@@ -23,6 +24,7 @@ class UserProfileTests(TestCase):
         response = self.client.get(reverse("account"))
 
         self.assertContains(response, "Akvaristen")
+        self.assertContains(response, "ProfileUser")
         self.assertContains(response, "Uppsala")
         self.assertContains(response, "https://example.com/avatar.jpg")
 
@@ -30,6 +32,7 @@ class UserProfileTests(TestCase):
         response = self.client.post(
             reverse("account"),
             {
+                "public_username": "PellePublic",
                 "display_name": "Pelle",
                 "location": "Uppsala",
                 "avatar_url": "https://example.com/pelle.jpg",
@@ -38,6 +41,7 @@ class UserProfileTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.user.refresh_from_db()
+        self.assertEqual(self.user.public_username, "PellePublic")
         self.assertEqual(self.user.display_name, "Pelle")
         self.assertEqual(self.user.location, "Uppsala")
         self.assertEqual(self.user.avatar_url, "https://example.com/pelle.jpg")

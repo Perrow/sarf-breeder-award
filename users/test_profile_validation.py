@@ -9,19 +9,26 @@ class UserProfileValidationTests(TestCase):
             username="profile-validation@example.com",
             email="profile-validation@example.com",
             password="test-password-123",
+            public_username="ProfileValidation",
         )
         self.other_user = get_user_model().objects.create_user(
             username="other@example.com",
             email="other@example.com",
             password="test-password-123",
             display_name="Oförändrad",
+            public_username="OtherUser",
         )
         self.client.force_login(self.user)
 
     def test_whitespace_display_name_is_rejected(self):
         response = self.client.post(
             reverse("account"),
-            {"display_name": "   ", "location": "Uppsala", "avatar_url": ""},
+            {
+                "public_username": "ProfileValidation",
+                "display_name": "   ",
+                "location": "Uppsala",
+                "avatar_url": "",
+            },
         )
 
         self.assertEqual(response.status_code, 200)
@@ -30,7 +37,12 @@ class UserProfileValidationTests(TestCase):
     def test_invalid_avatar_url_is_rejected(self):
         response = self.client.post(
             reverse("account"),
-            {"display_name": "Pelle", "location": "Uppsala", "avatar_url": "inte-en-url"},
+            {
+                "public_username": "ProfileValidation",
+                "display_name": "Pelle",
+                "location": "Uppsala",
+                "avatar_url": "inte-en-url",
+            },
         )
 
         self.assertEqual(response.status_code, 200)
@@ -40,6 +52,7 @@ class UserProfileValidationTests(TestCase):
         response = self.client.post(
             reverse("account"),
             {
+                "public_username": "ProfileValidation",
                 "display_name": "Pelle",
                 "location": "Uppsala",
                 "avatar_url": "",
