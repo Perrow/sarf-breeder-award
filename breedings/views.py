@@ -1,13 +1,12 @@
-from collections import defaultdict
-
 from django.contrib import messages
+from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
-from .scoring import association_leaderboard_scores, points_for_registration
+from .scoring import association_leaderboard_scores, competition_points
 
 
 def _leaderboard_year(raw_year):
@@ -27,32 +26,25 @@ def individual_leaderboard(request):
     current_year = timezone.localdate().year
     selected_year = _leaderboard_year(request.GET.get("year"))
 
-    registrations = (
-        BreedingRegistration.objects.filter(
-            status=BreedingRegistration.Status.APPROVED,
-            breeding_date__year=selected_year,
-        )
-        .select_related("owner")
-        .only("owner", "status", "awarded_breeding_class")
-    )
+    owner_ids = BreedingRegistration.objects.filter(
+        status=BreedingRegistration.Status.APPROVED,
+        breeding_date__year=selected_year,
+    ).values_list("owner_id", flat=True).distinct()
+    users = get_user_model().objects.filter(pk__in=owner_ids)
 
-    totals = defaultdict(int)
-    users = {}
-    for registration in registrations:
-        points = points_for_registration(registration)
-        if points is None:
+    leaderboard = []
+    for user in users:
+        points = competition_points(user, selected_year)
+        if not points:
             continue
-        totals[registration.owner_id] += points
-        users[registration.owner_id] = registration.owner
+        leaderboard.append(
+            {
+                "user": user,
+                "name": user.public_display_name(),
+                "points": points,
+            }
+        )
 
-    leaderboard = [
-        {
-            "user": users[user_id],
-            "name": users[user_id].public_display_name(),
-            "points": points,
-        }
-        for user_id, points in totals.items()
-    ]
     leaderboard.sort(
         key=lambda row: (-row["points"], row["name"].casefold(), row["user"].pk)
     )
