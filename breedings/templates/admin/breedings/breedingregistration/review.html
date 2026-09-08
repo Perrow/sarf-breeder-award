@@ -1,0 +1,24 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+<h1>{{ title }}</h1>
+
+<dl>
+    <dt>Användare</dt><dd>{{ registration.owner }}</dd>
+    <dt>Förening</dt><dd>{{ registration.association }}</dd>
+    <dt>Art</dt><dd>{% if registration.species %}{{ registration.species }}{% else %}Inte vald{% endif %}</dd>
+    <dt>Föreslaget släkte</dt><dd>{{ registration.proposed_genus_name|default:"–" }}</dd>
+    <dt>Föreslaget artnamn</dt><dd>{{ registration.proposed_species_name|default:"–" }}</dd>
+    <dt>Föreslaget populärnamn</dt><dd>{{ registration.proposed_common_name|default:"–" }}</dd>
+    <dt>Odlingsdatum</dt><dd>{{ registration.breeding_date }}</dd>
+    <dt>Beskrivning</dt><dd>{{ registration.description|linebreaksbr }}</dd>
+</dl>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Spara beslut">
+</form>
+
+<p><a href="{% url 'admin:breedings_breedingregistration_changelist' %}">Till odlingsregistreringar</a></p>
+{% endblock %}
