@@ -8,7 +8,11 @@ from django.utils import timezone
 from associations.models import Association
 from taxonomy.models import Genus, Species, SpeciesGroup
 
-from .models import AssociationCompetitionLimit, BreedingRegistration
+from .models import (
+    AssociationCompetitionLimit,
+    AssociationCompetitionSettings,
+    BreedingRegistration,
+)
 from .scoring import association_competition_points
 
 
@@ -203,6 +207,86 @@ class AssociationLeaderboardTests(TestCase):
         )
 
         self.assertEqual(association_competition_points(self.association_a, year), 3)
+
+    def test_default_genus_limit_applies_without_specific_rule(self):
+        year = timezone.localdate().year
+        AssociationCompetitionSettings.objects.create(
+            effective_from_year=year,
+            default_max_registrations_per_genus=1,
+        )
+        self.create_registration(
+            self.user_a, self.association_a, self.bronze_a, date(year, 1, 1)
+        )
+        self.create_registration(
+            self.user_a, self.association_a, self.gold_a, date(year, 1, 2)
+        )
+
+        self.assertEqual(association_competition_points(self.association_a, year), 3)
+
+    def test_specific_rule_replaces_default_genus_limit(self):
+        year = timezone.localdate().year
+        AssociationCompetitionSettings.objects.create(
+            effective_from_year=year,
+            default_max_registrations_per_genus=1,
+        )
+        AssociationCompetitionLimit.objects.create(
+            effective_from_year=year,
+            genus=self.genus_a,
+            max_registrations_per_member=2,
+        )
+        self.create_registration(
+            self.user_a, self.association_a, self.bronze_a, date(year, 1, 1)
+        )
+        self.create_registration(
+            self.user_a, self.association_a, self.gold_a, date(year, 1, 2)
+        )
+
+        self.assertEqual(association_competition_points(self.association_a, year), 4)
+
+    def test_newer_rule_version_does_not_change_previous_year(self):
+        current_year = timezone.localdate().year
+        previous_year = current_year - 1
+        AssociationCompetitionLimit.objects.create(
+            effective_from_year=previous_year,
+            genus=self.genus_a,
+            max_registrations_per_member=1,
+        )
+        AssociationCompetitionLimit.objects.create(
+            effective_from_year=current_year,
+            genus=self.genus_a,
+            max_registrations_per_member=2,
+        )
+        self.create_registration(
+            self.user_a,
+            self.association_a,
+            self.bronze_a,
+            date(previous_year, 1, 1),
+        )
+        self.create_registration(
+            self.user_a,
+            self.association_a,
+            self.gold_a,
+            date(previous_year, 1, 2),
+        )
+        self.create_registration(
+            self.user_a,
+            self.association_a,
+            self.bronze_a,
+            date(current_year, 1, 1),
+        )
+        self.create_registration(
+            self.user_a,
+            self.association_a,
+            self.gold_a,
+            date(current_year, 1, 2),
+        )
+
+        self.assertEqual(
+            association_competition_points(self.association_a, previous_year), 3
+        )
+        self.assertEqual(
+            association_competition_points(self.association_a, current_year), 4
+        )
 
     def test_invalid_year_falls_back_to_current_year(self):
         current_year = timezone.localdate().year
