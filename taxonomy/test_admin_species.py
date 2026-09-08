@@ -11,16 +11,14 @@ class SpeciesAdminTests(TestCase):
     def setUp(self):
         self.genus = Genus.objects.create(scientific_name="Corydoras")
         self.other_genus = Genus.objects.create(scientific_name="Brochis")
-        self.species_group = SpeciesGroup.objects.create(name="Malar")
-        self.other_species_group = SpeciesGroup.objects.create(name="Övriga")
+        self.species_group = SpeciesGroup.objects.create(name="Pansarmalar")
         self.species = Species.objects.create(
             genus=self.genus,
             scientific_name="aeneus",
             common_name="Metallpansarmal",
-            family="Callichthyidae",
-            species_group=self.species_group,
             breeding_class=Species.BreedingClass.BRONZE,
         )
+        self.species_group.genera.add(self.genus)
         self.admin_user = get_user_model().objects.create_superuser(
             username="species-admin@example.com",
             email="species-admin@example.com",
@@ -30,7 +28,6 @@ class SpeciesAdminTests(TestCase):
 
     def test_species_is_registered_with_expected_admin_configuration(self):
         model_admin = admin.site._registry[Species]
-
         self.assertIsInstance(model_admin, SpeciesAdmin)
         self.assertEqual(
             model_admin.list_display,
@@ -38,25 +35,12 @@ class SpeciesAdminTests(TestCase):
                 "genus",
                 "scientific_name",
                 "common_name",
-                "species_group",
+                "group_names",
                 "breeding_class",
                 "is_active",
             ),
         )
-        self.assertEqual(
-            model_admin.list_filter,
-            ("is_active", "species_group", "breeding_class", "genus"),
-        )
-        self.assertEqual(
-            model_admin.search_fields,
-            (
-                "scientific_name",
-                "genus__scientific_name",
-                "common_name",
-                "english_name",
-                "synonyms__scientific_name",
-            ),
-        )
+        self.assertEqual(model_admin.list_filter, ("is_active", "breeding_class", "genus"))
         self.assertIn(SpeciesSynonymInline, model_admin.inlines)
 
     def test_admin_can_create_species(self):
@@ -67,8 +51,6 @@ class SpeciesAdminTests(TestCase):
                 "scientific_name": "splendens",
                 "common_name": "Testart",
                 "english_name": "",
-                "family": "Callichthyidae",
-                "species_group": self.other_species_group.pk,
                 "breeding_class": Species.BreedingClass.SILVER,
                 "is_active": "on",
                 "synonyms-TOTAL_FORMS": "0",
@@ -78,13 +60,11 @@ class SpeciesAdminTests(TestCase):
                 "_save": "Spara",
             },
         )
-
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             Species.objects.filter(
                 genus=self.other_genus,
                 scientific_name="splendens",
-                species_group=self.other_species_group,
                 breeding_class=Species.BreedingClass.SILVER,
                 is_active=True,
             ).exists()
@@ -98,8 +78,6 @@ class SpeciesAdminTests(TestCase):
                 "scientific_name": "aeneus",
                 "common_name": "Metallpansarmal",
                 "english_name": "",
-                "family": "Callichthyidae",
-                "species_group": self.other_species_group.pk,
                 "breeding_class": Species.BreedingClass.GOLD,
                 "synonyms-TOTAL_FORMS": "0",
                 "synonyms-INITIAL_FORMS": "0",
@@ -108,13 +86,15 @@ class SpeciesAdminTests(TestCase):
                 "_save": "Spara",
             },
         )
-
         self.assertEqual(response.status_code, 302)
         self.species.refresh_from_db()
         self.assertEqual(self.species.genus, self.other_genus)
-        self.assertEqual(self.species.species_group, self.other_species_group)
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.GOLD)
         self.assertFalse(self.species.is_active)
+
+    def test_species_list_displays_inherited_group(self):
+        response = self.client.get(reverse("admin:taxonomy_species_changelist"))
+        self.assertContains(response, "Pansarmalar")
 
     def test_synonym_can_be_managed_inline_from_species_admin(self):
         response = self.client.post(
@@ -124,8 +104,6 @@ class SpeciesAdminTests(TestCase):
                 "scientific_name": "aeneus",
                 "common_name": "Metallpansarmal",
                 "english_name": "",
-                "family": "Callichthyidae",
-                "species_group": self.species_group.pk,
                 "breeding_class": Species.BreedingClass.BRONZE,
                 "is_active": "on",
                 "synonyms-TOTAL_FORMS": "1",
@@ -136,7 +114,6 @@ class SpeciesAdminTests(TestCase):
                 "_save": "Spara",
             },
         )
-
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             SpeciesSynonym.objects.filter(
@@ -146,16 +123,11 @@ class SpeciesAdminTests(TestCase):
         )
 
     def test_admin_searches_species_by_synonym(self):
-        SpeciesSynonym.objects.create(
-            species=self.species,
-            scientific_name="Hoplisoma aeneum",
-        )
-
+        SpeciesSynonym.objects.create(species=self.species, scientific_name="Hoplisoma aeneum")
         response = self.client.get(
             reverse("admin:taxonomy_species_changelist"),
             {"q": "Hoplisoma"},
         )
-
         self.assertContains(response, "aeneus")
 
     def test_admin_filters_species_by_active_status(self):
@@ -163,16 +135,12 @@ class SpeciesAdminTests(TestCase):
             genus=self.genus,
             scientific_name="panda",
             common_name="Pandapansarmal",
-            family="Callichthyidae",
-            species_group=self.species_group,
             breeding_class=Species.BreedingClass.SILVER,
             is_active=False,
         )
-
         response = self.client.get(
             reverse("admin:taxonomy_species_changelist"),
             {"is_active__exact": "0"},
         )
-
         self.assertContains(response, "panda")
         self.assertNotContains(response, "aeneus")
