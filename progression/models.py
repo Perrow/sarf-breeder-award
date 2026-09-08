@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 
 
@@ -10,6 +11,18 @@ class LevelDefinition(models.Model):
         ordering = ("points_required", "name")
         verbose_name = "nivå"
         verbose_name_plural = "nivåer"
+
+    def clean(self):
+        super().clean()
+        self.name = (self.name or "").strip()
+        if not self.name:
+            raise ValidationError({"name": "Nivånamn måste anges."})
+        if self.points_required is not None and self.points_required < 0:
+            raise ValidationError({"points_required": "Poängkravet kan inte vara negativt."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.name} ({self.points_required} poäng)"
