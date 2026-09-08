@@ -1,6 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
-from django.db.models import Q
+from django.db.models import Q, Value
+from django.db.models.functions import Concat
 
 
 class Genus(models.Model):
@@ -18,6 +19,7 @@ class Genus(models.Model):
 
 class SpeciesGroup(models.Model):
     name = models.CharField(max_length=100, unique=True, verbose_name="namn")
+    is_visible = models.BooleanField(default=True, verbose_name="synlig för användare")
     genera = models.ManyToManyField(
         Genus,
         blank=True,
@@ -38,6 +40,37 @@ class SpeciesGroup(models.Model):
 
     def __str__(self):
         return self.name
+
+
+class SpeciesQuerySet(models.QuerySet):
+    def available_for_registration(self):
+        return self.filter(is_active=True)
+
+    def search(self, query, include_inactive=False):
+        query = (query or "").strip()
+        if not query:
+            return self.none()
+
+        queryset = self
+        if not include_inactive:
+            queryset = queryset.available_for_registration()
+
+        return (
+            queryset.annotate(
+                full_scientific_name=Concat(
+                    "genus__scientific_name",
+                    Value(" "),
+                    "scientific_name",
+                )
+            )
+            .filter(
+                Q(full_scientific_name__icontains=query)
+                | Q(common_name__icontains=query)
+                | Q(synonyms__scientific_name__icontains=query)
+                | Q(synonyms__common_name__icontains=query)
+            )
+            .distinct()
+        )
 
 
 class Species(models.Model):
@@ -66,6 +99,8 @@ class Species(models.Model):
     )
     is_active = models.BooleanField(default=True, verbose_name="aktiv")
 
+    objects = SpeciesQuerySet.as_manager()
+
     class Meta:
         ordering = ["genus__scientific_name", "scientific_name"]
         verbose_name = "art"
@@ -87,10 +122,13 @@ class Species(models.Model):
         if errors:
             raise ValidationError(errors)
 
-    def get_species_groups(self):
-        return SpeciesGroup.objects.filter(
+    def get_species_groups(self, include_hidden=False):
+        groups = SpeciesGroup.objects.filter(
             Q(genera=self.genus) | Q(species=self)
         ).distinct()
+        if not include_hidden:
+            groups = groups.filter(is_visible=True)
+        return groups
 
     def __str__(self):
         return f"{self.genus} {self.scientific_name}"

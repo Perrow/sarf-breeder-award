@@ -12,7 +12,8 @@ class GenusAdmin(admin.ModelAdmin):
 
 @admin.register(SpeciesGroup)
 class SpeciesGroupAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "is_visible")
+    list_filter = ("is_visible",)
     search_fields = ("name",)
     filter_horizontal = ("genera", "species")
 
@@ -45,7 +46,9 @@ class SpeciesAdmin(admin.ModelAdmin):
 
     @admin.display(description="artgrupper")
     def group_names(self, obj):
-        return ", ".join(obj.get_species_groups().values_list("name", flat=True))
+        return ", ".join(
+            obj.get_species_groups(include_hidden=True).values_list("name", flat=True)
+        )
 
 
 @admin.register(SpeciesSynonym)
