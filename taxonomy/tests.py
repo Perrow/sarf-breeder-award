@@ -5,7 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .admin import GenusAdmin, SpeciesGroupAdmin
-from .models import Genus, SpeciesGroup
+from .models import Genus, Species, SpeciesGroup
 
 
 class GenusModelTests(TestCase):
@@ -165,3 +165,100 @@ class SpeciesGroupAdminTests(TestCase):
         self.assertEqual(response.status_code, 302)
         species_group.refresh_from_db()
         self.assertEqual(species_group.name, "Malartade fiskar")
+
+
+class SpeciesModelTests(TestCase):
+    def setUp(self):
+        self.genus = Genus.objects.create(scientific_name="Corydoras")
+        self.other_genus = Genus.objects.create(scientific_name="Brochis")
+        self.species_group = SpeciesGroup.objects.create(name="Malar")
+
+    def create_species(self, **overrides):
+        values = {
+            "genus": self.genus,
+            "scientific_name": "aeneus",
+            "common_name": "Metallpansarmal",
+            "english_name": "Bronze corydoras",
+            "family": "Callichthyidae",
+            "species_group": self.species_group,
+            "breeding_class": Species.BreedingClass.BRONZE,
+        }
+        values.update(overrides)
+        return Species.objects.create(**values)
+
+    def test_species_stores_basic_classification(self):
+        species = self.create_species()
+
+        self.assertEqual(species.genus, self.genus)
+        self.assertEqual(species.scientific_name, "aeneus")
+        self.assertEqual(species.common_name, "Metallpansarmal")
+        self.assertEqual(species.english_name, "Bronze corydoras")
+        self.assertEqual(species.family, "Callichthyidae")
+        self.assertEqual(species.species_group, self.species_group)
+        self.assertEqual(species.breeding_class, Species.BreedingClass.BRONZE)
+
+    def test_english_name_is_optional(self):
+        species = Species(
+            genus=self.genus,
+            scientific_name="panda",
+            common_name="Pandapansarmal",
+            family="Callichthyidae",
+            species_group=self.species_group,
+            breeding_class=Species.BreedingClass.SILVER,
+        )
+
+        species.full_clean()
+
+    def test_genus_and_scientific_name_combination_is_unique(self):
+        self.create_species()
+        duplicate = Species(
+            genus=self.genus,
+            scientific_name="aeneus",
+            common_name="Annat namn",
+            family="Callichthyidae",
+            species_group=self.species_group,
+            breeding_class=Species.BreedingClass.GOLD,
+        )
+
+        with self.assertRaises(ValidationError):
+            duplicate.full_clean()
+
+    def test_same_scientific_name_is_allowed_in_another_genus(self):
+        self.create_species()
+        species = Species(
+            genus=self.other_genus,
+            scientific_name="aeneus",
+            common_name="Testart",
+            family="Callichthyidae",
+            species_group=self.species_group,
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+
+        species.full_clean()
+
+    def test_breeding_class_is_limited_to_defined_choices(self):
+        species = Species(
+            genus=self.genus,
+            scientific_name="paleatus",
+            common_name="Fläckig pansarmal",
+            family="Callichthyidae",
+            species_group=self.species_group,
+            breeding_class="platinum",
+        )
+
+        with self.assertRaises(ValidationError):
+            species.full_clean()
+
+    def test_species_can_be_inactivated_without_deleting_it(self):
+        species = self.create_species()
+
+        species.is_active = False
+        species.save()
+
+        species.refresh_from_db()
+        self.assertFalse(species.is_active)
+
+    def test_string_representation_is_full_scientific_name(self):
+        species = self.create_species()
+
+        self.assertEqual(str(species), "Corydoras aeneus")

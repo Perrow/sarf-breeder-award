@@ -129,6 +129,24 @@ Run the taxonomy tests with:
 python manage.py test taxonomy
 ```
 
+## BA-023 – Species register and breeding class
+
+Species are stored in `taxonomy.Species` and linked to both a genus and a species group. Each species stores its scientific species name, common name, optional English name, family, breeding class and active status. Breeding class is limited to Brons, Silver or Guld.
+
+The combination of genus and scientific species name is unique. Species can be marked inactive while keeping the record for historical references.
+
+Apply the BA-023 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the taxonomy tests with:
+
+```bash
+python manage.py test taxonomy
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:
