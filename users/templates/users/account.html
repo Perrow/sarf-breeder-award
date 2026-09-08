@@ -13,6 +13,19 @@
 <p><strong>E-post:</strong> {{ user.email }}</p>
 {% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
 
+<h2 class="h4 mt-4">Nivå och progression</h2>
+<p><strong>Karriärpoäng:</strong> {{ career_score }}</p>
+<p><strong>Aktuell nivå:</strong> {% if current_level %}{{ current_level.level_name }}{% else %}Ingen nivå ännu{% endif %}</p>
+{% if level_achievements %}
+<ul>
+    {% for achievement in level_achievements %}
+    <li>{{ achievement.level_name }} – {{ achievement.points_required }} poäng</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Du har ännu inte uppnått någon nivå.</p>
+{% endif %}
+
 <h2 class="h4 mt-4">Redigera profil</h2>
 <form method="post">
     {% csrf_token %}

@@ -5,6 +5,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
+from progression.services import progression_for_user
+
 from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
 
 
@@ -45,4 +47,14 @@ def account(request):
     else:
         form = ProfileForm(instance=request.user)
 
-    return render(request, "users/account.html", {"form": form})
+    career_score, current_level, level_achievements = progression_for_user(request.user)
+    return render(
+        request,
+        "users/account.html",
+        {
+            "form": form,
+            "career_score": career_score,
+            "current_level": current_level,
+            "level_achievements": level_achievements,
+        },
+    )
