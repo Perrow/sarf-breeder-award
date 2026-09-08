@@ -1,7 +1,7 @@
 from urllib.parse import parse_qs, urlparse
 
 from django.contrib.auth import get_user_model
-from django.contrib.auth.models import Group
+from django.contrib.auth.models import Group, Permission
 from django.test import TestCase
 from django.urls import reverse
 from django.utils import timezone
@@ -19,6 +19,7 @@ class TaxonomyPrefillTests(TestCase):
         self.owner = User.objects.create_user(username="prefill-owner@example.com", email="prefill-owner@example.com", password="test-password")
         self.reviewer = User.objects.create_user(username="prefill-reviewer@example.com", email="prefill-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
+        self.reviewer.user_permissions.add(Permission.objects.get(codename="add_species"))
         self.association = Association.objects.create(name="Förifyllnadsförening")
         Membership.objects.create(user=self.reviewer, association=self.association)
         self.client.force_login(self.reviewer)
