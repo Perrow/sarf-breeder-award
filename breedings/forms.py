@@ -43,6 +43,7 @@ class BreedingRegistrationForm(forms.ModelForm):
             self.fields["association"].required = False
             self.fields["association"].widget = forms.HiddenInput()
             self.fields["association"].initial = self.single_association
+            self.fields["association"].disabled = True
         self.fields["species"].queryset = Species.objects.available_for_registration()
         self.fields["species"].required = False
 
