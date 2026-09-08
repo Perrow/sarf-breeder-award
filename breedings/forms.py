@@ -36,11 +36,20 @@ class BreedingRegistrationForm(forms.ModelForm):
     def __init__(self, user, *args, **kwargs):
         self.user = user
         super().__init__(*args, **kwargs)
-        self.fields["association"].queryset = Association.objects.filter(memberships__user=user).distinct()
+        associations = Association.objects.filter(memberships__user=user).distinct()
+        self.fields["association"].queryset = associations
+        self.single_association = associations.first() if associations.count() == 1 else None
+        if self.single_association:
+            self.fields["association"].required = False
+            self.fields["association"].widget = forms.HiddenInput()
+            self.fields["association"].initial = self.single_association
         self.fields["species"].queryset = Species.objects.available_for_registration()
         self.fields["species"].required = False
 
     def clean_association(self):
+        if self.single_association:
+            return self.single_association
+
         association = self.cleaned_data["association"]
         if not association.memberships.filter(user=self.user).exists():
             raise forms.ValidationError("Du kan bara registrera odlingar för en förening där du är medlem.")

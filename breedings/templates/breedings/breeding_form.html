@@ -8,7 +8,11 @@
     {% csrf_token %}
     {{ form.non_field_errors }}
 
-    <p>{{ form.association.label_tag }} {{ form.association }} {{ form.association.errors }}</p>
+    {% if form.single_association %}
+        <p><strong>Förening:</strong> {{ form.single_association }} {{ form.association }}</p>
+    {% else %}
+        <p>{{ form.association.label_tag }} {{ form.association }} {{ form.association.errors }}</p>
+    {% endif %}
     <p>{{ form.species.label_tag }} {{ form.species }} {{ form.species.errors }}</p>
 
     <div id="free-text-taxonomy">
