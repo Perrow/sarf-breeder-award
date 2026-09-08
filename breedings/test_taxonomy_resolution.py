@@ -52,8 +52,9 @@ class TaxonomyResolutionTests(TestCase):
     def test_reviewer_can_link_existing_species_and_preserve_original_text(self):
         self.client.force_login(self.reviewer)
         response = self.client.post(self.resolve_url(), {"species": self.species.pk})
+        review_url = reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
 
-        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.assertRedirects(response, review_url)
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.species, self.species)
         self.assertFalse(self.registration.taxonomy_needs_resolution)

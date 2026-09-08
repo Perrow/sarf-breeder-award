@@ -175,9 +175,9 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
             form = TaxonomyResolutionForm(request.POST)
             if form.is_valid():
                 registration.species = form.cleaned_data["species"]
-                registration.save()
+                registration.save(update_fields=("species", "taxonomy_needs_resolution"))
                 messages.success(request, "Taxonomin har kopplats till en registrerad art.")
-                return redirect("admin:breedings_breedingregistration_changelist")
+                return redirect("admin:breedings_breedingregistration_review", object_id=registration.pk)
         else:
             form = TaxonomyResolutionForm()
 
