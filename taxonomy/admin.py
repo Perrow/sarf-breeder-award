@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Genus, SpeciesGroup, SpeciesSynonym
+from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
 
 
 @admin.register(Genus)
@@ -13,6 +13,32 @@ class GenusAdmin(admin.ModelAdmin):
 @admin.register(SpeciesGroup)
 class SpeciesGroupAdmin(admin.ModelAdmin):
     list_display = ("name",)
+
+
+class SpeciesSynonymInline(admin.TabularInline):
+    model = SpeciesSynonym
+    extra = 0
+
+
+@admin.register(Species)
+class SpeciesAdmin(admin.ModelAdmin):
+    list_display = (
+        "genus",
+        "scientific_name",
+        "common_name",
+        "species_group",
+        "breeding_class",
+        "is_active",
+    )
+    list_filter = ("is_active", "species_group", "breeding_class", "genus")
+    search_fields = (
+        "scientific_name",
+        "genus__scientific_name",
+        "common_name",
+        "english_name",
+        "synonyms__scientific_name",
+    )
+    inlines = (SpeciesSynonymInline,)
 
 
 @admin.register(SpeciesSynonym)

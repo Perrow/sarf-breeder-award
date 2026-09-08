@@ -165,6 +165,20 @@ Run the taxonomy tests with:
 python manage.py test taxonomy
 ```
 
+## BA-025 – Administer species register
+
+`taxonomy.Species` is registered in Django Admin. Administrators can create and edit species, change genus, species group and breeding class, and mark historical species inactive instead of deleting them.
+
+The species list shows scientific classification, common name, species group, breeding class and active status. It supports filtering by active status, species group, breeding class and genus, and searching by current scientific name, genus, common/English name and synonym. Synonyms can also be managed inline from the species edit page.
+
+No database migration is required for BA-025.
+
+Run the taxonomy tests with:
+
+```bash
+python manage.py test taxonomy
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:
