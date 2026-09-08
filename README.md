@@ -113,6 +113,22 @@ python manage.py test taxonomy
 
 No database migration is required for BA-021.
 
+## BA-022 – Species groups
+
+Species groups are stored in `taxonomy.SpeciesGroup` as separate records with a required unique name. They can be created and edited in Django Admin and are available for the species model introduced in a later ticket to reference.
+
+Apply the BA-022 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the taxonomy tests with:
+
+```bash
+python manage.py test taxonomy
+```
+
 ### Verification
 
 Run Django's system checks and the test suite:
