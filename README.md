@@ -1,4 +1,4 @@
-# SARF Breeder Award
+# Odlingskampanjen
 
 Breeder Award Program for multiple associations.
 
@@ -41,6 +41,10 @@ python manage.py runserver
 
 The development site is then available at `http://127.0.0.1:8000/`. The Django administration site is available at `/admin/`.
 
+## SQ-001 – Swedish site
+
+The application is named **Odlingskampanjen** and uses Swedish throughout, including Django's built-in administration interface and translated validation messages.
+
 ## BA-001 – Django project
 
 The repository contains the initial Django project scaffold using SQLite.
@@ -67,6 +71,24 @@ Run the BA-010 account tests with:
 
 ```bash
 python manage.py test users
+```
+
+## BA-011 – Associations and memberships
+
+The `associations` app contains the `Association` and `Membership` models. Associations store their name, organization number, contact details, address and description. A membership links one user to one association and can store a member number and association-specific information.
+
+A user can belong to multiple associations. The same user cannot have duplicate memberships in the same association.
+
+Apply the BA-011 migration with:
+
+```bash
+python manage.py migrate
+```
+
+Run the BA-011 model tests with:
+
+```bash
+python manage.py test associations
 ```
 
 ## BA-020 – Genera

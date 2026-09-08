@@ -5,8 +5,8 @@ from .models import User
 
 
 class RegistrationForm(UserCreationForm):
-    name = forms.CharField(max_length=300)
-    email = forms.EmailField()
+    name = forms.CharField(label="Namn", max_length=300)
+    email = forms.EmailField(label="E-post")
 
     class Meta(UserCreationForm.Meta):
         model = User
@@ -15,7 +15,7 @@ class RegistrationForm(UserCreationForm):
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
         if User.objects.filter(username__iexact=email).exists():
-            raise forms.ValidationError("An account with this email address already exists.")
+            raise forms.ValidationError("Det finns redan ett konto med den e-postadressen.")
         return email
 
     def save(self, commit=True):
@@ -35,4 +35,4 @@ class RegistrationForm(UserCreationForm):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label="Email")
+    username = forms.EmailField(label="E-post")

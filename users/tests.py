@@ -51,7 +51,7 @@ class UserAccountTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotIn("_auth_user_id", self.client.session)
-        self.assertContains(response, "Please enter a correct")
+        self.assertContains(response, "Ange en korrekt")
 
     def test_account_page_is_not_accessible_anonymously(self):
         response = self.client.get(reverse("account"))
@@ -73,3 +73,14 @@ class UserAccountTests(TestCase):
 
         self.assertRedirects(response, reverse("login"))
         self.assertNotIn("_auth_user_id", self.client.session)
+
+    def test_public_site_is_swedish(self):
+        response = self.client.get(reverse("login"))
+
+        self.assertContains(response, "Logga in")
+        self.assertContains(response, "Lösenord")
+
+    def test_admin_is_swedish(self):
+        response = self.client.get("/admin/login/")
+
+        self.assertContains(response, "Logga in")
