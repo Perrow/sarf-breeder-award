@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}Individuell topplista | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Individuell topplista</h1>
+
+<form method="get" class="row g-2 align-items-end mb-4">
+    <div class="col-auto">
+        <label for="year" class="form-label">Kalenderår</label>
+        <select id="year" name="year" class="form-select">
+            {% for year in available_years %}
+            <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="col-auto">
+        <button class="btn btn-primary" type="submit">Visa</button>
+    </div>
+</form>
+
+{% if leaderboard %}
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+    <thead>
+        <tr><th scope="col">Placering</th><th scope="col">Användare</th><th scope="col">Poäng</th></tr>
+    </thead>
+    <tbody>
+        {% for row in leaderboard %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ row.name }}</td>
+            <td>{{ row.points }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Det finns inga godkända odlingar för {{ selected_year }}.</p>
+{% endif %}
+{% endblock %}
