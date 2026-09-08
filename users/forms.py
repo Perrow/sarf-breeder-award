@@ -14,7 +14,10 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
-        if User.objects.filter(username__iexact=email).exists():
+        if (
+            User.objects.filter(username__iexact=email).exists()
+            or User.objects.filter(email__iexact=email).exists()
+        ):
             raise forms.ValidationError("Det finns redan ett konto med den e-postadressen.")
         return email
 
@@ -36,3 +39,24 @@ class RegistrationForm(UserCreationForm):
 
 class EmailAuthenticationForm(AuthenticationForm):
     username = forms.EmailField(label="E-post")
+
+
+class ProfileForm(forms.ModelForm):
+    display_name = forms.CharField(label="Visningsnamn", max_length=150)
+
+    class Meta:
+        model = User
+        fields = ("display_name", "location", "avatar_url")
+        labels = {
+            "location": "Ort",
+            "avatar_url": "Profilbild (URL)",
+        }
+
+    def clean_display_name(self):
+        display_name = self.cleaned_data["display_name"].strip()
+        if not display_name:
+            raise forms.ValidationError("Ange ett visningsnamn.")
+        return display_name
+
+    def clean_location(self):
+        return self.cleaned_data["location"].strip()

@@ -1,10 +1,11 @@
+from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from .forms import EmailAuthenticationForm, RegistrationForm
+from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
 
 
 def register(request):
@@ -35,4 +36,13 @@ class AccountLogoutView(LogoutView):
 
 @login_required
 def account(request):
-    return render(request, "users/account.html")
+    if request.method == "POST":
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, "Profilen har sparats.")
+            return redirect("account")
+    else:
+        form = ProfileForm(instance=request.user)
+
+    return render(request, "users/account.html", {"form": form})

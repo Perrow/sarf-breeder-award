@@ -4,9 +4,23 @@
 
 {% block content %}
 <h1>Konto</h1>
-<p>{{ user.get_full_name|default:user.email }}</p>
-<p>{{ user.email }}</p>
-<form method="post" action="{% url 'logout' %}">
+
+{% if user.avatar_url %}
+<p><img src="{{ user.avatar_url }}" alt="Profilbild för {{ user.display_name|default:user.get_full_name }}" class="img-thumbnail" style="max-width: 160px;"></p>
+{% endif %}
+
+<p><strong>Namn:</strong> {{ user.display_name|default:user.get_full_name|default:user.email }}</p>
+<p><strong>E-post:</strong> {{ user.email }}</p>
+{% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
+
+<h2 class="h4 mt-4">Redigera profil</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Spara profil</button>
+</form>
+
+<form method="post" action="{% url 'logout' %}" class="mt-3">
     {% csrf_token %}
     <button class="btn btn-outline-secondary" type="submit">Logga ut</button>
 </form>

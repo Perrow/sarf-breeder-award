@@ -1,12 +1,10 @@
 from django.contrib.auth.models import AbstractUser
+from django.db import models
 
 
 class User(AbstractUser):
-    """Application user model.
+    """Application user model."""
 
-    BA-002 intentionally introduces no additional fields. Using a project-owned
-    model from the start allows later tasks to extend users without replacing
-    Django's built-in user table after migrations have been applied.
-    """
-
-    pass
+    display_name = models.CharField(max_length=150, blank=True, verbose_name="visningsnamn")
+    location = models.CharField(max_length=150, blank=True, verbose_name="ort")
+    avatar_url = models.URLField(blank=True, verbose_name="profilbild")
