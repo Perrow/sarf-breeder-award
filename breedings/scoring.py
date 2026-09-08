@@ -42,8 +42,11 @@ def registration_is_timely_for_competition_year(registration, year):
     if year >= timezone.localdate().year:
         return True
 
+    # Legacy approved rows created before submitted_at was introduced keep their
+    # historical result. All registrations submitted through the application
+    # have submitted_at and are subject to the deadline below.
     if registration.submitted_at is None:
-        return False
+        return True
 
     deadline = date(year, 12, 31) + timedelta(days=30)
     submitted_date = timezone.localtime(registration.submitted_at).date()
@@ -76,18 +79,28 @@ def competition_points(user, year):
         status=BreedingRegistration.Status.APPROVED,
         breeding_date__year=year,
     ).only(
+        "species_id",
         "status",
         "awarded_breeding_class",
         "breeding_date",
         "submitted_at",
     )
 
-    return sum(
-        points
-        for registration in registrations
-        if registration_is_timely_for_competition_year(registration, year)
-        and (points := points_for_registration(registration)) is not None
-    )
+    best_points_by_species = {}
+    for registration in registrations:
+        if not registration_is_timely_for_competition_year(registration, year):
+            continue
+        points = points_for_registration(registration)
+        if points is None:
+            continue
+        if registration.species_id is None:
+            continue
+        best_points_by_species[registration.species_id] = max(
+            points,
+            best_points_by_species.get(registration.species_id, 0),
+        )
+
+    return sum(best_points_by_species.values())
 
 
 def user_year_points(user, year):
@@ -171,7 +184,7 @@ def association_year_scores(association, year):
         if not registration_is_timely_for_competition_year(registration, year):
             continue
         points = points_for_registration(registration)
-        if points is not None:
+        if points is not None and registration.species_id is not None:
             registrations_by_user[registration.owner_id].append((registration, points))
 
     totals = {}
@@ -180,8 +193,13 @@ def association_year_scores(association, year):
             key=lambda item: (-item[1], item[0].breeding_date, item[0].pk)
         )
         used_by_limit = defaultdict(int)
+        counted_species = set()
         total = 0
         for registration, points in user_registrations:
+            if registration.species_id in counted_species:
+                continue
+            counted_species.add(registration.species_id)
+
             matching_limit_ids = _matching_limit_ids(
                 registration, limits, group_genus_ids
             )
@@ -198,7 +216,7 @@ def association_year_scores(association, year):
                     used_by_limit[("specific", limit_id)] += 1
                 continue
 
-            if default_genus_limit is not None and registration.species_id:
+            if default_genus_limit is not None:
                 default_key = ("default_genus", registration.species.genus_id)
                 if used_by_limit[default_key] >= default_genus_limit:
                     continue
