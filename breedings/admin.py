@@ -11,7 +11,7 @@ from django.utils.html import format_html
 from associations.admin import is_association_admin, is_system_admin, managed_associations
 from taxonomy.models import Genus, Species
 
-from .models import BreedingRegistration
+from .models import AssociationCompetitionLimit, BreedingRegistration
 
 
 BREEDING_CLASS_POINTS = {
@@ -39,6 +39,32 @@ class TaxonomyResolutionForm(forms.Form):
         label="Art",
         queryset=Species.objects.all(),
     )
+
+
+@admin.register(AssociationCompetitionLimit)
+class AssociationCompetitionLimitAdmin(admin.ModelAdmin):
+    list_display = ("target", "max_registrations_per_member")
+    list_select_related = ("genus", "species_group")
+    fields = ("genus", "species_group", "max_registrations_per_member")
+
+    @admin.display(description="begränsat område")
+    def target(self, obj):
+        return obj.genus or obj.species_group
+
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_delete_permission(self, request, obj=None):
+        return is_system_admin(request.user)
 
 
 @admin.register(BreedingRegistration)
