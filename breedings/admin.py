@@ -42,6 +42,13 @@ class ReviewDecisionForm(forms.Form):
         return cleaned_data
 
 
+class TaxonomyResolutionForm(forms.Form):
+    species = forms.ModelChoiceField(
+        label="Art",
+        queryset=Species.objects.all(),
+    )
+
+
 @admin.register(BreedingRegistration)
 class BreedingRegistrationAdmin(admin.ModelAdmin):
     list_display = (
@@ -51,6 +58,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         "breeding_date",
         "status",
         "taxonomy_needs_resolution",
+        "taxonomy_link",
         "review_link",
     )
     list_filter = ("status", "taxonomy_needs_resolution", "association")
@@ -93,8 +101,20 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.review_view),
                 name="breedings_breedingregistration_review",
             ),
+            path(
+                "<int:object_id>/resolve-taxonomy/",
+                self.admin_site.admin_view(self.resolve_taxonomy_view),
+                name="breedings_breedingregistration_resolve_taxonomy",
+            ),
         ]
         return custom_urls + urls
+
+    @admin.display(description="Taxonomi")
+    def taxonomy_link(self, obj):
+        if not obj.taxonomy_needs_resolution:
+            return "–"
+        url = reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[obj.pk])
+        return format_html('<a href="{}">Lös taxonomi</a>', url)
 
     @admin.display(description="Granskning")
     def review_link(self, obj):
@@ -110,6 +130,9 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         if registration.status != BreedingRegistration.Status.SUBMITTED:
             messages.error(request, "Endast inskickade odlingsregistreringar kan granskas.")
             return redirect("admin:breedings_breedingregistration_changelist")
+        if registration.taxonomy_needs_resolution:
+            messages.error(request, "Taxonomin måste lösas innan odlingsregistreringen kan behandlas.")
+            return redirect("admin:breedings_breedingregistration_resolve_taxonomy", object_id=registration.pk)
 
         if request.method == "POST":
             form = ReviewDecisionForm(request.POST)
@@ -153,3 +176,31 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
             "form": form,
         }
         return render(request, "admin/breedings/breedingregistration/review.html", context)
+
+    def resolve_taxonomy_view(self, request, object_id):
+        registration = get_object_or_404(BreedingRegistration, pk=object_id)
+        if not self.has_view_permission(request, registration):
+            raise PermissionDenied
+        if not registration.taxonomy_needs_resolution:
+            messages.info(request, "Odlingsregistreringen har redan löst taxonomi.")
+            return redirect("admin:breedings_breedingregistration_changelist")
+
+        if request.method == "POST":
+            form = TaxonomyResolutionForm(request.POST)
+            if form.is_valid():
+                registration.species = form.cleaned_data["species"]
+                registration.save()
+                messages.success(request, "Taxonomin har kopplats till en registrerad art.")
+                return redirect("admin:breedings_breedingregistration_changelist")
+        else:
+            form = TaxonomyResolutionForm()
+
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "title": "Lös taxonomi",
+            "registration": registration,
+            "form": form,
+            "species_add_url": reverse("admin:taxonomy_species_add"),
+        }
+        return render(request, "admin/breedings/breedingregistration/resolve_taxonomy.html", context)
