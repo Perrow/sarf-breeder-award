@@ -1,3 +1,5 @@
+from collections import defaultdict
+
 from taxonomy.models import Species
 
 from .models import BreedingRegistration
@@ -57,3 +59,23 @@ def competition_points(user, year):
         for registration in registrations
         if (points := points_for_registration(registration)) is not None
     )
+
+
+def user_year_points(user, year):
+    return competition_points(user, year)
+
+
+def association_year_scores(association, year):
+    totals = defaultdict(int)
+    registrations = BreedingRegistration.objects.filter(
+        association=association,
+        status=BreedingRegistration.Status.APPROVED,
+        breeding_date__year=year,
+    ).only("owner_id", "status", "awarded_breeding_class")
+
+    for registration in registrations:
+        points = points_for_registration(registration)
+        if points is not None:
+            totals[registration.owner_id] += points
+
+    return dict(totals)
