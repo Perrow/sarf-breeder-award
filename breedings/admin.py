@@ -60,9 +60,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         "species",
         "breeding_date",
         "status",
-        "taxonomy_needs_resolution",
-        "taxonomy_link",
-        "review_link",
+        "action_link",
     )
     list_filter = ("status", "taxonomy_needs_resolution", "association")
     search_fields = (
@@ -112,19 +110,15 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         ]
         return custom_urls + urls
 
-    @admin.display(description="Taxonomi")
-    def taxonomy_link(self, obj):
-        if not obj.taxonomy_needs_resolution:
-            return "–"
-        url = reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[obj.pk])
-        return format_html('<a href="{}">Lös taxonomi</a>', url)
-
-    @admin.display(description="Granskning")
-    def review_link(self, obj):
-        if obj.status != BreedingRegistration.Status.SUBMITTED:
-            return "–"
-        url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
-        return format_html('<a href="{}">Granska</a>', url)
+    @admin.display(description="Åtgärd")
+    def action_link(self, obj):
+        if obj.taxonomy_needs_resolution:
+            url = reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[obj.pk])
+            return format_html('<a href="{}">Lös taxonomi</a>', url)
+        if obj.status == BreedingRegistration.Status.SUBMITTED:
+            url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
+            return format_html('<a href="{}">Granska</a>', url)
+        return "–"
 
     def review_view(self, request, object_id):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
