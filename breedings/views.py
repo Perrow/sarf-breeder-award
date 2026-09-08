@@ -9,7 +9,11 @@ from .models import BreedingRegistration
 
 @login_required
 def breeding_list(request):
-    registrations = BreedingRegistration.objects.filter(owner=request.user)
+    registrations = (
+        BreedingRegistration.objects.filter(owner=request.user)
+        .select_related("association", "species__genus", "reviewer")
+        .order_by("-breeding_date", "-pk")
+    )
     return render(request, "breedings/breeding_list.html", {"registrations": registrations})
 
 

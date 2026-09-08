@@ -11,7 +11,18 @@
 {% if registrations %}
 <div class="table-responsive">
 <table class="table align-middle">
-    <thead><tr><th>Datum</th><th>Art</th><th>Förening</th><th>Status</th><th></th></tr></thead>
+    <thead>
+        <tr>
+            <th>Datum</th>
+            <th>Art</th>
+            <th>Förening</th>
+            <th>Status</th>
+            <th>Klass</th>
+            <th>Poäng</th>
+            <th>Granskningskommentar</th>
+            <th></th>
+        </tr>
+    </thead>
     <tbody>
     {% for registration in registrations %}
         <tr>
@@ -26,6 +37,9 @@
             </td>
             <td>{{ registration.association }}</td>
             <td>{{ registration.get_status_display }}</td>
+            <td>{{ registration.get_awarded_breeding_class_display|default:"–" }}</td>
+            <td>{{ registration.awarded_points|default_if_none:"–" }}</td>
+            <td>{{ registration.review_comment|default:"–" }}</td>
             <td class="text-nowrap">
                 <a href="{% url 'breeding_detail' registration.pk %}">Visa</a>
                 {% if registration.status == "draft" %} · <a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>{% endif %}
