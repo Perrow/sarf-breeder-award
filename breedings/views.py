@@ -9,6 +9,7 @@ from associations.models import Association
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
 from .scoring import (
+    association_competition_rules,
     association_leaderboard_scores,
     association_member_year_registration_ids,
     association_year_scores,
@@ -105,6 +106,29 @@ def association_leaderboard(request):
             "leaderboard": leaderboard,
             "selected_year": selected_year,
             "available_years": sorted(available_years, reverse=True),
+        },
+    )
+
+
+def association_scoring_rules(request):
+    current_year = timezone.localdate().year
+    selected_year = _leaderboard_year(request.GET.get("year"))
+    available_years = {
+        date.year
+        for date in BreedingRegistration.objects.filter(
+            status=BreedingRegistration.Status.APPROVED
+        ).dates("breeding_date", "year", order="DESC")
+    }
+    available_years.add(current_year)
+    available_years.add(selected_year)
+
+    return render(
+        request,
+        "breedings/association_scoring_rules.html",
+        {
+            "selected_year": selected_year,
+            "available_years": sorted(available_years, reverse=True),
+            "rules": association_competition_rules(selected_year),
         },
     )
 

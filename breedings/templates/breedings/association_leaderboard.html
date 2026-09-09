@@ -3,6 +3,7 @@
 {% block content %}
 <h1>Föreningstopplista</h1>
 <p class="text-body-secondary">Tävlingsresultat mellan föreningarna för {{ selected_year }}.</p>
+<p><a href="{% url 'association_scoring_rules' %}?year={{ selected_year }}">Så räknas föreningspoängen och vilka begränsningar gäller</a></p>
 {% include "breedings/includes/leaderboard_year_selector.html" %}
 {% if leaderboard %}
 <div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Placering</th><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead><tbody>
