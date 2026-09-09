@@ -1,10 +1,37 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
+from associations.models import Association, Membership
+
 from .models import User
 
 
 PUBLIC_USERNAME_HELP = "Detta namn visas offentligt, bland annat i topplistor."
+
+
+def _association_field():
+    return forms.ModelMultipleChoiceField(
+        label="Föreningar",
+        queryset=Association.objects.order_by("name"),
+        required=False,
+        widget=forms.CheckboxSelectMultiple,
+    )
+
+
+def _sync_memberships(user, associations):
+    selected_ids = {association.pk for association in associations}
+    Membership.objects.filter(user=user).exclude(association_id__in=selected_ids).delete()
+    existing_ids = set(
+        Membership.objects.filter(user=user, association_id__in=selected_ids).values_list(
+            "association_id", flat=True
+        )
+    )
+    Membership.objects.bulk_create(
+        [
+            Membership(user=user, association_id=association_id)
+            for association_id in selected_ids - existing_ids
+        ]
+    )
 
 
 class RegistrationForm(UserCreationForm):
@@ -15,10 +42,18 @@ class RegistrationForm(UserCreationForm):
         help_text=PUBLIC_USERNAME_HELP,
     )
     email = forms.EmailField(label="E-post")
+    associations = _association_field()
 
     class Meta(UserCreationForm.Meta):
         model = User
-        fields = ("name", "public_username", "email", "password1", "password2")
+        fields = (
+            "name",
+            "public_username",
+            "email",
+            "associations",
+            "password1",
+            "password2",
+        )
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
@@ -49,6 +84,7 @@ class RegistrationForm(UserCreationForm):
 
         if commit:
             user.save()
+            _sync_memberships(user, self.cleaned_data["associations"])
         return user
 
 
@@ -63,6 +99,7 @@ class ProfileForm(forms.ModelForm):
         max_length=50,
         help_text=PUBLIC_USERNAME_HELP,
     )
+    associations = _association_field()
 
     class Meta:
         model = User
@@ -71,6 +108,13 @@ class ProfileForm(forms.ModelForm):
             "location": "Ort",
             "avatar_url": "Profilbild (URL)",
         }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.pk and not self.is_bound:
+            self.fields["associations"].initial = self.instance.memberships.values_list(
+                "association_id", flat=True
+            )
 
     def clean_public_username(self):
         public_username = self.cleaned_data["public_username"].strip()
@@ -90,3 +134,9 @@ class ProfileForm(forms.ModelForm):
 
     def clean_location(self):
         return self.cleaned_data["location"].strip()
+
+    def save(self, commit=True):
+        user = super().save(commit=commit)
+        if commit:
+            _sync_memberships(user, self.cleaned_data["associations"])
+        return user
