@@ -1,3 +1,4 @@
+from django.db import transaction
 from django.utils import timezone
 
 from breedings.models import BreedingRegistration
@@ -72,6 +73,34 @@ def _level_is_met(level, registrations):
     )
 
 
+def _expected_achievement_keys(achievement, registrations):
+    years = sorted({registration.breeding_date.year for registration in registrations})
+    evaluation_years = years if achievement.calendar_year_based else [None]
+    expected = set()
+
+    levels = list(
+        achievement.levels.prefetch_related(
+            "requirements__genera",
+            "requirements__species_groups__genera",
+            "requirements__species_groups__species",
+        )
+    )
+    for year in evaluation_years:
+        period_registrations = (
+            [
+                registration
+                for registration in registrations
+                if registration.breeding_date.year == year
+            ]
+            if year is not None
+            else registrations
+        )
+        for level in levels:
+            if _level_is_met(level, period_registrations):
+                expected.add((level.pk, year))
+    return expected, {level.pk: level for level in levels}
+
+
 def sync_achievements(user):
     achievements = Achievement.objects.prefetch_related(
         "levels__requirements__genera",
@@ -106,6 +135,57 @@ def sync_achievements(user):
                         "level_description": level.description,
                     },
                 )
+
+
+@transaction.atomic
+def revalidate_achievement(achievement):
+    existing_queryset = UserAchievement.objects.filter(level__achievement=achievement)
+    user_ids = set(existing_queryset.values_list("user_id", flat=True))
+    user_ids.update(
+        BreedingRegistration.objects.filter(
+            status=BreedingRegistration.Status.APPROVED,
+            species__isnull=False,
+        ).values_list("owner_id", flat=True).distinct()
+    )
+
+    removed = 0
+    created = 0
+    for user_id in user_ids:
+        registrations = list(
+            BreedingRegistration.objects.filter(
+                owner_id=user_id,
+                status=BreedingRegistration.Status.APPROVED,
+                species__isnull=False,
+            ).select_related("species__genus")
+        )
+        expected, levels_by_id = _expected_achievement_keys(achievement, registrations)
+        existing = {
+            (earned.level_id, earned.calendar_year): earned
+            for earned in existing_queryset.filter(user_id=user_id)
+        }
+
+        invalid_ids = [
+            earned.pk
+            for key, earned in existing.items()
+            if key not in expected
+        ]
+        if invalid_ids:
+            deleted, _ = UserAchievement.objects.filter(pk__in=invalid_ids).delete()
+            removed += deleted
+
+        for level_id, year in expected - set(existing):
+            level = levels_by_id[level_id]
+            UserAchievement.objects.create(
+                user_id=user_id,
+                level=level,
+                achievement_name=achievement.name,
+                level_name=level.name,
+                level_description=level.description,
+                calendar_year=year,
+            )
+            created += 1
+
+    return {"removed": removed, "created": created}
 
 
 def achievements_for_user(user):

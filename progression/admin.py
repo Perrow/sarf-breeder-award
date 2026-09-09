@@ -1,4 +1,8 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseNotAllowed
+from django.shortcuts import redirect
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
@@ -9,6 +13,7 @@ from .models import (
     AchievementRequirement,
     UserAchievement,
 )
+from .services import revalidate_achievement
 
 
 def _image_preview(background=None, overlay=None, custom_background=None):
@@ -59,6 +64,39 @@ class AchievementAdmin(admin.ModelAdmin):
     list_display = ("name", "calendar_year_based", "has_image", "has_background")
     inlines = (AchievementLevelInline,)
     readonly_fields = ("preview",)
+    change_form_template = "admin/progression/achievement/change_form.html"
+
+    def get_urls(self):
+        custom_urls = [
+            path(
+                "<path:object_id>/revalidate/",
+                self.admin_site.admin_view(self.revalidate_view),
+                name="progression_achievement_revalidate",
+            ),
+        ]
+        return custom_urls + super().get_urls()
+
+    def revalidate_view(self, request, object_id):
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+        achievement = self.get_object(request, object_id)
+        if achievement is None:
+            return redirect("admin:progression_achievement_changelist")
+        if not self.has_change_permission(request, achievement):
+            raise PermissionDenied
+
+        result = revalidate_achievement(achievement)
+        messages.success(
+            request,
+            (
+                "Granskningen är klar. "
+                f"{result['removed']} utdelning(ar) togs bort och "
+                f"{result['created']} skapades."
+            ),
+        )
+        return redirect(
+            reverse("admin:progression_achievement_change", args=[achievement.pk])
+        )
 
     @admin.display(boolean=True, description="Bild")
     def has_image(self, obj):
