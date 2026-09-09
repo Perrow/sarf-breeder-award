@@ -41,6 +41,8 @@ def _requirement_is_met(requirement, registrations):
     matching = _matching_registrations(requirement, registrations)
     if requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
         return len(matching) >= requirement.value
+    if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
+        return len({registration.species_id for registration in matching}) >= requirement.value
 
     best_points_by_species = {}
     for registration in matching:

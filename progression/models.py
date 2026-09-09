@@ -142,6 +142,7 @@ class AchievementRequirement(models.Model):
     class Kind(models.TextChoices):
         POINTS = "points", "Poäng"
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
+        SPECIES_COUNT = "species_count", "Antal arter"
 
     level = models.ForeignKey(
         AchievementLevel,
