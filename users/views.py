@@ -31,6 +31,9 @@ class EmailLoginView(LoginView):
     template_name = "users/login.html"
     redirect_authenticated_user = True
 
+    def get_success_url(self):
+        return self.get_redirect_url() or reverse_lazy("breeding_list")
+
 
 class AccountLogoutView(LogoutView):
     next_page = reverse_lazy("login")
