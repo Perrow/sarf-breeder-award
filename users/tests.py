@@ -36,7 +36,7 @@ class UserAccountTests(TestCase):
             {"username": "test@example.com", "password": "correct-password"},
         )
 
-        self.assertRedirects(response, reverse("account"))
+        self.assertRedirects(response, reverse("breeding_list"))
         self.assertEqual(self.client.session["_auth_user_id"], str(User.objects.get().pk))
 
     def test_invalid_credentials_are_denied(self):
