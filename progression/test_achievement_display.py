@@ -102,13 +102,22 @@ class AchievementDisplayTests(TestCase):
         presentations = achievement_presentations_for_user(self.user)
 
         self.assertEqual([item["background"] for item in presentations], [background_2025, background_2026])
-        response = self.client.get(reverse("breeding_list"))
-        self.assertContains(response, background_2025.image.url)
-        self.assertContains(response, background_2026.image.url)
-        self.assertContains(response, "#336699")
-        self.assertContains(response, "#993333")
-        self.assertContains(response, "<strong>År:</strong> 2025", html=True)
-        self.assertContains(response, "<strong>År:</strong> 2026", html=True)
+
+        overview_response = self.client.get(reverse("breeding_list"))
+        self.assertNotContains(overview_response, background_2025.image.url)
+        self.assertContains(overview_response, background_2026.image.url)
+        self.assertNotContains(overview_response, "#336699")
+        self.assertContains(overview_response, "#993333")
+        self.assertNotContains(overview_response, "<strong>År:</strong> 2025", html=True)
+        self.assertContains(overview_response, "<strong>År:</strong> 2026", html=True)
+
+        history_response = self.client.get(reverse("achievements"))
+        self.assertContains(history_response, background_2025.image.url)
+        self.assertContains(history_response, background_2026.image.url)
+        self.assertContains(history_response, "#336699")
+        self.assertContains(history_response, "#993333")
+        self.assertContains(history_response, "<strong>År:</strong> 2025", html=True)
+        self.assertContains(history_response, "<strong>År:</strong> 2026", html=True)
 
     def test_yearly_achievement_uses_latest_previous_background_when_exact_year_is_missing(self):
         background_2026 = AchievementBackground.objects.create(
