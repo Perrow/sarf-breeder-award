@@ -156,7 +156,7 @@ def _matching_limit_ids(registration, limits, group_genus_ids):
     return result
 
 
-def association_year_scores(association, year):
+def _association_year_results(association, year):
     limits, group_genus_ids = _competition_limits(year)
     limits_by_id = {limit.pk: limit for limit in limits}
     default_genus_limit = _default_genus_limit(year)
@@ -188,6 +188,9 @@ def association_year_scores(association, year):
             registrations_by_user[registration.owner_id].append((registration, points))
 
     totals = {}
+    eligible_registration_ids = defaultdict(list)
+    counted_registration_ids = defaultdict(list)
+
     for user_id, user_registrations in registrations_by_user.items():
         user_registrations.sort(
             key=lambda item: (-item[1], item[0].breeding_date, item[0].pk)
@@ -195,10 +198,12 @@ def association_year_scores(association, year):
         used_by_limit = defaultdict(int)
         counted_species = set()
         total = 0
+
         for registration, points in user_registrations:
             if registration.species_id in counted_species:
                 continue
             counted_species.add(registration.species_id)
+            eligible_registration_ids[user_id].append(registration.pk)
 
             matching_limit_ids = _matching_limit_ids(
                 registration, limits, group_genus_ids
@@ -212,6 +217,7 @@ def association_year_scores(association, year):
                 ):
                     continue
                 total += points
+                counted_registration_ids[user_id].append(registration.pk)
                 for limit_id in matching_limit_ids:
                     used_by_limit[("specific", limit_id)] += 1
                 continue
@@ -223,11 +229,25 @@ def association_year_scores(association, year):
                 used_by_limit[default_key] += 1
 
             total += points
+            counted_registration_ids[user_id].append(registration.pk)
 
         if total:
             totals[user_id] = total
 
+    return totals, dict(eligible_registration_ids), dict(counted_registration_ids)
+
+
+def association_year_scores(association, year):
+    totals, _, _ = _association_year_results(association, year)
     return totals
+
+
+def association_member_year_registration_ids(association, user, year, contribution_only):
+    _, eligible_registration_ids, counted_registration_ids = _association_year_results(
+        association, year
+    )
+    source = counted_registration_ids if contribution_only else eligible_registration_ids
+    return source.get(user.pk, [])
 
 
 def association_competition_points(association, year):

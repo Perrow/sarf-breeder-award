@@ -10,6 +10,11 @@ urlpatterns = [
         views.association_member_leaderboard,
         name="association_member_leaderboard",
     ),
+    path(
+        "foreningstopplista/<int:association_id>/medlemmar/<int:user_id>/odlingar/",
+        views.association_member_breeding_list,
+        name="association_member_breeding_list",
+    ),
     path("odlingar/", views.breeding_list, name="breeding_list"),
     path("odlingar/ny/", views.breeding_create, name="breeding_create"),
     path("odlingar/<int:pk>/", views.breeding_detail, name="breeding_detail"),
