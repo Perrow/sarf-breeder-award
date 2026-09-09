@@ -38,12 +38,14 @@ class LatestAchievementsPageTests(TestCase):
         earned.refresh_from_db()
         return earned
 
-    def test_breeding_overview_shows_six_latest_in_each_category_newest_first(self):
+    def test_breeding_overview_shows_only_current_year_and_six_latest_career(self):
         now = timezone.now()
+        current_year = timezone.localdate().year
+        previous_year = current_year - 1
         for index in range(7):
             self._earned(
                 f"Årsmerit {index}",
-                2020 + index,
+                current_year,
                 now - timedelta(days=index),
             )
             self._earned(
@@ -51,6 +53,7 @@ class LatestAchievementsPageTests(TestCase):
                 None,
                 now - timedelta(days=index),
             )
+        self._earned("Äldre årsmerit", previous_year, now + timedelta(days=1))
 
         response = self.client.get(reverse("breeding_list"))
 
@@ -66,8 +69,28 @@ class LatestAchievementsPageTests(TestCase):
             [item["earned"].achievement_name for item in career],
             [f"Karriärmerit {index}" for index in range(6)],
         )
-        self.assertTrue(all(item["earned"].calendar_year is not None for item in yearly))
-        self.assertTrue(all(item["earned"].calendar_year is None for item in career))
+        self.assertTrue(
+            all(item["earned"].calendar_year == current_year for item in yearly)
+        )
+        self.assertNotContains(response, "Äldre årsmerit")
+        self.assertContains(response, reverse("achievements"))
+
+    def test_all_achievements_page_shows_career_first_and_years_newest_first(self):
+        now = timezone.now()
+        current_year = timezone.localdate().year
+        previous_year = current_year - 1
+        self._earned("Karriär", None, now)
+        self._earned("Nuvarande år", current_year, now - timedelta(days=1))
+        self._earned("Föregående år", previous_year, now - timedelta(days=2))
+
+        response = self.client.get(reverse("achievements"))
+
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertLess(content.index("Karriärsutmärkelser"), content.index(f"Årsutmärkelser {current_year}"))
+        self.assertLess(content.index(f"Årsutmärkelser {current_year}"), content.index(f"Årsutmärkelser {previous_year}"))
+        groups = response.context["yearly_achievement_groups"]
+        self.assertEqual([group["year"] for group in groups], [current_year, previous_year])
 
     def test_account_page_does_not_show_achievements(self):
         self._earned("Ska bara synas på Min sida", None, timezone.now())
@@ -82,5 +105,5 @@ class LatestAchievementsPageTests(TestCase):
 
         self.assertEqual(response.context["yearly_achievements"], [])
         self.assertEqual(response.context["career_achievements"], [])
-        self.assertContains(response, "Du har ännu ingen årsutmärkelse.")
+        self.assertContains(response, "Du har ännu ingen årsutmärkelse för innevarande år.")
         self.assertContains(response, "Du har ännu ingen karriärsutmärkelse.")
