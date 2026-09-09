@@ -1,7 +1,7 @@
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
-from .models import Achievement, AchievementRequirement, UserAchievement
+from .models import Achievement, AchievementBackground, AchievementRequirement, UserAchievement
 
 
 def _registrations_for(user, year=None):
@@ -113,3 +113,22 @@ def achievements_for_user(user):
             "level__order",
         )
     )
+
+
+def achievement_presentations_for_user(user):
+    presentations = []
+    for earned in achievements_for_user(user):
+        background = (
+            AchievementBackground.for_year(earned.calendar_year)
+            if earned.calendar_year is not None
+            else AchievementBackground.lifetime()
+        )
+        achievement = earned.level.achievement
+        presentations.append(
+            {
+                "earned": earned,
+                "background": background,
+                "overlay": achievement.image if achievement.image else None,
+            }
+        )
+    return presentations
