@@ -5,6 +5,11 @@ from . import views
 urlpatterns = [
     path("topplista/", views.individual_leaderboard, name="individual_leaderboard"),
     path("foreningstopplista/", views.association_leaderboard, name="association_leaderboard"),
+    path(
+        "foreningstopplista/<int:association_id>/medlemmar/",
+        views.association_member_leaderboard,
+        name="association_member_leaderboard",
+    ),
     path("odlingar/", views.breeding_list, name="breeding_list"),
     path("odlingar/ny/", views.breeding_create, name="breeding_create"),
     path("odlingar/<int:pk>/", views.breeding_detail, name="breeding_detail"),

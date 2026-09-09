@@ -4,9 +4,11 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
+from associations.models import Association
+
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
-from .scoring import association_leaderboard_scores, competition_points
+from .scoring import association_leaderboard_scores, association_year_scores, competition_points
 
 
 def _leaderboard_year(raw_year):
@@ -97,6 +99,61 @@ def association_leaderboard(request):
             "leaderboard": leaderboard,
             "selected_year": selected_year,
             "available_years": sorted(available_years, reverse=True),
+        },
+    )
+
+
+def association_member_leaderboard(request, association_id):
+    association = get_object_or_404(Association, pk=association_id)
+    current_year = timezone.localdate().year
+    selected_year = _leaderboard_year(request.GET.get("year"))
+    view_mode = request.GET.get("view", "contribution")
+    if view_mode not in {"contribution", "individual"}:
+        view_mode = "contribution"
+
+    contribution_by_user = association_year_scores(association, selected_year)
+    members = get_user_model().objects.filter(memberships__association=association).distinct()
+
+    leaderboard = []
+    for user in members:
+        contribution_points = contribution_by_user.get(user.pk, 0)
+        individual_points = competition_points(user, selected_year)
+        if not contribution_points and not individual_points:
+            continue
+        leaderboard.append(
+            {
+                "user": user,
+                "name": user.public_display_name(),
+                "contribution_points": contribution_points,
+                "individual_points": individual_points,
+            }
+        )
+
+    score_key = "contribution_points" if view_mode == "contribution" else "individual_points"
+    leaderboard.sort(
+        key=lambda row: (-row[score_key], row["name"].casefold(), row["user"].pk)
+    )
+
+    available_years = {
+        date.year
+        for date in BreedingRegistration.objects.filter(
+            owner__memberships__association=association,
+            status=BreedingRegistration.Status.APPROVED,
+        ).dates("breeding_date", "year", order="DESC")
+    }
+    available_years.add(current_year)
+    available_years.add(selected_year)
+
+    return render(
+        request,
+        "breedings/association_member_leaderboard.html",
+        {
+            "association": association,
+            "leaderboard": leaderboard,
+            "selected_year": selected_year,
+            "available_years": sorted(available_years, reverse=True),
+            "view_mode": view_mode,
+            "score_key": score_key,
         },
     )
 
