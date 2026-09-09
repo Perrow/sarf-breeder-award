@@ -55,7 +55,7 @@ class PasswordResetTests(TestCase):
                 "password": "New-password-456",
             },
         )
-        self.assertRedirects(response, reverse("account"))
+        self.assertRedirects(response, reverse("breeding_list"))
         self.assertEqual(self.client.session["_auth_user_id"], str(self.user.pk))
 
         reused = self.client.get(reset_url, follow=True)
