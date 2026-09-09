@@ -15,7 +15,7 @@ class UserProfileTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_account_page_shows_profile_fields(self):
+    def test_account_page_is_read_only_and_links_to_edit(self):
         self.user.display_name = "Akvaristen"
         self.user.location = "Uppsala"
         self.user.avatar_url = "https://example.com/avatar.jpg"
@@ -27,10 +27,13 @@ class UserProfileTests(TestCase):
         self.assertContains(response, "ProfileUser")
         self.assertContains(response, "Uppsala")
         self.assertContains(response, "https://example.com/avatar.jpg")
+        self.assertContains(response, reverse("account_edit"))
+        self.assertNotContains(response, 'name="display_name"')
+        self.assertNotContains(response, 'name="public_username"')
 
-    def test_user_can_update_own_profile(self):
+    def test_user_can_update_own_profile_on_edit_page(self):
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             {
                 "public_username": "PellePublic",
                 "display_name": "Pelle",
@@ -39,14 +42,19 @@ class UserProfileTests(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("account"))
         self.user.refresh_from_db()
         self.assertEqual(self.user.public_username, "PellePublic")
         self.assertEqual(self.user.display_name, "Pelle")
         self.assertEqual(self.user.location, "Uppsala")
         self.assertEqual(self.user.avatar_url, "https://example.com/pelle.jpg")
 
-    def test_account_requires_login(self):
+        account_response = self.client.get(reverse("account"))
+        self.assertContains(account_response, "PellePublic")
+        self.assertContains(account_response, "Pelle")
+        self.assertContains(account_response, "Uppsala")
+
+    def test_account_and_edit_require_login(self):
         self.client.logout()
-        response = self.client.get(reverse("account"))
-        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.client.get(reverse("account")).status_code, 302)
+        self.assertEqual(self.client.get(reverse("account_edit")).status_code, 302)
