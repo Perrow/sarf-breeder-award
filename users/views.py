@@ -5,6 +5,8 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
+from progression.services import all_achievement_presentations_for_user
+
 from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
 
 
@@ -46,3 +48,16 @@ def account(request):
         form = ProfileForm(instance=request.user)
 
     return render(request, "users/account.html", {"form": form})
+
+
+@login_required
+def achievements(request):
+    presentations = all_achievement_presentations_for_user(request.user)
+    return render(
+        request,
+        "users/achievements.html",
+        {
+            "career_achievements": presentations["career"],
+            "yearly_achievement_groups": presentations["yearly"],
+        },
+    )
