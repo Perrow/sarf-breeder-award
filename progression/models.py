@@ -1,8 +1,17 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import RegexValidator
 from django.db import models
 
 from taxonomy.models import Genus, SpeciesGroup
+
+from .image_validators import validate_achievement_overlay, validate_award_image_dimensions
+
+
+hex_color_validator = RegexValidator(
+    regex=r"^#[0-9A-Fa-f]{6}$",
+    message="Färgen måste anges som #RRGGBB.",
+)
 
 
 class Achievement(models.Model):
@@ -11,14 +20,82 @@ class Achievement(models.Model):
         default=False,
         verbose_name="ska uppnås inom kalenderår",
     )
+    image = models.ImageField(
+        upload_to="achievements/images/",
+        blank=True,
+        validators=[validate_achievement_overlay],
+        verbose_name="utmärkelsebild",
+    )
 
     class Meta:
         ordering = ("name",)
         verbose_name = "utmärkelse"
         verbose_name_plural = "utmärkelser"
 
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
     def __str__(self):
         return self.name
+
+
+class AchievementBackground(models.Model):
+    calendar_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        unique=True,
+        verbose_name="kalenderår",
+        help_text="Lämna tomt för lifetime-bakgrunden.",
+    )
+    image = models.ImageField(
+        upload_to="achievements/backgrounds/",
+        validators=[validate_award_image_dimensions],
+        verbose_name="bakgrundsbild",
+    )
+    tint_color = models.CharField(
+        max_length=7,
+        blank=True,
+        validators=[hex_color_validator],
+        verbose_name="färgning",
+        help_text="Valfri färg i formatet #RRGGBB. Används bara för års-bakgrunder.",
+    )
+
+    class Meta:
+        ordering = ("calendar_year",)
+        verbose_name = "utmärkelsebakgrund"
+        verbose_name_plural = "utmärkelsebakgrunder"
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if self.calendar_year is None:
+            if self.tint_color:
+                errors["tint_color"] = "Lifetime-bakgrunden kan inte ha års-färgning."
+            lifetime_query = AchievementBackground.objects.filter(calendar_year__isnull=True)
+            if self.pk:
+                lifetime_query = lifetime_query.exclude(pk=self.pk)
+            if lifetime_query.exists():
+                errors["calendar_year"] = "Det kan bara finnas en lifetime-bakgrund."
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    @classmethod
+    def lifetime(cls):
+        return cls.objects.filter(calendar_year__isnull=True).first()
+
+    @classmethod
+    def for_year(cls, year):
+        return cls.objects.filter(calendar_year__lte=year).order_by("-calendar_year").first()
+
+    def __str__(self):
+        if self.calendar_year is None:
+            return "Lifetime"
+        return str(self.calendar_year)
 
 
 class AchievementLevel(models.Model):
