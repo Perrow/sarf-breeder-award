@@ -99,6 +99,7 @@ def sync_achievements(user):
                     defaults={
                         "achievement_name": achievement.name,
                         "level_name": level.name,
+                        "level_description": level.description,
                     },
                 )
 

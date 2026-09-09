@@ -45,6 +45,7 @@ class UserAchievementAdmin(admin.ModelAdmin):
         "level",
         "achievement_name",
         "level_name",
+        "level_description",
         "calendar_year",
         "achieved_at",
     )

@@ -28,7 +28,8 @@ class AchievementLevel(models.Model):
         related_name="levels",
         verbose_name="utmärkelse",
     )
-    name = models.CharField(max_length=100, verbose_name="nivånamn")
+    name = models.CharField(max_length=15, verbose_name="nivånamn")
+    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
     order = models.PositiveIntegerField(verbose_name="ordning")
 
     class Meta:
@@ -45,6 +46,10 @@ class AchievementLevel(models.Model):
         ]
         verbose_name = "utmärkelsenivå"
         verbose_name_plural = "utmärkelsenivåer"
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
 
     def __str__(self):
         return f"{self.achievement}: {self.name}"
@@ -100,6 +105,7 @@ class UserAchievement(models.Model):
     )
     achievement_name = models.CharField(max_length=100)
     level_name = models.CharField(max_length=100)
+    level_description = models.CharField(max_length=300, blank=True)
     calendar_year = models.PositiveIntegerField(null=True, blank=True)
     achieved_at = models.DateTimeField(auto_now_add=True)
 
