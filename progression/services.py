@@ -1,3 +1,5 @@
+from django.utils import timezone
+
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
@@ -134,9 +136,9 @@ def _presentation_for(earned):
             else fallback_background.image if fallback_background else None
         ),
         "background_tint": (
-            ""
-            if custom_background
-            else fallback_background.tint_color if fallback_background else ""
+            fallback_background.tint_color
+            if earned.calendar_year is not None and fallback_background
+            else ""
         ),
         "overlay": achievement.image if achievement.image else None,
     }
@@ -147,11 +149,33 @@ def achievement_presentations_for_user(user):
 
 
 def latest_achievement_presentations_for_user(user, limit=6):
+    current_year = timezone.localdate().year
     earned = achievements_for_user(user)
     earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
-    yearly = [item for item in earned if item.calendar_year is not None][:limit]
+    yearly = [
+        item for item in earned if item.calendar_year == current_year
+    ][:limit]
     career = [item for item in earned if item.calendar_year is None][:limit]
     return {
+        "year": current_year,
         "yearly": [_presentation_for(item) for item in yearly],
         "career": [_presentation_for(item) for item in career],
     }
+
+
+def all_achievement_presentations_for_user(user):
+    earned = achievements_for_user(user)
+    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
+
+    career = [_presentation_for(item) for item in earned if item.calendar_year is None]
+    yearly_by_year = {}
+    for item in earned:
+        if item.calendar_year is None:
+            continue
+        yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item))
+
+    yearly = [
+        {"year": year, "achievements": yearly_by_year[year]}
+        for year in sorted(yearly_by_year, reverse=True)
+    ]
+    return {"career": career, "yearly": yearly}
