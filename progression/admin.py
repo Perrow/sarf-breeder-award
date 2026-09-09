@@ -11,15 +11,20 @@ from .models import (
 )
 
 
-def _image_preview(background=None, overlay=None):
-    if not background and not overlay:
+def _image_preview(background=None, overlay=None, custom_background=None):
+    if not background and not overlay and not custom_background:
         return "-"
 
     background_html = ""
     tint_html = ""
     overlay_html = ""
 
-    if background and background.image:
+    if custom_background:
+        background_html = format_html(
+            '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
+            custom_background.url,
+        )
+    elif background and background.image:
         background_html = format_html(
             '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
             background.image.url,
@@ -50,13 +55,17 @@ class AchievementLevelInline(admin.TabularInline):
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = ("name", "calendar_year_based", "has_image")
+    list_display = ("name", "calendar_year_based", "has_image", "has_background")
     inlines = (AchievementLevelInline,)
     readonly_fields = ("preview",)
 
     @admin.display(boolean=True, description="Bild")
     def has_image(self, obj):
         return bool(obj.image)
+
+    @admin.display(boolean=True, description="Egen bakgrund")
+    def has_background(self, obj):
+        return bool(obj.background_image)
 
     @admin.display(description="Förhandsvisning")
     def preview(self, obj):
@@ -67,7 +76,11 @@ class AchievementAdmin(admin.ModelAdmin):
             if obj.calendar_year_based
             else AchievementBackground.lifetime()
         )
-        return _image_preview(background, obj.image if obj.image else None)
+        return _image_preview(
+            background,
+            obj.image if obj.image else None,
+            obj.background_image if obj.background_image else None,
+        )
 
 
 @admin.register(AchievementBackground)

@@ -118,16 +118,27 @@ def achievements_for_user(user):
 def achievement_presentations_for_user(user):
     presentations = []
     for earned in achievements_for_user(user):
-        background = (
+        fallback_background = (
             AchievementBackground.for_year(earned.calendar_year)
             if earned.calendar_year is not None
             else AchievementBackground.lifetime()
         )
         achievement = earned.level.achievement
+        custom_background = achievement.background_image if achievement.background_image else None
         presentations.append(
             {
                 "earned": earned,
-                "background": background,
+                "background": fallback_background,
+                "background_image": (
+                    custom_background
+                    if custom_background
+                    else fallback_background.image if fallback_background else None
+                ),
+                "background_tint": (
+                    ""
+                    if custom_background
+                    else fallback_background.tint_color if fallback_background else ""
+                ),
                 "overlay": achievement.image if achievement.image else None,
             }
         )

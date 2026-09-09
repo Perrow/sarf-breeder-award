@@ -21,12 +21,12 @@
     {% for presentation in award_presentations %}
     <article class="card" style="width: 220px;" data-achievement="{{ presentation.earned.achievement_name }}">
         <div class="card-body">
-            {% if presentation.background or presentation.overlay %}
+            {% if presentation.background_image or presentation.overlay %}
             <div style="position:relative;width:200px;height:250px;overflow:hidden;">
-                {% if presentation.background and presentation.background.image %}
-                <img src="{{ presentation.background.image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
-                {% if presentation.background.tint_color %}
-                <span aria-hidden="true" style="position:absolute;inset:0;background:{{ presentation.background.tint_color }};mix-blend-mode:color;"></span>
+                {% if presentation.background_image %}
+                <img src="{{ presentation.background_image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
+                {% if presentation.background_tint %}
+                <span aria-hidden="true" style="position:absolute;inset:0;background:{{ presentation.background_tint }};mix-blend-mode:color;"></span>
                 {% endif %}
                 {% endif %}
                 {% if presentation.overlay %}
