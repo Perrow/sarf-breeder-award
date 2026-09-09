@@ -10,12 +10,18 @@ from django.urls import reverse
 class PasswordResetTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="reset@example.com",
+            username="legacy-reset-user",
             email="reset@example.com",
             password="Old-password-123",
         )
 
-    def test_registered_email_can_reset_password_with_one_time_link(self):
+    def test_login_page_links_to_password_reset(self):
+        response = self.client.get(reverse("login"))
+
+        self.assertContains(response, "Glömt lösenord?")
+        self.assertContains(response, f'href="{reverse("password_reset")}"')
+
+    def test_registered_email_can_reset_password_and_log_in_with_email(self):
         response = self.client.post(reverse("password_reset"), {"email": self.user.email})
 
         self.assertRedirects(response, reverse("password_reset_done"))
@@ -41,7 +47,16 @@ class PasswordResetTests(TestCase):
 
         self.user.refresh_from_db()
         self.assertTrue(self.user.check_password("New-password-456"))
-        self.assertTrue(self.client.login(username=self.user.email, password="New-password-456"))
+
+        response = self.client.post(
+            reverse("login"),
+            {
+                "username": self.user.email,
+                "password": "New-password-456",
+            },
+        )
+        self.assertRedirects(response, reverse("account"))
+        self.assertEqual(self.client.session["_auth_user_id"], str(self.user.pk))
 
         reused = self.client.get(reset_url, follow=True)
         self.assertContains(reused, "ogiltig eller har redan använts")
