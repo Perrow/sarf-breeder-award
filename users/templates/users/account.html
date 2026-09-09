@@ -15,41 +15,6 @@
 <p><strong>E-post:</strong> {{ user.email }}</p>
 {% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
 
-<h2 class="h4 mt-4">Utmärkelser</h2>
-{% if award_presentations %}
-<div class="d-flex flex-wrap gap-4">
-    {% for presentation in award_presentations %}
-    <article class="card" style="width: 220px;" data-achievement="{{ presentation.earned.achievement_name }}">
-        <div class="card-body">
-            {% if presentation.background_image or presentation.overlay %}
-            <div style="position:relative;width:200px;height:250px;overflow:hidden;">
-                {% if presentation.background_image %}
-                <img src="{{ presentation.background_image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
-                {% if presentation.background_tint %}
-                <span aria-hidden="true" style="position:absolute;inset:0;background:{{ presentation.background_tint }};mix-blend-mode:color;"></span>
-                {% endif %}
-                {% endif %}
-                {% if presentation.overlay %}
-                <img src="{{ presentation.overlay.url }}" alt="{{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:2;">
-                {% endif %}
-            </div>
-            {% endif %}
-            <h3 class="h5 mt-3 mb-1">{{ presentation.earned.achievement_name }}</h3>
-            <p class="mb-1"><strong>Grad:</strong> {{ presentation.earned.level_name }}</p>
-            {% if presentation.earned.calendar_year %}
-            <p class="mb-1"><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>
-            {% endif %}
-            {% if presentation.earned.level_description %}
-            <p class="mb-0">{{ presentation.earned.level_description }}</p>
-            {% endif %}
-        </div>
-    </article>
-    {% endfor %}
-</div>
-{% else %}
-<p>Du har ännu inte uppnått någon utmärkelse.</p>
-{% endif %}
-
 <h2 class="h4 mt-4">Redigera profil</h2>
 <form method="post">
     {% csrf_token %}

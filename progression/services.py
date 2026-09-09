@@ -117,31 +117,41 @@ def achievements_for_user(user):
     )
 
 
+def _presentation_for(earned):
+    fallback_background = (
+        AchievementBackground.for_year(earned.calendar_year)
+        if earned.calendar_year is not None
+        else AchievementBackground.lifetime()
+    )
+    achievement = earned.level.achievement
+    custom_background = achievement.background_image if achievement.background_image else None
+    return {
+        "earned": earned,
+        "background": fallback_background,
+        "background_image": (
+            custom_background
+            if custom_background
+            else fallback_background.image if fallback_background else None
+        ),
+        "background_tint": (
+            ""
+            if custom_background
+            else fallback_background.tint_color if fallback_background else ""
+        ),
+        "overlay": achievement.image if achievement.image else None,
+    }
+
+
 def achievement_presentations_for_user(user):
-    presentations = []
-    for earned in achievements_for_user(user):
-        fallback_background = (
-            AchievementBackground.for_year(earned.calendar_year)
-            if earned.calendar_year is not None
-            else AchievementBackground.lifetime()
-        )
-        achievement = earned.level.achievement
-        custom_background = achievement.background_image if achievement.background_image else None
-        presentations.append(
-            {
-                "earned": earned,
-                "background": fallback_background,
-                "background_image": (
-                    custom_background
-                    if custom_background
-                    else fallback_background.image if fallback_background else None
-                ),
-                "background_tint": (
-                    ""
-                    if custom_background
-                    else fallback_background.tint_color if fallback_background else ""
-                ),
-                "overlay": achievement.image if achievement.image else None,
-            }
-        )
-    return presentations
+    return [_presentation_for(earned) for earned in achievements_for_user(user)]
+
+
+def latest_achievement_presentations_for_user(user, limit=6):
+    earned = achievements_for_user(user)
+    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
+    yearly = [item for item in earned if item.calendar_year is not None][:limit]
+    career = [item for item in earned if item.calendar_year is None][:limit]
+    return {
+        "yearly": [_presentation_for(item) for item in yearly],
+        "career": [_presentation_for(item) for item in career],
+    }

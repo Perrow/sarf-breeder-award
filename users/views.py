@@ -5,8 +5,6 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
-from progression.services import achievement_presentations_for_user
-
 from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
 
 
@@ -47,12 +45,4 @@ def account(request):
     else:
         form = ProfileForm(instance=request.user)
 
-    award_presentations = achievement_presentations_for_user(request.user)
-    return render(
-        request,
-        "users/account.html",
-        {
-            "form": form,
-            "award_presentations": award_presentations,
-        },
-    )
+    return render(request, "users/account.html", {"form": form})

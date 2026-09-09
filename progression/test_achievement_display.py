@@ -60,7 +60,7 @@ class AchievementDisplayTests(TestCase):
         self.assertEqual(presentation["background"], background)
         self.assertEqual(presentation["overlay"].name, achievement.image.name)
 
-        response = self.client.get(reverse("account"))
+        response = self.client.get(reverse("breeding_list"))
         self.assertContains(response, background.image.url)
         self.assertContains(response, achievement.image.url)
         self.assertContains(response, "Brons")
@@ -102,7 +102,7 @@ class AchievementDisplayTests(TestCase):
         presentations = achievement_presentations_for_user(self.user)
 
         self.assertEqual([item["background"] for item in presentations], [background_2025, background_2026])
-        response = self.client.get(reverse("account"))
+        response = self.client.get(reverse("breeding_list"))
         self.assertContains(response, background_2025.image.url)
         self.assertContains(response, background_2026.image.url)
         self.assertContains(response, "#336699")
@@ -129,7 +129,7 @@ class AchievementDisplayTests(TestCase):
             year=2026,
         )
 
-        response = self.client.get(reverse("account"))
+        response = self.client.get(reverse("breeding_list"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Textmerit")
@@ -141,6 +141,6 @@ class AchievementDisplayTests(TestCase):
         achievement = Achievement.objects.create(name="Inte vunnen")
         AchievementLevel.objects.create(achievement=achievement, name="Brons", order=1)
 
-        response = self.client.get(reverse("account"))
+        response = self.client.get(reverse("breeding_list"))
 
         self.assertNotContains(response, "Inte vunnen")
