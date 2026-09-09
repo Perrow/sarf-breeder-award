@@ -12,7 +12,8 @@
             {% if next %}<input type="hidden" name="next" value="{{ next }}">{% endif %}
             <button class="btn btn-primary" type="submit">Logga in</button>
         </form>
-        <p class="mt-3"><a href="{% url 'register' %}">Skapa konto</a></p>
+        <p class="mt-3"><a href="{% url 'password_reset' %}">Glömt lösenord?</a></p>
+        <p><a href="{% url 'register' %}">Skapa konto</a></p>
     </div>
 </div>
 {% endblock %}

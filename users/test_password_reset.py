@@ -15,6 +15,12 @@ class PasswordResetTests(TestCase):
             password="Old-password-123",
         )
 
+    def test_login_page_links_to_password_reset(self):
+        response = self.client.get(reverse("login"))
+
+        self.assertContains(response, "Glömt lösenord?")
+        self.assertContains(response, f'href="{reverse("password_reset")}"')
+
     def test_registered_email_can_reset_password_with_one_time_link(self):
         response = self.client.post(reverse("password_reset"), {"email": self.user.email})
 
