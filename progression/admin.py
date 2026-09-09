@@ -1,4 +1,8 @@
-from django.contrib import admin
+from django.contrib import admin, messages
+from django.core.exceptions import PermissionDenied
+from django.http import HttpResponseNotAllowed
+from django.shortcuts import redirect
+from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html
 
@@ -9,26 +13,33 @@ from .models import (
     AchievementRequirement,
     UserAchievement,
 )
+from .services import revalidate_achievement
 
 
-def _image_preview(background=None, overlay=None):
-    if not background and not overlay:
+def _image_preview(background=None, overlay=None, custom_background=None):
+    if not background and not overlay and not custom_background:
         return "-"
 
     background_html = ""
     tint_html = ""
     overlay_html = ""
 
-    if background and background.image:
+    if custom_background:
+        background_html = format_html(
+            '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
+            custom_background.url,
+        )
+    elif background and background.image:
         background_html = format_html(
             '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
             background.image.url,
         )
-        if background.tint_color:
-            tint_html = format_html(
-                '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;"></span>',
-                background.tint_color,
-            )
+
+    if background and background.tint_color:
+        tint_html = format_html(
+            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;"></span>',
+            background.tint_color,
+        )
 
     if overlay:
         overlay_html = format_html(
@@ -50,13 +61,50 @@ class AchievementLevelInline(admin.TabularInline):
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
-    list_display = ("name", "calendar_year_based", "has_image")
+    list_display = ("name", "calendar_year_based", "has_image", "has_background")
     inlines = (AchievementLevelInline,)
     readonly_fields = ("preview",)
+    change_form_template = "admin/progression/achievement/change_form.html"
+
+    def get_urls(self):
+        custom_urls = [
+            path(
+                "<path:object_id>/revalidate/",
+                self.admin_site.admin_view(self.revalidate_view),
+                name="progression_achievement_revalidate",
+            ),
+        ]
+        return custom_urls + super().get_urls()
+
+    def revalidate_view(self, request, object_id):
+        if request.method != "POST":
+            return HttpResponseNotAllowed(["POST"])
+        achievement = self.get_object(request, object_id)
+        if achievement is None:
+            return redirect("admin:progression_achievement_changelist")
+        if not self.has_change_permission(request, achievement):
+            raise PermissionDenied
+
+        result = revalidate_achievement(achievement)
+        messages.success(
+            request,
+            (
+                "Granskningen är klar. "
+                f"{result['removed']} utdelning(ar) togs bort och "
+                f"{result['created']} skapades."
+            ),
+        )
+        return redirect(
+            reverse("admin:progression_achievement_change", args=[achievement.pk])
+        )
 
     @admin.display(boolean=True, description="Bild")
     def has_image(self, obj):
         return bool(obj.image)
+
+    @admin.display(boolean=True, description="Egen bakgrund")
+    def has_background(self, obj):
+        return bool(obj.background_image)
 
     @admin.display(description="Förhandsvisning")
     def preview(self, obj):
@@ -67,7 +115,11 @@ class AchievementAdmin(admin.ModelAdmin):
             if obj.calendar_year_based
             else AchievementBackground.lifetime()
         )
-        return _image_preview(background, obj.image if obj.image else None)
+        return _image_preview(
+            background,
+            obj.image if obj.image else None,
+            obj.background_image if obj.background_image else None,
+        )
 
 
 @admin.register(AchievementBackground)

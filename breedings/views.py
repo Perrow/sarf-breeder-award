@@ -5,6 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from associations.models import Association
+from progression.services import latest_achievement_presentations_for_user
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
@@ -249,7 +250,16 @@ def breeding_list(request):
         .select_related("association", "species__genus", "reviewer")
         .order_by("-breeding_date", "-pk")
     )
-    return render(request, "breedings/breeding_list.html", {"registrations": registrations})
+    achievements = latest_achievement_presentations_for_user(request.user)
+    return render(
+        request,
+        "breedings/breeding_list.html",
+        {
+            "registrations": registrations,
+            "yearly_achievements": achievements["yearly"],
+            "career_achievements": achievements["career"],
+        },
+    )
 
 
 @login_required

@@ -26,6 +26,12 @@ class Achievement(models.Model):
         validators=[validate_achievement_overlay],
         verbose_name="utmärkelsebild",
     )
+    background_image = models.ImageField(
+        upload_to="achievements/custom_backgrounds/",
+        blank=True,
+        validators=[validate_award_image_dimensions],
+        verbose_name="egen bakgrundsbild",
+    )
 
     class Meta:
         ordering = ("name",)
@@ -136,6 +142,7 @@ class AchievementRequirement(models.Model):
     class Kind(models.TextChoices):
         POINTS = "points", "Poäng"
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
+        SPECIES_COUNT = "species_count", "Antal arter"
 
     level = models.ForeignKey(
         AchievementLevel,

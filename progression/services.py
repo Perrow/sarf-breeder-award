@@ -1,3 +1,6 @@
+from django.db import transaction
+from django.utils import timezone
+
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
@@ -41,6 +44,8 @@ def _requirement_is_met(requirement, registrations):
     matching = _matching_registrations(requirement, registrations)
     if requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
         return len(matching) >= requirement.value
+    if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
+        return len({registration.species_id for registration in matching}) >= requirement.value
 
     best_points_by_species = {}
     for registration in matching:
@@ -66,6 +71,34 @@ def _level_is_met(level, registrations):
         _requirement_is_met(requirement, registrations)
         for requirement in requirements
     )
+
+
+def _expected_achievement_keys(achievement, registrations):
+    years = sorted({registration.breeding_date.year for registration in registrations})
+    evaluation_years = years if achievement.calendar_year_based else [None]
+    expected = set()
+
+    levels = list(
+        achievement.levels.prefetch_related(
+            "requirements__genera",
+            "requirements__species_groups__genera",
+            "requirements__species_groups__species",
+        )
+    )
+    for year in evaluation_years:
+        period_registrations = (
+            [
+                registration
+                for registration in registrations
+                if registration.breeding_date.year == year
+            ]
+            if year is not None
+            else registrations
+        )
+        for level in levels:
+            if _level_is_met(level, period_registrations):
+                expected.add((level.pk, year))
+    return expected, {level.pk: level for level in levels}
 
 
 def sync_achievements(user):
@@ -104,6 +137,57 @@ def sync_achievements(user):
                 )
 
 
+@transaction.atomic
+def revalidate_achievement(achievement):
+    existing_queryset = UserAchievement.objects.filter(level__achievement=achievement)
+    user_ids = set(existing_queryset.values_list("user_id", flat=True))
+    user_ids.update(
+        BreedingRegistration.objects.filter(
+            status=BreedingRegistration.Status.APPROVED,
+            species__isnull=False,
+        ).values_list("owner_id", flat=True).distinct()
+    )
+
+    removed = 0
+    created = 0
+    for user_id in user_ids:
+        registrations = list(
+            BreedingRegistration.objects.filter(
+                owner_id=user_id,
+                status=BreedingRegistration.Status.APPROVED,
+                species__isnull=False,
+            ).select_related("species__genus")
+        )
+        expected, levels_by_id = _expected_achievement_keys(achievement, registrations)
+        existing = {
+            (earned.level_id, earned.calendar_year): earned
+            for earned in existing_queryset.filter(user_id=user_id)
+        }
+
+        invalid_ids = [
+            earned.pk
+            for key, earned in existing.items()
+            if key not in expected
+        ]
+        if invalid_ids:
+            deleted, _ = UserAchievement.objects.filter(pk__in=invalid_ids).delete()
+            removed += deleted
+
+        for level_id, year in expected - set(existing):
+            level = levels_by_id[level_id]
+            UserAchievement.objects.create(
+                user_id=user_id,
+                level=level,
+                achievement_name=achievement.name,
+                level_name=level.name,
+                level_description=level.description,
+                calendar_year=year,
+            )
+            created += 1
+
+    return {"removed": removed, "created": created}
+
+
 def achievements_for_user(user):
     sync_achievements(user)
     return list(
@@ -115,20 +199,63 @@ def achievements_for_user(user):
     )
 
 
+def _presentation_for(earned):
+    fallback_background = (
+        AchievementBackground.for_year(earned.calendar_year)
+        if earned.calendar_year is not None
+        else AchievementBackground.lifetime()
+    )
+    achievement = earned.level.achievement
+    custom_background = achievement.background_image if achievement.background_image else None
+    return {
+        "earned": earned,
+        "background": fallback_background,
+        "background_image": (
+            custom_background
+            if custom_background
+            else fallback_background.image if fallback_background else None
+        ),
+        "background_tint": (
+            fallback_background.tint_color
+            if earned.calendar_year is not None and fallback_background
+            else ""
+        ),
+        "overlay": achievement.image if achievement.image else None,
+    }
+
+
 def achievement_presentations_for_user(user):
-    presentations = []
-    for earned in achievements_for_user(user):
-        background = (
-            AchievementBackground.for_year(earned.calendar_year)
-            if earned.calendar_year is not None
-            else AchievementBackground.lifetime()
-        )
-        achievement = earned.level.achievement
-        presentations.append(
-            {
-                "earned": earned,
-                "background": background,
-                "overlay": achievement.image if achievement.image else None,
-            }
-        )
-    return presentations
+    return [_presentation_for(earned) for earned in achievements_for_user(user)]
+
+
+def latest_achievement_presentations_for_user(user, limit=6):
+    current_year = timezone.localdate().year
+    earned = achievements_for_user(user)
+    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
+    yearly = [
+        item for item in earned if item.calendar_year == current_year
+    ][:limit]
+    career = [item for item in earned if item.calendar_year is None][:limit]
+    return {
+        "year": current_year,
+        "yearly": [_presentation_for(item) for item in yearly],
+        "career": [_presentation_for(item) for item in career],
+    }
+
+
+def all_achievement_presentations_for_user(user):
+    earned = achievements_for_user(user)
+    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
+
+    career = [_presentation_for(item) for item in earned if item.calendar_year is None]
+    yearly_by_year = {}
+    for item in earned:
+        if item.calendar_year is None:
+            continue
+        yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item))
+
+    yearly = [
+        {"year": year, "achievements": yearly_by_year[year]}
+        for year in sorted(yearly_by_year, reverse=True)
+    ]
+    return {"career": career, "yearly": yearly}

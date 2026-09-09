@@ -3,6 +3,30 @@
 {% block title %}Mina odlingar | Odlingskampanjen{% endblock %}
 
 {% block content %}
+<h2 class="h4">Årsutmärkelser för innevarande år</h2>
+{% if yearly_achievements %}
+<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
+    {% for presentation in yearly_achievements %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen årsutmärkelse för innevarande år.</p>
+{% endif %}
+
+<h2 class="h4">Senaste karriärsutmärkelser</h2>
+{% if career_achievements %}
+<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
+    {% for presentation in career_achievements %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen karriärsutmärkelse.</p>
+{% endif %}
+
+<p><a href="{% url 'achievements' %}">Visa alla utmärkelser</a></p>
+
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Mina odlingar</h1>
     <a class="btn btn-primary" href="{% url 'breeding_create' %}">Registrera odling</a>
