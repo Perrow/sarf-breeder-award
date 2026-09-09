@@ -29,11 +29,12 @@ def _image_preview(background=None, overlay=None, custom_background=None):
             '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
             background.image.url,
         )
-        if background.tint_color:
-            tint_html = format_html(
-                '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;"></span>',
-                background.tint_color,
-            )
+
+    if background and background.tint_color:
+        tint_html = format_html(
+            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;"></span>',
+            background.tint_color,
+        )
 
     if overlay:
         overlay_html = format_html(
