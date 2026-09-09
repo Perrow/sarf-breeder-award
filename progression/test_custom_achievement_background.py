@@ -1,12 +1,14 @@
 import io
 import tempfile
 
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from PIL import Image
 
+from .admin import AchievementAdmin
 from .models import Achievement, AchievementBackground, AchievementLevel, UserAchievement
 from .services import achievement_presentations_for_user
 
@@ -59,7 +61,7 @@ class CustomAchievementBackgroundTests(TestCase):
         self.assertEqual(presentation["background_tint"], "")
         self.assertEqual(presentation["overlay"].name, achievement.image.name)
 
-    def test_custom_background_has_priority_for_yearly_achievement(self):
+    def test_custom_background_for_yearly_achievement_keeps_year_tint(self):
         AchievementBackground.objects.create(
             calendar_year=2026,
             image=image_file("2026.png"),
@@ -75,7 +77,10 @@ class CustomAchievementBackgroundTests(TestCase):
         presentation = achievement_presentations_for_user(self.user)[0]
 
         self.assertEqual(presentation["background_image"].name, achievement.background_image.name)
-        self.assertEqual(presentation["background_tint"], "")
+        self.assertEqual(presentation["background_tint"], "#336699")
+        preview = str(AchievementAdmin(Achievement, admin.site).preview(achievement))
+        self.assertIn("#336699", preview)
+        self.assertIn(achievement.background_image.url, preview)
 
     def test_missing_custom_background_uses_existing_fallback(self):
         fallback = AchievementBackground.objects.create(
