@@ -41,6 +41,12 @@ class AccountLogoutView(LogoutView):
 
 @login_required
 def account(request):
+    memberships = request.user.memberships.select_related("association").order_by("association__name")
+    return render(request, "users/account.html", {"memberships": memberships})
+
+
+@login_required
+def account_edit(request):
     if request.method == "POST":
         form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
@@ -50,7 +56,7 @@ def account(request):
     else:
         form = ProfileForm(instance=request.user)
 
-    return render(request, "users/account.html", {"form": form})
+    return render(request, "users/account_edit.html", {"form": form})
 
 
 @login_required

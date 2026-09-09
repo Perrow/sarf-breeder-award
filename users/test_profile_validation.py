@@ -22,7 +22,7 @@ class UserProfileValidationTests(TestCase):
 
     def test_whitespace_display_name_is_rejected(self):
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             {
                 "public_username": "ProfileValidation",
                 "display_name": "   ",
@@ -36,7 +36,7 @@ class UserProfileValidationTests(TestCase):
 
     def test_invalid_avatar_url_is_rejected(self):
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             {
                 "public_username": "ProfileValidation",
                 "display_name": "Pelle",
@@ -50,7 +50,7 @@ class UserProfileValidationTests(TestCase):
 
     def test_direct_post_cannot_update_another_user(self):
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             {
                 "public_username": "ProfileValidation",
                 "display_name": "Pelle",
@@ -60,6 +60,6 @@ class UserProfileValidationTests(TestCase):
             },
         )
 
-        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse("account"))
         self.other_user.refresh_from_db()
         self.assertEqual(self.other_user.display_name, "Oförändrad")

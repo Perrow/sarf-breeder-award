@@ -30,25 +30,35 @@ class UserMembershipSelectionTests(TestCase):
             {self.association_a.pk, self.association_b.pk},
         )
 
-    def test_account_form_preselects_current_associations(self):
+    def test_account_shows_current_associations(self):
         user = self._create_user()
         Membership.objects.create(user=user, association=self.association_b)
         self.client.force_login(user)
 
         response = self.client.get(reverse("account"))
 
+        self.assertContains(response, self.association_b.name)
+        self.assertNotContains(response, self.association_a.name)
+
+    def test_edit_form_preselects_current_associations(self):
+        user = self._create_user()
+        Membership.objects.create(user=user, association=self.association_b)
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("account_edit"))
+
         self.assertEqual(
             set(response.context["form"].fields["associations"].initial),
             {self.association_b.pk},
         )
 
-    def test_account_can_add_and_remove_associations(self):
+    def test_account_edit_can_add_and_remove_associations(self):
         user = self._create_user()
         Membership.objects.create(user=user, association=self.association_a)
         self.client.force_login(user)
 
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             self._profile_data(associations=[self.association_b.pk]),
         )
 
@@ -70,7 +80,7 @@ class UserMembershipSelectionTests(TestCase):
         self.client.force_login(user)
 
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             self._profile_data(associations=[self.association_a.pk, self.association_b.pk]),
         )
 

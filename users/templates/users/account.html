@@ -3,24 +3,41 @@
 {% block title %}Konto | Odlingskampanjen{% endblock %}
 
 {% block content %}
-<h1>Konto</h1>
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h1>Konto</h1>
+    <a class="btn btn-primary" href="{% url 'account_edit' %}">Redigera konto</a>
+</div>
 
 {% if user.avatar_url %}
 <p><img src="{{ user.avatar_url }}" alt="Profilbild för {{ user.display_name|default:user.get_full_name }}" class="img-thumbnail" style="max-width: 160px;"></p>
 {% endif %}
 
-<p><strong>Namn:</strong> {{ user.display_name|default:user.get_full_name|default:user.email }}</p>
-<p><strong>Publikt användarnamn:</strong> {{ user.public_username|default:"Inte angivet" }}</p>
-<p class="text-body-secondary">Det publika användarnamnet visas offentligt, bland annat i topplistor.</p>
-<p><strong>E-post:</strong> {{ user.email }}</p>
-{% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
+<dl class="row">
+    <dt class="col-sm-3">Namn</dt>
+    <dd class="col-sm-9">{{ user.display_name|default:user.get_full_name|default:user.email }}</dd>
 
-<h2 class="h4 mt-4">Redigera profil</h2>
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">Spara profil</button>
-</form>
+    <dt class="col-sm-3">Publikt användarnamn</dt>
+    <dd class="col-sm-9">{{ user.public_username|default:"Inte angivet" }}</dd>
+
+    <dt class="col-sm-3">E-post</dt>
+    <dd class="col-sm-9">{{ user.email }}</dd>
+
+    <dt class="col-sm-3">Ort</dt>
+    <dd class="col-sm-9">{{ user.location|default:"Inte angivet" }}</dd>
+</dl>
+
+<h2 class="h4 mt-4">Föreningar</h2>
+{% if memberships %}
+<ul>
+    {% for membership in memberships %}
+    <li>{{ membership.association.name }}</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="text-body-secondary">Inga föreningar valda.</p>
+{% endif %}
+
+<p class="text-body-secondary">Det publika användarnamnet visas offentligt, bland annat i topplistor.</p>
 
 <form method="post" action="{% url 'logout' %}" class="mt-3">
     {% csrf_token %}

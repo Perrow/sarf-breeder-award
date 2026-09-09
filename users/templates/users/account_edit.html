@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Redigera konto | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Redigera konto</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Spara</button>
+    <a class="btn btn-outline-secondary" href="{% url 'account' %}">Avbryt</a>
+</form>
+{% endblock %}
