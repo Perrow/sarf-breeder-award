@@ -63,8 +63,8 @@ class AchievementBackground(models.Model):
 
     class Meta:
         ordering = ("calendar_year",)
-        verbose_name = "utmärkelsebakgrund"
-        verbose_name_plural = "utmärkelsebakgrunder"
+        verbose_name = "bakgrund"
+        verbose_name_plural = "bakgrunder"
 
     def clean(self):
         super().clean()
@@ -121,8 +121,8 @@ class AchievementLevel(models.Model):
                 name="unique_achievement_level_name",
             ),
         ]
-        verbose_name = "utmärkelsenivå"
-        verbose_name_plural = "utmärkelsenivåer"
+        verbose_name = "nivå"
+        verbose_name_plural = "nivåer"
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -160,8 +160,8 @@ class AchievementRequirement(models.Model):
 
     class Meta:
         ordering = ("level", "pk")
-        verbose_name = "utmärkelsekrav"
-        verbose_name_plural = "utmärkelsekrav"
+        verbose_name = "krav"
+        verbose_name_plural = "krav"
 
     def clean(self):
         super().clean()
@@ -205,8 +205,8 @@ class UserAchievement(models.Model):
                 name="unique_yearly_user_achievement",
             ),
         ]
-        verbose_name = "uppnådd utmärkelse"
-        verbose_name_plural = "uppnådda utmärkelser"
+        verbose_name = "uppnådd"
+        verbose_name_plural = "uppnådda"
 
     def __str__(self):
         suffix = f" ({self.calendar_year})" if self.calendar_year else ""

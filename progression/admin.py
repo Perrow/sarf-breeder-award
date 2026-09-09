@@ -126,3 +126,28 @@ class UserAchievementAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+
+_default_get_app_list = admin.site.get_app_list
+
+
+def _get_app_list(request, app_label=None):
+    app_list = _default_get_app_list(request, app_label)
+    progression_order = {
+        "Achievement": 0,
+        "AchievementLevel": 1,
+        "AchievementRequirement": 2,
+        "AchievementBackground": 3,
+        "UserAchievement": 4,
+    }
+
+    for app in app_list:
+        if app["app_label"] == "progression":
+            app["models"].sort(
+                key=lambda model: progression_order.get(model["object_name"], 99)
+            )
+
+    return app_list
+
+
+admin.site.get_app_list = _get_app_list
