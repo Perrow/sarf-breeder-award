@@ -31,10 +31,21 @@ def _leaderboard_year(raw_year):
     return year
 
 
-def individual_leaderboard(request):
+def _available_leaderboard_years(selected_year, queryset=None):
     current_year = timezone.localdate().year
-    selected_year = _leaderboard_year(request.GET.get("year"))
+    registrations = BreedingRegistration.objects.all() if queryset is None else queryset
+    available_years = {
+        date.year
+        for date in registrations.filter(
+            status=BreedingRegistration.Status.APPROVED
+        ).dates("breeding_date", "year", order="DESC")
+    }
+    available_years.add(current_year)
+    available_years.add(selected_year)
+    return sorted(available_years, reverse=True)
 
+
+def _individual_leaderboard_rows(selected_year):
     owner_ids = BreedingRegistration.objects.filter(
         status=BreedingRegistration.Status.APPROVED,
         breeding_date__year=selected_year,
@@ -44,43 +55,21 @@ def individual_leaderboard(request):
     leaderboard = []
     for user in users:
         points = competition_points(user, selected_year)
-        if not points:
-            continue
-        leaderboard.append(
-            {
-                "user": user,
-                "name": user.public_display_name(),
-                "points": points,
-            }
-        )
-
+        if points:
+            leaderboard.append(
+                {
+                    "user": user,
+                    "name": user.public_display_name(),
+                    "points": points,
+                }
+            )
     leaderboard.sort(
         key=lambda row: (-row["points"], row["name"].casefold(), row["user"].pk)
     )
-
-    available_years = {
-        date.year
-        for date in BreedingRegistration.objects.filter(
-            status=BreedingRegistration.Status.APPROVED
-        ).dates("breeding_date", "year", order="DESC")
-    }
-    available_years.add(current_year)
-    available_years.add(selected_year)
-
-    return render(
-        request,
-        "breedings/individual_leaderboard.html",
-        {
-            "leaderboard": leaderboard,
-            "selected_year": selected_year,
-            "available_years": sorted(available_years, reverse=True),
-        },
-    )
+    return leaderboard
 
 
-def association_leaderboard(request):
-    current_year = timezone.localdate().year
-    selected_year = _leaderboard_year(request.GET.get("year"))
+def _association_leaderboard_rows(selected_year):
     leaderboard = association_leaderboard_scores(selected_year)
     leaderboard.sort(
         key=lambda row: (
@@ -89,45 +78,66 @@ def association_leaderboard(request):
             row["association"].pk,
         )
     )
+    return leaderboard
 
-    available_years = {
-        date.year
-        for date in BreedingRegistration.objects.filter(
-            status=BreedingRegistration.Status.APPROVED
-        ).dates("breeding_date", "year", order="DESC")
-    }
-    available_years.add(current_year)
-    available_years.add(selected_year)
 
+def leaderboards(request):
+    selected_year = _leaderboard_year(request.GET.get("year"))
+    leaderboard_type = request.GET.get("type", "individual")
+    if leaderboard_type not in {"individual", "association"}:
+        leaderboard_type = "individual"
+
+    leaderboard = (
+        _individual_leaderboard_rows(selected_year)
+        if leaderboard_type == "individual"
+        else _association_leaderboard_rows(selected_year)
+    )
+    return render(
+        request,
+        "breedings/leaderboards.html",
+        {
+            "leaderboard": leaderboard,
+            "leaderboard_type": leaderboard_type,
+            "selected_year": selected_year,
+            "available_years": _available_leaderboard_years(selected_year),
+        },
+    )
+
+
+def individual_leaderboard(request):
+    selected_year = _leaderboard_year(request.GET.get("year"))
+    return render(
+        request,
+        "breedings/individual_leaderboard.html",
+        {
+            "leaderboard": _individual_leaderboard_rows(selected_year),
+            "selected_year": selected_year,
+            "available_years": _available_leaderboard_years(selected_year),
+        },
+    )
+
+
+def association_leaderboard(request):
+    selected_year = _leaderboard_year(request.GET.get("year"))
     return render(
         request,
         "breedings/association_leaderboard.html",
         {
-            "leaderboard": leaderboard,
+            "leaderboard": _association_leaderboard_rows(selected_year),
             "selected_year": selected_year,
-            "available_years": sorted(available_years, reverse=True),
+            "available_years": _available_leaderboard_years(selected_year),
         },
     )
 
 
 def association_scoring_rules(request):
-    current_year = timezone.localdate().year
     selected_year = _leaderboard_year(request.GET.get("year"))
-    available_years = {
-        date.year
-        for date in BreedingRegistration.objects.filter(
-            status=BreedingRegistration.Status.APPROVED
-        ).dates("breeding_date", "year", order="DESC")
-    }
-    available_years.add(current_year)
-    available_years.add(selected_year)
-
     return render(
         request,
         "breedings/association_scoring_rules.html",
         {
             "selected_year": selected_year,
-            "available_years": sorted(available_years, reverse=True),
+            "available_years": _available_leaderboard_years(selected_year),
             "rules": association_competition_rules(selected_year),
         },
     )
@@ -135,7 +145,6 @@ def association_scoring_rules(request):
 
 def association_member_leaderboard(request, association_id):
     association = get_object_or_404(Association, pk=association_id)
-    current_year = timezone.localdate().year
     selected_year = _leaderboard_year(request.GET.get("year"))
     view_mode = request.GET.get("view", "contribution")
     if view_mode not in {"contribution", "individual"}:
@@ -164,16 +173,9 @@ def association_member_leaderboard(request, association_id):
         key=lambda row: (-row[score_key], row["name"].casefold(), row["user"].pk)
     )
 
-    available_years = {
-        date.year
-        for date in BreedingRegistration.objects.filter(
-            owner__memberships__association=association,
-            status=BreedingRegistration.Status.APPROVED,
-        ).dates("breeding_date", "year", order="DESC")
-    }
-    available_years.add(current_year)
-    available_years.add(selected_year)
-
+    member_registrations = BreedingRegistration.objects.filter(
+        owner__memberships__association=association
+    )
     return render(
         request,
         "breedings/association_member_leaderboard.html",
@@ -181,7 +183,9 @@ def association_member_leaderboard(request, association_id):
             "association": association,
             "leaderboard": leaderboard,
             "selected_year": selected_year,
-            "available_years": sorted(available_years, reverse=True),
+            "available_years": _available_leaderboard_years(
+                selected_year, member_registrations
+            ),
             "view_mode": view_mode,
             "score_key": score_key,
         },

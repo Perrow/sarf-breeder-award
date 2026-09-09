@@ -129,8 +129,8 @@ class IndividualLeaderboardTests(TestCase):
         self.assertNotContains(response, "Hemligt namn A")
         self.assertNotContains(response, "Privat Person A")
 
-    def test_navigation_links_to_leaderboard_for_anonymous_visitor(self):
+    def test_navigation_links_to_leaderboards_for_anonymous_visitor(self):
         response = self.client.get(reverse("home"))
 
-        self.assertContains(response, reverse("individual_leaderboard"))
-        self.assertContains(response, "Individuell topplista")
+        self.assertContains(response, reverse("leaderboards"))
+        self.assertContains(response, "Topplistor")
