@@ -59,6 +59,4 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(model_name="achievementlevel", constraint=models.UniqueConstraint(fields=("achievement", "name"), name="unique_achievement_level_name")),
         migrations.AddConstraint(model_name="userachievement", constraint=models.UniqueConstraint(condition=models.Q(("calendar_year__isnull", True)), fields=("user", "level"), name="unique_lifetime_user_achievement")),
         migrations.AddConstraint(model_name="userachievement", constraint=models.UniqueConstraint(condition=models.Q(("calendar_year__isnull", False)), fields=("user", "level", "calendar_year"), name="unique_yearly_user_achievement")),
-        migrations.DeleteModel(name="UserLevelAchievement"),
-        migrations.DeleteModel(name="LevelDefinition"),
     ]
