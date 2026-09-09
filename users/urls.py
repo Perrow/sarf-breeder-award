@@ -6,7 +6,7 @@ from django.contrib.auth.views import (
 )
 from django.urls import path, reverse_lazy
 
-from .views import AccountLogoutView, EmailLoginView, account, register
+from .views import AccountLogoutView, EmailLoginView, account, achievements, register
 
 urlpatterns = [
     path("accounts/register/", register, name="register"),
@@ -41,4 +41,5 @@ urlpatterns = [
         name="password_reset_complete",
     ),
     path("account/", account, name="account"),
+    path("utmarkelser/", achievements, name="achievements"),
 ]
