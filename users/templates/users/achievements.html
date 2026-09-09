@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Alla utmärkelser | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Alla utmärkelser</h1>
+
+<h2 class="h4 mt-4">Karriärsutmärkelser</h2>
+{% if career_achievements %}
+<div class="d-flex flex-wrap gap-3 mb-4">
+    {% for presentation in career_achievements %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen karriärsutmärkelse.</p>
+{% endif %}
+
+{% for group in yearly_achievement_groups %}
+<section class="mt-4" data-achievement-year="{{ group.year }}">
+    <h2 class="h4">Årsutmärkelser {{ group.year }}</h2>
+    <div class="d-flex flex-wrap gap-3 mb-4">
+        {% for presentation in group.achievements %}
+            {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
+        {% endfor %}
+    </div>
+</section>
+{% empty %}
+<h2 class="h4 mt-4">Årsutmärkelser</h2>
+<p class="text-body-secondary">Du har ännu ingen årsutmärkelse.</p>
+{% endfor %}
+
+<p><a href="{% url 'breeding_list' %}">Tillbaka till Mina odlingar</a></p>
+{% endblock %}
