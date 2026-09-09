@@ -242,7 +242,17 @@ def association_leaderboard_scores(year):
 
     result = []
     for association in associations:
-        points = association_competition_points(association, year)
-        if points:
-            result.append({"association": association, "points": points})
+        scores = association_year_scores(association, year)
+        points = sum(scores.values())
+        if not points:
+            continue
+        member_ids = set(association.memberships.values_list("user_id", flat=True))
+        grower_count = len(member_ids.intersection(scores.keys()))
+        result.append(
+            {
+                "association": association,
+                "points": points,
+                "grower_count": grower_count,
+            }
+        )
     return result

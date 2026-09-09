@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Medlemstopplista – {{ association.name }} | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>{{ association.name }}</h1>
+<p class="text-body-secondary">Medlemstopplista för {{ selected_year }}.</p>
+
+{% include "breedings/includes/leaderboard_year_selector.html" %}
+
+<div class="btn-group mb-4" role="group" aria-label="Typ av medlemstopplista">
+    <a class="btn {% if view_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=contribution">Bidrag till föreningen</a>
+    <a class="btn {% if view_mode == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=individual">Samtliga individuella poäng</a>
+</div>
+
+{% if leaderboard %}
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+    <thead>
+        <tr><th>Placering</th><th>Medlem</th><th class="text-end">Poäng</th></tr>
+    </thead>
+    <tbody>
+        {% for row in leaderboard %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ row.name }}</td>
+            <td class="text-end">{% if view_mode == 'contribution' %}{{ row.contribution_points }}{% else %}{{ row.individual_points }}{% endif %}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Det finns inga resultat för {{ selected_year }}.</p>
+{% endif %}
+{% endblock %}

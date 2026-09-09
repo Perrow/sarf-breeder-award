@@ -29,10 +29,10 @@ class CompetitionScoringTests(TestCase):
             awarded_breeding_class=Species.BreedingClass.SILVER,
         )
 
-    def test_all_approved_registrations_in_year_count(self):
+    def test_same_species_counts_only_once_in_year(self):
         self.add_registration(2026)
         self.add_registration(2026)
-        self.assertEqual(competition_points(self.user, 2026), 4)
+        self.assertEqual(competition_points(self.user, 2026), 2)
 
     def test_other_year_does_not_count(self):
         self.add_registration(2025)
