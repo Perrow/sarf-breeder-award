@@ -1,18 +1,53 @@
 from django.contrib import admin
 
-from .models import LevelDefinition, UserLevelAchievement
+from .models import (
+    Achievement,
+    AchievementLevel,
+    AchievementRequirement,
+    UserAchievement,
+)
 
 
-@admin.register(LevelDefinition)
-class LevelDefinitionAdmin(admin.ModelAdmin):
-    list_display = ("name", "points_required")
-    ordering = ("points_required", "name")
+class AchievementLevelInline(admin.TabularInline):
+    model = AchievementLevel
+    extra = 1
 
 
-@admin.register(UserLevelAchievement)
-class UserLevelAchievementAdmin(admin.ModelAdmin):
-    list_display = ("user", "level_name", "points_required", "achieved_at")
-    readonly_fields = ("user", "level", "level_name", "points_required", "achieved_at")
+@admin.register(Achievement)
+class AchievementAdmin(admin.ModelAdmin):
+    list_display = ("name", "calendar_year_based")
+    inlines = (AchievementLevelInline,)
+
+
+@admin.register(AchievementLevel)
+class AchievementLevelAdmin(admin.ModelAdmin):
+    list_display = ("achievement", "name", "order")
+    list_filter = ("achievement",)
+
+
+@admin.register(AchievementRequirement)
+class AchievementRequirementAdmin(admin.ModelAdmin):
+    list_display = ("level", "kind", "value")
+    filter_horizontal = ("genera", "species_groups")
+
+
+@admin.register(UserAchievement)
+class UserAchievementAdmin(admin.ModelAdmin):
+    list_display = (
+        "user",
+        "achievement_name",
+        "level_name",
+        "calendar_year",
+        "achieved_at",
+    )
+    readonly_fields = (
+        "user",
+        "level",
+        "achievement_name",
+        "level_name",
+        "calendar_year",
+        "achieved_at",
+    )
 
     def has_add_permission(self, request):
         return False

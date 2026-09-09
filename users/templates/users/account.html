@@ -15,17 +15,18 @@
 <p><strong>E-post:</strong> {{ user.email }}</p>
 {% if user.location %}<p><strong>Ort:</strong> {{ user.location }}</p>{% endif %}
 
-<h2 class="h4 mt-4">Nivå och progression</h2>
-<p><strong>Karriärpoäng:</strong> {{ career_score }}</p>
-<p><strong>Aktuell nivå:</strong> {% if current_level %}{{ current_level.level_name }}{% else %}Ingen nivå ännu{% endif %}</p>
-{% if level_achievements %}
+<h2 class="h4 mt-4">Utmärkelser</h2>
+{% if award_achievements %}
 <ul>
-    {% for achievement in level_achievements %}
-    <li>{{ achievement.level_name }} – {{ achievement.points_required }} poäng</li>
+    {% for achievement in award_achievements %}
+    <li>
+        {{ achievement.achievement_name }} – {{ achievement.level_name }}
+        {% if achievement.calendar_year %} ({{ achievement.calendar_year }}){% endif %}
+    </li>
     {% endfor %}
 </ul>
 {% else %}
-<p>Du har ännu inte uppnått någon nivå.</p>
+<p>Du har ännu inte uppnått någon utmärkelse.</p>
 {% endif %}
 
 <h2 class="h4 mt-4">Redigera profil</h2>
