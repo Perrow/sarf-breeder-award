@@ -57,6 +57,31 @@ def _image_preview(background=None, overlay=None, custom_background=None):
 class AchievementLevelInline(admin.TabularInline):
     model = AchievementLevel
     extra = 1
+    fields = ("name", "description", "order", "requirement_count", "edit_link")
+    readonly_fields = ("requirement_count", "edit_link")
+
+    @admin.display(description="Antal krav")
+    def requirement_count(self, obj):
+        if not obj or not obj.pk:
+            return 0
+        return obj.requirements.count()
+
+    @admin.display(description="Redigera")
+    def edit_link(self, obj):
+        if not obj or not obj.pk:
+            return "-"
+        return format_html(
+            '<a href="{}">Redigera nivå</a>',
+            reverse("admin:progression_achievementlevel_change", args=[obj.pk]),
+        )
+
+
+class AchievementRequirementInline(admin.StackedInline):
+    model = AchievementRequirement
+    extra = 1
+    fields = ("kind", "value", "genera", "species_groups")
+    filter_horizontal = ("genera", "species_groups")
+    can_delete = True
 
 
 @admin.register(Achievement)
@@ -143,6 +168,7 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
 class AchievementLevelAdmin(admin.ModelAdmin):
     list_display = ("achievement", "name", "order")
     list_filter = ("achievement",)
+    inlines = (AchievementRequirementInline,)
 
 
 @admin.register(AchievementRequirement)
@@ -187,14 +213,18 @@ def _get_app_list(request, app_label=None):
     app_list = _default_get_app_list(request, app_label)
     progression_order = {
         "Achievement": 0,
-        "AchievementLevel": 1,
-        "AchievementRequirement": 2,
-        "AchievementBackground": 3,
-        "UserAchievement": 4,
+        "AchievementBackground": 1,
+        "UserAchievement": 2,
     }
+    hidden_progression_models = {"AchievementLevel", "AchievementRequirement"}
 
     for app in app_list:
         if app["app_label"] == "progression":
+            app["models"] = [
+                model
+                for model in app["models"]
+                if model["object_name"] not in hidden_progression_models
+            ]
             app["models"].sort(
                 key=lambda model: progression_order.get(model["object_name"], 99)
             )
