@@ -28,6 +28,7 @@
                 <tr>
                     <th scope="col">Placering</th>
                     <th scope="col">Förening</th>
+                    <th scope="col" class="text-end">Antal odlare</th>
                     <th scope="col" class="text-end">Poäng</th>
                 </tr>
             </thead>
@@ -35,7 +36,8 @@
                 {% for row in leaderboard %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ row.association.name }}</td>
+                        <td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}">{{ row.association.name }}</a></td>
+                        <td class="text-end">{{ row.grower_count }}</td>
                         <td class="text-end">{{ row.points }}</td>
                     </tr>
                 {% endfor %}
