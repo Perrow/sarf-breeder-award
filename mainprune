@@ -6,6 +6,6 @@ git pull
 git fetch --prune
 
 git branch --merged main \
-  | sed 's/^[[:space:]]*//' \
+  --format='%(refname:short)' \
   | grep -v '^main$' \
   | xargs -r git branch -d
