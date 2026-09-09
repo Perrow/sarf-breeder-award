@@ -9,8 +9,8 @@
 {% include "breedings/includes/leaderboard_year_selector.html" %}
 
 <div class="btn-group mb-4" role="group" aria-label="Typ av medlemstopplista">
-    <a class="btn {% if view_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=contribution">Bidrag till föreningen</a>
-    <a class="btn {% if view_mode == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=individual">Samtliga individuella poäng</a>
+    <a class="btn {% if view_mode == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=individual">Total individuell</a>
+    <a class="btn {% if view_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=contribution">Bidrag till föreningen per medlem</a>
 </div>
 
 {% if leaderboard %}

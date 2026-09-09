@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Topplistor | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Topplistor</h1>
+
+<div class="btn-group mb-4" role="group" aria-label="Typ av topplista">
+    <a class="btn {% if leaderboard_type == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?type=individual&year={{ selected_year }}">Individuell</a>
+    <a class="btn {% if leaderboard_type == 'association' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?type=association&year={{ selected_year }}">Förening</a>
+</div>
+
+{% include "breedings/includes/leaderboard_year_selector.html" %}
+
+{% if leaderboard_type == "association" %}
+    <p><a href="{% url 'association_scoring_rules' %}?year={{ selected_year }}">Så räknas föreningspoängen och vilka begränsningar gäller</a></p>
+    {% if leaderboard %}
+    <div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead><tr><th>Placering</th><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead>
+        <tbody>
+        {% for row in leaderboard %}
+            <tr>
+                <td>{{ forloop.counter }}</td>
+                <td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}&view=contribution">{{ row.association.name }}</a></td>
+                <td class="text-end">{{ row.grower_count }}</td>
+                <td class="text-end">{{ row.points }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p>Det finns inga godkända odlingsresultat för {{ selected_year }}.</p>
+    {% endif %}
+{% else %}
+    {% if leaderboard %}
+    <div class="table-responsive">
+    <table class="table table-striped align-middle">
+        <thead><tr><th>Placering</th><th>Användare</th><th class="text-end">Poäng</th></tr></thead>
+        <tbody>
+        {% for row in leaderboard %}
+            <tr><td>{{ forloop.counter }}</td><td>{{ row.name }}</td><td class="text-end">{{ row.points }}</td></tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    </div>
+    {% else %}
+    <p>Det finns inga godkända odlingar för {{ selected_year }}.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}

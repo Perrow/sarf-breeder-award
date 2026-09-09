@@ -143,6 +143,21 @@ def _default_genus_limit(year):
     return settings.default_max_registrations_per_genus
 
 
+def association_competition_rules(year):
+    limits, _ = _competition_limits(year)
+    return {
+        "genus_limits": sorted(
+            (limit for limit in limits if limit.genus_id),
+            key=lambda limit: limit.genus.scientific_name.casefold(),
+        ),
+        "species_group_limits": sorted(
+            (limit for limit in limits if limit.species_group_id),
+            key=lambda limit: limit.species_group.name.casefold(),
+        ),
+        "default_genus_limit": _default_genus_limit(year),
+    }
+
+
 def _matching_limit_ids(registration, limits, group_genus_ids):
     if not registration.species_id:
         return []

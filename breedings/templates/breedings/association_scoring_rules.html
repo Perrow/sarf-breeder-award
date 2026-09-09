@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Så räknas föreningspoängen | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Så räknas föreningspoängen</h1>
+<p>Regler och begränsningar för {{ selected_year }}.</p>
+
+{% include "breedings/includes/leaderboard_year_selector.html" %}
+
+<p>Endast godkända, poänggivande odlingar som är giltiga för tävlingsåret räknas. För varje medlem räknas högst en poänggivande odling per art och år, med den högsta poängen om samma art har flera godkända odlingar. Därefter tillämpas föreningstävlingens begränsningar.</p>
+
+<h2 class="h4">Specifika begränsningar per släkte</h2>
+{% if rules.genus_limits %}
+<ul>
+    {% for limit in rules.genus_limits %}
+    <li><i>{{ limit.genus.scientific_name }}</i>: högst {{ limit.max_registrations_per_member }} odling{{ limit.max_registrations_per_member|pluralize:"ar" }} per medlem och år.</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Inga särskilda släktesbegränsningar gäller.</p>
+{% endif %}
+
+<h2 class="h4">Begränsningar via artgrupp</h2>
+{% if rules.species_group_limits %}
+<ul>
+    {% for limit in rules.species_group_limits %}
+    <li>{{ limit.species_group.name }}: högst {{ limit.max_registrations_per_member }} odling{{ limit.max_registrations_per_member|pluralize:"ar" }} per medlem och år.</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Inga särskilda artgruppsbegränsningar gäller.</p>
+{% endif %}
+
+<h2 class="h4">Standardbegränsning</h2>
+{% if rules.default_genus_limit %}
+<p>För släkten som inte omfattas av en särskild regel räknas högst {{ rules.default_genus_limit }} odling{{ rules.default_genus_limit|pluralize:"ar" }} per medlem och släkte under året.</p>
+{% else %}
+<p>Ingen generell standardbegränsning är konfigurerad för året.</p>
+{% endif %}
+
+<p><a href="{% url 'association_leaderboard' %}?year={{ selected_year }}">Tillbaka till föreningstopplistan</a></p>
+{% endblock %}

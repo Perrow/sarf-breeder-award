@@ -3,8 +3,14 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
+    path("topplistor/", views.leaderboards, name="leaderboards"),
     path("topplista/", views.individual_leaderboard, name="individual_leaderboard"),
     path("foreningstopplista/", views.association_leaderboard, name="association_leaderboard"),
+    path(
+        "foreningstopplista/regler/",
+        views.association_scoring_rules,
+        name="association_scoring_rules",
+    ),
     path(
         "foreningstopplista/<int:association_id>/medlemmar/",
         views.association_member_leaderboard,
