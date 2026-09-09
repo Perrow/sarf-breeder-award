@@ -60,4 +60,4 @@ class LeaderboardYearNavigationTests(TestCase):
             {"year": self.current_year, "view": "individual"},
         )
         self.assert_year_navigation(response)
-        self.assertContains(response, f"?year={self.previous_year}&amp;view=individual")
+        self.assertContains(response, f"?year={self.previous_year}&view=individual")
