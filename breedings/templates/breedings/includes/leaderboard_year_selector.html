@@ -1,0 +1,12 @@
+<nav class="mb-4" aria-label="Välj kalenderår">
+    <span class="d-block form-label mb-2">Kalenderår</span>
+    <div class="btn-group flex-wrap" role="group">
+        {% for year in available_years %}
+            <a href="?year={{ year }}{% if view_mode %}&view={{ view_mode }}{% endif %}"
+               class="btn {% if year == selected_year %}btn-primary{% else %}btn-outline-primary{% endif %}"
+               {% if year == selected_year %}aria-current="page"{% endif %}>
+                {{ year }}
+            </a>
+        {% endfor %}
+    </div>
+</nav>

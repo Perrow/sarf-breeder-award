@@ -3,24 +3,10 @@
 {% block title %}Medlemstopplista – {{ association.name }} | Odlingskampanjen{% endblock %}
 
 {% block content %}
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
-    <div>
-        <h1>{{ association.name }}</h1>
-        <p class="text-body-secondary mb-0">Medlemstopplista för {{ selected_year }}.</p>
-    </div>
-    <form method="get" class="d-flex align-items-end gap-2">
-        <input type="hidden" name="view" value="{{ view_mode }}">
-        <div>
-            <label for="year" class="form-label">År</label>
-            <select id="year" name="year" class="form-select">
-                {% for year in available_years %}
-                    <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Visa</button>
-    </form>
-</div>
+<h1>{{ association.name }}</h1>
+<p class="text-body-secondary">Medlemstopplista för {{ selected_year }}.</p>
+
+{% include "breedings/includes/leaderboard_year_selector.html" %}
 
 <div class="btn-group mb-4" role="group" aria-label="Typ av medlemstopplista">
     <a class="btn {% if view_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&view=contribution">Bidrag till föreningen</a>

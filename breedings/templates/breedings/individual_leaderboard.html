@@ -4,20 +4,9 @@
 
 {% block content %}
 <h1>Individuell topplista</h1>
+<p class="text-body-secondary">Resultat för {{ selected_year }}.</p>
 
-<form method="get" class="row g-2 align-items-end mb-4">
-    <div class="col-auto">
-        <label for="year" class="form-label">Kalenderår</label>
-        <select id="year" name="year" class="form-select">
-            {% for year in available_years %}
-            <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
-            {% endfor %}
-        </select>
-    </div>
-    <div class="col-auto">
-        <button class="btn btn-primary" type="submit">Visa</button>
-    </div>
-</form>
+{% include "breedings/includes/leaderboard_year_selector.html" %}
 
 {% if leaderboard %}
 <div class="table-responsive">

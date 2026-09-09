@@ -1,50 +1,12 @@
 {% extends "base.html" %}
-
 {% block title %}Föreningstopplista – Odlingskampanjen{% endblock %}
-
 {% block content %}
-<div class="d-flex flex-column flex-md-row justify-content-between align-items-md-end gap-3 mb-4">
-    <div>
-        <h1>Föreningstopplista</h1>
-        <p class="text-body-secondary mb-0">Tävlingsresultat mellan föreningarna för {{ selected_year }}.</p>
-    </div>
-    <form method="get" class="d-flex align-items-end gap-2">
-        <div>
-            <label for="year" class="form-label">År</label>
-            <select id="year" name="year" class="form-select">
-                {% for year in available_years %}
-                    <option value="{{ year }}"{% if year == selected_year %} selected{% endif %}>{{ year }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <button type="submit" class="btn btn-primary">Visa</button>
-    </form>
-</div>
-
+<h1>Föreningstopplista</h1>
+<p class="text-body-secondary">Tävlingsresultat mellan föreningarna för {{ selected_year }}.</p>
+{% include "breedings/includes/leaderboard_year_selector.html" %}
 {% if leaderboard %}
-    <div class="table-responsive">
-        <table class="table table-striped align-middle">
-            <thead>
-                <tr>
-                    <th scope="col">Placering</th>
-                    <th scope="col">Förening</th>
-                    <th scope="col" class="text-end">Antal odlare</th>
-                    <th scope="col" class="text-end">Poäng</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for row in leaderboard %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}">{{ row.association.name }}</a></td>
-                        <td class="text-end">{{ row.grower_count }}</td>
-                        <td class="text-end">{{ row.points }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-{% else %}
-    <p>Det finns inga godkända odlingsresultat för {{ selected_year }}.</p>
-{% endif %}
+<div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Placering</th><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead><tbody>
+{% for row in leaderboard %}<tr><td>{{ forloop.counter }}</td><td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}">{{ row.association.name }}</a></td><td class="text-end">{{ row.grower_count }}</td><td class="text-end">{{ row.points }}</td></tr>{% endfor %}
+</tbody></table></div>
+{% else %}<p>Det finns inga godkända odlingsresultat för {{ selected_year }}.</p>{% endif %}
 {% endblock %}
