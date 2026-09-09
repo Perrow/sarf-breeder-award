@@ -1,4 +1,6 @@
 """URL configuration for the Breeder Awards project."""
+from django.conf import settings
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import include, path
 from django.views.generic import TemplateView
@@ -9,3 +11,6 @@ urlpatterns = [
     path("", include("users.urls")),
     path("", include("breedings.urls")),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
