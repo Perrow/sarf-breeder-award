@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+
+{% block title %}{{ member_name }} – {{ association.name }} | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>{{ member_name }}</h1>
+<p class="text-body-secondary">{{ association.name }} – odlingar för {{ selected_year }}.</p>
+
+<p>
+    <a href="{% url 'association_member_leaderboard' association.pk %}?year={{ selected_year }}&view={{ leaderboard_view }}">Tillbaka till föreningens medlemstopplista</a>
+</p>
+
+<div class="btn-group mb-4" role="group" aria-label="Typ av odlingslista">
+    <a class="btn {% if list_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=contribution&leaderboard={{ leaderboard_view }}">Bidragit med poäng</a>
+    <a class="btn {% if list_mode == 'full' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=full&leaderboard={{ leaderboard_view }}">Fullständig lista</a>
+</div>
+
+{% if rows %}
+<div class="table-responsive">
+<table class="table table-striped align-middle">
+    <thead>
+        <tr>
+            <th>Odlingsdatum</th>
+            <th>Art</th>
+            <th class="text-end">Poäng</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in rows %}
+        <tr>
+            <td>{{ row.registration.breeding_date }}</td>
+            <td>{{ row.registration.species }}</td>
+            <td class="text-end">{{ row.points }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Det finns inga odlingar i den här listan för {{ selected_year }}.</p>
+{% endif %}
+{% endblock %}

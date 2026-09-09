@@ -8,7 +8,13 @@ from associations.models import Association
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
-from .scoring import association_leaderboard_scores, association_year_scores, competition_points
+from .scoring import (
+    association_leaderboard_scores,
+    association_member_year_registration_ids,
+    association_year_scores,
+    competition_points,
+    points_for_registration,
+)
 
 
 def _leaderboard_year(raw_year):
@@ -154,6 +160,56 @@ def association_member_leaderboard(request, association_id):
             "available_years": sorted(available_years, reverse=True),
             "view_mode": view_mode,
             "score_key": score_key,
+        },
+    )
+
+
+def association_member_breeding_list(request, association_id, user_id):
+    association = get_object_or_404(Association, pk=association_id)
+    member = get_object_or_404(
+        get_user_model().objects.filter(memberships__association=association).distinct(),
+        pk=user_id,
+    )
+    selected_year = _leaderboard_year(request.GET.get("year"))
+
+    list_mode = request.GET.get("list", "contribution")
+    if list_mode not in {"contribution", "full"}:
+        list_mode = "contribution"
+
+    leaderboard_view = request.GET.get("leaderboard", "contribution")
+    if leaderboard_view not in {"contribution", "individual"}:
+        leaderboard_view = "contribution"
+
+    registration_ids = association_member_year_registration_ids(
+        association,
+        member,
+        selected_year,
+        contribution_only=list_mode == "contribution",
+    )
+    registrations = (
+        BreedingRegistration.objects.filter(pk__in=registration_ids)
+        .select_related("species__genus")
+        .order_by("-breeding_date", "-pk")
+    )
+    rows = [
+        {
+            "registration": registration,
+            "points": points_for_registration(registration),
+        }
+        for registration in registrations
+    ]
+
+    return render(
+        request,
+        "breedings/association_member_breeding_list.html",
+        {
+            "association": association,
+            "member": member,
+            "member_name": member.public_display_name(),
+            "rows": rows,
+            "selected_year": selected_year,
+            "list_mode": list_mode,
+            "leaderboard_view": leaderboard_view,
         },
     )
 
