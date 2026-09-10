@@ -75,15 +75,34 @@ class SpeciesAdmin(admin.ModelAdmin):
     def get_urls(self):
         return [
             path(
+                "import/help/",
+                self.admin_site.admin_view(self.import_species_help_view),
+                name="taxonomy_species_import_help",
+            ),
+            path(
                 "import/",
                 self.admin_site.admin_view(self.import_species_view),
                 name="taxonomy_species_import",
             ),
         ] + super().get_urls()
 
-    def import_species_view(self, request):
+    def _check_import_permission(self, request):
         if not self.has_change_permission(request):
             raise PermissionDenied
+
+    def import_species_help_view(self, request):
+        self._check_import_permission(request)
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "title": "Dokumentation för artimport",
+            "species_import_url": reverse("admin:taxonomy_species_import"),
+            "species_changelist_url": reverse("admin:taxonomy_species_changelist"),
+        }
+        return render(request, "admin/taxonomy/species/import_help.html", context)
+
+    def import_species_view(self, request):
+        self._check_import_permission(request)
 
         stats = None
         import_error = None
@@ -112,6 +131,7 @@ class SpeciesAdmin(admin.ModelAdmin):
             "stats": stats,
             "import_error": import_error,
             "species_changelist_url": reverse("admin:taxonomy_species_changelist"),
+            "species_import_help_url": reverse("admin:taxonomy_species_import_help"),
         }
         return render(request, "admin/taxonomy/species/import.html", context)
 
