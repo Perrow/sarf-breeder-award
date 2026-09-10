@@ -46,6 +46,16 @@ class BreedingRegistrationForm(forms.ModelForm):
             self.fields["association"].disabled = True
         self.fields["species"].queryset = Species.objects.available_for_registration()
         self.fields["species"].required = False
+        self.fields["description"].required = False
+        selected_species = self.initial.get("species") or getattr(self.instance, "species", None)
+        if selected_species and selected_species.breeding_class in {
+            Species.BreedingClass.SILVER,
+            Species.BreedingClass.GOLD,
+        }:
+            self.fields["description"].required = True
+            self.fields["description"].help_text = "Obligatorisk för silver- och guldodlingar."
+        else:
+            self.fields["description"].help_text = "Obligatorisk endast för silver- och guldodlingar."
 
     def clean_association(self):
         if self.single_association:
@@ -74,10 +84,17 @@ class BreedingRegistrationForm(forms.ModelForm):
         genus_name = (cleaned_data.get("proposed_genus_name") or "").strip()
         species_name = (cleaned_data.get("proposed_species_name") or "").strip()
         common_name = (cleaned_data.get("proposed_common_name") or "").strip()
+        description = (cleaned_data.get("description") or "").strip()
 
         if species and (genus_name or species_name or common_name):
             raise forms.ValidationError("Välj antingen en registrerad art eller ange taxonomin i fritext, inte båda.")
         if not species and not (genus_name and species_name):
             raise forms.ValidationError("Välj en art eller ange både släkte och art i fritext.")
+        if (
+            species
+            and species.breeding_class in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD}
+            and not description
+        ):
+            self.add_error("description", "Beskrivning är obligatorisk för silver- och guldodlingar.")
 
         return cleaned_data
