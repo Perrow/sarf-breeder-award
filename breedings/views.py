@@ -6,6 +6,7 @@ from django.utils import timezone
 
 from associations.models import Association
 from progression.services import latest_achievement_presentations_for_user
+from taxonomy.models import Species
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
@@ -298,7 +299,14 @@ def breeding_return_to_draft(request, pk):
 
 @login_required
 def breeding_create(request):
-    return _edit_breeding(request)
+    selected_species = None
+    species_id = request.GET.get("species")
+    if species_id:
+        selected_species = get_object_or_404(
+            Species.objects.available_for_registration().select_related("genus"),
+            pk=species_id,
+        )
+    return _edit_breeding(request, selected_species=selected_species)
 
 
 @login_required
@@ -312,7 +320,7 @@ def breeding_edit(request, pk):
     return _edit_breeding(request, registration)
 
 
-def _edit_breeding(request, registration=None):
+def _edit_breeding(request, registration=None, selected_species=None):
     if request.method == "POST":
         form = BreedingRegistrationForm(request.user, request.POST, instance=registration)
         if form.is_valid():
@@ -330,10 +338,19 @@ def _edit_breeding(request, registration=None):
             messages.success(request, message)
             return redirect("breeding_list")
     else:
-        form = BreedingRegistrationForm(request.user, instance=registration)
+        initial = {"species": selected_species} if selected_species else None
+        form = BreedingRegistrationForm(
+            request.user,
+            instance=registration,
+            initial=initial,
+        )
 
     return render(
         request,
         "breedings/breeding_form.html",
-        {"form": form, "registration": registration},
+        {
+            "form": form,
+            "registration": registration,
+            "selected_species": selected_species,
+        },
     )

@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import views
+from . import species_search, views
 
 urlpatterns = [
     path("topplistor/", views.leaderboards, name="leaderboards"),
@@ -22,6 +22,8 @@ urlpatterns = [
         name="association_member_breeding_list",
     ),
     path("odlingar/", views.breeding_list, name="breeding_list"),
+    path("odlingar/valj-art/", species_search.species_select, name="species_select"),
+    path("odlingar/artsok/", species_search.species_search_results, name="species_search_results"),
     path("odlingar/ny/", views.breeding_create, name="breeding_create"),
     path("odlingar/<int:pk>/", views.breeding_detail, name="breeding_detail"),
     path("odlingar/<int:pk>/redigera/", views.breeding_edit, name="breeding_edit"),
