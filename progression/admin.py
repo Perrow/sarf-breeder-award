@@ -76,12 +76,13 @@ class AchievementLevelInline(admin.TabularInline):
         )
 
 
-class AchievementRequirementInline(admin.StackedInline):
+class AchievementRequirementInline(admin.TabularInline):
     model = AchievementRequirement
-    extra = 1
+    extra = 0
     fields = ("kind", "value", "genera", "species_groups")
     filter_horizontal = ("genera", "species_groups")
     can_delete = True
+    show_change_link = True
 
 
 @admin.register(Achievement)
