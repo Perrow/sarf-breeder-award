@@ -66,6 +66,7 @@ class SpeciesQuerySet(models.QuerySet):
             .filter(
                 Q(full_scientific_name__icontains=query)
                 | Q(common_name__icontains=query)
+                | Q(english_name__icontains=query)
                 | Q(synonyms__scientific_name__icontains=query)
                 | Q(synonyms__common_name__icontains=query)
             )

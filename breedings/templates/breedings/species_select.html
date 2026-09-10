@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}Välj art | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Välj art</h1>
+<p>Sök på vetenskapligt namn, svenskt eller engelskt populärnamn. Äldre registrerade synonymer går också att söka på.</p>
+
+<div class="mb-3">
+    <label class="form-label" for="species-search">Sök art</label>
+    <input class="form-control" id="species-search" type="search" autocomplete="off" autofocus>
+</div>
+
+<div id="species-search-results" class="list-group mb-3" aria-live="polite"></div>
+<p id="species-search-empty" class="text-body-secondary" hidden>Inga arter hittades.</p>
+
+<p><a href="{{ breeding_create_url }}">Jag hittar inte arten – ange taxonomin i fritext</a></p>
+
+<script>
+(function () {
+    const input = document.getElementById("species-search");
+    const results = document.getElementById("species-search-results");
+    const empty = document.getElementById("species-search-empty");
+    const searchUrl = "{{ search_url|escapejs }}";
+    const createUrl = "{{ breeding_create_url|escapejs }}";
+    let requestNumber = 0;
+    let timer = null;
+
+    function render(items) {
+        results.replaceChildren();
+        empty.hidden = items.length !== 0 || input.value.trim() === "";
+
+        items.forEach(function (item) {
+            const link = document.createElement("a");
+            link.className = "list-group-item list-group-item-action";
+            link.href = createUrl + "?species=" + encodeURIComponent(item.id);
+
+            const scientificName = document.createElement("div");
+            scientificName.className = "fw-semibold fst-italic";
+            scientificName.textContent = item.scientific_name;
+            link.appendChild(scientificName);
+
+            const registeredAs = document.createElement("div");
+            registeredAs.className = "small text-body-secondary";
+            registeredAs.textContent = "Registreras som: " + item.scientific_name;
+            link.appendChild(registeredAs);
+
+            if (item.common_name) {
+                const swedishName = document.createElement("div");
+                swedishName.textContent = item.common_name;
+                link.appendChild(swedishName);
+            }
+
+            if (item.english_name) {
+                const englishName = document.createElement("div");
+                englishName.className = "small text-body-secondary";
+                englishName.textContent = "Engelska: " + item.english_name;
+                link.appendChild(englishName);
+            }
+
+            results.appendChild(link);
+        });
+    }
+
+    async function search() {
+        const query = input.value.trim();
+        const currentRequest = ++requestNumber;
+        if (!query) {
+            render([]);
+            return;
+        }
+
+        const response = await fetch(searchUrl + "?q=" + encodeURIComponent(query), {
+            headers: {"X-Requested-With": "XMLHttpRequest"}
+        });
+        if (!response.ok || currentRequest !== requestNumber) {
+            return;
+        }
+        const data = await response.json();
+        if (currentRequest === requestNumber) {
+            render(data.results);
+        }
+    }
+
+    input.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(search, 150);
+    });
+})();
+</script>
+{% endblock %}
