@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from associations.admin import ASSOCIATION_ADMIN_GROUP
 from associations.models import Association, Membership
-from taxonomy.models import Genus, Species
+from taxonomy.models import Genus, Species, SpeciesSynonym
 
 from .models import BreedingRegistration
 
@@ -31,6 +31,7 @@ class TaxonomyResolutionTests(TestCase):
             genus=genus,
             scientific_name="cacatuoides",
             common_name="Kakaduaciklid",
+            english_name="Cockatoo dwarf cichlid",
             breeding_class=Species.BreedingClass.SILVER,
         )
         self.registration = BreedingRegistration.objects.create(
@@ -61,6 +62,50 @@ class TaxonomyResolutionTests(TestCase):
         self.assertEqual(self.registration.proposed_genus_name, "Apistogramma")
         self.assertEqual(self.registration.proposed_species_name, "cacatuoides")
         self.assertEqual(self.registration.proposed_common_name, "Kakaduaciklid")
+
+    def test_resolution_page_reuses_shared_species_search(self):
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(self.resolve_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, reverse("species_search_results"))
+        self.assertContains(response, 'id="species-search"')
+        self.assertContains(response, 'id="species-search-results"')
+        self.assertContains(response, 'id="taxonomy-submit"')
+
+    def test_shared_search_finds_synonym_and_returns_current_name(self):
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Apistogramma oldname",
+        )
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(reverse("species_search_results"), {"q": "oldname"})
+
+        self.assertEqual(response.status_code, 200)
+        results = response.json()["results"]
+        self.assertEqual(len(results), 1)
+        self.assertEqual(results[0]["id"], self.species.pk)
+        self.assertEqual(results[0]["scientific_name"], "Apistogramma cacatuoides")
+        self.assertEqual(results[0]["common_name"], "Kakaduaciklid")
+        self.assertEqual(results[0]["english_name"], "Cockatoo dwarf cichlid")
+
+    def test_shared_search_returns_at_most_ten_results(self):
+        genus = self.species.genus
+        for index in range(11):
+            Species.objects.create(
+                genus=genus,
+                scientific_name=f"searchable{index:02d}",
+                common_name=f"Sökbar {index}",
+                breeding_class=Species.BreedingClass.BRONZE,
+            )
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(reverse("species_search_results"), {"q": "searchable"})
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.json()["results"]), 10)
 
     def test_reviewer_cannot_resolve_other_association(self):
         self.client.force_login(self.other_reviewer)
