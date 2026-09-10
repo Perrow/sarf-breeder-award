@@ -33,10 +33,12 @@
         <div class="card h-100">
             <div class="card-body">
                 <h2 class="h5 card-title">Andra namn</h2>
+                {% if scientific_synonyms %}
                 <h3 class="h6">Vetenskapliga synonymer</h3>
                 <ul>
-                    {% for synonym in scientific_synonyms %}<li><em>{{ synonym.scientific_name }}</em></li>{% empty %}<li>Inga registrerade</li>{% endfor %}
+                    {% for synonym in scientific_synonyms %}<li><em>{{ synonym.scientific_name }}</em></li>{% endfor %}
                 </ul>
+                {% endif %}
                 <h3 class="h6">Populärnamnssynonymer</h3>
                 <ul class="mb-0">
                     {% for synonym in common_synonyms %}<li>{{ synonym.common_name }}</li>{% empty %}<li>Inga registrerade</li>{% endfor %}
