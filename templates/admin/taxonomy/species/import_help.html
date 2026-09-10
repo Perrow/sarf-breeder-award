@@ -1,0 +1,82 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <p>
+      <a href="{{ species_import_url }}">Tillbaka till import</a>
+      ·
+      <a href="{{ species_changelist_url }}">Tillbaka till arter</a>
+    </p>
+
+    <h2>Filformat</h2>
+    <p>Importfilen är JSON och ska innehålla <code>version: 1</code> samt en lista med arter i <code>species</code>.</p>
+
+    <h3>Fullständig import av en ny art</h3>
+    <pre>{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Poecilia",
+      "scientific_name": "reticulata",
+      "breeding_class": "bronze",
+      "swedish_names": ["Guppy", "Miljonfisk"],
+      "english_names": ["Guppy", "Millionfish"],
+      "scientific_synonyms": ["Lebistes reticulatus"],
+      "links": [
+        {
+          "url": "https://example.org/poecilia-reticulata",
+          "source_name": "Example",
+          "title": "Poecilia reticulata"
+        }
+      ]
+    }
+  ]
+}</pre>
+
+    <p>För en ny art krävs <code>genus</code>, <code>scientific_name</code>, <code>breeding_class</code> och minst ett värde i <code>swedish_names</code>.</p>
+
+    <h3>Kompletteringsimport av en befintlig art</h3>
+    <p>För en art som redan finns räcker det att ange <code>genus</code> och <code>scientific_name</code> plus de uppgifter som ska läggas till.</p>
+    <pre>{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Poecilia",
+      "scientific_name": "reticulata",
+      "links": [
+        {
+          "url": "https://new.example.org/guppy",
+          "source_name": "New Example"
+        }
+      ]
+    }
+  ]
+}</pre>
+
+    <h2>Hur importen fungerar</h2>
+    <ul>
+      <li>Importen är additiv. Utelämnade fält tar inte bort eller nollställer befintlig information.</li>
+      <li>Samma fil kan importeras flera gånger utan att skapa dubbletter av arter, synonymer eller länkar.</li>
+      <li>Matchning på genus och vetenskapligt artnamn är skiftlägesokänslig.</li>
+      <li>Om aktuellt vetenskapligt namn inte hittas försöker importen matcha ett gammalt vetenskapligt namn som finns registrerat som synonym.</li>
+      <li>Om samma gamla vetenskapliga namn pekar på flera arter avbryts den raden med ett tydligt fel i stället för att välja godtyckligt.</li>
+      <li>Befintlig <code>breeding_class</code> skrivs inte över vid kompletteringsimport.</li>
+      <li>Om ett svenskt eller engelskt namn skiljer sig från det aktuella namnet kan det läggas till som synonym enligt importens befintliga regler.</li>
+      <li>Länkar identifieras per art och URL. Befintlig länk återanvänds och saknad titel eller källa kan kompletteras.</li>
+    </ul>
+
+    <h2>Fält</h2>
+    <table>
+      <thead><tr><th>Fält</th><th>Beskrivning</th></tr></thead>
+      <tbody>
+        <tr><th><code>genus</code></th><td>Vetenskapligt släktnamn. Alltid obligatoriskt.</td></tr>
+        <tr><th><code>scientific_name</code></th><td>Vetenskapligt artnamn/artepitet. Alltid obligatoriskt.</td></tr>
+        <tr><th><code>breeding_class</code></th><td><code>bronze</code>, <code>silver</code> eller <code>gold</code>. Krävs när en ny art skapas.</td></tr>
+        <tr><th><code>swedish_names</code></th><td>Lista med svenska populärnamn. Minst ett krävs när en ny art skapas.</td></tr>
+        <tr><th><code>english_names</code></th><td>Valfri lista med engelska populärnamn.</td></tr>
+        <tr><th><code>scientific_synonyms</code></th><td>Valfri lista med tidigare eller alternativa vetenskapliga namn.</td></tr>
+        <tr><th><code>links</code></th><td>Valfri lista med externa länkar. <code>url</code> krävs; <code>source_name</code> och <code>title</code> är valfria.</td></tr>
+      </tbody>
+    </table>
+  </div>
+{% endblock %}
