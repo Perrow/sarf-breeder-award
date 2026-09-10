@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
+from .models import Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 
 
 @admin.register(Genus)
@@ -23,6 +23,12 @@ class SpeciesSynonymInline(admin.TabularInline):
     extra = 0
 
 
+class SpeciesLinkInline(admin.TabularInline):
+    model = SpeciesLink
+    extra = 0
+    fields = ("source_name", "title", "url")
+
+
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
     list_display = (
@@ -42,7 +48,7 @@ class SpeciesAdmin(admin.ModelAdmin):
         "synonyms__scientific_name",
         "synonyms__common_name",
     )
-    inlines = (SpeciesSynonymInline,)
+    inlines = (SpeciesSynonymInline, SpeciesLinkInline)
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
