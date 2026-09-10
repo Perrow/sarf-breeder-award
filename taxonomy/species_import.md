@@ -1,6 +1,6 @@
 # Artimport – filformat och beteende
 
-Den gemensamma importmotorn finns i `taxonomy/species_import.py` och används både av management-kommandot och administrationsgränssnittet.
+Den gemensamma importmotorn finns i `taxonomy/species_import.py` och används både av management-kommandot och administrationsgränssnittet. Samma information finns som hjälpsida från artimporten i Django Admin.
 
 Importfilen är JSON med formatversion 1:
 
@@ -9,17 +9,18 @@ Importfilen är JSON med formatversion 1:
   "version": 1,
   "species": [
     {
-      "genus": "Poecilia",
-      "scientific_name": "reticulata",
-      "breeding_class": "bronze",
-      "swedish_names": ["Guppy", "Miljonfisk"],
-      "english_names": ["Guppy", "Millionfish"],
-      "scientific_synonyms": ["Lebistes reticulatus"],
+      "genus": "Aulonocara",
+      "scientific_name": "stuartgranti",
+      "breeding_class": "silver",
+      "swedish_names": ["Påfågelciklid"],
+      "english_names": ["Flavescent peacock"],
+      "scientific_synonyms": [],
+      "geographies": ["Afrika", "Malawi"],
       "links": [
         {
-          "url": "https://example.org/poecilia-reticulata",
+          "url": "https://example.org/aulonocara-stuartgranti",
           "source_name": "Example",
-          "title": "Poecilia reticulata"
+          "title": "Aulonocara stuartgranti"
         }
       ]
     }
@@ -39,6 +40,8 @@ Importfilen är JSON med formatversion 1:
 
 `scientific_synonyms` är valfri och innehåller fullständiga tidigare vetenskapliga namn, till exempel `Lebistes reticulatus`.
 
+`geographies` är en valfri lista med geografiska områden, till exempel `["Afrika", "Malawi"]`. En art kan ha flera geografier. Geografier återanvänds skiftlägesokänsligt, så `malawi` matchar en befintlig `Malawi`, samtidigt som den befintliga stavningen bevaras.
+
 `links` är valfri. Varje länk kräver `url`. `source_name` och `title` är valfria. Om `source_name` saknas härleds det från domänen. Om `title` saknas försöker importen läsa HTML-sidans `<title>`; misslyckad hämtning stoppar inte importen.
 
 ## Full import av en ny art
@@ -47,29 +50,31 @@ För en art som ännu inte finns måste importposten minst innehålla:
 
 ```json
 {
-  "genus": "Poecilia",
-  "scientific_name": "wingei",
-  "breeding_class": "bronze",
-  "swedish_names": ["Endlers guppy"]
+  "genus": "Aulonocara",
+  "scientific_name": "stuartgranti",
+  "breeding_class": "silver",
+  "swedish_names": ["Påfågelciklid"],
+  "geographies": ["Afrika", "Malawi"]
 }
 ```
 
-Saknas `breeding_class` eller `swedish_names` när en ny art behöver skapas avbryts den artposten med valideringsfel. Importen är atomisk per artpost, så en misslyckad post ska inte lämna kvar ett delvis skapat genus, art, synonym eller länk.
+`geographies` är valfritt även vid ny art. Saknas `breeding_class` eller `swedish_names` när en ny art behöver skapas avbryts den artposten med valideringsfel. Importen är atomisk per artpost, så en misslyckad post ska inte lämna kvar delvis skapad data.
 
 ## Kompletterande import av en befintlig art
 
-När arten redan finns räcker `genus` + `scientific_name` tillsammans med de fält som ska kompletteras. Exempel som endast lägger till en extern länk:
+När arten redan finns räcker `genus` + `scientific_name` tillsammans med de fält som ska kompletteras. Exempel som lägger till ytterligare geografi och en extern länk:
 
 ```json
 {
   "version": 1,
   "species": [
     {
-      "genus": "Poecilia",
-      "scientific_name": "reticulata",
+      "genus": "Aulonocara",
+      "scientific_name": "stuartgranti",
+      "geographies": ["Malawi"],
       "links": [
         {
-          "url": "https://example.org/guppy",
+          "url": "https://example.org/malawi-reference",
           "source_name": "Example"
         }
       ]
@@ -78,33 +83,16 @@ När arten redan finns räcker `genus` + `scientific_name` tillsammans med de f�
 }
 ```
 
-Kompletteringsimporten är additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, länkar eller `breeding_class`. Samma fil kan importeras flera gånger utan att skapa dubbletter enligt respektive objekts idempotensregler.
+Kompletteringsimporten är additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, geografier, länkar eller `breeding_class`. Angivna geografier läggs till; andra befintliga geografier ligger kvar. Samma fil kan importeras flera gånger utan att skapa dubbletter.
 
 ## Import via gammalt vetenskapligt namn
 
 Om `genus` + `scientific_name` inte matchar en arts aktuella namn försöker importen matcha den fullständiga kombinationen mot `SpeciesSynonym.scientific_name`.
 
-Exempel: om `Lebistes reticulatus` finns som synonym till `Poecilia reticulata` kan följande kompletteringsimport användas utan att skapa en ny art:
-
-```json
-{
-  "version": 1,
-  "species": [
-    {
-      "genus": "Lebistes",
-      "scientific_name": "reticulatus",
-      "links": [
-        {
-          "url": "https://example.org/old-name-reference"
-        }
-      ]
-    }
-  ]
-}
-```
+Exempel: om `Lebistes reticulatus` finns som synonym till `Poecilia reticulata` kan en kompletteringsimport använda det gamla namnet utan att skapa en ny art.
 
 Om samma gamla vetenskapliga namn finns som synonym för flera arter betraktas matchningen som tvetydig och importen ger ett valideringsfel i stället för att välja en art godtyckligt.
 
 ## Resultat och output
 
-`import_species_file(path)` returnerar strukturerad statistik över skapade och återanvända genera, arter, synonymer och länkar. Själva importmotorn skriver inte till stdout eller stderr. Management-kommandot ansvarar själv för eventuell konsoloutput, och adminvyn presenterar samma returvärde i webbgränssnittet.
+`import_species_file(path)` returnerar strukturerad statistik över skapade och återanvända genera, arter, synonymer, geografier, geografikopplingar och länkar. Själva importmotorn skriver inte till stdout eller stderr. Management-kommandot ansvarar själv för eventuell konsoloutput, och adminvyn presenterar samma returvärde i webbgränssnittet.
