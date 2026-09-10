@@ -81,6 +81,15 @@ def _required_text(row, key):
     return value.strip()
 
 
+def _optional_text(row, key):
+    if key not in row:
+        return None
+    value = row.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise SpeciesImportError(f"'{key}' måste vara en icke-tom text när fältet anges.")
+    return value.strip()
+
+
 def _name_list(row, key):
     values = row.get(key, [])
     if values is None:
@@ -165,6 +174,26 @@ def _import_link(species, data, stats):
             link.save(update_fields=changed)
 
 
+def _find_existing_species(genus, genus_name, scientific_name):
+    if genus is not None:
+        species = Species.objects.filter(genus=genus, scientific_name=scientific_name).first()
+        if species is not None:
+            return species
+
+    old_full_name = f"{genus_name} {scientific_name}"
+    synonym_matches = list(
+        SpeciesSynonym.objects.filter(scientific_name=old_full_name)
+        .select_related("species__genus")[:2]
+    )
+    if len(synonym_matches) > 1:
+        raise SpeciesImportError(
+            f"Det gamla vetenskapliga namnet '{old_full_name}' är tvetydigt och finns som synonym för flera arter."
+        )
+    if synonym_matches:
+        return synonym_matches[0].species
+    return None
+
+
 @transaction.atomic
 def _import_species_row(row, stats):
     if not isinstance(row, dict):
@@ -172,8 +201,8 @@ def _import_species_row(row, stats):
 
     genus_name = _required_text(row, "genus")
     scientific_name = _required_text(row, "scientific_name")
-    breeding_class = _required_text(row, "breeding_class")
-    if breeding_class not in Species.BreedingClass.values:
+    breeding_class = _optional_text(row, "breeding_class")
+    if breeding_class is not None and breeding_class not in Species.BreedingClass.values:
         raise SpeciesImportError(
             f"Ogiltig breeding_class '{breeding_class}'. Tillåtna värden är: "
             + ", ".join(Species.BreedingClass.values)
@@ -183,29 +212,40 @@ def _import_species_row(row, stats):
     english_names = _name_list(row, "english_names")
     scientific_synonyms = _name_list(row, "scientific_synonyms")
     links = _link_list(row)
-    if not swedish_names:
-        raise SpeciesImportError("Minst ett svenskt populärnamn krävs i 'swedish_names'.")
 
-    genus, genus_created = Genus.objects.get_or_create(scientific_name=genus_name)
-    stats["genera_created" if genus_created else "genera_reused"] += 1
+    genus = Genus.objects.filter(scientific_name=genus_name).first()
+    species = _find_existing_species(genus, genus_name, scientific_name)
 
-    species, species_created = Species.objects.get_or_create(
-        genus=genus,
-        scientific_name=scientific_name,
-        defaults={
-            "common_name": swedish_names[0],
-            "english_name": english_names[0] if english_names else "",
-            "breeding_class": breeding_class,
-        },
-    )
-    stats["species_created" if species_created else "species_reused"] += 1
+    if species is None:
+        if breeding_class is None:
+            raise SpeciesImportError("'breeding_class' krävs när en ny art ska skapas.")
+        if not swedish_names:
+            raise SpeciesImportError("Minst ett svenskt populärnamn krävs i 'swedish_names' när en ny art ska skapas.")
 
-    if not species_created:
-        if not species.common_name:
-            species.common_name = swedish_names[0]
-            species.save(update_fields=["common_name"])
-        elif species.common_name != swedish_names[0]:
-            _ensure_common_synonym(species, swedish_names[0], stats)
+        if genus is None:
+            genus = Genus.objects.create(scientific_name=genus_name)
+            stats["genera_created"] += 1
+        else:
+            stats["genera_reused"] += 1
+
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name=scientific_name,
+            common_name=swedish_names[0],
+            english_name=english_names[0] if english_names else "",
+            breeding_class=breeding_class,
+        )
+        stats["species_created"] += 1
+    else:
+        stats["genera_reused"] += 1
+        stats["species_reused"] += 1
+
+        if swedish_names:
+            if not species.common_name:
+                species.common_name = swedish_names[0]
+                species.save(update_fields=["common_name"])
+            elif species.common_name != swedish_names[0]:
+                _ensure_common_synonym(species, swedish_names[0], stats)
 
         if english_names:
             if not species.english_name:
