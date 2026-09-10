@@ -67,7 +67,7 @@ class PublicUsernameTests(TestCase):
         self.client.force_login(user)
 
         response = self.client.post(
-            reverse("account"),
+            reverse("account_edit"),
             {
                 "public_username": "NewName",
                 "display_name": "Test Person",
