@@ -42,5 +42,6 @@ class ReviewHeadingTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content.decode().count("<h1>"), 1)
-        self.assertContains(response, "Granska odlingsregistrering", count=1)
+        content = response.content.decode()
+        self.assertEqual(content.count("<h1>"), 1)
+        self.assertEqual(content.count("<h1>Granska odlingsregistrering</h1>"), 1)
