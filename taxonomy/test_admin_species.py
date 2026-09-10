@@ -43,6 +43,7 @@ class SpeciesAdminTests(TestCase):
                 "genus",
                 "scientific_name",
                 "common_name",
+                "geography_names",
                 "group_names",
                 "breeding_class",
                 "is_active",
