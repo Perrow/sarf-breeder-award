@@ -33,3 +33,9 @@ class ReviewActionColumnTests(SimpleTestCase):
             self.model_admin.action_link(self._registration(BreedingRegistration.Status.APPROVED, False)),
             "–",
         )
+
+    def test_processed_registration_with_unresolved_taxonomy_has_no_action(self):
+        self.assertEqual(
+            self.model_admin.action_link(self._registration(BreedingRegistration.Status.REJECTED, True)),
+            "–",
+        )

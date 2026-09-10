@@ -188,13 +188,13 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
 
     @admin.display(description="Åtgärd")
     def action_link(self, obj):
+        if obj.status != BreedingRegistration.Status.SUBMITTED:
+            return "–"
         if obj.taxonomy_needs_resolution:
             url = reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[obj.pk])
             return format_html('<a href="{}">Lös taxonomi</a>', url)
-        if obj.status == BreedingRegistration.Status.SUBMITTED:
-            url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
-            return format_html('<a href="{}">Granska</a>', url)
-        return "–"
+        url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
+        return format_html('<a href="{}">Granska</a>', url)
 
     def review_view(self, request, object_id):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
@@ -254,9 +254,15 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
         if not self.has_view_permission(request, registration):
             raise PermissionDenied
+        if registration.status != BreedingRegistration.Status.SUBMITTED:
+            messages.error(request, "Endast inskickade odlingsregistreringar kan få taxonomin löst.")
+            return redirect("admin:breedings_breedingregistration_changelist")
         if not registration.taxonomy_needs_resolution:
             messages.info(request, "Odlingsregistreringen har redan löst taxonomi.")
-            return redirect("admin:breedings_breedingregistration_changelist")
+            return redirect(
+                "admin:breedings_breedingregistration_review",
+                object_id=registration.pk,
+            )
 
         if request.method == "POST":
             form = TaxonomyResolutionForm(request.POST)
