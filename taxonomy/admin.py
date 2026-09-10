@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.utils.html import format_html
 
 from .models import Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 
@@ -26,7 +27,19 @@ class SpeciesSynonymInline(admin.TabularInline):
 class SpeciesLinkInline(admin.TabularInline):
     model = SpeciesLink
     extra = 0
-    fields = ("source_name", "title", "url")
+    fields = ("link_preview", "source_name", "title", "url")
+    readonly_fields = ("link_preview",)
+
+    @admin.display(description="Länk")
+    def link_preview(self, obj):
+        if not obj or not obj.url:
+            return "–"
+        return format_html(
+            '<a href="{}" target="_blank" rel="noopener">{}</a> ({})',
+            obj.url,
+            obj.title or obj.url,
+            obj.source_name,
+        )
 
 
 @admin.register(Species)
