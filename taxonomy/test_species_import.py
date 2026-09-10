@@ -111,6 +111,37 @@ class SpeciesImportTests(TestCase):
         self.assertEqual(first_stats["links_created"], 1)
         self.assertEqual(second_stats["links_reused"], 1)
 
+    def test_import_matches_current_scientific_name_case_insensitively(self):
+        genus = Genus.objects.create(scientific_name="Poecilia")
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name="reticulata",
+            common_name="Guppy",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        path = self._write_file(
+            [
+                {
+                    "genus": "poecilia",
+                    "scientific_name": "RETICULATA",
+                    "links": [
+                        {
+                            "url": "https://example.org/case-insensitive-current",
+                            "source_name": "Example",
+                            "title": "Guppy",
+                        }
+                    ],
+                }
+            ]
+        )
+
+        stats = import_species_file(path)
+
+        self.assertEqual(Genus.objects.count(), 1)
+        self.assertEqual(Species.objects.count(), 1)
+        self.assertEqual(stats["species_reused"], 1)
+        self.assertTrue(species.external_links.filter(url="https://example.org/case-insensitive-current").exists())
+
     def test_partial_import_of_missing_species_requires_creation_fields_without_partial_data(self):
         path = self._write_file(
             [
@@ -167,6 +198,37 @@ class SpeciesImportTests(TestCase):
         self.assertTrue(species.external_links.filter(url="https://example.org/guppy").exists())
         self.assertEqual(stats["species_reused"], 1)
         self.assertEqual(stats["links_created"], 1)
+
+    def test_import_matches_old_scientific_name_case_insensitively(self):
+        genus = Genus.objects.create(scientific_name="Poecilia")
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name="reticulata",
+            common_name="Guppy",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        SpeciesSynonym.objects.create(species=species, scientific_name="Lebistes reticulatus")
+        path = self._write_file(
+            [
+                {
+                    "genus": "LEBISTES",
+                    "scientific_name": "RETICULATUS",
+                    "links": [
+                        {
+                            "url": "https://example.org/case-insensitive-synonym",
+                            "source_name": "Example",
+                            "title": "Guppy",
+                        }
+                    ],
+                }
+            ]
+        )
+
+        stats = import_species_file(path)
+
+        self.assertEqual(Species.objects.count(), 1)
+        self.assertEqual(stats["species_reused"], 1)
+        self.assertTrue(species.external_links.filter(url="https://example.org/case-insensitive-synonym").exists())
 
     def test_import_by_ambiguous_old_scientific_name_fails(self):
         first_genus = Genus.objects.create(scientific_name="Poecilia")
