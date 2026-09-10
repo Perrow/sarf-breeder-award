@@ -221,6 +221,7 @@ def _presentation_for(earned):
             else ""
         ),
         "overlay": achievement.image if achievement.image else None,
+        "level_overlay": earned.level.image if earned.level.image else None,
     }
 
 

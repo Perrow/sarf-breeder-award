@@ -113,6 +113,12 @@ class AchievementLevel(models.Model):
     )
     name = models.CharField(max_length=15, verbose_name="nivånamn")
     description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
+    image = models.ImageField(
+        upload_to="achievements/level_images/",
+        blank=True,
+        validators=[validate_achievement_overlay],
+        verbose_name="nivåbild",
+    )
     order = models.PositiveIntegerField(verbose_name="ordning")
 
     class Meta:

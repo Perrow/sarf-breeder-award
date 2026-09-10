@@ -161,7 +161,7 @@ class AchievementLevelAdmin(admin.ModelAdmin):
     list_display = ("achievement", "name", "order")
     list_filter = ("achievement",)
     readonly_fields = ("requirements_summary",)
-    fields = ("achievement", "name", "description", "order", "requirements_summary")
+    fields = ("achievement", "name", "description", "image", "order", "requirements_summary")
 
     @admin.display(description="Krav")
     def requirements_summary(self, obj):
