@@ -21,6 +21,8 @@ urlpatterns = [
         views.association_member_breeding_list,
         name="association_member_breeding_list",
     ),
+    path("arter/", species_search.species_catalogue, name="species_catalogue"),
+    path("arter/<int:pk>/", species_search.species_information, name="species_information"),
     path("odlingar/", views.breeding_list, name="breeding_list"),
     path("odlingar/valj-art/", species_search.species_select, name="species_select"),
     path("odlingar/artsok/", species_search.species_search_results, name="species_search_results"),
