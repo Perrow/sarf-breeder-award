@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxonomy.models import Genus, Species, SpeciesSynonym
+from taxonomy.models import Geography, Genus, Species, SpeciesSynonym
 
 
 class SpeciesSelectionTests(TestCase):
@@ -25,6 +25,13 @@ class SpeciesSelectionTests(TestCase):
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
+        SpeciesSynonym.objects.create(
+            species=self.species,
+            common_name="Brunpansarmal",
+        )
+        self.africa = Geography.objects.create(name="Afrika")
+        self.malawi = Geography.objects.create(name="Malawi")
+        self.species.geographies.add(self.africa, self.malawi)
 
     def search(self, query):
         return self.client.get(reverse("species_search_results"), {"q": query})
@@ -40,15 +47,18 @@ class SpeciesSelectionTests(TestCase):
         self.assertContains(response, 'id="species-search"')
         self.assertContains(response, "Jag hittar inte arten")
         self.assertContains(response, reverse("breeding_create"))
+        self.assertNotContains(response, 'registeredAs.textContent = "Registreras som: "')
 
     def test_search_matches_current_scientific_swedish_and_english_names(self):
         for query in ("Corydoras aeneus", "Metallpansarmal", "Bronze corydoras"):
             with self.subTest(query=query):
                 response = self.search(query)
                 self.assertEqual(response.status_code, 200)
-                self.assertEqual(response.json()["results"][0]["id"], self.species.pk)
+                result = response.json()["results"][0]
+                self.assertEqual(result["id"], self.species.pk)
+                self.assertIsNone(result["matched_via"])
 
-    def test_search_by_synonym_returns_current_species_name(self):
+    def test_search_by_scientific_synonym_explains_match(self):
         response = self.search("Callichthys aeneus")
 
         self.assertEqual(response.status_code, 200)
@@ -57,6 +67,38 @@ class SpeciesSelectionTests(TestCase):
         self.assertEqual(result["scientific_name"], "Corydoras aeneus")
         self.assertEqual(result["common_name"], "Metallpansarmal")
         self.assertEqual(result["english_name"], "Bronze corydoras")
+        self.assertEqual(
+            result["matched_via"],
+            {"type": "synonym", "value": "Callichthys aeneus"},
+        )
+
+    def test_search_by_common_name_synonym_explains_match(self):
+        response = self.search("brunpansar")
+
+        result = response.json()["results"][0]
+        self.assertEqual(
+            result["matched_via"],
+            {"type": "synonym", "value": "Brunpansarmal"},
+        )
+
+    def test_direct_match_takes_priority_over_matching_synonym(self):
+        SpeciesSynonym.objects.create(species=self.species, common_name="Metallpansarmal old")
+
+        response = self.search("Metallpansarmal")
+
+        self.assertIsNone(response.json()["results"][0]["matched_via"])
+
+    def test_search_by_geography_returns_geographies_and_explains_match(self):
+        response = self.search("malawi")
+
+        self.assertEqual(response.status_code, 200)
+        result = response.json()["results"][0]
+        self.assertEqual(result["id"], self.species.pk)
+        self.assertEqual(result["geographies"], ["Afrika", "Malawi"])
+        self.assertEqual(
+            result["matched_via"],
+            {"type": "geography", "value": "Malawi"},
+        )
 
     def test_search_returns_at_most_ten_active_species(self):
         for index in range(12):

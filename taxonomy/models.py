@@ -87,6 +87,7 @@ class SpeciesQuerySet(models.QuerySet):
                 | Q(english_name__icontains=query)
                 | Q(synonyms__scientific_name__icontains=query)
                 | Q(synonyms__common_name__icontains=query)
+                | Q(geographies__name__icontains=query)
             )
             .distinct()
         )

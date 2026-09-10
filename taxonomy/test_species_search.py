@@ -1,6 +1,6 @@
 from django.test import TestCase
 
-from .models import Genus, Species, SpeciesSynonym
+from .models import Geography, Genus, Species, SpeciesSynonym
 
 
 class SpeciesSearchTests(TestCase):
@@ -20,6 +20,9 @@ class SpeciesSearchTests(TestCase):
             species=self.species,
             common_name="Panda cory",
         )
+        self.africa = Geography.objects.create(name="Afrika")
+        self.malawi = Geography.objects.create(name="Malawi")
+        self.species.geographies.add(self.africa, self.malawi)
         self.inactive_species = Species.objects.create(
             genus=self.genus,
             scientific_name="oldname",
@@ -48,6 +51,11 @@ class SpeciesSearchTests(TestCase):
         results = Species.objects.search("Panda cory")
 
         self.assertEqual(list(results), [self.species])
+
+    def test_search_matches_each_species_geography_case_insensitively(self):
+        for query in ("Afrika", "malawi"):
+            with self.subTest(query=query):
+                self.assertEqual(list(Species.objects.search(query)), [self.species])
 
     def test_inactive_species_is_excluded_for_new_registration(self):
         results = Species.objects.search("Historisk art")
