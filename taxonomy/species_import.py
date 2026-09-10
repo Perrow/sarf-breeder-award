@@ -7,7 +7,7 @@ from urllib.request import Request, urlopen
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import Genus, Species, SpeciesLink, SpeciesSynonym
+from .models import Geography, Genus, Species, SpeciesLink, SpeciesSynonym
 
 
 class SpeciesImportError(ValueError):
@@ -56,7 +56,7 @@ def import_species_file(path):
     """Import species from a BA-026 JSON file.
 
     File format and additive/partial-import behavior are documented in
-    ``taxonomy/species_import.md`` next to this module.
+    ``taxonomy/species_import.md`` next to this module and in Django Admin.
     """
     rows = load_species_import_file(path)
     stats = {
@@ -68,6 +68,10 @@ def import_species_file(path):
         "synonyms_reused": 0,
         "links_created": 0,
         "links_reused": 0,
+        "geographies_created": 0,
+        "geographies_reused": 0,
+        "geography_links_created": 0,
+        "geography_links_reused": 0,
     }
 
     for index, row in enumerate(rows, start=1):
@@ -99,7 +103,9 @@ def _name_list(row, key):
     values = row.get(key, [])
     if values is None:
         return []
-    if not isinstance(values, list) or any(not isinstance(value, str) or not value.strip() for value in values):
+    if not isinstance(values, list) or any(
+        not isinstance(value, str) or not value.strip() for value in values
+    ):
         raise SpeciesImportError(f"'{key}' måste vara en lista med icke-tomma texter.")
     return list(dict.fromkeys(value.strip() for value in values))
 
@@ -121,7 +127,13 @@ def _link_list(row):
         source_name = value.get("source_name", "")
         if not isinstance(title, str) or not isinstance(source_name, str):
             raise SpeciesImportError("Länkens 'title' och 'source_name' måste vara text.")
-        result.append({"url": url.strip(), "title": title.strip(), "source_name": source_name.strip()})
+        result.append(
+            {
+                "url": url.strip(),
+                "title": title.strip(),
+                "source_name": source_name.strip(),
+            }
+        )
     return result
 
 
@@ -179,6 +191,21 @@ def _import_link(species, data, stats):
             link.save(update_fields=changed)
 
 
+def _import_geography(species, name, stats):
+    geography = Geography.objects.filter(name__iexact=name).first()
+    if geography is None:
+        geography = Geography.objects.create(name=name)
+        stats["geographies_created"] += 1
+    else:
+        stats["geographies_reused"] += 1
+
+    if species.geographies.filter(pk=geography.pk).exists():
+        stats["geography_links_reused"] += 1
+    else:
+        species.geographies.add(geography)
+        stats["geography_links_created"] += 1
+
+
 def _find_existing_species(genus, genus_name, scientific_name):
     if genus is not None:
         species = Species.objects.filter(
@@ -219,6 +246,7 @@ def _import_species_row(row, stats):
     swedish_names = _name_list(row, "swedish_names")
     english_names = _name_list(row, "english_names")
     scientific_synonyms = _name_list(row, "scientific_synonyms")
+    geographies = _name_list(row, "geographies")
     links = _link_list(row)
 
     genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
@@ -228,7 +256,9 @@ def _import_species_row(row, stats):
         if breeding_class is None:
             raise SpeciesImportError("'breeding_class' krävs när en ny art ska skapas.")
         if not swedish_names:
-            raise SpeciesImportError("Minst ett svenskt populärnamn krävs i 'swedish_names' när en ny art ska skapas.")
+            raise SpeciesImportError(
+                "Minst ett svenskt populärnamn krävs i 'swedish_names' när en ny art ska skapas."
+            )
 
         if genus is None:
             genus = Genus.objects.create(scientific_name=genus_name)
@@ -272,6 +302,9 @@ def _import_species_row(row, stats):
             defaults={"common_name": ""},
         )
         stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+    for geography in geographies:
+        _import_geography(species, geography, stats)
 
     for link in links:
         _import_link(species, link, stats)
