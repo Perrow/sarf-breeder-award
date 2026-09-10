@@ -7,7 +7,7 @@ from urllib.request import Request, urlopen
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import Genus, Species, SpeciesLink, SpeciesSynonym
+from .models import Geography, Genus, Species, SpeciesLink, SpeciesSynonym
 
 
 class SpeciesImportError(ValueError):
@@ -53,6 +53,11 @@ def load_species_import_file(path):
 
 
 def import_species_file(path):
+    """Import species from a BA-026 JSON file.
+
+    File format and additive/partial-import behavior are documented in
+    ``taxonomy/species_import.md`` next to this module and in Django Admin.
+    """
     rows = load_species_import_file(path)
     stats = {
         "genera_created": 0,
@@ -63,6 +68,10 @@ def import_species_file(path):
         "synonyms_reused": 0,
         "links_created": 0,
         "links_reused": 0,
+        "geographies_created": 0,
+        "geographies_reused": 0,
+        "geography_links_created": 0,
+        "geography_links_reused": 0,
     }
 
     for index, row in enumerate(rows, start=1):
@@ -81,11 +90,22 @@ def _required_text(row, key):
     return value.strip()
 
 
+def _optional_text(row, key):
+    if key not in row:
+        return None
+    value = row.get(key)
+    if not isinstance(value, str) or not value.strip():
+        raise SpeciesImportError(f"'{key}' måste vara en icke-tom text när fältet anges.")
+    return value.strip()
+
+
 def _name_list(row, key):
     values = row.get(key, [])
     if values is None:
         return []
-    if not isinstance(values, list) or any(not isinstance(value, str) or not value.strip() for value in values):
+    if not isinstance(values, list) or any(
+        not isinstance(value, str) or not value.strip() for value in values
+    ):
         raise SpeciesImportError(f"'{key}' måste vara en lista med icke-tomma texter.")
     return list(dict.fromkeys(value.strip() for value in values))
 
@@ -107,7 +127,13 @@ def _link_list(row):
         source_name = value.get("source_name", "")
         if not isinstance(title, str) or not isinstance(source_name, str):
             raise SpeciesImportError("Länkens 'title' och 'source_name' måste vara text.")
-        result.append({"url": url.strip(), "title": title.strip(), "source_name": source_name.strip()})
+        result.append(
+            {
+                "url": url.strip(),
+                "title": title.strip(),
+                "source_name": source_name.strip(),
+            }
+        )
     return result
 
 
@@ -165,6 +191,44 @@ def _import_link(species, data, stats):
             link.save(update_fields=changed)
 
 
+def _import_geography(species, name, stats):
+    geography = Geography.objects.filter(name__iexact=name).first()
+    if geography is None:
+        geography = Geography.objects.create(name=name)
+        stats["geographies_created"] += 1
+    else:
+        stats["geographies_reused"] += 1
+
+    if species.geographies.filter(pk=geography.pk).exists():
+        stats["geography_links_reused"] += 1
+    else:
+        species.geographies.add(geography)
+        stats["geography_links_created"] += 1
+
+
+def _find_existing_species(genus, genus_name, scientific_name):
+    if genus is not None:
+        species = Species.objects.filter(
+            genus=genus,
+            scientific_name__iexact=scientific_name,
+        ).first()
+        if species is not None:
+            return species
+
+    old_full_name = f"{genus_name} {scientific_name}"
+    synonym_matches = list(
+        SpeciesSynonym.objects.filter(scientific_name__iexact=old_full_name)
+        .select_related("species__genus")[:2]
+    )
+    if len(synonym_matches) > 1:
+        raise SpeciesImportError(
+            f"Det gamla vetenskapliga namnet '{old_full_name}' är tvetydigt och finns som synonym för flera arter."
+        )
+    if synonym_matches:
+        return synonym_matches[0].species
+    return None
+
+
 @transaction.atomic
 def _import_species_row(row, stats):
     if not isinstance(row, dict):
@@ -172,8 +236,8 @@ def _import_species_row(row, stats):
 
     genus_name = _required_text(row, "genus")
     scientific_name = _required_text(row, "scientific_name")
-    breeding_class = _required_text(row, "breeding_class")
-    if breeding_class not in Species.BreedingClass.values:
+    breeding_class = _optional_text(row, "breeding_class")
+    if breeding_class is not None and breeding_class not in Species.BreedingClass.values:
         raise SpeciesImportError(
             f"Ogiltig breeding_class '{breeding_class}'. Tillåtna värden är: "
             + ", ".join(Species.BreedingClass.values)
@@ -182,30 +246,44 @@ def _import_species_row(row, stats):
     swedish_names = _name_list(row, "swedish_names")
     english_names = _name_list(row, "english_names")
     scientific_synonyms = _name_list(row, "scientific_synonyms")
+    geographies = _name_list(row, "geographies")
     links = _link_list(row)
-    if not swedish_names:
-        raise SpeciesImportError("Minst ett svenskt populärnamn krävs i 'swedish_names'.")
 
-    genus, genus_created = Genus.objects.get_or_create(scientific_name=genus_name)
-    stats["genera_created" if genus_created else "genera_reused"] += 1
+    genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
+    species = _find_existing_species(genus, genus_name, scientific_name)
 
-    species, species_created = Species.objects.get_or_create(
-        genus=genus,
-        scientific_name=scientific_name,
-        defaults={
-            "common_name": swedish_names[0],
-            "english_name": english_names[0] if english_names else "",
-            "breeding_class": breeding_class,
-        },
-    )
-    stats["species_created" if species_created else "species_reused"] += 1
+    if species is None:
+        if breeding_class is None:
+            raise SpeciesImportError("'breeding_class' krävs när en ny art ska skapas.")
+        if not swedish_names:
+            raise SpeciesImportError(
+                "Minst ett svenskt populärnamn krävs i 'swedish_names' när en ny art ska skapas."
+            )
 
-    if not species_created:
-        if not species.common_name:
-            species.common_name = swedish_names[0]
-            species.save(update_fields=["common_name"])
-        elif species.common_name != swedish_names[0]:
-            _ensure_common_synonym(species, swedish_names[0], stats)
+        if genus is None:
+            genus = Genus.objects.create(scientific_name=genus_name)
+            stats["genera_created"] += 1
+        else:
+            stats["genera_reused"] += 1
+
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name=scientific_name,
+            common_name=swedish_names[0],
+            english_name=english_names[0] if english_names else "",
+            breeding_class=breeding_class,
+        )
+        stats["species_created"] += 1
+    else:
+        stats["genera_reused"] += 1
+        stats["species_reused"] += 1
+
+        if swedish_names:
+            if not species.common_name:
+                species.common_name = swedish_names[0]
+                species.save(update_fields=["common_name"])
+            elif species.common_name != swedish_names[0]:
+                _ensure_common_synonym(species, swedish_names[0], stats)
 
         if english_names:
             if not species.english_name:
@@ -224,6 +302,9 @@ def _import_species_row(row, stats):
             defaults={"common_name": ""},
         )
         stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+    for geography in geographies:
+        _import_geography(species, geography, stats)
 
     for link in links:
         _import_link(species, link, stats)

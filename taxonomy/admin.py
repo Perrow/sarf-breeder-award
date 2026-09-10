@@ -8,7 +8,7 @@ from django.urls import path, reverse
 from django.utils.html import format_html
 
 from .forms import SpeciesImportForm
-from .models import Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
+from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 from .species_import import SpeciesImportError, import_species_file
 
 
@@ -17,6 +17,12 @@ class GenusAdmin(admin.ModelAdmin):
     list_display = ("scientific_name", "is_active")
     list_filter = ("is_active",)
     search_fields = ("scientific_name",)
+
+
+@admin.register(Geography)
+class GeographyAdmin(admin.ModelAdmin):
+    list_display = ("name",)
+    search_fields = ("name",)
 
 
 @admin.register(SpeciesGroup)
@@ -57,11 +63,12 @@ class SpeciesAdmin(admin.ModelAdmin):
         "genus",
         "scientific_name",
         "common_name",
+        "geography_names",
         "group_names",
         "breeding_class",
         "is_active",
     )
-    list_filter = ("is_active", "breeding_class", "genus")
+    list_filter = ("is_active", "breeding_class", "genus", "geographies")
     search_fields = (
         "scientific_name",
         "genus__scientific_name",
@@ -70,10 +77,16 @@ class SpeciesAdmin(admin.ModelAdmin):
         "synonyms__scientific_name",
         "synonyms__common_name",
     )
+    filter_horizontal = ("geographies",)
     inlines = (SpeciesSynonymInline, SpeciesLinkInline)
 
     def get_urls(self):
         return [
+            path(
+                "import/help/",
+                self.admin_site.admin_view(self.import_species_help_view),
+                name="taxonomy_species_import_help",
+            ),
             path(
                 "import/",
                 self.admin_site.admin_view(self.import_species_view),
@@ -81,9 +94,23 @@ class SpeciesAdmin(admin.ModelAdmin):
             ),
         ] + super().get_urls()
 
-    def import_species_view(self, request):
+    def _check_import_permission(self, request):
         if not self.has_change_permission(request):
             raise PermissionDenied
+
+    def import_species_help_view(self, request):
+        self._check_import_permission(request)
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "title": "Dokumentation för artimport",
+            "species_import_url": reverse("admin:taxonomy_species_import"),
+            "species_changelist_url": reverse("admin:taxonomy_species_changelist"),
+        }
+        return render(request, "admin/taxonomy/species/import_help.html", context)
+
+    def import_species_view(self, request):
+        self._check_import_permission(request)
 
         stats = None
         import_error = None
@@ -112,6 +139,7 @@ class SpeciesAdmin(admin.ModelAdmin):
             "stats": stats,
             "import_error": import_error,
             "species_changelist_url": reverse("admin:taxonomy_species_changelist"),
+            "species_import_help_url": reverse("admin:taxonomy_species_import_help"),
         }
         return render(request, "admin/taxonomy/species/import.html", context)
 
@@ -121,6 +149,10 @@ class SpeciesAdmin(admin.ModelAdmin):
         if obj is None and source_genus and not request.GET.get("genus"):
             form.base_fields["genus"].help_text = f"Användaren angav släkte: {source_genus}"
         return form
+
+    @admin.display(description="geografier")
+    def geography_names(self, obj):
+        return ", ".join(obj.geographies.values_list("name", flat=True))
 
     @admin.display(description="artgrupper")
     def group_names(self, obj):

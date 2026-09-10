@@ -1,7 +1,7 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, Value
-from django.db.models.functions import Concat
+from django.db.models.functions import Concat, Lower
 
 
 class Genus(models.Model):
@@ -37,6 +37,24 @@ class SpeciesGroup(models.Model):
         ordering = ["name"]
         verbose_name = "artgrupp"
         verbose_name_plural = "artgrupper"
+
+    def __str__(self):
+        return self.name
+
+
+class Geography(models.Model):
+    name = models.CharField(max_length=100, verbose_name="namn")
+
+    class Meta:
+        ordering = ["name"]
+        verbose_name = "geografi"
+        verbose_name_plural = "geografier"
+        constraints = [
+            models.UniqueConstraint(
+                Lower("name"),
+                name="unique_geography_name_ci",
+            ),
+        ]
 
     def __str__(self):
         return self.name
@@ -97,6 +115,12 @@ class Species(models.Model):
         max_length=6,
         choices=BreedingClass.choices,
         verbose_name="odlingsklass",
+    )
+    geographies = models.ManyToManyField(
+        Geography,
+        blank=True,
+        related_name="species",
+        verbose_name="geografier",
     )
     is_active = models.BooleanField(default=True, verbose_name="aktiv")
 
