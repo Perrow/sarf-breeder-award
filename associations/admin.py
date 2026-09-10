@@ -23,30 +23,53 @@ def managed_associations(user):
     return Association.objects.none()
 
 
+def _has_any_permission(user, model_name):
+    return any(
+        user.has_perm(f"associations.{action}_{model_name}")
+        for action in ("view", "add", "change", "delete")
+    )
+
+
+def _permission_associations(user):
+    if is_system_admin(user) or is_association_admin(user):
+        return managed_associations(user)
+    if _has_any_permission(user, "association") or _has_any_permission(user, "membership"):
+        return Association.objects.all()
+    return Association.objects.none()
+
+
 @admin.register(Association)
 class AssociationAdmin(admin.ModelAdmin):
     list_display = ("name", "organization_number", "email", "phone", "city")
     search_fields = ("name", "organization_number", "email", "city")
 
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(pk__in=managed_associations(request.user))
+        return super().get_queryset(request).filter(pk__in=_permission_associations(request.user))
 
     def has_module_permission(self, request):
-        return is_system_admin(request.user) or is_association_admin(request.user)
+        return (
+            is_system_admin(request.user)
+            or is_association_admin(request.user)
+            or _has_any_permission(request.user, "association")
+        )
 
     def has_view_permission(self, request, obj=None):
-        if obj is None:
-            return self.has_module_permission(request)
-        return managed_associations(request.user).filter(pk=obj.pk).exists()
+        if is_system_admin(request.user) or is_association_admin(request.user):
+            if obj is None:
+                return True
+            return managed_associations(request.user).filter(pk=obj.pk).exists()
+        return request.user.has_perm("associations.view_association")
 
     def has_change_permission(self, request, obj=None):
-        return self.has_view_permission(request, obj)
+        if is_system_admin(request.user) or is_association_admin(request.user):
+            return self.has_view_permission(request, obj)
+        return request.user.has_perm("associations.change_association")
 
     def has_add_permission(self, request):
-        return is_system_admin(request.user)
+        return is_system_admin(request.user) or request.user.has_perm("associations.add_association")
 
     def has_delete_permission(self, request, obj=None):
-        return is_system_admin(request.user)
+        return is_system_admin(request.user) or request.user.has_perm("associations.delete_association")
 
 
 @admin.register(Membership)
@@ -71,32 +94,36 @@ class MembershipAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(
-            association__in=managed_associations(request.user)
+            association__in=_permission_associations(request.user)
         )
 
     def has_module_permission(self, request):
-        return is_system_admin(request.user) or is_association_admin(request.user)
+        return (
+            is_system_admin(request.user)
+            or is_association_admin(request.user)
+            or _has_any_permission(request.user, "membership")
+        )
 
     def _can_manage(self, request, obj=None):
-        if not self.has_module_permission(request):
+        if not (is_system_admin(request.user) or is_association_admin(request.user)):
             return False
         if obj is None:
             return managed_associations(request.user).exists()
         return managed_associations(request.user).filter(pk=obj.association_id).exists()
 
     def has_view_permission(self, request, obj=None):
-        return self._can_manage(request, obj)
+        return self._can_manage(request, obj) or request.user.has_perm("associations.view_membership")
 
     def has_change_permission(self, request, obj=None):
-        return self._can_manage(request, obj)
+        return self._can_manage(request, obj) or request.user.has_perm("associations.change_membership")
 
     def has_add_permission(self, request):
-        return self._can_manage(request)
+        return self._can_manage(request) or request.user.has_perm("associations.add_membership")
 
     def has_delete_permission(self, request, obj=None):
-        return self._can_manage(request, obj)
+        return self._can_manage(request, obj) or request.user.has_perm("associations.delete_membership")
 
     def formfield_for_foreignkey(self, db_field, request, **kwargs):
         if db_field.name == "association":
-            kwargs["queryset"] = managed_associations(request.user)
+            kwargs["queryset"] = _permission_associations(request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
