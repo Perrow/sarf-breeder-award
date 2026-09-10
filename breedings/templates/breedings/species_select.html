@@ -4,7 +4,7 @@
 
 {% block content %}
 <h1>Välj art</h1>
-<p>Sök på vetenskapligt namn, svenskt eller engelskt populärnamn. Äldre registrerade synonymer går också att söka på.</p>
+<p>Sök på vetenskapligt namn, svenskt eller engelskt populärnamn, synonym eller geografi.</p>
 
 <div class="mb-3">
     <label class="form-label" for="species-search">Sök art</label>
@@ -40,10 +40,14 @@
             scientificName.textContent = item.scientific_name;
             link.appendChild(scientificName);
 
-            const registeredAs = document.createElement("div");
-            registeredAs.className = "small text-body-secondary";
-            registeredAs.textContent = "Registreras som: " + item.scientific_name;
-            link.appendChild(registeredAs);
+            if (item.matched_via) {
+                const matchReason = document.createElement("div");
+                matchReason.className = "small text-body-secondary";
+                matchReason.textContent = item.matched_via.type === "geography"
+                    ? "Träff via geografi: " + item.matched_via.value
+                    : "Träff via synonym: " + item.matched_via.value;
+                link.appendChild(matchReason);
+            }
 
             if (item.common_name) {
                 const swedishName = document.createElement("div");
@@ -56,6 +60,13 @@
                 englishName.className = "small text-body-secondary";
                 englishName.textContent = "Engelska: " + item.english_name;
                 link.appendChild(englishName);
+            }
+
+            if (item.geographies && item.geographies.length) {
+                const geography = document.createElement("div");
+                geography.className = "small text-body-secondary";
+                geography.textContent = "Geografi: " + item.geographies.join(", ");
+                link.appendChild(geography);
             }
 
             results.appendChild(link);
