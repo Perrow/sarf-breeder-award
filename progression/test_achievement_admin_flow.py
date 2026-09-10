@@ -1,9 +1,9 @@
-from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .admin import AchievementRequirementInline
+from taxonomy.models import Genus, SpeciesGroup
+
 from .models import Achievement, AchievementLevel, AchievementRequirement
 
 
@@ -27,6 +27,10 @@ class AchievementAdminFlowTests(TestCase):
             kind=AchievementRequirement.Kind.BREEDING_COUNT,
             value=2,
         )
+        self.genus = Genus.objects.create(scientific_name="Corydoras")
+        self.group = SpeciesGroup.objects.create(name="Pansarmalar")
+        self.requirement.genera.add(self.genus)
+        self.requirement.species_groups.add(self.group)
 
     def test_achievement_page_shows_requirement_count_and_edit_link_for_level(self):
         response = self.client.get(
@@ -42,76 +46,45 @@ class AchievementAdminFlowTests(TestCase):
             reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
         )
 
-    def test_requirement_inline_is_compact_and_has_no_visible_extra_form_initially(self):
-        self.assertTrue(issubclass(AchievementRequirementInline, admin.TabularInline))
-        self.assertEqual(AchievementRequirementInline.extra, 0)
-        self.assertTrue(AchievementRequirementInline.show_change_link)
-
+    def test_level_page_shows_requirements_as_read_only_summary(self):
         response = self.client.get(
             reverse("admin:progression_achievementlevel_change", args=[self.level.pk])
         )
 
-        inline_formset = response.context["inline_admin_formsets"][0].formset
-        self.assertEqual(inline_formset.initial_form_count(), 1)
-        self.assertEqual(inline_formset.total_form_count(), 1)
-
-    def test_level_page_shows_existing_requirements_and_allows_adding_one(self):
-        change_url = reverse("admin:progression_achievementlevel_change", args=[self.level.pk])
-        response = self.client.get(change_url)
-
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Antal odlingar")
-        self.assertContains(response, "Kravvärde")
+        self.assertContains(response, "Corydoras")
+        self.assertContains(response, "Pansarmalar")
+        self.assertContains(response, ">2<", html=False)
+        self.assertContains(
+            response,
+            reverse(
+                "admin:progression_achievementrequirement_change",
+                args=[self.requirement.pk],
+            ),
+        )
+        self.assertNotContains(response, 'name="requirements-0-kind"')
+        self.assertNotContains(response, 'name="requirements-0-value"')
 
-        response = self.client.post(
-            change_url,
-            {
-                "achievement": str(self.achievement.pk),
-                "name": self.level.name,
-                "description": self.level.description,
-                "order": str(self.level.order),
-                "requirements-TOTAL_FORMS": "2",
-                "requirements-INITIAL_FORMS": "1",
-                "requirements-MIN_NUM_FORMS": "0",
-                "requirements-MAX_NUM_FORMS": "1000",
-                "requirements-0-id": str(self.requirement.pk),
-                "requirements-0-kind": self.requirement.kind,
-                "requirements-0-value": str(self.requirement.value),
-                "requirements-1-id": "",
-                "requirements-1-kind": AchievementRequirement.Kind.SPECIES_COUNT,
-                "requirements-1-value": "3",
-                "_save": "Spara",
-            },
+    def test_level_page_has_add_requirement_link_with_level_preselected(self):
+        response = self.client.get(
+            reverse("admin:progression_achievementlevel_change", args=[self.level.pk])
         )
 
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(self.level.requirements.count(), 2)
-        self.assertTrue(
-            self.level.requirements.filter(
-                kind=AchievementRequirement.Kind.SPECIES_COUNT,
-                value=3,
-            ).exists()
-        )
+        add_url = reverse("admin:progression_achievementrequirement_add")
+        self.assertContains(response, "Lägg till krav")
+        self.assertContains(response, f'{add_url}?level={self.level.pk}')
 
-    def test_level_page_allows_deleting_requirement(self):
-        response = self.client.post(
-            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
-            {
-                "achievement": str(self.achievement.pk),
-                "name": self.level.name,
-                "description": self.level.description,
-                "order": str(self.level.order),
-                "requirements-TOTAL_FORMS": "1",
-                "requirements-INITIAL_FORMS": "1",
-                "requirements-MIN_NUM_FORMS": "0",
-                "requirements-MAX_NUM_FORMS": "1000",
-                "requirements-0-id": str(self.requirement.pk),
-                "requirements-0-kind": self.requirement.kind,
-                "requirements-0-value": str(self.requirement.value),
-                "requirements-0-DELETE": "on",
-                "_save": "Spara",
-            },
+        response = self.client.get(f"{add_url}?level={self.level.pk}")
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["adminform"].form["level"].value(), str(self.level.pk))
+
+    def test_requirement_can_be_deleted_from_its_edit_page(self):
+        delete_url = reverse(
+            "admin:progression_achievementrequirement_delete",
+            args=[self.requirement.pk],
         )
+        response = self.client.post(delete_url, {"post": "yes"})
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(AchievementRequirement.objects.filter(pk=self.requirement.pk).exists())
