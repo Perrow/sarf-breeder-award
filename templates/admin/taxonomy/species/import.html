@@ -2,7 +2,11 @@
 
 {% block content %}
   <div id="content-main">
-    <p><a href="{{ species_changelist_url }}">Tillbaka till arter</a></p>
+    <p>
+      <a href="{{ species_changelist_url }}">Tillbaka till arter</a>
+      ·
+      <a href="{{ species_import_help_url }}">Dokumentation för importformatet</a>
+    </p>
 
     {% if import_error %}
       <p class="errornote">{{ import_error }}</p>
