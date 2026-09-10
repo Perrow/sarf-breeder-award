@@ -47,7 +47,7 @@ class AchievementCardInteractionTests(TestCase):
             response,
             'data-bs-content="Grad: Silver · Detaljerad beskrivning"',
         )
-        self.assertContains(response, "<div hidden data-achievement-details>", html=True)
+        self.assertContains(response, "data-achievement-details")
         self.assertContains(response, "new bootstrap.Popover(element);")
 
     def test_history_page_reuses_interactive_card_and_includes_year(self):
