@@ -1,15 +1,16 @@
 import tempfile
 from pathlib import Path
 
-from django.contrib import admin
+from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .forms import SpeciesImportForm
+from .forms import SpeciesImportForm, SpeciesMergeForm
 from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 from .species_import import SpeciesImportError, import_species_file
+from .species_merge import merge_species
 
 
 @admin.register(Genus)
@@ -59,6 +60,7 @@ class SpeciesLinkInline(admin.TabularInline):
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
     change_list_template = "admin/taxonomy/species/change_list.html"
+    change_form_template = "admin/taxonomy/species/change_form.html"
     list_display = (
         "genus",
         "scientific_name",
@@ -91,6 +93,11 @@ class SpeciesAdmin(admin.ModelAdmin):
                 "import/",
                 self.admin_site.admin_view(self.import_species_view),
                 name="taxonomy_species_import",
+            ),
+            path(
+                "<path:object_id>/merge/",
+                self.admin_site.admin_view(self.merge_species_view),
+                name="taxonomy_species_merge",
             ),
         ] + super().get_urls()
 
@@ -142,6 +149,32 @@ class SpeciesAdmin(admin.ModelAdmin):
             "species_import_help_url": reverse("admin:taxonomy_species_import_help"),
         }
         return render(request, "admin/taxonomy/species/import.html", context)
+
+    def merge_species_view(self, request, object_id):
+        source = get_object_or_404(Species.objects.select_related("genus"), pk=object_id)
+        if not self.has_delete_permission(request, source) or not self.has_change_permission(request, source):
+            raise PermissionDenied
+
+        form = SpeciesMergeForm(request.POST or None, source_species=source)
+        if request.method == "POST" and form.is_valid():
+            target = form.cleaned_data["target_species"]
+            merge_species(source, target)
+            self.message_user(
+                request,
+                f"Arten slogs ihop med {target}.",
+                level=messages.SUCCESS,
+            )
+            return redirect("admin:taxonomy_species_change", target.pk)
+
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "title": f"Slå ihop {source}",
+            "source": source,
+            "form": form,
+            "change_url": reverse("admin:taxonomy_species_change", args=(source.pk,)),
+        }
+        return render(request, "admin/taxonomy/species/merge.html", context)
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
