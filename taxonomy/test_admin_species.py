@@ -26,6 +26,14 @@ class SpeciesAdminTests(TestCase):
         )
         self.client.force_login(self.admin_user)
 
+    def _empty_links_management_form(self):
+        return {
+            "links-TOTAL_FORMS": "0",
+            "links-INITIAL_FORMS": "0",
+            "links-MIN_NUM_FORMS": "0",
+            "links-MAX_NUM_FORMS": "1000",
+        }
+
     def test_species_is_registered_with_expected_admin_configuration(self):
         model_admin = admin.site._registry[Species]
         self.assertIsInstance(model_admin, SpeciesAdmin)
@@ -44,22 +52,23 @@ class SpeciesAdminTests(TestCase):
         self.assertIn(SpeciesSynonymInline, model_admin.inlines)
 
     def test_admin_can_create_species(self):
-        response = self.client.post(
-            reverse("admin:taxonomy_species_add"),
-            {
-                "genus": self.other_genus.pk,
-                "scientific_name": "splendens",
-                "common_name": "Testart",
-                "english_name": "",
-                "breeding_class": Species.BreedingClass.SILVER,
-                "is_active": "on",
-                "synonyms-TOTAL_FORMS": "0",
-                "synonyms-INITIAL_FORMS": "0",
-                "synonyms-MIN_NUM_FORMS": "0",
-                "synonyms-MAX_NUM_FORMS": "1000",
-                "_save": "Spara",
-            },
-        )
+        post_data = {
+            "genus": self.other_genus.pk,
+            "scientific_name": "splendens",
+            "common_name": "Testart",
+            "english_name": "",
+            "breeding_class": Species.BreedingClass.SILVER,
+            "is_active": "on",
+            "synonyms-TOTAL_FORMS": "0",
+            "synonyms-INITIAL_FORMS": "0",
+            "synonyms-MIN_NUM_FORMS": "0",
+            "synonyms-MAX_NUM_FORMS": "1000",
+            "_save": "Spara",
+        }
+        post_data.update(self._empty_links_management_form())
+
+        response = self.client.post(reverse("admin:taxonomy_species_add"), post_data)
+
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             Species.objects.filter(
@@ -71,21 +80,25 @@ class SpeciesAdminTests(TestCase):
         )
 
     def test_admin_can_edit_classification_and_inactivate_species(self):
+        post_data = {
+            "genus": self.other_genus.pk,
+            "scientific_name": "aeneus",
+            "common_name": "Metallpansarmal",
+            "english_name": "",
+            "breeding_class": Species.BreedingClass.GOLD,
+            "synonyms-TOTAL_FORMS": "0",
+            "synonyms-INITIAL_FORMS": "0",
+            "synonyms-MIN_NUM_FORMS": "0",
+            "synonyms-MAX_NUM_FORMS": "1000",
+            "_save": "Spara",
+        }
+        post_data.update(self._empty_links_management_form())
+
         response = self.client.post(
             reverse("admin:taxonomy_species_change", args=(self.species.pk,)),
-            {
-                "genus": self.other_genus.pk,
-                "scientific_name": "aeneus",
-                "common_name": "Metallpansarmal",
-                "english_name": "",
-                "breeding_class": Species.BreedingClass.GOLD,
-                "synonyms-TOTAL_FORMS": "0",
-                "synonyms-INITIAL_FORMS": "0",
-                "synonyms-MIN_NUM_FORMS": "0",
-                "synonyms-MAX_NUM_FORMS": "1000",
-                "_save": "Spara",
-            },
+            post_data,
         )
+
         self.assertEqual(response.status_code, 302)
         self.species.refresh_from_db()
         self.assertEqual(self.species.genus, self.other_genus)
@@ -97,23 +110,27 @@ class SpeciesAdminTests(TestCase):
         self.assertContains(response, "Pansarmalar")
 
     def test_synonym_can_be_managed_inline_from_species_admin(self):
+        post_data = {
+            "genus": self.genus.pk,
+            "scientific_name": "aeneus",
+            "common_name": "Metallpansarmal",
+            "english_name": "",
+            "breeding_class": Species.BreedingClass.BRONZE,
+            "is_active": "on",
+            "synonyms-TOTAL_FORMS": "1",
+            "synonyms-INITIAL_FORMS": "0",
+            "synonyms-MIN_NUM_FORMS": "0",
+            "synonyms-MAX_NUM_FORMS": "1000",
+            "synonyms-0-scientific_name": "Hoplisoma aeneum",
+            "_save": "Spara",
+        }
+        post_data.update(self._empty_links_management_form())
+
         response = self.client.post(
             reverse("admin:taxonomy_species_change", args=(self.species.pk,)),
-            {
-                "genus": self.genus.pk,
-                "scientific_name": "aeneus",
-                "common_name": "Metallpansarmal",
-                "english_name": "",
-                "breeding_class": Species.BreedingClass.BRONZE,
-                "is_active": "on",
-                "synonyms-TOTAL_FORMS": "1",
-                "synonyms-INITIAL_FORMS": "0",
-                "synonyms-MIN_NUM_FORMS": "0",
-                "synonyms-MAX_NUM_FORMS": "1000",
-                "synonyms-0-scientific_name": "Hoplisoma aeneum",
-                "_save": "Spara",
-            },
+            post_data,
         )
+
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
             SpeciesSynonym.objects.filter(
