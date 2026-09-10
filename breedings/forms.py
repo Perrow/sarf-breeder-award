@@ -47,7 +47,15 @@ class BreedingRegistrationForm(forms.ModelForm):
         self.fields["species"].queryset = Species.objects.available_for_registration()
         self.fields["species"].required = False
         self.fields["description"].required = False
-        selected_species = self.initial.get("species") or getattr(self.instance, "species", None)
+
+        selected_species = getattr(self.instance, "species", None)
+        initial_species = self.initial.get("species")
+        if initial_species:
+            if isinstance(initial_species, Species):
+                selected_species = initial_species
+            else:
+                selected_species = Species.objects.filter(pk=initial_species).first()
+
         if selected_species and selected_species.breeding_class in {
             Species.BreedingClass.SILVER,
             Species.BreedingClass.GOLD,
