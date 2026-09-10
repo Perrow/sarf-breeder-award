@@ -41,6 +41,22 @@ python manage.py runserver
 
 The development site is then available at `http://127.0.0.1:8000/`. The Django administration site is available at `/admin/`.
 
+## Production security
+
+Production must run with `DJANGO_ENV=production`. In production, the application requires `DJANGO_SECRET_KEY` to be supplied from the deployment environment or another secret store; no development fallback is used. `DJANGO_ALLOWED_HOSTS` must contain a comma-separated list of the public host names served by the deployment.
+
+Example environment configuration:
+
+```text
+DJANGO_ENV=production
+DJANGO_SECRET_KEY=<long-random-secret>
+DJANGO_ALLOWED_HOSTS=example.org,www.example.org
+```
+
+Production mode disables Django debug output, redirects HTTP requests to HTTPS, marks session and CSRF cookies as secure, and trusts `X-Forwarded-Proto: https` from the deployment reverse proxy. The public reverse proxy/web server must therefore terminate TLS and pass the original scheme correctly.
+
+Do not put the production `DJANGO_SECRET_KEY`, user passwords, or other credentials in source control or application logs.
+
 ## SQ-001 – Swedish site
 
 The application is named **Odlingskampanjen** and uses Swedish throughout, including Django's built-in administration interface and translated validation messages.
