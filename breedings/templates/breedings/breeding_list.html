@@ -3,6 +3,23 @@
 {% block title %}Min sida | Odlingskampanjen{% endblock %}
 
 {% block content %}
+{% with yearly_count=yearly_achievements|length career_count=career_achievements|length %}
+{% with achievement_count=yearly_count|add:career_count %}
+{% if achievement_count < 6 %}
+<h2 class="h4">Utmärkelser</h2>
+{% if achievement_count %}
+<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
+    {% for presentation in yearly_achievements %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
+    {% endfor %}
+    {% for presentation in career_achievements %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu inga utmärkelser.</p>
+{% endif %}
+{% else %}
 <h2 class="h4">Årsutmärkelser för innevarande år</h2>
 {% if yearly_achievements %}
 <div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
@@ -24,6 +41,9 @@
 {% else %}
 <p class="text-body-secondary">Du har ännu ingen karriärsutmärkelse.</p>
 {% endif %}
+{% endif %}
+{% endwith %}
+{% endwith %}
 
 <p><a href="{% url 'achievements' %}">Visa alla utmärkelser</a></p>
 

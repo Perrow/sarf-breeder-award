@@ -79,6 +79,125 @@ class AchievementAdminFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["adminform"].form["level"].value(), str(self.level.pk))
 
+    def test_saving_existing_level_returns_to_achievement(self):
+        response = self.client.post(
+            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
+            {
+                "achievement": self.achievement.pk,
+                "name": "Silver",
+                "description": "Uppdaterad nivå",
+                "order": 1,
+                "_save": "Spara",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:progression_achievement_change", args=[self.achievement.pk]),
+        )
+
+    def test_adding_level_returns_to_achievement(self):
+        response = self.client.post(
+            reverse("admin:progression_achievementlevel_add"),
+            {
+                "achievement": self.achievement.pk,
+                "name": "Silver",
+                "description": "Andra nivån",
+                "order": 2,
+                "_save": "Spara",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:progression_achievement_change", args=[self.achievement.pk]),
+        )
+        self.assertTrue(
+            AchievementLevel.objects.filter(achievement=self.achievement, name="Silver").exists()
+        )
+
+    def test_save_and_continue_level_stays_on_level(self):
+        change_url = reverse(
+            "admin:progression_achievementlevel_change", args=[self.level.pk]
+        )
+        response = self.client.post(
+            change_url,
+            {
+                "achievement": self.achievement.pk,
+                "name": self.level.name,
+                "description": self.level.description,
+                "order": self.level.order,
+                "_continue": "Spara och fortsätt redigera",
+            },
+        )
+
+        self.assertRedirects(response, change_url)
+
+    def test_saving_existing_requirement_returns_to_level(self):
+        response = self.client.post(
+            reverse(
+                "admin:progression_achievementrequirement_change",
+                args=[self.requirement.pk],
+            ),
+            {
+                "level": self.level.pk,
+                "kind": AchievementRequirement.Kind.BREEDING_COUNT,
+                "value": 3,
+                "genera": [self.genus.pk],
+                "species_groups": [self.group.pk],
+                "_save": "Spara",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
+        )
+
+    def test_adding_requirement_returns_to_level(self):
+        response = self.client.post(
+            reverse("admin:progression_achievementrequirement_add"),
+            {
+                "level": self.level.pk,
+                "kind": AchievementRequirement.Kind.POINTS,
+                "value": 10,
+                "genera": [],
+                "species_groups": [],
+                "_save": "Spara",
+            },
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
+        )
+        self.assertTrue(
+            AchievementRequirement.objects.filter(
+                level=self.level,
+                kind=AchievementRequirement.Kind.POINTS,
+                value=10,
+            ).exists()
+        )
+
+    def test_save_and_continue_requirement_stays_on_requirement(self):
+        change_url = reverse(
+            "admin:progression_achievementrequirement_change",
+            args=[self.requirement.pk],
+        )
+        response = self.client.post(
+            change_url,
+            {
+                "level": self.level.pk,
+                "kind": self.requirement.kind,
+                "value": self.requirement.value,
+                "genera": [self.genus.pk],
+                "species_groups": [self.group.pk],
+                "_continue": "Spara och fortsätt redigera",
+            },
+        )
+
+        self.assertRedirects(response, change_url)
+
     def test_requirement_can_be_deleted_from_its_edit_page(self):
         delete_url = reverse(
             "admin:progression_achievementrequirement_delete",
