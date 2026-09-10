@@ -40,25 +40,55 @@ class TaxonomyReviewReturnTests(TestCase):
         )
         self.client.force_login(self.reviewer)
 
-    def test_resolved_taxonomy_redirects_to_same_registration_review(self):
-        resolve_url = reverse(
+    def _resolve_url(self):
+        return reverse(
             "admin:breedings_breedingregistration_resolve_taxonomy",
             args=[self.registration.pk],
         )
-        review_url = reverse(
+
+    def _review_url(self):
+        return reverse(
             "admin:breedings_breedingregistration_review",
             args=[self.registration.pk],
         )
 
-        response = self.client.post(resolve_url, {"species": self.species.pk})
+    def test_resolved_taxonomy_redirects_to_same_registration_review(self):
+        response = self.client.post(self._resolve_url(), {"species": self.species.pk})
 
-        self.assertRedirects(response, review_url)
+        self.assertRedirects(response, self._review_url())
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.species, self.species)
         self.assertEqual(self.registration.proposed_genus_name, "Apistogramma")
         self.assertEqual(self.registration.proposed_species_name, "cacatuoides")
         self.assertEqual(self.registration.proposed_common_name, "Kakaduaciklid")
 
-        review_response = self.client.get(review_url)
+        review_response = self.client.get(self._review_url())
         self.assertEqual(review_response.status_code, 200)
         self.assertContains(review_response, "Apistogramma cacatuoides")
+
+    def test_already_resolved_submitted_registration_returns_to_review(self):
+        self.registration.species = self.species
+        self.registration.save(update_fields=("species", "taxonomy_needs_resolution"))
+
+        response = self.client.get(self._resolve_url())
+
+        self.assertRedirects(response, self._review_url())
+
+    def test_registration_can_be_approved_immediately_after_taxonomy_resolution(self):
+        response = self.client.post(self._resolve_url(), {"species": self.species.pk})
+        self.assertRedirects(response, self._review_url())
+
+        response = self.client.post(
+            self._review_url(),
+            {
+                "decision": "approve",
+                "review_comment": "Taxonomin är löst.",
+            },
+        )
+
+        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.APPROVED)
+        self.assertEqual(self.registration.species, self.species)
+        self.assertEqual(self.registration.reviewer, self.reviewer)
+        self.assertEqual(self.registration.review_comment, "Taxonomin är löst.")
