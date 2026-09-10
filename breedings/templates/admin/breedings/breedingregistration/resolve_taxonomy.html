@@ -7,12 +7,105 @@
 <p><strong>Ursprungligt artnamn:</strong> {{ registration.proposed_species_name|default:"–" }}</p>
 <p><strong>Ursprungligt populärnamn:</strong> {{ registration.proposed_common_name|default:"–" }}</p>
 
-<form method="post">
+<div class="form-row">
+    <label for="species-search">Sök art</label>
+    <input id="species-search" type="search" autocomplete="off" autofocus>
+    <p class="help">Sök på vetenskapligt namn, svenskt eller engelskt populärnamn. Registrerade synonymer ingår i sökningen.</p>
+</div>
+
+<div id="species-search-results" aria-live="polite"></div>
+<p id="species-search-empty" hidden>Inga arter hittades.</p>
+<p id="species-search-selected" hidden></p>
+
+<form method="post" id="taxonomy-resolution-form">
     {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Koppla art">
+    <div hidden>{{ form.species }}</div>
+    {% if form.species.errors %}{{ form.species.errors }}{% endif %}
+    <input id="taxonomy-submit" type="submit" value="Koppla art" disabled>
 </form>
 
 <p><a href="{{ species_add_url }}">Skapa ny art i artregistret</a></p>
 <p><a href="{% url 'admin:breedings_breedingregistration_changelist' %}">Till odlingsregistreringar</a></p>
+
+<script>
+(function () {
+    const input = document.getElementById("species-search");
+    const results = document.getElementById("species-search-results");
+    const empty = document.getElementById("species-search-empty");
+    const selected = document.getElementById("species-search-selected");
+    const speciesField = document.getElementById("id_species");
+    const submit = document.getElementById("taxonomy-submit");
+    const searchUrl = "{% url 'species_search_results' %}";
+    let requestNumber = 0;
+    let timer = null;
+
+    function render(items) {
+        results.replaceChildren();
+        empty.hidden = items.length !== 0 || input.value.trim() === "";
+
+        items.forEach(function (item) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.style.display = "block";
+            button.style.marginBottom = "0.5rem";
+            button.style.textAlign = "left";
+
+            const scientificName = document.createElement("strong");
+            scientificName.textContent = item.scientific_name;
+            button.appendChild(scientificName);
+
+            const registeredAs = document.createElement("span");
+            registeredAs.textContent = " – kopplas som " + item.scientific_name;
+            button.appendChild(registeredAs);
+
+            if (item.common_name) {
+                button.appendChild(document.createElement("br"));
+                button.appendChild(document.createTextNode(item.common_name));
+            }
+
+            if (item.english_name) {
+                button.appendChild(document.createElement("br"));
+                button.appendChild(document.createTextNode("Engelska: " + item.english_name));
+            }
+
+            button.addEventListener("click", function () {
+                speciesField.value = item.id;
+                selected.textContent = "Vald art: " + item.scientific_name;
+                selected.hidden = false;
+                submit.disabled = false;
+            });
+            results.appendChild(button);
+        });
+    }
+
+    async function search() {
+        const query = input.value.trim();
+        const currentRequest = ++requestNumber;
+        speciesField.value = "";
+        selected.hidden = true;
+        submit.disabled = true;
+
+        if (!query) {
+            render([]);
+            return;
+        }
+
+        const response = await fetch(searchUrl + "?q=" + encodeURIComponent(query), {
+            headers: {"X-Requested-With": "XMLHttpRequest"}
+        });
+        if (!response.ok || currentRequest !== requestNumber) {
+            return;
+        }
+        const data = await response.json();
+        if (currentRequest === requestNumber) {
+            render(data.results);
+        }
+    }
+
+    input.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(search, 150);
+    });
+})();
+</script>
 {% endblock %}
