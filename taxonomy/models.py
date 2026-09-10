@@ -179,3 +179,29 @@ class SpeciesSynonym(models.Model):
 
     def __str__(self):
         return self.scientific_name or self.common_name
+
+
+class SpeciesLink(models.Model):
+    species = models.ForeignKey(
+        Species,
+        on_delete=models.CASCADE,
+        related_name="external_links",
+        verbose_name="art",
+    )
+    url = models.URLField(max_length=500, verbose_name="URL")
+    title = models.CharField(max_length=300, blank=True, verbose_name="sidtitel")
+    source_name = models.CharField(max_length=100, verbose_name="källa")
+
+    class Meta:
+        ordering = ["source_name", "title", "url"]
+        verbose_name = "extern artlänk"
+        verbose_name_plural = "externa artlänkar"
+        constraints = [
+            models.UniqueConstraint(
+                fields=("species", "url"),
+                name="unique_species_external_link_url",
+            ),
+        ]
+
+    def __str__(self):
+        return f"{self.source_name}: {self.title or self.url}"
