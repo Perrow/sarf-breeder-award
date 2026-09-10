@@ -87,11 +87,7 @@ def _expected_achievement_keys(achievement, registrations):
     )
     for year in evaluation_years:
         period_registrations = (
-            [
-                registration
-                for registration in registrations
-                if registration.breeding_date.year == year
-            ]
+            [registration for registration in registrations if registration.breeding_date.year == year]
             if year is not None
             else registrations
         )
@@ -114,11 +110,7 @@ def sync_achievements(user):
         evaluation_years = years if achievement.calendar_year_based else [None]
         for year in evaluation_years:
             registrations = (
-                [
-                    registration
-                    for registration in all_registrations
-                    if registration.breeding_date.year == year
-                ]
+                [registration for registration in all_registrations if registration.breeding_date.year == year]
                 if year is not None
                 else all_registrations
             )
@@ -164,11 +156,7 @@ def revalidate_achievement(achievement):
             for earned in existing_queryset.filter(user_id=user_id)
         }
 
-        invalid_ids = [
-            earned.pk
-            for key, earned in existing.items()
-            if key not in expected
-        ]
+        invalid_ids = [earned.pk for key, earned in existing.items() if key not in expected]
         if invalid_ids:
             deleted, _ = UserAchievement.objects.filter(pk__in=invalid_ids).delete()
             removed += deleted
@@ -210,17 +198,10 @@ def _presentation_for(earned):
     return {
         "earned": earned,
         "background": fallback_background,
-        "background_image": (
-            custom_background
-            if custom_background
-            else fallback_background.image if fallback_background else None
-        ),
-        "background_tint": (
-            fallback_background.tint_color
-            if earned.calendar_year is not None and fallback_background
-            else ""
-        ),
+        "background_image": custom_background if custom_background else fallback_background.image if fallback_background else None,
+        "background_tint": fallback_background.tint_color if earned.calendar_year is not None and fallback_background else "",
         "overlay": achievement.image if achievement.image else None,
+        "level_overlay": earned.level.image if earned.level.image else None,
     }
 
 
@@ -241,12 +222,8 @@ def _highest_level_per_achievement(earned):
 def latest_achievement_presentations_for_user(user, limit=6):
     current_year = timezone.localdate().year
     earned = achievements_for_user(user)
-    yearly = _highest_level_per_achievement(
-        item for item in earned if item.calendar_year == current_year
-    )
-    career = _highest_level_per_achievement(
-        item for item in earned if item.calendar_year is None
-    )
+    yearly = _highest_level_per_achievement(item for item in earned if item.calendar_year == current_year)
+    career = _highest_level_per_achievement(item for item in earned if item.calendar_year is None)
     yearly.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
     career.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
     return {
