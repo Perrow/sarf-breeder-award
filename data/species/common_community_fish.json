@@ -7,7 +7,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Guppy", "Miljonfisk"],
       "english_names": ["Guppy", "Millionfish"],
-      "scientific_synonyms": ["Lebistes reticulatus"]
+      "scientific_synonyms": ["Lebistes reticulatus"],
+      "links": [{"url": "https://www.fishbase.se/summary/Poecilia-reticulata.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Poecilia",
@@ -15,7 +16,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Molly", "Svart molly"],
       "english_names": ["Molly", "Black molly"],
-      "scientific_synonyms": ["Mollienesia sphenops"]
+      "scientific_synonyms": ["Mollienesia sphenops"],
+      "links": [{"url": "https://www.fishbase.se/summary/Poecilia-sphenops.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Xiphophorus",
@@ -23,7 +25,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Svärdbärare"],
       "english_names": ["Swordtail", "Green swordtail"],
-      "scientific_synonyms": []
+      "scientific_synonyms": [],
+      "links": [{"url": "https://www.fishbase.se/summary/Xiphophorus-hellerii.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Xiphophorus",
@@ -31,7 +34,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Platy"],
       "english_names": ["Platy", "Southern platyfish"],
-      "scientific_synonyms": ["Platypoecilus maculatus"]
+      "scientific_synonyms": ["Platypoecilus maculatus"],
+      "links": [{"url": "https://www.fishbase.se/summary/Xiphophorus-maculatus.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Betta",
@@ -39,7 +43,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Kampfisk", "Siamesisk kampfisk"],
       "english_names": ["Siamese fighting fish", "Betta"],
-      "scientific_synonyms": []
+      "scientific_synonyms": [],
+      "links": [{"url": "https://www.fishbase.se/summary/Betta-splendens.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Trichopodus",
@@ -47,7 +52,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Blå gurami", "Trepunktsgurami"],
       "english_names": ["Three spot gourami", "Blue gourami"],
-      "scientific_synonyms": ["Trichogaster trichopterus"]
+      "scientific_synonyms": ["Trichogaster trichopterus"],
+      "links": [{"url": "https://www.fishbase.se/summary/Trichopodus-trichopterus.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Paracheirodon",
@@ -55,7 +61,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Neontetra"],
       "english_names": ["Neon tetra"],
-      "scientific_synonyms": ["Hyphessobrycon innesi"]
+      "scientific_synonyms": ["Hyphessobrycon innesi"],
+      "links": [{"url": "https://www.fishbase.se/summary/Paracheirodon-innesi.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Paracheirodon",
@@ -63,7 +70,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Kardinaltetra"],
       "english_names": ["Cardinal tetra"],
-      "scientific_synonyms": []
+      "scientific_synonyms": [],
+      "links": [{"url": "https://www.fishbase.se/summary/Paracheirodon-axelrodi.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Gymnocorymbus",
@@ -71,7 +79,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Sorgmanteltetra"],
       "english_names": ["Black tetra", "Black skirt tetra"],
-      "scientific_synonyms": ["Tetragonopterus ternetzi"]
+      "scientific_synonyms": ["Tetragonopterus ternetzi"],
+      "links": [{"url": "https://www.fishbase.se/summary/Gymnocorymbus-ternetzi.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Danio",
@@ -79,7 +88,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Zebrafisk"],
       "english_names": ["Zebrafish", "Zebra danio"],
-      "scientific_synonyms": ["Brachydanio rerio"]
+      "scientific_synonyms": ["Brachydanio rerio"],
+      "links": [{"url": "https://www.fishbase.se/summary/Danio-rerio.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Trigonostigma",
@@ -87,7 +97,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Kilfläcksrasbora"],
       "english_names": ["Harlequin rasbora", "Harlequin fish"],
-      "scientific_synonyms": ["Rasbora heteromorpha"]
+      "scientific_synonyms": ["Rasbora heteromorpha"],
+      "links": [{"url": "https://www.fishbase.se/summary/Trigonostigma-heteromorpha.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Puntigrus",
@@ -95,7 +106,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Sumatrabarb", "Tigerbarb"],
       "english_names": ["Tiger barb", "Sumatra barb"],
-      "scientific_synonyms": ["Puntius tetrazona", "Barbus tetrazona", "Capoeta tetrazona"]
+      "scientific_synonyms": ["Puntius tetrazona", "Barbus tetrazona", "Capoeta tetrazona"],
+      "links": [{"url": "https://www.fishbase.se/summary/Puntigrus-tetrazona.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Pethia",
@@ -103,7 +115,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Rosenbarb"],
       "english_names": ["Rosy barb"],
-      "scientific_synonyms": ["Puntius conchonius", "Barbus conchonius"]
+      "scientific_synonyms": ["Puntius conchonius", "Barbus conchonius"],
+      "links": [{"url": "https://www.fishbase.se/summary/Pethia-conchonius.html", "source_name": "FishBase"}]
     }
   ]
 }
