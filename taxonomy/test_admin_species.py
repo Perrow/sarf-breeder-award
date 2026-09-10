@@ -28,10 +28,10 @@ class SpeciesAdminTests(TestCase):
 
     def _empty_links_management_form(self):
         return {
-            "links-TOTAL_FORMS": "0",
-            "links-INITIAL_FORMS": "0",
-            "links-MIN_NUM_FORMS": "0",
-            "links-MAX_NUM_FORMS": "1000",
+            "external_links-TOTAL_FORMS": "0",
+            "external_links-INITIAL_FORMS": "0",
+            "external_links-MIN_NUM_FORMS": "0",
+            "external_links-MAX_NUM_FORMS": "1000",
         }
 
     def test_species_is_registered_with_expected_admin_configuration(self):
