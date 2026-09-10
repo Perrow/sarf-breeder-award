@@ -1,7 +1,15 @@
+import tempfile
+from pathlib import Path
+
 from django.contrib import admin
+from django.core.exceptions import PermissionDenied
+from django.shortcuts import render
+from django.urls import path, reverse
 from django.utils.html import format_html
 
+from .forms import SpeciesImportForm
 from .models import Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
+from .species_import import SpeciesImportError, import_species_file
 
 
 @admin.register(Genus)
@@ -44,6 +52,7 @@ class SpeciesLinkInline(admin.TabularInline):
 
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
+    change_list_template = "admin/taxonomy/species/change_list.html"
     list_display = (
         "genus",
         "scientific_name",
@@ -62,6 +71,49 @@ class SpeciesAdmin(admin.ModelAdmin):
         "synonyms__common_name",
     )
     inlines = (SpeciesSynonymInline, SpeciesLinkInline)
+
+    def get_urls(self):
+        return [
+            path(
+                "import/",
+                self.admin_site.admin_view(self.import_species_view),
+                name="taxonomy_species_import",
+            ),
+        ] + super().get_urls()
+
+    def import_species_view(self, request):
+        if not self.has_change_permission(request):
+            raise PermissionDenied
+
+        stats = None
+        import_error = None
+        form = SpeciesImportForm(request.POST or None, request.FILES or None)
+        if request.method == "POST" and form.is_valid():
+            uploaded_file = form.cleaned_data["import_file"]
+            temporary_path = None
+            try:
+                with tempfile.NamedTemporaryFile(suffix=".json", delete=False) as temporary_file:
+                    for chunk in uploaded_file.chunks():
+                        temporary_file.write(chunk)
+                    temporary_path = Path(temporary_file.name)
+                stats = import_species_file(temporary_path)
+                form = SpeciesImportForm()
+            except SpeciesImportError as exc:
+                import_error = str(exc)
+            finally:
+                if temporary_path is not None:
+                    temporary_path.unlink(missing_ok=True)
+
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "title": "Importera arter",
+            "form": form,
+            "stats": stats,
+            "import_error": import_error,
+            "species_changelist_url": reverse("admin:taxonomy_species_changelist"),
+        }
+        return render(request, "admin/taxonomy/species/import.html", context)
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
