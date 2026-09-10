@@ -228,18 +228,31 @@ def achievement_presentations_for_user(user):
     return [_presentation_for(earned) for earned in achievements_for_user(user)]
 
 
+def _highest_level_per_achievement(earned):
+    highest = {}
+    for item in earned:
+        achievement_id = item.level.achievement_id
+        current = highest.get(achievement_id)
+        if current is None or (item.level.order, item.pk) > (current.level.order, current.pk):
+            highest[achievement_id] = item
+    return list(highest.values())
+
+
 def latest_achievement_presentations_for_user(user, limit=6):
     current_year = timezone.localdate().year
     earned = achievements_for_user(user)
-    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
-    yearly = [
+    yearly = _highest_level_per_achievement(
         item for item in earned if item.calendar_year == current_year
-    ][:limit]
-    career = [item for item in earned if item.calendar_year is None][:limit]
+    )
+    career = _highest_level_per_achievement(
+        item for item in earned if item.calendar_year is None
+    )
+    yearly.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
+    career.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
     return {
         "year": current_year,
-        "yearly": [_presentation_for(item) for item in yearly],
-        "career": [_presentation_for(item) for item in career],
+        "yearly": [_presentation_for(item) for item in yearly[:limit]],
+        "career": [_presentation_for(item) for item in career[:limit]],
     }
 
 

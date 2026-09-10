@@ -8,7 +8,7 @@ from django.urls import reverse
 from PIL import Image
 
 from .models import Achievement, AchievementBackground, AchievementLevel, UserAchievement
-from .services import achievement_presentations_for_user
+from .services import achievement_presentations_for_user, latest_achievement_presentations_for_user
 
 
 def image_file(name, mode="RGBA", transparent=True):
@@ -153,3 +153,107 @@ class AchievementDisplayTests(TestCase):
         response = self.client.get(reverse("breeding_list"))
 
         self.assertNotContains(response, "Inte vunnen")
+
+    def test_my_page_shows_only_highest_earned_career_level_per_achievement(self):
+        achievement = Achievement.objects.create(name="Karriär")
+        bronze = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Brons",
+            order=1,
+        )
+        gold = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Guld",
+            order=3,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=gold,
+            achievement_name=achievement.name,
+            level_name=gold.name,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=bronze,
+            achievement_name=achievement.name,
+            level_name=bronze.name,
+        )
+
+        presentations = latest_achievement_presentations_for_user(self.user)
+
+        self.assertEqual(len(presentations["career"]), 1)
+        self.assertEqual(presentations["career"][0]["earned"].level, gold)
+
+        history_response = self.client.get(reverse("achievements"))
+        self.assertContains(history_response, "Brons")
+        self.assertContains(history_response, "Guld")
+
+    def test_my_page_shows_only_highest_earned_level_for_current_year(self):
+        achievement = Achievement.objects.create(
+            name="Årsgrad",
+            calendar_year_based=True,
+        )
+        bronze = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Brons",
+            order=1,
+        )
+        silver = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Silver",
+            order=2,
+        )
+        current_year = latest_achievement_presentations_for_user(self.user)["year"]
+        UserAchievement.objects.create(
+            user=self.user,
+            level=silver,
+            achievement_name=achievement.name,
+            level_name=silver.name,
+            calendar_year=current_year,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=bronze,
+            achievement_name=achievement.name,
+            level_name=bronze.name,
+            calendar_year=current_year,
+        )
+
+        presentations = latest_achievement_presentations_for_user(self.user)
+
+        self.assertEqual(len(presentations["yearly"]), 1)
+        self.assertEqual(presentations["yearly"][0]["earned"].level, silver)
+
+    def test_my_page_applies_limit_after_reducing_duplicate_levels(self):
+        first = Achievement.objects.create(name="Första")
+        first_low = AchievementLevel.objects.create(
+            achievement=first,
+            name="Brons",
+            order=1,
+        )
+        first_high = AchievementLevel.objects.create(
+            achievement=first,
+            name="Silver",
+            order=2,
+        )
+        second = Achievement.objects.create(name="Andra")
+        second_level = AchievementLevel.objects.create(
+            achievement=second,
+            name="Brons",
+            order=1,
+        )
+        for level in (first_high, first_low, second_level):
+            UserAchievement.objects.create(
+                user=self.user,
+                level=level,
+                achievement_name=level.achievement.name,
+                level_name=level.name,
+            )
+
+        presentations = latest_achievement_presentations_for_user(self.user, limit=2)
+
+        self.assertEqual(len(presentations["career"]), 2)
+        self.assertEqual(
+            {item["earned"].level.achievement for item in presentations["career"]},
+            {first, second},
+        )
