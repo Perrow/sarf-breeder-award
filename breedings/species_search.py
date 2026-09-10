@@ -1,9 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse
 
 from taxonomy.models import Species
+
+from .models import BreedingRegistration
 
 
 def _contains(text, query):
@@ -65,3 +67,57 @@ def species_search_results(request):
         for item in species
     ]
     return JsonResponse({"results": results})
+
+
+@login_required
+def species_catalogue(request):
+    query = request.GET.get("q", "").strip()
+    results = []
+    if query:
+        results = list(
+            Species.objects.search(query)
+            .select_related("genus")
+            .prefetch_related("geographies")
+            .order_by("genus__scientific_name", "scientific_name")[:50]
+        )
+    return render(
+        request,
+        "breedings/species_catalogue.html",
+        {"query": query, "results": results},
+    )
+
+
+@login_required
+def species_information(request, pk):
+    species = get_object_or_404(
+        Species.objects.select_related("genus").prefetch_related(
+            "geographies", "synonyms", "external_links"
+        ),
+        pk=pk,
+    )
+    approved = (
+        BreedingRegistration.objects.filter(
+            species=species,
+            status=BreedingRegistration.Status.APPROVED,
+        )
+        .select_related("owner", "association")
+        .order_by("-breeding_date", "-pk")
+    )
+    approved_breedings = [
+        {
+            "breeding_date": registration.breeding_date,
+            "breeder": registration.owner.public_display_name(),
+            "association": registration.association,
+            "breeding_class": registration.get_awarded_breeding_class_display()
+            or species.get_breeding_class_display(),
+        }
+        for registration in approved
+    ]
+    context = {
+        "species": species,
+        "species_groups": species.get_species_groups(),
+        "scientific_synonyms": species.synonyms.exclude(scientific_name=""),
+        "common_synonyms": species.synonyms.exclude(common_name=""),
+        "approved_breedings": approved_breedings,
+    }
+    return render(request, "breedings/species_information.html", context)
