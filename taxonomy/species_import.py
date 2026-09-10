@@ -1,14 +1,40 @@
 import json
+from html.parser import HTMLParser
 from pathlib import Path
+from urllib.parse import urlparse
+from urllib.request import Request, urlopen
 
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import Genus, Species, SpeciesSynonym
+from .models import Genus, Species, SpeciesLink, SpeciesSynonym
 
 
 class SpeciesImportError(ValueError):
     pass
+
+
+class _TitleParser(HTMLParser):
+    def __init__(self):
+        super().__init__()
+        self.in_title = False
+        self.parts = []
+
+    def handle_starttag(self, tag, attrs):
+        if tag.lower() == "title":
+            self.in_title = True
+
+    def handle_endtag(self, tag):
+        if tag.lower() == "title":
+            self.in_title = False
+
+    def handle_data(self, data):
+        if self.in_title:
+            self.parts.append(data)
+
+    @property
+    def title(self):
+        return " ".join(" ".join(self.parts).split())
 
 
 def load_species_import_file(path):
@@ -35,6 +61,8 @@ def import_species_file(path):
         "species_reused": 0,
         "synonyms_created": 0,
         "synonyms_reused": 0,
+        "links_created": 0,
+        "links_reused": 0,
     }
 
     for index, row in enumerate(rows, start=1):
@@ -62,6 +90,51 @@ def _name_list(row, key):
     return list(dict.fromkeys(value.strip() for value in values))
 
 
+def _link_list(row):
+    values = row.get("links", [])
+    if values is None:
+        return []
+    if not isinstance(values, list):
+        raise SpeciesImportError("'links' måste vara en lista.")
+    result = []
+    for value in values:
+        if not isinstance(value, dict):
+            raise SpeciesImportError("Varje länk måste vara ett JSON-objekt.")
+        url = value.get("url")
+        if not isinstance(url, str) or not url.strip():
+            raise SpeciesImportError("Varje länk måste innehålla en icke-tom 'url'.")
+        title = value.get("title", "")
+        source_name = value.get("source_name", "")
+        if not isinstance(title, str) or not isinstance(source_name, str):
+            raise SpeciesImportError("Länkens 'title' och 'source_name' måste vara text.")
+        result.append({"url": url.strip(), "title": title.strip(), "source_name": source_name.strip()})
+    return result
+
+
+def _source_name_from_url(url):
+    host = (urlparse(url).hostname or "").lower().removeprefix("www.")
+    return {
+        "fishbase.se": "FishBase",
+        "planetcatfish.com": "PlanetCatfish",
+        "ciklid.org": "NCS Artregister",
+    }.get(host, host or "Extern källa")
+
+
+def _fetch_page_title(url):
+    try:
+        request = Request(url, headers={"User-Agent": "BreederAwardsSpeciesImporter/1.0"})
+        with urlopen(request, timeout=5) as response:
+            if response.headers.get_content_type() != "text/html":
+                return ""
+            charset = response.headers.get_content_charset() or "utf-8"
+            html = response.read(262144).decode(charset, errors="replace")
+        parser = _TitleParser()
+        parser.feed(html)
+        return parser.title[:300]
+    except (OSError, ValueError, UnicodeError):
+        return ""
+
+
 def _ensure_common_synonym(species, common_name, stats):
     _, created = SpeciesSynonym.objects.get_or_create(
         species=species,
@@ -69,6 +142,27 @@ def _ensure_common_synonym(species, common_name, stats):
         defaults={"scientific_name": ""},
     )
     stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+
+def _import_link(species, data, stats):
+    source_name = data["source_name"] or _source_name_from_url(data["url"])
+    title = data["title"] or _fetch_page_title(data["url"])
+    link, created = SpeciesLink.objects.get_or_create(
+        species=species,
+        url=data["url"],
+        defaults={"source_name": source_name, "title": title},
+    )
+    stats["links_created" if created else "links_reused"] += 1
+    if not created:
+        changed = []
+        if not link.source_name and source_name:
+            link.source_name = source_name
+            changed.append("source_name")
+        if not link.title and title:
+            link.title = title
+            changed.append("title")
+        if changed:
+            link.save(update_fields=changed)
 
 
 @transaction.atomic
@@ -88,6 +182,7 @@ def _import_species_row(row, stats):
     swedish_names = _name_list(row, "swedish_names")
     english_names = _name_list(row, "english_names")
     scientific_synonyms = _name_list(row, "scientific_synonyms")
+    links = _link_list(row)
     if not swedish_names:
         raise SpeciesImportError("Minst ett svenskt populärnamn krävs i 'swedish_names'.")
 
@@ -129,3 +224,6 @@ def _import_species_row(row, stats):
             defaults={"common_name": ""},
         )
         stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+    for link in links:
+        _import_link(species, link, stats)
