@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .forms import SpeciesImportForm, SpeciesMergeForm
+from .forms import SpeciesAdminForm, SpeciesImportForm, SpeciesMergeForm
 from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 from .species_import import SpeciesImportError, import_species_file
 from .species_merge import merge_species
@@ -59,6 +59,7 @@ class SpeciesLinkInline(admin.TabularInline):
 
 @admin.register(Species)
 class SpeciesAdmin(admin.ModelAdmin):
+    form = SpeciesAdminForm
     change_list_template = "admin/taxonomy/species/change_list.html"
     change_form_template = "admin/taxonomy/species/change_form.html"
     list_display = (
@@ -175,6 +176,30 @@ class SpeciesAdmin(admin.ModelAdmin):
             "change_url": reverse("admin:taxonomy_species_change", args=(source.pk,)),
         }
         return render(request, "admin/taxonomy/species/merge.html", context)
+
+    def save_model(self, request, obj, form, change):
+        synonym = form.cleaned_data.get("promote_synonym")
+        if synonym is not None:
+            previous = Species.objects.select_related("genus").get(pk=obj.pk)
+            form.previous_scientific_name = (
+                f"{previous.genus.scientific_name} {previous.scientific_name}"
+            )
+            obj.genus, _ = Genus.objects.get_or_create(
+                scientific_name=form.promoted_genus_name
+            )
+            obj.scientific_name = form.promoted_scientific_name
+        super().save_model(request, obj, form, change)
+
+    def save_related(self, request, form, formsets, change):
+        super().save_related(request, form, formsets, change)
+        synonym = form.cleaned_data.get("promote_synonym")
+        if synonym is not None:
+            SpeciesSynonym.objects.filter(pk=synonym.pk, species=form.instance).delete()
+            SpeciesSynonym.objects.get_or_create(
+                species=form.instance,
+                scientific_name=form.previous_scientific_name,
+                defaults={"common_name": ""},
+            )
 
     def get_form(self, request, obj=None, change=False, **kwargs):
         form = super().get_form(request, obj, change, **kwargs)
