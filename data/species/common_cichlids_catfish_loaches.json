@@ -7,7 +7,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Skalare"],
       "english_names": ["Freshwater angelfish", "Angelfish"],
-      "scientific_synonyms": []
+      "scientific_synonyms": [],
+      "links": [{"url": "https://www.fishbase.se/summary/Pterophyllum-scalare.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Mikrogeophagus",
@@ -15,7 +16,11 @@
       "breeding_class": "silver",
       "swedish_names": ["Fjärilsciklid"],
       "english_names": ["Ram cichlid", "German blue ram"],
-      "scientific_synonyms": ["Papiliochromis ramirezi", "Microgeophagus ramirezi"]
+      "scientific_synonyms": ["Papiliochromis ramirezi", "Microgeophagus ramirezi"],
+      "links": [
+        {"url": "https://www.fishbase.se/summary/Mikrogeophagus-ramirezi.html", "source_name": "FishBase"},
+        {"url": "https://www.ciklid.org/artregister/art.php?ID=442", "source_name": "NCS Artregister"}
+      ]
     },
     {
       "genus": "Pelvicachromis",
@@ -23,7 +28,8 @@
       "breeding_class": "bronze",
       "swedish_names": ["Palettciklid"],
       "english_names": ["Kribensis", "Rainbow krib"],
-      "scientific_synonyms": ["Pelmatochromis pulcher"]
+      "scientific_synonyms": ["Pelmatochromis pulcher"],
+      "links": [{"url": "https://www.fishbase.se/summary/Pelvicachromis-pulcher.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Apistogramma",
@@ -31,7 +37,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Kakaduaciklid"],
       "english_names": ["Cockatoo dwarf cichlid"],
-      "scientific_synonyms": []
+      "scientific_synonyms": [],
+      "links": [{"url": "https://www.fishbase.se/summary/Apistogramma-cacatuoides.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Osteogaster",
@@ -39,7 +46,11 @@
       "breeding_class": "bronze",
       "swedish_names": ["Metallpansarmal", "Bronspansarmal"],
       "english_names": ["Bronze corydoras", "Bronze cory"],
-      "scientific_synonyms": ["Corydoras aeneus", "Hoplosoma aeneum"]
+      "scientific_synonyms": ["Corydoras aeneus", "Hoplosoma aeneum"],
+      "links": [
+        {"url": "https://www.fishbase.se/summary/Osteogaster-aenea.html", "source_name": "FishBase"},
+        {"url": "https://www.planetcatfish.com/corydoradinae", "source_name": "PlanetCatfish", "title": "The catfish subfamily Corydoradinae - Cat-eLog"}
+      ]
     },
     {
       "genus": "Hoplisoma",
@@ -47,7 +58,11 @@
       "breeding_class": "bronze",
       "swedish_names": ["Fläckig pansarmal"],
       "english_names": ["Peppered corydoras", "Peppered cory"],
-      "scientific_synonyms": ["Corydoras paleatus", "Callichthys paleatus"]
+      "scientific_synonyms": ["Corydoras paleatus", "Callichthys paleatus"],
+      "links": [
+        {"url": "https://www.fishbase.se/summary/Hoplisoma-paleatum.html", "source_name": "FishBase"},
+        {"url": "https://www.planetcatfish.com/corydoradinae", "source_name": "PlanetCatfish", "title": "The catfish subfamily Corydoradinae - Cat-eLog"}
+      ]
     },
     {
       "genus": "Chromobotia",
@@ -55,7 +70,8 @@
       "breeding_class": "gold",
       "swedish_names": ["Praktbotia"],
       "english_names": ["Clown loach", "Tiger botia"],
-      "scientific_synonyms": ["Botia macracanthus"]
+      "scientific_synonyms": ["Botia macracanthus"],
+      "links": [{"url": "https://www.fishbase.se/summary/Chromobotia-macracanthus.html", "source_name": "FishBase"}]
     },
     {
       "genus": "Pangio",
@@ -63,7 +79,8 @@
       "breeding_class": "silver",
       "swedish_names": ["Kuhliål"],
       "english_names": ["Kuhli loach", "Coolie loach"],
-      "scientific_synonyms": ["Acanthophthalmus kuhlii"]
+      "scientific_synonyms": ["Acanthophthalmus kuhlii"],
+      "links": [{"url": "https://www.fishbase.se/summary/Pangio-kuhlii.html", "source_name": "FishBase"}]
     }
   ]
 }
