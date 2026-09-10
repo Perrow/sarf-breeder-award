@@ -11,6 +11,7 @@ from .models import Species, SpeciesLink, SpeciesSynonym
 class SpeciesAdminImportTests(TestCase):
     def setUp(self):
         self.url = reverse("admin:taxonomy_species_import")
+        self.help_url = reverse("admin:taxonomy_species_import_help")
         self.admin_user = get_user_model().objects.create_superuser(
             username="import-admin@example.com",
             email="import-admin@example.com",
@@ -45,6 +46,27 @@ class SpeciesAdminImportTests(TestCase):
 
         self.assertContains(response, self.url)
         self.assertContains(response, "Importera arter")
+
+    def test_import_page_links_to_documentation(self):
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(self.url)
+
+        self.assertContains(response, self.help_url)
+        self.assertContains(response, "Dokumentation för importformatet")
+
+    def test_import_documentation_describes_full_and_partial_imports(self):
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(self.help_url)
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Fullständig import av en ny art")
+        self.assertContains(response, "Kompletteringsimport av en befintlig art")
+        self.assertContains(response, '"breeding_class": "bronze"')
+        self.assertContains(response, '"links"')
+        self.assertContains(response, "skiftlägesokänslig")
+        self.assertContains(response, "additiv")
 
     def test_admin_can_import_species_file(self):
         self.client.force_login(self.admin_user)
@@ -90,5 +112,18 @@ class SpeciesAdminImportTests(TestCase):
         self.client.force_login(staff_user)
 
         response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 403)
+
+    def test_staff_without_species_change_permission_cannot_view_import_documentation(self):
+        staff_user = get_user_model().objects.create_user(
+            username="help-staff@example.com",
+            email="help-staff@example.com",
+            password="test-password",
+            is_staff=True,
+        )
+        self.client.force_login(staff_user)
+
+        response = self.client.get(self.help_url)
 
         self.assertEqual(response.status_code, 403)
