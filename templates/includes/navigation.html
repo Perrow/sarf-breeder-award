@@ -8,6 +8,7 @@
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
                 <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
                 {% if user.is_authenticated %}
+                    <li class="nav-item"><a class="nav-link" href="{% url 'species_catalogue' %}">Arter</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'breeding_list' %}">Min sida</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">Konto</a></li>
                     <li class="nav-item">

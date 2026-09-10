@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Arter | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Arter</h1>
+<p>Sök efter en art för att se namn, klassificering, geografi, synonymer, länkar och godkända odlingar.</p>
+
+<form method="get" class="mb-4" role="search">
+    <label class="form-label" for="species-query">Sök art</label>
+    <div class="input-group">
+        <input class="form-control" id="species-query" name="q" value="{{ query }}" autocomplete="off">
+        <button class="btn btn-primary" type="submit">Sök</button>
+    </div>
+</form>
+
+{% if query %}
+    {% if results %}
+        <div class="list-group">
+        {% for species in results %}
+            <a class="list-group-item list-group-item-action" href="{% url 'species_information' species.pk %}">
+                <strong><em>{{ species }}</em></strong>
+                <div>{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</div>
+                {% if species.geographies.all %}
+                    <div class="small text-body-secondary">
+                        {% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}{{ geography.name }}{% endfor %}
+                    </div>
+                {% endif %}
+            </a>
+        {% endfor %}
+        </div>
+    {% else %}
+        <p>Inga arter matchade sökningen.</p>
+    {% endif %}
+{% endif %}
+{% endblock %}
