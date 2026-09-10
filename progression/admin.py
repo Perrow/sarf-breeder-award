@@ -4,7 +4,7 @@ from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
 from django.urls import path, reverse
 from django.utils import timezone
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 
 from .models import (
     Achievement,
@@ -57,6 +57,23 @@ def _image_preview(background=None, overlay=None, custom_background=None):
 class AchievementLevelInline(admin.TabularInline):
     model = AchievementLevel
     extra = 1
+    fields = ("name", "description", "order", "requirement_count", "edit_link")
+    readonly_fields = ("requirement_count", "edit_link")
+
+    @admin.display(description="Antal krav")
+    def requirement_count(self, obj):
+        if not obj or not obj.pk:
+            return 0
+        return obj.requirements.count()
+
+    @admin.display(description="Redigera")
+    def edit_link(self, obj):
+        if not obj or not obj.pk:
+            return "-"
+        return format_html(
+            '<a href="{}">Redigera nivå</a>',
+            reverse("admin:progression_achievementlevel_change", args=[obj.pk]),
+        )
 
 
 @admin.register(Achievement)
@@ -143,6 +160,55 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
 class AchievementLevelAdmin(admin.ModelAdmin):
     list_display = ("achievement", "name", "order")
     list_filter = ("achievement",)
+    readonly_fields = ("requirements_summary",)
+    fields = ("achievement", "name", "description", "order", "requirements_summary")
+
+    @admin.display(description="Krav")
+    def requirements_summary(self, obj):
+        if not obj or not obj.pk:
+            return "Spara nivån innan krav kan läggas till."
+
+        requirements = obj.requirements.prefetch_related("genera", "species_groups").all()
+        rows = []
+        for requirement in requirements:
+            genera = ", ".join(str(genus) for genus in requirement.genera.all()) or "–"
+            groups = ", ".join(str(group) for group in requirement.species_groups.all()) or "–"
+            edit_url = reverse(
+                "admin:progression_achievementrequirement_change",
+                args=[requirement.pk],
+            )
+            rows.append(
+                (
+                    requirement.get_kind_display(),
+                    requirement.value,
+                    genera,
+                    groups,
+                    edit_url,
+                )
+            )
+
+        if rows:
+            body = format_html_join(
+                "",
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td>"
+                '<td><a href="{}">Redigera</a></td></tr>',
+                rows,
+            )
+            table = format_html(
+                '<table><thead><tr><th>Typ</th><th>Värde</th><th>Genera</th>'
+                "<th>Artgrupper</th><th></th></tr></thead><tbody>{}</tbody></table>",
+                body,
+            )
+        else:
+            table = format_html("<p>Inga krav är definierade.</p>")
+
+        add_url = reverse("admin:progression_achievementrequirement_add")
+        add_link = format_html(
+            '<p><a class="button" href="{}?level={}">Lägg till krav</a></p>',
+            add_url,
+            obj.pk,
+        )
+        return format_html("{}{}", table, add_link)
 
 
 @admin.register(AchievementRequirement)
@@ -187,14 +253,18 @@ def _get_app_list(request, app_label=None):
     app_list = _default_get_app_list(request, app_label)
     progression_order = {
         "Achievement": 0,
-        "AchievementLevel": 1,
-        "AchievementRequirement": 2,
-        "AchievementBackground": 3,
-        "UserAchievement": 4,
+        "AchievementBackground": 1,
+        "UserAchievement": 2,
     }
+    hidden_progression_models = {"AchievementLevel", "AchievementRequirement"}
 
     for app in app_list:
         if app["app_label"] == "progression":
+            app["models"] = [
+                model
+                for model in app["models"]
+                if model["object_name"] not in hidden_progression_models
+            ]
             app["models"].sort(
                 key=lambda model: progression_order.get(model["object_name"], 99)
             )
