@@ -53,6 +53,11 @@ def load_species_import_file(path):
 
 
 def import_species_file(path):
+    """Import species from a BA-026 JSON file.
+
+    File format and additive/partial-import behavior are documented in
+    ``taxonomy/species_import.md`` next to this module.
+    """
     rows = load_species_import_file(path)
     stats = {
         "genera_created": 0,
@@ -176,13 +181,16 @@ def _import_link(species, data, stats):
 
 def _find_existing_species(genus, genus_name, scientific_name):
     if genus is not None:
-        species = Species.objects.filter(genus=genus, scientific_name=scientific_name).first()
+        species = Species.objects.filter(
+            genus=genus,
+            scientific_name__iexact=scientific_name,
+        ).first()
         if species is not None:
             return species
 
     old_full_name = f"{genus_name} {scientific_name}"
     synonym_matches = list(
-        SpeciesSynonym.objects.filter(scientific_name=old_full_name)
+        SpeciesSynonym.objects.filter(scientific_name__iexact=old_full_name)
         .select_related("species__genus")[:2]
     )
     if len(synonym_matches) > 1:
@@ -213,7 +221,7 @@ def _import_species_row(row, stats):
     scientific_synonyms = _name_list(row, "scientific_synonyms")
     links = _link_list(row)
 
-    genus = Genus.objects.filter(scientific_name=genus_name).first()
+    genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
     species = _find_existing_species(genus, genus_name, scientific_name)
 
     if species is None:
