@@ -179,6 +179,34 @@ Run the taxonomy tests with:
 python manage.py test taxonomy
 ```
 
+## BA-026 – Species import
+
+Species and synonyms can be imported from a versioned JSON file with:
+
+```bash
+python manage.py import_species path/to/species.json
+```
+
+The file format is:
+
+```json
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Poecilia",
+      "scientific_name": "reticulata",
+      "breeding_class": "bronze",
+      "swedish_names": ["Guppy", "Miljonfisk"],
+      "english_names": ["Guppy", "Millionfish"],
+      "scientific_synonyms": ["Lebistes reticulatus"]
+    }
+  ]
+}
+```
+
+`breeding_class` must be `bronze`, `silver` or `gold`. The first Swedish name becomes the primary common name and the first English name becomes the primary English name for newly created species. Additional names are stored as species synonyms. Existing genera, species and synonyms are reused, so the same file can safely be imported more than once. A synonym is unique only within one species; the same synonym text may therefore be linked to several species.
+
 ### Verification
 
 Run Django's system checks and the test suite:
