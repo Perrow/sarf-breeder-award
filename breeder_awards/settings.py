@@ -1,13 +1,31 @@
 """Django settings for the Breeder Awards project."""
+import os
 from pathlib import Path
 
 from .email_config import get_email_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = "django-insecure-development-only"
-DEBUG = True
-ALLOWED_HOSTS = []
+ENVIRONMENT = os.getenv("DJANGO_ENV", "development").strip().lower()
+IS_PRODUCTION = ENVIRONMENT == "production"
+
+if IS_PRODUCTION:
+    SECRET_KEY = os.environ["DJANGO_SECRET_KEY"]
+    DEBUG = False
+    ALLOWED_HOSTS = [
+        host.strip()
+        for host in os.getenv("DJANGO_ALLOWED_HOSTS", "").split(",")
+        if host.strip()
+    ]
+else:
+    SECRET_KEY = os.getenv("DJANGO_SECRET_KEY", "django-insecure-development-only")
+    DEBUG = True
+    ALLOWED_HOSTS = []
+
+SECURE_SSL_REDIRECT = IS_PRODUCTION
+SESSION_COOKIE_SECURE = IS_PRODUCTION
+CSRF_COOKIE_SECURE = IS_PRODUCTION
+SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if IS_PRODUCTION else None
 
 INSTALLED_APPS = [
     "django.contrib.admin",
