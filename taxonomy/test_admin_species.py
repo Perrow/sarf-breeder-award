@@ -49,7 +49,10 @@ class SpeciesAdminTests(TestCase):
                 "is_active",
             ),
         )
-        self.assertEqual(model_admin.list_filter, ("is_active", "breeding_class", "genus"))
+        self.assertEqual(
+            model_admin.list_filter,
+            ("is_active", "breeding_class", "genus", "geographies"),
+        )
         self.assertIn(SpeciesSynonymInline, model_admin.inlines)
 
     def test_admin_can_create_species(self):
