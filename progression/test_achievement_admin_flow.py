@@ -1,7 +1,9 @@
+from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
+from .admin import AchievementRequirementInline
 from .models import Achievement, AchievementLevel, AchievementRequirement
 
 
@@ -39,6 +41,19 @@ class AchievementAdminFlowTests(TestCase):
             response,
             reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
         )
+
+    def test_requirement_inline_is_compact_and_has_no_visible_extra_form_initially(self):
+        self.assertTrue(issubclass(AchievementRequirementInline, admin.TabularInline))
+        self.assertEqual(AchievementRequirementInline.extra, 0)
+        self.assertTrue(AchievementRequirementInline.show_change_link)
+
+        response = self.client.get(
+            reverse("admin:progression_achievementlevel_change", args=[self.level.pk])
+        )
+
+        inline_formset = response.context["inline_admin_formsets"][0].formset
+        self.assertEqual(inline_formset.initial_form_count(), 1)
+        self.assertEqual(inline_formset.total_form_count(), 1)
 
     def test_level_page_shows_existing_requirements_and_allows_adding_one(self):
         change_url = reverse("admin:progression_achievementlevel_change", args=[self.level.pk])
