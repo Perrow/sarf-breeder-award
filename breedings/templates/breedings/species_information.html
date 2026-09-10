@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+
+{% block title %}{{ species }} | Arter | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'species_catalogue' %}">← Till artsökningen</a></p>
+
+<div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+    <div>
+        <h1><em>{{ species }}</em></h1>
+        <p class="lead mb-0">{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</p>
+    </div>
+    <span class="badge text-bg-secondary fs-6">{{ species.get_breeding_class_display }}</span>
+</div>
+
+<div class="row g-4 mb-4">
+    <section class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5 card-title">Klassificering och utbredning</h2>
+                <dl class="mb-0">
+                    <dt>Släkte</dt><dd><em>{{ species.genus }}</em></dd>
+                    <dt>Artgrupper</dt>
+                    <dd>{% for group in species_groups %}{% if not forloop.first %}, {% endif %}{{ group.name }}{% empty %}–{% endfor %}</dd>
+                    <dt>Geografi</dt>
+                    <dd>{% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}{{ geography.name }}{% empty %}–{% endfor %}</dd>
+                </dl>
+            </div>
+        </div>
+    </section>
+
+    <section class="col-md-6">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5 card-title">Andra namn</h2>
+                <h3 class="h6">Vetenskapliga synonymer</h3>
+                <ul>
+                    {% for synonym in scientific_synonyms %}<li><em>{{ synonym.scientific_name }}</em></li>{% empty %}<li>Inga registrerade</li>{% endfor %}
+                </ul>
+                <h3 class="h6">Populärnamnssynonymer</h3>
+                <ul class="mb-0">
+                    {% for synonym in common_synonyms %}<li>{{ synonym.common_name }}</li>{% empty %}<li>Inga registrerade</li>{% endfor %}
+                </ul>
+            </div>
+        </div>
+    </section>
+</div>
+
+{% if species.external_links.all %}
+<section class="mb-4">
+    <h2 class="h4">Externa länkar</h2>
+    <ul>
+        {% for link in species.external_links.all %}
+            <li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.title|default:link.url }}</a>{% if link.source_name %} – {{ link.source_name }}{% endif %}</li>
+        {% endfor %}
+    </ul>
+</section>
+{% endif %}
+
+<section>
+    <h2 class="h4">Godkända odlingar</h2>
+    {% if approved_breedings %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Datum</th><th>Odlare</th><th>Förening</th><th>Klass</th></tr></thead>
+            <tbody>
+            {% for breeding in approved_breedings %}
+                <tr>
+                    <td>{{ breeding.breeding_date }}</td>
+                    <td>{{ breeding.breeder }}</td>
+                    <td>{{ breeding.association }}</td>
+                    <td>{{ breeding.breeding_class }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>Det finns ännu inga godkända odlingar registrerade för arten.</p>
+    {% endif %}
+</section>
+{% endblock %}
