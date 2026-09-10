@@ -36,7 +36,10 @@
     </div>
 
     <div class="form-field">{{ form.breeding_date.label_tag }} {{ form.breeding_date }} {{ form.breeding_date.errors }}</div>
-    <div class="form-field">{{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}</div>
+    <div class="form-field">
+        {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
+        {% if form.description.help_text %}<div class="form-text">{{ form.description.help_text }}</div>{% endif %}
+    </div>
 
     <div class="form-actions">
         <button class="btn btn-outline-primary" type="submit" name="action" value="draft">Spara utkast</button>
