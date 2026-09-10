@@ -65,32 +65,31 @@ class SpeciesQuerySet(models.QuerySet):
         return self.filter(is_active=True)
 
     def search(self, query, include_inactive=False):
-        query = (query or "").strip()
-        if not query:
+        terms = (query or "").split()
+        if not terms:
             return self.none()
 
         queryset = self
         if not include_inactive:
             queryset = queryset.available_for_registration()
 
-        return (
-            queryset.annotate(
-                full_scientific_name=Concat(
-                    "genus__scientific_name",
-                    Value(" "),
-                    "scientific_name",
-                )
+        queryset = queryset.annotate(
+            full_scientific_name=Concat(
+                "genus__scientific_name",
+                Value(" "),
+                "scientific_name",
             )
-            .filter(
-                Q(full_scientific_name__icontains=query)
-                | Q(common_name__icontains=query)
-                | Q(english_name__icontains=query)
-                | Q(synonyms__scientific_name__icontains=query)
-                | Q(synonyms__common_name__icontains=query)
-                | Q(geographies__name__icontains=query)
-            )
-            .distinct()
         )
+        for term in terms:
+            queryset = queryset.filter(
+                Q(full_scientific_name__icontains=term)
+                | Q(common_name__icontains=term)
+                | Q(english_name__icontains=term)
+                | Q(synonyms__scientific_name__icontains=term)
+                | Q(synonyms__common_name__icontains=term)
+                | Q(geographies__name__icontains=term)
+            )
+        return queryset.distinct()
 
 
 class Species(models.Model):
