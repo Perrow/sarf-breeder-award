@@ -16,24 +16,25 @@
   "version": 1,
   "species": [
     {
-      "genus": "Poecilia",
-      "scientific_name": "reticulata",
-      "breeding_class": "bronze",
-      "swedish_names": ["Guppy", "Miljonfisk"],
-      "english_names": ["Guppy", "Millionfish"],
-      "scientific_synonyms": ["Lebistes reticulatus"],
+      "genus": "Aulonocara",
+      "scientific_name": "stuartgranti",
+      "breeding_class": "silver",
+      "swedish_names": ["Påfågelciklid"],
+      "english_names": ["Flavescent peacock"],
+      "scientific_synonyms": [],
+      "geographies": ["Afrika", "Malawi"],
       "links": [
         {
-          "url": "https://example.org/poecilia-reticulata",
+          "url": "https://example.org/aulonocara-stuartgranti",
           "source_name": "Example",
-          "title": "Poecilia reticulata"
+          "title": "Aulonocara stuartgranti"
         }
       ]
     }
   ]
 }</pre>
 
-    <p>För en ny art krävs <code>genus</code>, <code>scientific_name</code>, <code>breeding_class</code> och minst ett värde i <code>swedish_names</code>.</p>
+    <p>För en ny art krävs <code>genus</code>, <code>scientific_name</code>, <code>breeding_class</code> och minst ett värde i <code>swedish_names</code>. <code>geographies</code> är valfritt och kan innehålla flera geografier.</p>
 
     <h3>Kompletteringsimport av en befintlig art</h3>
     <p>För en art som redan finns räcker det att ange <code>genus</code> och <code>scientific_name</code> plus de uppgifter som ska läggas till.</p>
@@ -41,11 +42,12 @@
   "version": 1,
   "species": [
     {
-      "genus": "Poecilia",
-      "scientific_name": "reticulata",
+      "genus": "Aulonocara",
+      "scientific_name": "stuartgranti",
+      "geographies": ["Malawi"],
       "links": [
         {
-          "url": "https://new.example.org/guppy",
+          "url": "https://new.example.org/aulonocara-stuartgranti",
           "source_name": "New Example"
         }
       ]
@@ -56,8 +58,10 @@
     <h2>Hur importen fungerar</h2>
     <ul>
       <li>Importen är additiv. Utelämnade fält tar inte bort eller nollställer befintlig information.</li>
-      <li>Samma fil kan importeras flera gånger utan att skapa dubbletter av arter, synonymer eller länkar.</li>
+      <li>Samma fil kan importeras flera gånger utan att skapa dubbletter av arter, synonymer, geografier eller länkar.</li>
       <li>Matchning på genus och vetenskapligt artnamn är skiftlägesokänslig.</li>
+      <li>Geografier matchas också skiftlägesokänsligt. Befintlig stavning bevaras.</li>
+      <li>Angivna geografier läggs till på arten. Geografier som inte finns med i en kompletteringsfil tas inte bort.</li>
       <li>Om aktuellt vetenskapligt namn inte hittas försöker importen matcha ett gammalt vetenskapligt namn som finns registrerat som synonym.</li>
       <li>Om samma gamla vetenskapliga namn pekar på flera arter avbryts den raden med ett tydligt fel i stället för att välja godtyckligt.</li>
       <li>Befintlig <code>breeding_class</code> skrivs inte över vid kompletteringsimport.</li>
@@ -75,6 +79,7 @@
         <tr><th><code>swedish_names</code></th><td>Lista med svenska populärnamn. Minst ett krävs när en ny art skapas.</td></tr>
         <tr><th><code>english_names</code></th><td>Valfri lista med engelska populärnamn.</td></tr>
         <tr><th><code>scientific_synonyms</code></th><td>Valfri lista med tidigare eller alternativa vetenskapliga namn.</td></tr>
+        <tr><th><code>geographies</code></th><td>Valfri lista med geografier, exempelvis <code>["Afrika", "Malawi"]</code>. Flera geografier kan kopplas till samma art.</td></tr>
         <tr><th><code>links</code></th><td>Valfri lista med externa länkar. <code>url</code> krävs; <code>source_name</code> och <code>title</code> är valfria.</td></tr>
       </tbody>
     </table>
