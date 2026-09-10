@@ -1,0 +1,69 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Pterophyllum",
+      "scientific_name": "scalare",
+      "breeding_class": "silver",
+      "swedish_names": ["Skalare"],
+      "english_names": ["Freshwater angelfish", "Angelfish"],
+      "scientific_synonyms": []
+    },
+    {
+      "genus": "Mikrogeophagus",
+      "scientific_name": "ramirezi",
+      "breeding_class": "silver",
+      "swedish_names": ["Fjärilsciklid"],
+      "english_names": ["Ram cichlid", "German blue ram"],
+      "scientific_synonyms": ["Papiliochromis ramirezi", "Microgeophagus ramirezi"]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": ["Palettciklid"],
+      "english_names": ["Kribensis", "Rainbow krib"],
+      "scientific_synonyms": ["Pelmatochromis pulcher"]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "cacatuoides",
+      "breeding_class": "silver",
+      "swedish_names": ["Kakaduaciklid"],
+      "english_names": ["Cockatoo dwarf cichlid"],
+      "scientific_synonyms": []
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "aenea",
+      "breeding_class": "bronze",
+      "swedish_names": ["Metallpansarmal", "Bronspansarmal"],
+      "english_names": ["Bronze corydoras", "Bronze cory"],
+      "scientific_synonyms": ["Corydoras aeneus", "Hoplosoma aeneum"]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "paleatum",
+      "breeding_class": "bronze",
+      "swedish_names": ["Fläckig pansarmal"],
+      "english_names": ["Peppered corydoras", "Peppered cory"],
+      "scientific_synonyms": ["Corydoras paleatus", "Callichthys paleatus"]
+    },
+    {
+      "genus": "Chromobotia",
+      "scientific_name": "macracanthus",
+      "breeding_class": "gold",
+      "swedish_names": ["Praktbotia"],
+      "english_names": ["Clown loach", "Tiger botia"],
+      "scientific_synonyms": ["Botia macracanthus"]
+    },
+    {
+      "genus": "Pangio",
+      "scientific_name": "kuhlii",
+      "breeding_class": "silver",
+      "swedish_names": ["Kuhliål"],
+      "english_names": ["Kuhli loach", "Coolie loach"],
+      "scientific_synonyms": ["Acanthophthalmus kuhlii"]
+    }
+  ]
+}

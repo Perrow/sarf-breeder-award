@@ -1,0 +1,109 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Poecilia",
+      "scientific_name": "reticulata",
+      "breeding_class": "bronze",
+      "swedish_names": ["Guppy", "Miljonfisk"],
+      "english_names": ["Guppy", "Millionfish"],
+      "scientific_synonyms": ["Lebistes reticulatus"]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "sphenops",
+      "breeding_class": "bronze",
+      "swedish_names": ["Molly", "Svart molly"],
+      "english_names": ["Molly", "Black molly"],
+      "scientific_synonyms": ["Mollienesia sphenops"]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "hellerii",
+      "breeding_class": "bronze",
+      "swedish_names": ["Svärdbärare"],
+      "english_names": ["Swordtail", "Green swordtail"],
+      "scientific_synonyms": []
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "maculatus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Platy"],
+      "english_names": ["Platy", "Southern platyfish"],
+      "scientific_synonyms": ["Platypoecilus maculatus"]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "splendens",
+      "breeding_class": "bronze",
+      "swedish_names": ["Kampfisk", "Siamesisk kampfisk"],
+      "english_names": ["Siamese fighting fish", "Betta"],
+      "scientific_synonyms": []
+    },
+    {
+      "genus": "Trichopodus",
+      "scientific_name": "trichopterus",
+      "breeding_class": "silver",
+      "swedish_names": ["Blå gurami", "Trepunktsgurami"],
+      "english_names": ["Three spot gourami", "Blue gourami"],
+      "scientific_synonyms": ["Trichogaster trichopterus"]
+    },
+    {
+      "genus": "Paracheirodon",
+      "scientific_name": "innesi",
+      "breeding_class": "silver",
+      "swedish_names": ["Neontetra"],
+      "english_names": ["Neon tetra"],
+      "scientific_synonyms": ["Hyphessobrycon innesi"]
+    },
+    {
+      "genus": "Paracheirodon",
+      "scientific_name": "axelrodi",
+      "breeding_class": "silver",
+      "swedish_names": ["Kardinaltetra"],
+      "english_names": ["Cardinal tetra"],
+      "scientific_synonyms": []
+    },
+    {
+      "genus": "Gymnocorymbus",
+      "scientific_name": "ternetzi",
+      "breeding_class": "silver",
+      "swedish_names": ["Sorgmanteltetra"],
+      "english_names": ["Black tetra", "Black skirt tetra"],
+      "scientific_synonyms": ["Tetragonopterus ternetzi"]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "rerio",
+      "breeding_class": "bronze",
+      "swedish_names": ["Zebrafisk"],
+      "english_names": ["Zebrafish", "Zebra danio"],
+      "scientific_synonyms": ["Brachydanio rerio"]
+    },
+    {
+      "genus": "Trigonostigma",
+      "scientific_name": "heteromorpha",
+      "breeding_class": "silver",
+      "swedish_names": ["Kilfläcksrasbora"],
+      "english_names": ["Harlequin rasbora", "Harlequin fish"],
+      "scientific_synonyms": ["Rasbora heteromorpha"]
+    },
+    {
+      "genus": "Puntigrus",
+      "scientific_name": "tetrazona",
+      "breeding_class": "bronze",
+      "swedish_names": ["Sumatrabarb", "Tigerbarb"],
+      "english_names": ["Tiger barb", "Sumatra barb"],
+      "scientific_synonyms": ["Puntius tetrazona", "Barbus tetrazona", "Capoeta tetrazona"]
+    },
+    {
+      "genus": "Pethia",
+      "scientific_name": "conchonius",
+      "breeding_class": "bronze",
+      "swedish_names": ["Rosenbarb"],
+      "english_names": ["Rosy barb"],
+      "scientific_synonyms": ["Puntius conchonius", "Barbus conchonius"]
+    }
+  ]
+}
