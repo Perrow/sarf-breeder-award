@@ -7,7 +7,13 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
 
-from .forms import SpeciesAdminForm, SpeciesImportForm, SpeciesMergeForm
+from .forms import (
+    CommonNameSynonymForm,
+    ScientificSynonymForm,
+    SpeciesAdminForm,
+    SpeciesImportForm,
+    SpeciesMergeForm,
+)
 from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
 from .species_import import SpeciesImportError, import_species_file
 from .species_merge import merge_species
@@ -34,9 +40,28 @@ class SpeciesGroupAdmin(admin.ModelAdmin):
     filter_horizontal = ("genera", "species")
 
 
-class SpeciesSynonymInline(admin.TabularInline):
+class ScientificSynonymInline(admin.TabularInline):
     model = SpeciesSynonym
+    form = ScientificSynonymForm
     extra = 0
+    verbose_name = "vetenskaplig synonym"
+    verbose_name_plural = "vetenskapliga synonymer"
+    fields = ("genus_name", "species_name")
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).exclude(scientific_name="")
+
+
+class CommonNameSynonymInline(admin.TabularInline):
+    model = SpeciesSynonym
+    form = CommonNameSynonymForm
+    extra = 0
+    verbose_name = "populärnamnssynonym"
+    verbose_name_plural = "populärnamnssynonymer"
+    fields = ("common_name",)
+
+    def get_queryset(self, request):
+        return super().get_queryset(request).exclude(common_name="")
 
 
 class SpeciesLinkInline(admin.TabularInline):
@@ -81,7 +106,7 @@ class SpeciesAdmin(admin.ModelAdmin):
         "synonyms__common_name",
     )
     filter_horizontal = ("geographies",)
-    inlines = (SpeciesSynonymInline, SpeciesLinkInline)
+    inlines = (ScientificSynonymInline, CommonNameSynonymInline, SpeciesLinkInline)
 
     def get_urls(self):
         return [

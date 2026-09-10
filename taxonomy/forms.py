@@ -24,6 +24,40 @@ class SpeciesMergeForm(forms.Form):
         ).select_related("genus")
 
 
+class ScientificSynonymForm(forms.ModelForm):
+    genus_name = forms.CharField(label="Släkte", max_length=100)
+    species_name = forms.CharField(label="Artnamn", max_length=100)
+
+    class Meta:
+        model = SpeciesSynonym
+        fields = ()
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        if self.instance and self.instance.scientific_name:
+            parts = self.instance.scientific_name.split(maxsplit=1)
+            self.fields["genus_name"].initial = parts[0]
+            self.fields["species_name"].initial = parts[1] if len(parts) > 1 else ""
+
+    def save(self, commit=True):
+        self.instance.scientific_name = (
+            f'{self.cleaned_data["genus_name"].strip()} '
+            f'{self.cleaned_data["species_name"].strip()}'
+        )
+        self.instance.common_name = ""
+        return super().save(commit=commit)
+
+
+class CommonNameSynonymForm(forms.ModelForm):
+    class Meta:
+        model = SpeciesSynonym
+        fields = ("common_name",)
+
+    def save(self, commit=True):
+        self.instance.scientific_name = ""
+        return super().save(commit=commit)
+
+
 class SpeciesAdminForm(forms.ModelForm):
     promote_synonym = forms.ModelChoiceField(
         queryset=SpeciesSynonym.objects.none(),
