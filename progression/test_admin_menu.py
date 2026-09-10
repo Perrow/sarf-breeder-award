@@ -24,5 +24,5 @@ class AchievementAdminMenuTests(TestCase):
         self.assertEqual(app["name"], "Utmärkelser")
         self.assertEqual(
             [model["name"] for model in app["models"]],
-            ["Utmärkelser", "Nivåer", "Krav", "Bakgrunder", "Uppnådda"],
+            ["Utmärkelser", "Bakgrunder", "Uppnådda"],
         )
