@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .admin import SpeciesAdmin, SpeciesSynonymInline
+from .admin import CommonNameSynonymInline, ScientificSynonymInline, SpeciesAdmin
 from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
 
 
@@ -25,6 +25,18 @@ class SpeciesAdminTests(TestCase):
             password="test-password",
         )
         self.client.force_login(self.admin_user)
+
+    def _empty_synonym_management_forms(self):
+        return {
+            "synonyms-TOTAL_FORMS": "0",
+            "synonyms-INITIAL_FORMS": "0",
+            "synonyms-MIN_NUM_FORMS": "0",
+            "synonyms-MAX_NUM_FORMS": "1000",
+            "synonyms-2-TOTAL_FORMS": "0",
+            "synonyms-2-INITIAL_FORMS": "0",
+            "synonyms-2-MIN_NUM_FORMS": "0",
+            "synonyms-2-MAX_NUM_FORMS": "1000",
+        }
 
     def _empty_links_management_form(self):
         return {
@@ -53,7 +65,8 @@ class SpeciesAdminTests(TestCase):
             model_admin.list_filter,
             ("is_active", "breeding_class", "genus", "geographies"),
         )
-        self.assertIn(SpeciesSynonymInline, model_admin.inlines)
+        self.assertIn(ScientificSynonymInline, model_admin.inlines)
+        self.assertIn(CommonNameSynonymInline, model_admin.inlines)
 
     def test_admin_can_create_species(self):
         post_data = {
@@ -63,12 +76,9 @@ class SpeciesAdminTests(TestCase):
             "english_name": "",
             "breeding_class": Species.BreedingClass.SILVER,
             "is_active": "on",
-            "synonyms-TOTAL_FORMS": "0",
-            "synonyms-INITIAL_FORMS": "0",
-            "synonyms-MIN_NUM_FORMS": "0",
-            "synonyms-MAX_NUM_FORMS": "1000",
             "_save": "Spara",
         }
+        post_data.update(self._empty_synonym_management_forms())
         post_data.update(self._empty_links_management_form())
 
         response = self.client.post(reverse("admin:taxonomy_species_add"), post_data)
@@ -90,12 +100,9 @@ class SpeciesAdminTests(TestCase):
             "common_name": "Metallpansarmal",
             "english_name": "",
             "breeding_class": Species.BreedingClass.GOLD,
-            "synonyms-TOTAL_FORMS": "0",
-            "synonyms-INITIAL_FORMS": "0",
-            "synonyms-MIN_NUM_FORMS": "0",
-            "synonyms-MAX_NUM_FORMS": "1000",
             "_save": "Spara",
         }
+        post_data.update(self._empty_synonym_management_forms())
         post_data.update(self._empty_links_management_form())
 
         response = self.client.post(
@@ -125,7 +132,12 @@ class SpeciesAdminTests(TestCase):
             "synonyms-INITIAL_FORMS": "0",
             "synonyms-MIN_NUM_FORMS": "0",
             "synonyms-MAX_NUM_FORMS": "1000",
-            "synonyms-0-scientific_name": "Hoplisoma aeneum",
+            "synonyms-0-genus_name": "Hoplisoma",
+            "synonyms-0-species_name": "aeneum",
+            "synonyms-2-TOTAL_FORMS": "0",
+            "synonyms-2-INITIAL_FORMS": "0",
+            "synonyms-2-MIN_NUM_FORMS": "0",
+            "synonyms-2-MAX_NUM_FORMS": "1000",
             "_save": "Spara",
         }
         post_data.update(self._empty_links_management_form())
