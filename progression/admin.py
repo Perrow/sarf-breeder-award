@@ -54,6 +54,10 @@ def _image_preview(background=None, overlay=None, custom_background=None):
     )
 
 
+def _uses_special_save_action(request):
+    return any(action in request.POST for action in ("_continue", "_addanother", "_saveasnew"))
+
+
 class AchievementLevelInline(admin.TabularInline):
     model = AchievementLevel
     extra = 1
@@ -163,6 +167,20 @@ class AchievementLevelAdmin(admin.ModelAdmin):
     readonly_fields = ("requirements_summary",)
     fields = ("achievement", "name", "description", "image", "order", "requirements_summary")
 
+    def response_change(self, request, obj):
+        if _uses_special_save_action(request):
+            return super().response_change(request, obj)
+        return redirect(
+            reverse("admin:progression_achievement_change", args=[obj.achievement_id])
+        )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if _uses_special_save_action(request):
+            return super().response_add(request, obj, post_url_continue)
+        return redirect(
+            reverse("admin:progression_achievement_change", args=[obj.achievement_id])
+        )
+
     @admin.display(description="Krav")
     def requirements_summary(self, obj):
         if not obj or not obj.pk:
@@ -215,6 +233,20 @@ class AchievementLevelAdmin(admin.ModelAdmin):
 class AchievementRequirementAdmin(admin.ModelAdmin):
     list_display = ("level", "kind", "value")
     filter_horizontal = ("genera", "species_groups")
+
+    def response_change(self, request, obj):
+        if _uses_special_save_action(request):
+            return super().response_change(request, obj)
+        return redirect(
+            reverse("admin:progression_achievementlevel_change", args=[obj.level_id])
+        )
+
+    def response_add(self, request, obj, post_url_continue=None):
+        if _uses_special_save_action(request):
+            return super().response_add(request, obj, post_url_continue)
+        return redirect(
+            reverse("admin:progression_achievementlevel_change", args=[obj.level_id])
+        )
 
 
 @admin.register(UserAchievement)
