@@ -62,6 +62,15 @@ def _name_list(row, key):
     return list(dict.fromkeys(value.strip() for value in values))
 
 
+def _ensure_common_synonym(species, common_name, stats):
+    _, created = SpeciesSynonym.objects.get_or_create(
+        species=species,
+        common_name=common_name,
+        defaults={"scientific_name": ""},
+    )
+    stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+
 @transaction.atomic
 def _import_species_row(row, stats):
     if not isinstance(row, dict):
@@ -97,24 +106,21 @@ def _import_species_row(row, stats):
     stats["species_created" if species_created else "species_reused"] += 1
 
     if not species_created:
-        changed_fields = []
-        if not species.common_name and swedish_names:
+        if not species.common_name:
             species.common_name = swedish_names[0]
-            changed_fields.append("common_name")
-        if not species.english_name and english_names:
-            species.english_name = english_names[0]
-            changed_fields.append("english_name")
-        if changed_fields:
-            species.save(update_fields=changed_fields)
+            species.save(update_fields=["common_name"])
+        elif species.common_name != swedish_names[0]:
+            _ensure_common_synonym(species, swedish_names[0], stats)
 
-    common_synonyms = swedish_names[1:] + english_names[1:]
-    for common_name in common_synonyms:
-        _, created = SpeciesSynonym.objects.get_or_create(
-            species=species,
-            common_name=common_name,
-            defaults={"scientific_name": ""},
-        )
-        stats["synonyms_created" if created else "synonyms_reused"] += 1
+        if english_names:
+            if not species.english_name:
+                species.english_name = english_names[0]
+                species.save(update_fields=["english_name"])
+            elif species.english_name != english_names[0]:
+                _ensure_common_synonym(species, english_names[0], stats)
+
+    for common_name in swedish_names[1:] + english_names[1:]:
+        _ensure_common_synonym(species, common_name, stats)
 
     for synonym in scientific_synonyms:
         _, created = SpeciesSynonym.objects.get_or_create(
