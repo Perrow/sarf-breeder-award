@@ -1,0 +1,33 @@
+{% extends "admin/base_site.html" %}
+
+{% block content %}
+  <div id="content-main">
+    <p><a href="{{ species_changelist_url }}">Tillbaka till arter</a></p>
+
+    {% if import_error %}
+      <p class="errornote">{{ import_error }}</p>
+    {% endif %}
+
+    {% if stats %}
+      <div class="messagelist">
+        <div class="success">Importen slutfördes.</div>
+      </div>
+      <table>
+        <tbody>
+          <tr><th>Genera</th><td>Skapade {{ stats.genera_created }}, återanvända {{ stats.genera_reused }}</td></tr>
+          <tr><th>Arter</th><td>Skapade {{ stats.species_created }}, återanvända {{ stats.species_reused }}</td></tr>
+          <tr><th>Synonymer</th><td>Skapade {{ stats.synonyms_created }}, återanvända {{ stats.synonyms_reused }}</td></tr>
+          <tr><th>Externa länkar</th><td>Skapade {{ stats.links_created }}, återanvända {{ stats.links_reused }}</td></tr>
+        </tbody>
+      </table>
+    {% endif %}
+
+    <form method="post" enctype="multipart/form-data" novalidate>
+      {% csrf_token %}
+      {{ form.as_p }}
+      <div class="submit-row">
+        <input type="submit" value="Importera" class="default">
+      </div>
+    </form>
+  </div>
+{% endblock %}
