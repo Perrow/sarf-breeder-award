@@ -321,12 +321,22 @@ def breeding_edit(request, pk):
     return _edit_breeding(request, registration)
 
 
-def _edit_breeding(request, registration=None, selected_species=None):
+def _edit_breeding(
+    request,
+    registration=None,
+    selected_species=None,
+    reset_approval_on_save=False,
+):
     if request.method == "POST":
         form = BreedingRegistrationForm(request.user, request.POST, instance=registration)
         if form.is_valid():
             breeding = form.save(commit=False)
             breeding.owner = request.user
+            if reset_approval_on_save:
+                breeding.approved_at = None
+                breeding.awarded_breeding_class = ""
+                breeding.awarded_points = None
+                breeding.reviewer = None
             if request.POST.get("action") == "submit":
                 submitted_at = timezone.now()
                 breeding.submitted_at = submitted_at
@@ -366,5 +376,6 @@ def _edit_breeding(request, registration=None, selected_species=None):
             "form": form,
             "registration": registration,
             "selected_species": selected_species,
+            "approval_will_reset": reset_approval_on_save,
         },
     )
