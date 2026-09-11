@@ -1,8 +1,8 @@
 :root {
     --sarf-ink: #263238;
     --sarf-muted: #68757d;
-    --sarf-accent: #315d62;
-    --sarf-accent-dark: #24484c;
+    --sarf-accent: #00416f;
+    --sarf-accent-dark: #003354;
     --sarf-soft: #f3f5f4;
     --sarf-border: #d9dfdc;
     --sarf-max-width: 1080px;
@@ -57,7 +57,7 @@ body {
     --bs-btn-hover-border-color: var(--sarf-accent-dark);
     --bs-btn-active-bg: var(--sarf-accent-dark);
     --bs-btn-active-border-color: var(--sarf-accent-dark);
-    --bs-btn-focus-shadow-rgb: 49, 93, 98;
+    --bs-btn-focus-shadow-rgb: 0, 65, 111;
 }
 
 .btn-outline-primary {
@@ -68,7 +68,7 @@ body {
     --bs-btn-hover-border-color: var(--sarf-accent);
     --bs-btn-active-bg: var(--sarf-accent-dark);
     --bs-btn-active-border-color: var(--sarf-accent-dark);
-    --bs-btn-focus-shadow-rgb: 49, 93, 98;
+    --bs-btn-focus-shadow-rgb: 0, 65, 111;
 }
 
 .btn-primary,
@@ -86,7 +86,7 @@ a:hover {
 }
 
 :focus-visible {
-    outline: 3px solid rgba(49, 93, 98, 0.45);
+    outline: 3px solid rgba(0, 65, 111, 0.45);
     outline-offset: 3px;
 }
 
@@ -132,8 +132,8 @@ a:hover {
     background:
         radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.3) 0 2%, transparent 2.5%),
         radial-gradient(circle at 72% 48%, rgba(255, 255, 255, 0.2) 0 1.5%, transparent 2%),
-        linear-gradient(135deg, rgba(49, 93, 98, 0.92), rgba(28, 69, 75, 0.58)),
-        linear-gradient(45deg, #77999c, #cedcda);
+        linear-gradient(135deg, rgba(0, 65, 111, 0.92), rgba(0, 51, 84, 0.58)),
+        linear-gradient(45deg, #5b7f99, #d4e0e8);
 }
 
 .aquarium-hero {
@@ -234,7 +234,7 @@ a:hover {
 .site-form select:focus,
 .site-form textarea:focus {
     border-color: var(--sarf-accent);
-    box-shadow: 0 0 0 0.25rem rgba(49, 93, 98, 0.18);
+    box-shadow: 0 0 0 0.25rem rgba(0, 65, 111, 0.18);
 }
 
 @media (min-width: 992px) {
