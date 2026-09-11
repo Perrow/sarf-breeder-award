@@ -28,6 +28,12 @@ class BreedingRegistrationForm(forms.ModelForm):
             "breeding_date": "Odlingsdatum",
             "description": "Beskrivning",
         }
+        help_texts = {
+            "breeding_date": (
+                "Ange den ungefärliga tidpunkten för leken. "
+                "Om exakt datum är okänt väljer du ett så nära datum som möjligt."
+            ),
+        }
         widgets = {
             "breeding_date": forms.DateInput(attrs={"type": "date"}),
             "description": forms.Textarea(attrs={"rows": 6}),
@@ -56,10 +62,13 @@ class BreedingRegistrationForm(forms.ModelForm):
             else:
                 selected_species = Species.objects.filter(pk=initial_species).first()
 
-        if selected_species and selected_species.breeding_class in {
-            Species.BreedingClass.SILVER,
-            Species.BreedingClass.GOLD,
-        }:
+        self.manual_review_required = bool(
+            selected_species
+            and selected_species.breeding_class
+            in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD}
+        )
+
+        if self.manual_review_required:
             self.fields["description"].required = True
             self.fields["description"].help_text = "Obligatorisk för silver- och guldodlingar."
         else:
