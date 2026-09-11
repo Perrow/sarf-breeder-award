@@ -35,7 +35,17 @@
         <div class="form-field">{{ form.proposed_common_name.label_tag }} {{ form.proposed_common_name }} {{ form.proposed_common_name.errors }}</div>
     </div>
 
-    <div class="form-field">{{ form.breeding_date.label_tag }} {{ form.breeding_date }} {{ form.breeding_date.errors }}</div>
+    <div class="form-field">
+        {{ form.breeding_date.label_tag }} {{ form.breeding_date }} {{ form.breeding_date.errors }}
+        {% if form.breeding_date.help_text %}<div class="form-text">{{ form.breeding_date.help_text }}</div>{% endif %}
+    </div>
+
+    {% if form.manual_review_required %}
+        <div class="alert alert-info" role="note">
+            Silver- och guldodlingar måste godkännas av tävlingsansvariga innan de räknas som godkända.
+        </div>
+    {% endif %}
+
     <div class="form-field">
         {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
         {% if form.description.help_text %}<div class="form-text">{{ form.description.help_text }}</div>{% endif %}
