@@ -21,6 +21,11 @@ class SpeciesReclassificationTests(TestCase):
             is_staff=True,
         )
         self.manager.groups.add(Group.objects.get(name="Odlingsansvarig"))
+        self.other_staff = User.objects.create_user(
+            username="other-staff@example.com",
+            password="x",
+            is_staff=True,
+        )
         genus = Genus.objects.create(scientific_name="Testus")
         self.species = Species.objects.create(
             genus=genus,
@@ -46,6 +51,20 @@ class SpeciesReclassificationTests(TestCase):
         self.assertEqual(request.requested_breeding_class, Species.BreedingClass.GOLD)
         self.species.refresh_from_db()
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.SILVER)
+
+    def test_current_class_cannot_be_requested(self):
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("species_reclassification_request", args=[self.species.pk]),
+            {
+                "requested_breeding_class": Species.BreedingClass.SILVER,
+                "reason": "Samma klass.",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(SpeciesReclassificationRequest.objects.count(), 0)
 
     def test_species_page_shows_own_request_status(self):
         SpeciesReclassificationRequest.objects.create(
@@ -79,6 +98,15 @@ class SpeciesReclassificationTests(TestCase):
 
         self.assertRedirects(response, reverse("species_information", args=[self.species.pk]))
         self.assertEqual(SpeciesReclassificationRequest.objects.count(), 1)
+
+    def test_staff_without_review_role_cannot_open_admin_list(self):
+        self.client.force_login(self.other_staff)
+
+        response = self.client.get(
+            reverse("admin:breedings_speciesreclassificationrequest_changelist")
+        )
+
+        self.assertEqual(response.status_code, 403)
 
     def test_breeding_manager_can_approve_without_changing_historical_award(self):
         association = Association.objects.create(name="Testförening")
