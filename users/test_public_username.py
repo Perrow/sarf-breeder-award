@@ -56,6 +56,7 @@ class PublicUsernameTests(TestCase):
 
         self.assertContains(response, "Det publika användarnamnet visas offentligt")
         self.assertContains(response, "PublicName")
+        self.assertNotContains(response, "Visningsnamn")
 
     def test_profile_can_update_public_username(self):
         user = get_user_model().objects.create_user(
@@ -69,8 +70,9 @@ class PublicUsernameTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
+                "first_name": "",
+                "last_name": "",
                 "public_username": "NewName",
-                "display_name": "Test Person",
                 "location": "",
                 "avatar_url": "",
             },
@@ -80,33 +82,26 @@ class PublicUsernameTests(TestCase):
         user.refresh_from_db()
         self.assertEqual(user.public_username, "NewName")
 
-    def test_non_public_identity_uses_public_username(self):
+    def test_identity_uses_public_username(self):
         user = get_user_model()(
             username="secret@example.com",
             email="secret@example.com",
             first_name="Private",
             last_name="Person",
-            display_name="Privat namn",
             public_username="PublicName",
         )
 
         self.assertEqual(user.public_display_name(), "PublicName")
+        self.assertEqual(user.public_display_name(profile_information_is_public=True), "PublicName")
 
-    def test_public_profile_may_use_profile_name(self):
-        user = get_user_model()(
-            username="user@example.com",
-            email="user@example.com",
-            display_name="Publikt profilnamn",
-            public_username="PublicName",
-        )
-
-        self.assertEqual(user.public_display_name(profile_information_is_public=True), "Publikt profilnamn")
-
-    def test_public_name_never_falls_back_to_email(self):
+    def test_public_name_never_falls_back_to_private_name_or_email(self):
         user = get_user_model()(
             username="secret@example.com",
             email="secret@example.com",
+            first_name="Private",
+            last_name="Person",
         )
 
         self.assertEqual(user.public_display_name(), "Användare")
         self.assertNotIn("secret@example.com", user.public_display_name())
+        self.assertNotIn("Private", user.public_display_name())
