@@ -1,29 +1,46 @@
-<article class="card flex-shrink-0" style="width: 220px;" data-achievement="{{ presentation.earned.achievement_name }}">
+<article class="flex-shrink-0 text-center" data-achievement="{{ presentation.earned.achievement_name }}">
     <button
         type="button"
-        class="card-body text-start border-0 bg-transparent"
-        data-bs-toggle="popover"
-        data-bs-trigger="hover focus"
-        data-bs-placement="auto"
-        data-bs-title="{{ presentation.earned.achievement_name }}"
-        data-bs-content="Grad: {{ presentation.earned.level_name }}{% if show_year and presentation.earned.calendar_year %} · År: {{ presentation.earned.calendar_year }}{% endif %}{% if presentation.earned.level_description %} · {{ presentation.earned.level_description }}{% endif %}"
+        class="border-0 bg-transparent p-0"
+        data-bs-toggle="modal"
+        data-bs-target="#achievement-modal-{{ presentation.earned.pk }}"
         aria-label="{{ presentation.earned.achievement_name }} – visa detaljer"
     >
         {% if presentation.background_image or presentation.overlay or presentation.level_overlay %}
-        <div style="position:relative;width:200px;height:250px;overflow:hidden;">
+        <div style="position:relative;width:150px;height:188px;overflow:hidden;">
             {% if presentation.background_image %}
-            <img src="{{ presentation.background_image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
+            <img src="{{ presentation.background_image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:150px;height:188px;object-fit:contain;">
             {% if presentation.background_tint %}<span aria-hidden="true" style="position:absolute;inset:0;background:{{ presentation.background_tint }};mix-blend-mode:color;"></span>{% endif %}
             {% endif %}
-            {% if presentation.overlay %}<img src="{{ presentation.overlay.url }}" alt="{{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:2;">{% endif %}
-            {% if presentation.level_overlay %}<img src="{{ presentation.level_overlay.url }}" alt="{{ presentation.earned.level_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:3;">{% endif %}
+            {% if presentation.overlay %}<img src="{{ presentation.overlay.url }}" alt="{{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:150px;height:188px;object-fit:contain;z-index:2;">{% endif %}
+            {% if presentation.level_overlay %}<img src="{{ presentation.level_overlay.url }}" alt="{{ presentation.earned.level_name }}" style="position:absolute;inset:0;width:150px;height:188px;object-fit:contain;z-index:3;">{% endif %}
         </div>
         {% endif %}
-        <h3 class="h5 mt-3 mb-1">{{ presentation.earned.achievement_name }}</h3>
     </button>
-    <div hidden data-achievement-details>
-        <p><strong>Grad:</strong> {{ presentation.earned.level_name }}</p>
-        {% if show_year and presentation.earned.calendar_year %}<p><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>{% endif %}
-        {% if presentation.earned.level_description %}<p>{{ presentation.earned.level_description }}</p>{% endif %}
+
+    <div class="modal fade" id="achievement-modal-{{ presentation.earned.pk }}" tabindex="-1" aria-labelledby="achievement-modal-title-{{ presentation.earned.pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title fs-5" id="achievement-modal-title-{{ presentation.earned.pk }}">{{ presentation.earned.achievement_name }}</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                </div>
+                <div class="modal-body text-center">
+                    {% if presentation.background_image or presentation.overlay or presentation.level_overlay %}
+                    <div class="mx-auto mb-4" style="position:relative;width:200px;height:250px;overflow:hidden;">
+                        {% if presentation.background_image %}
+                        <img src="{{ presentation.background_image.url }}" alt="Bakgrund för {{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
+                        {% if presentation.background_tint %}<span aria-hidden="true" style="position:absolute;inset:0;background:{{ presentation.background_tint }};mix-blend-mode:color;"></span>{% endif %}
+                        {% endif %}
+                        {% if presentation.overlay %}<img src="{{ presentation.overlay.url }}" alt="{{ presentation.earned.achievement_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:2;">{% endif %}
+                        {% if presentation.level_overlay %}<img src="{{ presentation.level_overlay.url }}" alt="{{ presentation.earned.level_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:3;">{% endif %}
+                    </div>
+                    {% endif %}
+                    <p class="mb-2"><strong>Nivå:</strong> {{ presentation.earned.level_name }}</p>
+                    {% if show_year and presentation.earned.calendar_year %}<p class="mb-2"><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>{% endif %}
+                    {% if presentation.earned.level_description %}<p class="mb-0">{{ presentation.earned.level_description }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
     </div>
 </article>
