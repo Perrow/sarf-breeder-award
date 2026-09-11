@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "taxonomy",
     "breedings",
     "progression",
+    "siteconfig",
 ]
 
 MIDDLEWARE = [
@@ -63,6 +64,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                "siteconfig.context_processors.site_branding",
             ],
         },
     },
