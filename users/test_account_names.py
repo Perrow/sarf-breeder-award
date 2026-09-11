@@ -60,12 +60,15 @@ class AccountNameTests(TestCase):
         self.assertEqual(self.user.first_name, "")
         self.assertEqual(self.user.last_name, "")
 
-    def test_edit_page_explains_private_optional_names(self):
+    def test_edit_page_shows_private_name_explanation_once_before_first_name(self):
         response = self.client.get(reverse("account_edit"))
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Förnamn")
         self.assertContains(response, "Efternamn")
-        self.assertContains(response, "frivilliga")
-        self.assertContains(response, "visas bara för administratörer")
-        self.assertContains(response, "kan ta bort ditt medlemskap")
+        self.assertContains(response, "frivilliga", count=1)
+        self.assertContains(response, "visas bara för administratörer", count=1)
+        self.assertContains(response, "kan ta bort ditt medlemskap", count=1)
+
+        content = response.content.decode()
+        self.assertLess(content.index("För- och efternamn är frivilliga"), content.index("Förnamn"))
