@@ -1,11 +1,16 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
-from django.db import IntegrityError
 from django.test import TestCase
 
 from .admin import SpeciesGroupAdmin
-from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesGroup,
+)
 
 
 class GenusModelTests(TestCase):
@@ -157,23 +162,23 @@ class SpeciesSynonymModelTests(TestCase):
         )
 
     def test_multiple_scientific_synonyms_can_be_linked_to_species(self):
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Hoplosoma aeneum",
         )
 
-        self.assertEqual(self.species.synonyms.count(), 2)
+        self.assertEqual(self.species.scientific_synonyms.count(), 2)
 
     def test_duplicate_scientific_synonym_for_same_species_is_rejected(self):
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
-        duplicate = SpeciesSynonym(
+        duplicate = ScientificSpeciesSynonym(
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
@@ -181,9 +186,16 @@ class SpeciesSynonymModelTests(TestCase):
         with self.assertRaises(ValidationError):
             duplicate.full_clean()
 
-    def test_synonym_string_representation_is_name(self):
-        synonym = SpeciesSynonym.objects.create(
+    def test_scientific_synonym_string_representation_is_name(self):
+        synonym = ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
         self.assertEqual(str(synonym), "Callichthys aeneus")
+
+    def test_common_name_synonym_string_representation_is_name(self):
+        synonym = CommonNameSpeciesSynonym.objects.create(
+            species=self.species,
+            common_name="Metallmal",
+        )
+        self.assertEqual(str(synonym), "Metallmal")
