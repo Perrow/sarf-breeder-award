@@ -211,6 +211,20 @@ def _requirement_scope(requirement):
     return ", ".join(names)
 
 
+def _requirement_target_text(requirement, scope):
+    if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
+        unit = "art" if requirement.value == 1 else "arter"
+        text = f"Odla {requirement.value} {unit}"
+    elif requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
+        unit = "odling" if requirement.value == 1 else "odlingar"
+        text = f"Gör {requirement.value} {unit}"
+    else:
+        text = f"Samla {requirement.value} poäng"
+    if scope:
+        text += f" inom {scope}"
+    return text + "."
+
+
 def _requirement_progress(requirement, registrations):
     current = _requirement_current_value(requirement, registrations)
     scope = _requirement_scope(requirement)
@@ -226,7 +240,7 @@ def _requirement_progress(requirement, registrations):
         "missing": max(requirement.value - current, 0),
         "unit": unit,
         "scope": scope,
-        "summary": f"{current} av {requirement.value} {unit}" + (f" inom {scope}" if scope else ""),
+        "summary": _requirement_target_text(requirement, scope),
         "kind": requirement.kind,
     }
 
