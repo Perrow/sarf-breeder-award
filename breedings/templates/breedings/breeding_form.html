@@ -5,6 +5,13 @@
 {% block content %}
 <div class="form-page">
 <h1>{% if registration %}Redigera odling{% else %}Registrera odling{% endif %}</h1>
+
+{% if approval_will_reset %}
+<div class="alert alert-warning" role="note">
+    Den här odlingen är redan godkänd. Om du sparar ändringar återställs godkännandet. Skickar du in odlingen igen måste den granskas och godkännas på nytt.
+</div>
+{% endif %}
+
 <form method="post" class="site-form">
     {% csrf_token %}
     {{ form.non_field_errors }}
