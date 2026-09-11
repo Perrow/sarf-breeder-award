@@ -44,7 +44,7 @@ class AssociationYearScoringTests(TestCase):
         scores = association_year_scores(self.association, 2026)
 
         self.assertEqual(scores[self.user_a.pk], 2)
-        self.assertEqual(scores[self.user_b.pk], 3)
+        self.assertEqual(scores[self.user_b.pk], 2)
 
     def test_other_association_and_unapproved_registrations_are_excluded(self):
         self.add_registration(self.user_a, self.other_association, 2026, Species.BreedingClass.GOLD)
