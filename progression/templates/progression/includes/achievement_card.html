@@ -25,7 +25,7 @@
                     <h2 class="modal-title fs-5" id="achievement-modal-title-{{ presentation.earned.pk }}">{{ presentation.earned.achievement_name }}</h2>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
                 </div>
-                <div class="modal-body text-center">
+                <div class="modal-body text-start">
                     {% if presentation.background_image or presentation.overlay or presentation.level_overlay %}
                     <div class="mx-auto mb-4" style="position:relative;width:200px;height:250px;overflow:hidden;">
                         {% if presentation.background_image %}
@@ -36,9 +36,37 @@
                         {% if presentation.level_overlay %}<img src="{{ presentation.level_overlay.url }}" alt="{{ presentation.earned.level_name }}" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:3;">{% endif %}
                     </div>
                     {% endif %}
+
                     <p class="mb-2"><strong>Nivå:</strong> {{ presentation.earned.level_name }}</p>
                     {% if show_year and presentation.earned.calendar_year %}<p class="mb-2"><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>{% endif %}
-                    {% if presentation.earned.level_description %}<p class="mb-0">{{ presentation.earned.level_description }}</p>{% endif %}
+                    {% if presentation.earned.level_description %}<p>{{ presentation.earned.level_description }}</p>{% endif %}
+
+                    {% if presentation.requirements %}
+                    <section class="mt-4" aria-labelledby="achievement-requirements-{{ presentation.earned.pk }}">
+                        <h3 class="h6" id="achievement-requirements-{{ presentation.earned.pk }}">Krav som du har uppfyllt</h3>
+                        <ul class="mb-0">
+                            {% for requirement in presentation.requirements %}
+                            <li>{{ requirement.summary }}</li>
+                            {% endfor %}
+                        </ul>
+                    </section>
+                    {% endif %}
+
+                    {% if presentation.next_level %}
+                    <section class="mt-4" aria-labelledby="achievement-next-level-{{ presentation.earned.pk }}">
+                        <h3 class="h6" id="achievement-next-level-{{ presentation.earned.pk }}">Nästa nivå: {{ presentation.next_level.name }}</h3>
+                        {% if presentation.next_requirements %}
+                        <p class="mb-2">För att komma upp i nästa nivå behöver du:</p>
+                        <ul class="mb-0">
+                            {% for requirement in presentation.next_requirements %}
+                            <li>{{ requirement.remaining_text }}</li>
+                            {% endfor %}
+                        </ul>
+                        {% else %}
+                        <p class="mb-0">Nästa nivå har inga registrerade krav.</p>
+                        {% endif %}
+                    </section>
+                    {% endif %}
                 </div>
             </div>
         </div>
