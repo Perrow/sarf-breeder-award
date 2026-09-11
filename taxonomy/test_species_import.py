@@ -7,7 +7,13 @@ from pathlib import Path
 from django.core.management import call_command
 from django.test import TestCase
 
-from .models import Genus, Species, SpeciesLink, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesLink,
+)
 from .species_import import SpeciesImportError, import_species_file
 
 
@@ -38,9 +44,9 @@ class SpeciesImportTests(TestCase):
         self.assertEqual(species.common_name, "Guppy")
         self.assertEqual(species.english_name, "Guppy")
         self.assertEqual(species.breeding_class, Species.BreedingClass.BRONZE)
-        self.assertTrue(species.synonyms.filter(common_name="Miljonfisk").exists())
-        self.assertTrue(species.synonyms.filter(common_name="Millionfish").exists())
-        self.assertTrue(species.synonyms.filter(scientific_name="Lebistes reticulatus").exists())
+        self.assertTrue(species.common_name_synonyms.filter(common_name="Miljonfisk").exists())
+        self.assertTrue(species.common_name_synonyms.filter(common_name="Millionfish").exists())
+        self.assertTrue(species.scientific_synonyms.filter(scientific_name="Lebistes reticulatus").exists())
         self.assertEqual(stats["genera_created"], 1)
         self.assertEqual(stats["species_created"], 1)
         self.assertEqual(stats["synonyms_created"], 3)
@@ -52,7 +58,8 @@ class SpeciesImportTests(TestCase):
 
         self.assertEqual(Genus.objects.count(), 1)
         self.assertEqual(Species.objects.count(), 1)
-        self.assertEqual(SpeciesSynonym.objects.count(), 3)
+        self.assertEqual(ScientificSpeciesSynonym.objects.count(), 1)
+        self.assertEqual(CommonNameSpeciesSynonym.objects.count(), 2)
 
     def test_existing_species_and_synonym_are_reused_and_completed(self):
         genus = Genus.objects.create(scientific_name="Poecilia")
@@ -63,7 +70,10 @@ class SpeciesImportTests(TestCase):
             english_name="",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=species, scientific_name="Lebistes reticulatus")
+        ScientificSpeciesSynonym.objects.create(
+            species=species,
+            scientific_name="Lebistes reticulatus",
+        )
 
         path = self._write_file([self._row()])
         import_species_file(path)
@@ -71,8 +81,11 @@ class SpeciesImportTests(TestCase):
 
         self.assertEqual(species.common_name, "Guppy fisk")
         self.assertEqual(species.english_name, "Guppy")
-        self.assertTrue(species.synonyms.filter(common_name="Guppy").exists())
-        self.assertEqual(species.synonyms.filter(scientific_name="Lebistes reticulatus").count(), 1)
+        self.assertTrue(species.common_name_synonyms.filter(common_name="Guppy").exists())
+        self.assertEqual(
+            species.scientific_synonyms.filter(scientific_name="Lebistes reticulatus").count(),
+            1,
+        )
 
     def test_partial_import_adds_link_to_existing_species_without_removing_data(self):
         genus = Genus.objects.create(scientific_name="Poecilia")
@@ -83,7 +96,10 @@ class SpeciesImportTests(TestCase):
             english_name="Guppy",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=species, scientific_name="Lebistes reticulatus")
+        ScientificSpeciesSynonym.objects.create(
+            species=species,
+            scientific_name="Lebistes reticulatus",
+        )
 
         row = {
             "genus": "Poecilia",
@@ -106,7 +122,7 @@ class SpeciesImportTests(TestCase):
         self.assertEqual(species.common_name, "Guppy")
         self.assertEqual(species.english_name, "Guppy")
         self.assertEqual(species.breeding_class, Species.BreedingClass.BRONZE)
-        self.assertEqual(species.synonyms.count(), 1)
+        self.assertEqual(species.scientific_synonyms.count(), 1)
         self.assertEqual(species.external_links.count(), 1)
         self.assertEqual(first_stats["links_created"], 1)
         self.assertEqual(second_stats["links_reused"], 1)
@@ -174,7 +190,10 @@ class SpeciesImportTests(TestCase):
             common_name="Guppy",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=species, scientific_name="Lebistes reticulatus")
+        ScientificSpeciesSynonym.objects.create(
+            species=species,
+            scientific_name="Lebistes reticulatus",
+        )
         path = self._write_file(
             [
                 {
@@ -207,7 +226,10 @@ class SpeciesImportTests(TestCase):
             common_name="Guppy",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=species, scientific_name="Lebistes reticulatus")
+        ScientificSpeciesSynonym.objects.create(
+            species=species,
+            scientific_name="Lebistes reticulatus",
+        )
         path = self._write_file(
             [
                 {
@@ -245,8 +267,14 @@ class SpeciesImportTests(TestCase):
             common_name="Svärdbärare",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=first_species, scientific_name="Lebistes reticulatus")
-        SpeciesSynonym.objects.create(species=second_species, scientific_name="Lebistes reticulatus")
+        ScientificSpeciesSynonym.objects.create(
+            species=first_species,
+            scientific_name="Lebistes reticulatus",
+        )
+        ScientificSpeciesSynonym.objects.create(
+            species=second_species,
+            scientific_name="Lebistes reticulatus",
+        )
         path = self._write_file(
             [
                 {
@@ -277,7 +305,10 @@ class SpeciesImportTests(TestCase):
         ]
         import_species_file(self._write_file(rows))
 
-        self.assertEqual(SpeciesSynonym.objects.filter(scientific_name="Shared old name").count(), 2)
+        self.assertEqual(
+            ScientificSpeciesSynonym.objects.filter(scientific_name="Shared old name").count(),
+            2,
+        )
 
     def test_invalid_row_does_not_leave_partial_species(self):
         path = self._write_file([self._row(breeding_class="platinum")])
