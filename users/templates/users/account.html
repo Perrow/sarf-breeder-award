@@ -9,7 +9,7 @@
 </div>
 
 {% if user.avatar_url %}
-<p><img src="{{ user.avatar_url }}" alt="Profilbild för {{ user.display_name|default:user.get_full_name }}" class="img-thumbnail" style="max-width: 160px;"></p>
+<p><img src="{{ user.avatar_url }}" alt="Profilbild för {{ user.public_username|default:'användaren' }}" class="img-thumbnail" style="max-width: 160px;"></p>
 {% endif %}
 
 <dl class="row">
@@ -18,9 +18,6 @@
 
     <dt class="col-sm-3">Efternamn</dt>
     <dd class="col-sm-9">{{ user.last_name|default:"Inte angivet" }}</dd>
-
-    <dt class="col-sm-3">Visningsnamn</dt>
-    <dd class="col-sm-9">{{ user.display_name|default:"Inte angivet" }}</dd>
 
     <dt class="col-sm-3">Publikt användarnamn</dt>
     <dd class="col-sm-9">{{ user.public_username|default:"Inte angivet" }}</dd>

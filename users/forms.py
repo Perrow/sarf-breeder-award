@@ -125,7 +125,6 @@ class ProfileForm(forms.ModelForm):
         max_length=150,
         required=False,
     )
-    display_name = forms.CharField(label="Visningsnamn", max_length=150)
     public_username = forms.CharField(
         label="Publikt användarnamn",
         max_length=50,
@@ -139,7 +138,6 @@ class ProfileForm(forms.ModelForm):
             "first_name",
             "last_name",
             "public_username",
-            "display_name",
             "location",
             "avatar_url",
         )
@@ -164,12 +162,6 @@ class ProfileForm(forms.ModelForm):
         ):
             raise forms.ValidationError("Det publika användarnamnet används redan.")
         return public_username
-
-    def clean_display_name(self):
-        display_name = self.cleaned_data["display_name"].strip()
-        if not display_name:
-            raise forms.ValidationError("Ange ett visningsnamn.")
-        return display_name
 
     def clean_first_name(self):
         return self.cleaned_data["first_name"].strip()
