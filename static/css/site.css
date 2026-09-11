@@ -211,7 +211,7 @@ a:hover {
 
 .site-footer {
     margin-top: auto;
-    background: #1d292b;
+    background: var(--sarf-accent);
     color: rgba(255, 255, 255, 0.82);
 }
 
