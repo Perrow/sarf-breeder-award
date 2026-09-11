@@ -1,3 +1,5 @@
+from string import Formatter
+
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
@@ -180,6 +182,108 @@ class AchievementRequirement(models.Model):
         super().clean()
         if self.value is not None and self.value < 1:
             raise ValidationError({"value": "Kravvärdet måste vara minst 1."})
+
+
+class RequirementTextTemplate(models.Model):
+    ALLOWED_PLACEHOLDERS = {
+        "current",
+        "target",
+        "missing",
+        "unit",
+        "target_unit",
+        "missing_unit",
+        "target_text",
+        "missing_text",
+        "scope",
+        "scope_suffix",
+    }
+    PLACEHOLDER_HELP = (
+        "Tillgängliga placeholders: {current}, {target}, {missing}, {unit}, "
+        "{target_unit}, {missing_unit}, {target_text}, {missing_text}, "
+        "{scope}, {scope_suffix}. {scope_suffix} innehåller ' inom …' när ett "
+        "släkte eller en artgrupp finns, annars tom text."
+    )
+
+    kind = models.CharField(
+        max_length=20,
+        choices=AchievementRequirement.Kind.choices,
+        unique=True,
+        verbose_name="kravtyp",
+    )
+    achieved_template = models.CharField(
+        max_length=300,
+        verbose_name="uppnådda krav",
+        help_text=PLACEHOLDER_HELP,
+    )
+    next_level_template = models.CharField(
+        max_length=300,
+        verbose_name="till nästa nivå",
+        help_text=PLACEHOLDER_HELP,
+    )
+
+    class Meta:
+        ordering = ("kind",)
+        verbose_name = "kravtext"
+        verbose_name_plural = "kravtexter"
+
+    @classmethod
+    def defaults_for_kind(cls, kind):
+        defaults = {
+            AchievementRequirement.Kind.SPECIES_COUNT: (
+                "Odla {target_text}{scope_suffix}.",
+                "Odla {missing_text} till{scope_suffix}.",
+            ),
+            AchievementRequirement.Kind.BREEDING_COUNT: (
+                "Gör {target_text}{scope_suffix}.",
+                "Gör {missing_text} till{scope_suffix}.",
+            ),
+            AchievementRequirement.Kind.POINTS: (
+                "Samla {target_text}{scope_suffix}.",
+                "Samla {missing_text} till{scope_suffix}.",
+            ),
+        }
+        return defaults[kind]
+
+    @classmethod
+    def templates_for_kind(cls, kind):
+        configured = cls.objects.filter(kind=kind).first()
+        if configured:
+            return configured.achieved_template, configured.next_level_template
+        return cls.defaults_for_kind(kind)
+
+    @classmethod
+    def _validate_template(cls, value):
+        try:
+            fields = {
+                field_name.split(".", 1)[0].split("[", 1)[0]
+                for _, field_name, _, _ in Formatter().parse(value)
+                if field_name
+            }
+        except ValueError as error:
+            raise ValidationError(f"Ogiltig template: {error}") from error
+        unknown = fields - cls.ALLOWED_PLACEHOLDERS
+        if unknown:
+            raise ValidationError(
+                "Okända placeholders: " + ", ".join(sorted(unknown))
+            )
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        for field_name in ("achieved_template", "next_level_template"):
+            try:
+                self._validate_template(getattr(self, field_name))
+            except ValidationError as error:
+                errors[field_name] = error.messages
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return self.get_kind_display()
 
 
 class UserAchievement(models.Model):
