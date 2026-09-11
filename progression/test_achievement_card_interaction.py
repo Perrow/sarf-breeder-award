@@ -125,7 +125,7 @@ class AchievementCardInteractionTests(TestCase):
         response = self.client.get(reverse("breeding_list"))
 
         self.assertContains(response, "Krav som du har uppfyllt")
-        self.assertContains(response, "1 av 1 art inom Corydoras")
+        self.assertContains(response, "Odla 1 art inom Corydoras.")
         self.assertContains(response, "Nästa nivå: Silver")
         self.assertContains(response, "För att komma upp i nästa nivå behöver du:")
         self.assertContains(response, "odla en art till inom Corydoras.")
