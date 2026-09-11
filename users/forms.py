@@ -148,6 +148,8 @@ class ProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields["avatar_url"].widget = forms.HiddenInput()
+        self.fields["avatar_url"].disabled = True
         if self.instance and self.instance.pk and not self.is_bound:
             self.fields["associations"].initial = self.instance.memberships.values_list(
                 "association_id", flat=True
