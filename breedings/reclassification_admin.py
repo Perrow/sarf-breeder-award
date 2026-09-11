@@ -1,4 +1,4 @@
-from django.contrib import admin, messages
+from django.contrib import admin
 from django.db import transaction
 from django.utils import timezone
 
@@ -16,6 +16,7 @@ def _can_review_reclassification(user):
 
 @admin.register(SpeciesReclassificationRequest)
 class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
+    change_form_template = "admin/breedings/speciesreclassificationrequest/change_form.html"
     list_display = (
         "species",
         "current_breeding_class",
@@ -32,6 +33,18 @@ class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
         "requester__email",
         "reason",
     )
+    fields = (
+        "species",
+        "requester",
+        "current_breeding_class",
+        "requested_breeding_class",
+        "reason",
+        "status",
+        "created_at",
+        "decision_comment",
+        "decided_by",
+        "decided_at",
+    )
     readonly_fields = (
         "species",
         "requester",
@@ -43,7 +56,6 @@ class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
         "decided_by",
         "decided_at",
     )
-    actions = ("approve_requests", "reject_requests")
 
     def has_module_permission(self, request):
         return _can_review_reclassification(request.user)
@@ -66,29 +78,17 @@ class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
             readonly.append("decision_comment")
         return readonly
 
-    @admin.action(description="Godkänn valda omklassningsbegäranden")
-    def approve_requests(self, request, queryset):
-        approved = 0
+    def save_model(self, request, obj, form, change):
         with transaction.atomic():
-            for item in queryset.select_related("species").filter(
-                status=SpeciesReclassificationRequest.Status.PENDING
-            ):
-                item.species.breeding_class = item.requested_breeding_class
-                item.species.save(update_fields=("breeding_class",))
-                item.status = SpeciesReclassificationRequest.Status.APPROVED
-                item.decided_by = request.user
-                item.decided_at = timezone.now()
-                item.save(update_fields=("status", "decided_by", "decided_at"))
-                approved += 1
-        self.message_user(request, f"{approved} omklassningsbegäran/omklassningsbegäranden godkändes.", messages.SUCCESS)
-
-    @admin.action(description="Avslå valda omklassningsbegäranden")
-    def reject_requests(self, request, queryset):
-        rejected = queryset.filter(
-            status=SpeciesReclassificationRequest.Status.PENDING
-        ).update(
-            status=SpeciesReclassificationRequest.Status.REJECTED,
-            decided_by=request.user,
-            decided_at=timezone.now(),
-        )
-        self.message_user(request, f"{rejected} omklassningsbegäran/omklassningsbegäranden avslogs.", messages.SUCCESS)
+            if change and obj.status == SpeciesReclassificationRequest.Status.PENDING:
+                if "_approve" in request.POST:
+                    obj.species.breeding_class = obj.requested_breeding_class
+                    obj.species.save(update_fields=("breeding_class",))
+                    obj.status = SpeciesReclassificationRequest.Status.APPROVED
+                    obj.decided_by = request.user
+                    obj.decided_at = timezone.now()
+                elif "_reject" in request.POST:
+                    obj.status = SpeciesReclassificationRequest.Status.REJECTED
+                    obj.decided_by = request.user
+                    obj.decided_at = timezone.now()
+            super().save_model(request, obj, form, change)
