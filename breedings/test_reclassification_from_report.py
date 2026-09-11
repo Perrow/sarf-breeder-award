@@ -37,7 +37,8 @@ class ReclassificationFromReportTests(TestCase):
 
         response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
 
-        self.assertContains(response, "Föreslå ändrad odlingsklass")
+        self.assertContains(response, "Föreslå ändrad klassning")
+        self.assertContains(response, "btn btn-sm btn-outline-primary")
         self.assertContains(
             response,
             f'href="{reverse("species_reclassification_request", args=[self.species.pk])}"',
@@ -56,4 +57,4 @@ class ReclassificationFromReportTests(TestCase):
 
         response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
 
-        self.assertNotContains(response, "Föreslå ändrad odlingsklass")
+        self.assertNotContains(response, "Föreslå ändrad klassning")
