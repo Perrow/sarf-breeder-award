@@ -1,23 +1,74 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-<dl>
-    <dt>Användare</dt><dd>{{ registration.owner }}</dd>
-    <dt>Förening</dt><dd>{{ registration.association }}</dd>
-    <dt>Art</dt><dd>{% if registration.species %}{{ registration.species }}{% else %}Inte vald{% endif %}</dd>
-    <dt>Odlingsklass</dt><dd>{% if registration.species %}{{ registration.species.get_breeding_class_display }}{% else %}–{% endif %}</dd>
-    <dt>Föreslaget släkte</dt><dd>{{ registration.proposed_genus_name|default:"–" }}</dd>
-    <dt>Föreslaget artnamn</dt><dd>{{ registration.proposed_species_name|default:"–" }}</dd>
-    <dt>Föreslaget populärnamn</dt><dd>{{ registration.proposed_common_name|default:"–" }}</dd>
-    <dt>Odlingsdatum</dt><dd>{{ registration.breeding_date }}</dd>
-    <dt>Beskrivning</dt><dd>{{ registration.description|linebreaksbr }}</dd>
-</dl>
+<div class="module">
+    <h2>{{ registration.species }}</h2>
+    <p>
+        <strong>Odlingsklass:</strong> {{ registration.species.get_breeding_class_display }}
+        &nbsp;·&nbsp;
+        <strong>Odlingsdatum:</strong> {{ registration.breeding_date }}
+    </p>
+    <p>
+        <strong>Odlare:</strong> {{ registration.owner }}
+        &nbsp;·&nbsp;
+        <strong>Förening:</strong> {{ registration.association }}
+    </p>
+</div>
 
-<form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Spara beslut">
-</form>
+<div class="module">
+    <h2>Odlarens beskrivning</h2>
+    <div style="max-width: 70rem; line-height: 1.5;">
+        {{ registration.description|default:"Ingen beskrivning angiven."|linebreaksbr }}
+    </div>
+</div>
+
+<div class="module">
+    <h2>Externa länkar om arten</h2>
+    {% with links=registration.species.external_links.all %}
+        {% if links %}
+            <ul>
+            {% for link in links %}
+                <li>
+                    <strong>{{ link.source_name }}</strong>:
+                    <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title|default:link.url }}</a>
+                </li>
+            {% endfor %}
+            </ul>
+        {% else %}
+            <p>Det finns inga externa länkar registrerade för arten.</p>
+        {% endif %}
+    {% endwith %}
+</div>
+
+<details class="module">
+    <summary><strong>Mer information</strong></summary>
+    <div style="padding: 1rem;">
+        <dl>
+            <dt>Inskickad</dt><dd>{{ registration.submitted_at|default:"–" }}</dd>
+            <dt>Föreslaget släkte</dt><dd>{{ registration.proposed_genus_name|default:"–" }}</dd>
+            <dt>Föreslaget artnamn</dt><dd>{{ registration.proposed_species_name|default:"–" }}</dd>
+            <dt>Föreslaget populärnamn</dt><dd>{{ registration.proposed_common_name|default:"–" }}</dd>
+            <dt>Registrerings-ID</dt><dd>{{ registration.pk }}</dd>
+        </dl>
+    </div>
+</details>
+
+<div class="module" style="margin-top: 1.5rem;">
+    <h2>Bedöm odlingen</h2>
+    <form method="post" style="padding: 1rem;">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        {% for field in form %}
+            <div style="margin-bottom: 1rem;">
+                {{ field.errors }}
+                <div><strong>{{ field.label_tag }}</strong></div>
+                {{ field }}
+                {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
+            </div>
+        {% endfor %}
+        <input type="submit" value="Spara beslut">
+    </form>
+</div>
 
 <p><a href="{% url 'admin:breedings_breedingregistration_changelist' %}">Till odlingsregistreringar</a></p>
 {% endblock %}
