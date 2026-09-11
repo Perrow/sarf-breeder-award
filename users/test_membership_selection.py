@@ -99,13 +99,11 @@ class UserMembershipSelectionTests(TestCase):
             email="member@example.com",
             password="correct-password",
             public_username="MemberUser",
-            display_name="Test User",
         )
 
     def _profile_data(self, associations):
         return {
             "public_username": "MemberUser",
-            "display_name": "Test User",
             "location": "Uppsala",
             "avatar_url": "",
             "associations": [str(pk) for pk in associations],
