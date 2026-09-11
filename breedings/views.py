@@ -16,6 +16,7 @@ from .scoring import (
     association_member_year_registration_ids,
     association_year_scores,
     competition_points,
+    points_for_breeding_class,
     points_for_registration,
 )
 
@@ -327,9 +328,22 @@ def _edit_breeding(request, registration=None, selected_species=None):
             breeding = form.save(commit=False)
             breeding.owner = request.user
             if request.POST.get("action") == "submit":
-                breeding.status = BreedingRegistration.Status.SUBMITTED
-                breeding.submitted_at = timezone.now()
-                message = "Odlingsregistreringen har skickats in för granskning."
+                submitted_at = timezone.now()
+                breeding.submitted_at = submitted_at
+                if (
+                    breeding.species
+                    and breeding.species.breeding_class == Species.BreedingClass.BRONZE
+                ):
+                    breeding.status = BreedingRegistration.Status.APPROVED
+                    breeding.approved_at = submitted_at
+                    breeding.awarded_breeding_class = Species.BreedingClass.BRONZE
+                    breeding.awarded_points = points_for_breeding_class(
+                        Species.BreedingClass.BRONZE
+                    )
+                    message = "Bronsodlingen har registrerats och godkänts direkt."
+                else:
+                    breeding.status = BreedingRegistration.Status.SUBMITTED
+                    message = "Odlingsregistreringen har skickats in för granskning."
             else:
                 breeding.status = BreedingRegistration.Status.DRAFT
                 breeding.submitted_at = None
