@@ -85,7 +85,9 @@ class SpeciesInformationTests(TestCase):
     def test_catalogue_search_uses_shared_species_search(self):
         for query in ("Pandapansarmal", "Hoplisoma", "Sydamerika"):
             with self.subTest(query=query):
-                response = self.client.get(reverse("species_catalogue"), {"q": query})
+                response = self.client.get(
+                    reverse("species_catalogue_search", args=[query])
+                )
                 self.assertEqual(response.status_code, 200)
                 self.assertContains(response, "Corydoras panda")
                 self.assertContains(
@@ -126,6 +128,7 @@ class SpeciesInformationTests(TestCase):
         self.client.logout()
         for url in (
             reverse("species_catalogue"),
+            reverse("species_catalogue_search", args=["corydoras"]),
             reverse("species_information", args=[self.species.pk]),
         ):
             with self.subTest(url=url):
