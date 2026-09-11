@@ -212,6 +212,19 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
         return format_html('<a href="{}">Granska</a>', url)
 
+    def _next_reviewable_registration(self, request, registration):
+        return (
+            self.get_queryset(request)
+            .filter(
+                status=BreedingRegistration.Status.SUBMITTED,
+                taxonomy_needs_resolution=False,
+                species__isnull=False,
+            )
+            .exclude(pk=registration.pk)
+            .order_by("breeding_date", "pk")
+            .first()
+        )
+
     def review_view(self, request, object_id):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
         if not self.has_view_permission(request, registration):
@@ -253,6 +266,13 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
                     )
                 )
                 messages.success(request, message)
+                if request.POST.get("save_and_next"):
+                    next_registration = self._next_reviewable_registration(request, registration)
+                    if next_registration is not None:
+                        return redirect(
+                            "admin:breedings_breedingregistration_review",
+                            object_id=next_registration.pk,
+                        )
                 return redirect("admin:breedings_breedingregistration_changelist")
         else:
             form = ReviewDecisionForm()
@@ -263,6 +283,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
             "title": "Granska odlingsregistrering",
             "registration": registration,
             "form": form,
+            "next_registration": self._next_reviewable_registration(request, registration),
         }
         return render(request, "admin/breedings/breedingregistration/review.html", context)
 
