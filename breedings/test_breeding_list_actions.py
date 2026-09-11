@@ -42,8 +42,10 @@ class BreedingListActionTests(TestCase):
 
         response = self.client.get(reverse("breeding_list"))
 
-        self.assertContains(response, reverse("breeding_edit", args=[registration.pk]))
-        self.assertNotContains(response, reverse("breeding_detail", args=[registration.pk]))
+        edit_url = reverse("breeding_edit", args=[registration.pk])
+        detail_url = reverse("breeding_detail", args=[registration.pk])
+        self.assertContains(response, f'href="{edit_url}"')
+        self.assertNotContains(response, f'href="{detail_url}"')
 
     def test_non_drafts_have_only_view_action(self):
         registrations = [
@@ -55,5 +57,7 @@ class BreedingListActionTests(TestCase):
         response = self.client.get(reverse("breeding_list"))
 
         for registration in registrations:
-            self.assertContains(response, reverse("breeding_detail", args=[registration.pk]))
-            self.assertNotContains(response, reverse("breeding_edit", args=[registration.pk]))
+            detail_url = reverse("breeding_detail", args=[registration.pk])
+            edit_url = reverse("breeding_edit", args=[registration.pk])
+            self.assertContains(response, f'href="{detail_url}"')
+            self.assertNotContains(response, f'href="{edit_url}"')
