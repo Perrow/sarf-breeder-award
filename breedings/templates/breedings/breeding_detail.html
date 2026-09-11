@@ -6,22 +6,19 @@
 <div class="d-flex justify-content-between align-items-center mb-3">
     <h1>Odlingsrapport</h1>
     <div class="d-flex gap-2">
-        {% if registration.status == "draft" %}
-            <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera utkast</a>
-        {% elif registration.status == "approved" and registration.awarded_breeding_class == "bronze" and not registration.reviewer_id %}
-            <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera odling</a>
-        {% elif registration.status == "submitted" %}
-            <form method="post" action="{% url 'breeding_return_to_draft' registration.pk %}">
-                {% csrf_token %}
-                <button class="btn btn-outline-primary" type="submit">Återgå till utkast</button>
-            </form>
-        {% endif %}
+        <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera</a>
         <form method="post" action="{% url 'breeding_delete' registration.pk %}" onsubmit="return confirm('Vill du verkligen ta bort odlingsrapporten?');">
             {% csrf_token %}
             <button class="btn btn-outline-danger" type="submit">Ta bort</button>
         </form>
     </div>
 </div>
+
+{% if registration.status == "approved" and registration.awarded_breeding_class == "silver" or registration.status == "approved" and registration.awarded_breeding_class == "gold" %}
+<div class="alert alert-warning" role="note">
+    Om du redigerar den här odlingen återställs godkännandet. När ändringarna skickas in måste odlingen granskas och godkännas på nytt.
+</div>
+{% endif %}
 
 {% if registration.species %}
 <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
