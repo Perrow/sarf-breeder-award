@@ -13,8 +13,14 @@
 {% endif %}
 
 <dl class="row">
-    <dt class="col-sm-3">Namn</dt>
-    <dd class="col-sm-9">{{ user.display_name|default:user.get_full_name|default:user.email }}</dd>
+    <dt class="col-sm-3">Förnamn</dt>
+    <dd class="col-sm-9">{{ user.first_name|default:"Inte angivet" }}</dd>
+
+    <dt class="col-sm-3">Efternamn</dt>
+    <dd class="col-sm-9">{{ user.last_name|default:"Inte angivet" }}</dd>
+
+    <dt class="col-sm-3">Visningsnamn</dt>
+    <dd class="col-sm-9">{{ user.display_name|default:"Inte angivet" }}</dd>
 
     <dt class="col-sm-3">Publikt användarnamn</dt>
     <dd class="col-sm-9">{{ user.public_username|default:"Inte angivet" }}</dd>
@@ -25,6 +31,10 @@
     <dt class="col-sm-3">Ort</dt>
     <dd class="col-sm-9">{{ user.location|default:"Inte angivet" }}</dd>
 </dl>
+
+<p class="text-body-secondary">
+    För- och efternamn är frivilliga och visas bara för administratörer. Föreningarnas administratörer kan ta bort ditt medlemskap om de inte kan avgöra vem du är.
+</p>
 
 <h2 class="h4 mt-4">Föreningar</h2>
 {% if memberships %}
