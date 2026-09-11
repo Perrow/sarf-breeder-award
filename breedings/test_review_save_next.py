@@ -48,10 +48,14 @@ class ReviewSaveNextTests(TestCase):
         response = self.client.get(
             reverse("admin:breedings_breedingregistration_review", args=[current.pk])
         )
-        self.assertContains(response, '<input type="submit" value="Spara beslut">', html=True)
         self.assertContains(
             response,
-            '<input type="submit" name="save_and_next" value="Spara och visa nästa">',
+            '<input class="button" type="submit" value="Spara beslut">',
+            html=True,
+        )
+        self.assertContains(
+            response,
+            '<input class="button" type="submit" name="save_and_next" value="Spara och visa nästa">',
             html=True,
         )
 
