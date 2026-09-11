@@ -3,7 +3,12 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .forms import CommonNameSynonymForm, ScientificSynonymForm
-from .models import Genus, Species, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+)
 
 
 class SplitSynonymAdminTests(TestCase):
@@ -15,11 +20,11 @@ class SplitSynonymAdminTests(TestCase):
             common_name="Metallpansarmal",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        self.scientific = SpeciesSynonym.objects.create(
+        self.scientific = ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Osteogaster aenea",
         )
-        self.common = SpeciesSynonym.objects.create(
+        self.common = CommonNameSpeciesSynonym.objects.create(
             species=self.species,
             common_name="Bronspansarmal",
         )
@@ -48,7 +53,6 @@ class SplitSynonymAdminTests(TestCase):
         self.assertEqual(form["genus_name"].value(), "Osteogaster")
         self.assertEqual(form["species_name"].value(), "aenea")
         self.assertNotIn("scientific_name", form.fields)
-        self.assertNotIn("common_name", form.fields)
 
     def test_scientific_synonym_form_saves_combined_storage_without_data_loss(self):
         form = ScientificSynonymForm(
@@ -60,7 +64,6 @@ class SplitSynonymAdminTests(TestCase):
 
         self.scientific.refresh_from_db()
         self.assertEqual(self.scientific.scientific_name, "Hoplisoma aeneum")
-        self.assertEqual(self.scientific.common_name, "")
 
     def test_common_name_form_only_edits_common_name(self):
         form = CommonNameSynonymForm(
@@ -72,4 +75,3 @@ class SplitSynonymAdminTests(TestCase):
 
         self.common.refresh_from_db()
         self.assertEqual(self.common.common_name, "Metallmal")
-        self.assertEqual(self.common.scientific_name, "")
