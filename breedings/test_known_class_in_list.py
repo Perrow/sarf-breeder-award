@@ -61,5 +61,10 @@ class KnownClassInBreedingListTests(TestCase):
             awarded_points=2,
         )
         response = self.client.get(reverse("breeding_list"))
-        self.assertContains(response, ">Silver<", html=False)
+        self.assertContains(response, "Silver")
+        self.assertNotContains(
+            response,
+            '<span class="text-body-secondary">Silver</span>',
+            html=True,
+        )
         self.assertNotContains(response, '<span class="text-body-secondary">Guld</span>', html=True)
