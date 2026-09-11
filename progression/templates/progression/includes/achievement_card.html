@@ -46,7 +46,7 @@
                         <h3 class="h6" id="achievement-requirements-{{ presentation.earned.pk }}">Krav som du har uppfyllt</h3>
                         <ul class="mb-0">
                             {% for requirement in presentation.requirements %}
-                            <li>{{ requirement.summary }}</li>
+                            <li>{{ requirement.achieved_text }}</li>
                             {% endfor %}
                         </ul>
                     </section>
