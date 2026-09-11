@@ -1,0 +1,276 @@
+:root {
+    --sarf-ink: #263238;
+    --sarf-muted: #68757d;
+    --sarf-accent: #315d62;
+    --sarf-accent-dark: #24484c;
+    --sarf-soft: #f3f5f4;
+    --sarf-border: #d9dfdc;
+    --sarf-max-width: 1080px;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    color: var(--sarf-ink);
+    background: #fff;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.65;
+}
+
+.site-shell {
+    max-width: var(--sarf-max-width);
+}
+
+.site-header {
+    background: rgba(255, 255, 255, 0.98);
+    border-bottom: 1px solid var(--sarf-border);
+}
+
+.navbar-brand {
+    color: var(--sarf-ink);
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.015em;
+}
+
+.navbar-brand:hover,
+.navbar-brand:focus,
+.navbar .nav-link:hover,
+.navbar .nav-link:focus {
+    color: var(--sarf-accent);
+}
+
+.navbar .nav-link {
+    color: var(--sarf-ink);
+    font-size: 0.95rem;
+    padding-inline: 0.85rem !important;
+}
+
+.btn-primary {
+    --bs-btn-color: #fff;
+    --bs-btn-bg: var(--sarf-accent);
+    --bs-btn-border-color: var(--sarf-accent);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--sarf-accent-dark);
+    --bs-btn-hover-border-color: var(--sarf-accent-dark);
+    --bs-btn-active-bg: var(--sarf-accent-dark);
+    --bs-btn-active-border-color: var(--sarf-accent-dark);
+    --bs-btn-focus-shadow-rgb: 49, 93, 98;
+}
+
+.btn-outline-primary {
+    --bs-btn-color: var(--sarf-accent);
+    --bs-btn-border-color: var(--sarf-accent);
+    --bs-btn-hover-color: #fff;
+    --bs-btn-hover-bg: var(--sarf-accent);
+    --bs-btn-hover-border-color: var(--sarf-accent);
+    --bs-btn-active-bg: var(--sarf-accent-dark);
+    --bs-btn-active-border-color: var(--sarf-accent-dark);
+    --bs-btn-focus-shadow-rgb: 49, 93, 98;
+}
+
+.btn-primary,
+.btn-outline-primary {
+    border-radius: 0;
+    font-weight: 600;
+}
+
+a {
+    color: var(--sarf-accent-dark);
+}
+
+a:hover {
+    color: var(--sarf-accent);
+}
+
+:focus-visible {
+    outline: 3px solid rgba(49, 93, 98, 0.45);
+    outline-offset: 3px;
+}
+
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 0;
+    z-index: 1100;
+    padding: 0.75rem 1rem;
+    transform: translateY(-120%);
+    background: #fff;
+    color: var(--sarf-ink);
+    box-shadow: 0 0.25rem 0.75rem rgba(0, 0, 0, 0.18);
+}
+
+.skip-link:focus {
+    transform: translateY(0);
+}
+
+.page-intro {
+    padding: 5.5rem 0 3.5rem;
+}
+
+.page-intro h1 {
+    max-width: 48rem;
+    font-size: clamp(2.5rem, 6vw, 4.7rem);
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: -0.035em;
+}
+
+.page-intro .lead {
+    max-width: 48rem;
+    margin-top: 1.5rem;
+    color: var(--sarf-muted);
+    font-size: clamp(1.1rem, 2vw, 1.35rem);
+}
+
+.aquarium-hero,
+.aquarium-panel {
+    position: relative;
+    overflow: hidden;
+    background:
+        radial-gradient(circle at 20% 25%, rgba(255, 255, 255, 0.3) 0 2%, transparent 2.5%),
+        radial-gradient(circle at 72% 48%, rgba(255, 255, 255, 0.2) 0 1.5%, transparent 2%),
+        linear-gradient(135deg, rgba(49, 93, 98, 0.92), rgba(28, 69, 75, 0.58)),
+        linear-gradient(45deg, #77999c, #cedcda);
+}
+
+.aquarium-hero {
+    min-height: 24rem;
+}
+
+.aquarium-panel {
+    min-height: 20rem;
+}
+
+.aquarium-hero::before,
+.aquarium-panel::before,
+.aquarium-hero::after,
+.aquarium-panel::after {
+    content: "";
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.13);
+}
+
+.aquarium-hero::before,
+.aquarium-panel::before {
+    width: 18rem;
+    height: 6rem;
+    right: -3rem;
+    bottom: 3rem;
+    transform: rotate(-8deg);
+}
+
+.aquarium-hero::after,
+.aquarium-panel::after {
+    width: 12rem;
+    height: 4rem;
+    left: 8%;
+    top: 22%;
+    transform: rotate(12deg);
+}
+
+.section-block {
+    padding: 5rem 0;
+}
+
+.section-block + .section-block {
+    border-top: 1px solid var(--sarf-border);
+}
+
+.section-eyebrow {
+    color: var(--sarf-accent);
+    font-size: 0.78rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+}
+
+.section-title {
+    margin-top: 0.45rem;
+    font-size: clamp(2rem, 4vw, 3rem);
+    font-weight: 400;
+    line-height: 1.12;
+    letter-spacing: -0.025em;
+}
+
+.soft-band {
+    background: var(--sarf-soft);
+}
+
+.editorial-note {
+    border-left: 4px solid var(--sarf-accent);
+    background: var(--sarf-soft);
+}
+
+.rules-copy {
+    max-width: 52rem;
+}
+
+.site-footer {
+    margin-top: auto;
+    background: #1d292b;
+    color: rgba(255, 255, 255, 0.82);
+}
+
+.site-footer a {
+    color: #fff;
+}
+
+.site-footer a:hover,
+.site-footer a:focus {
+    color: #dce9e7;
+}
+
+.table {
+    --bs-table-striped-bg: var(--sarf-soft);
+}
+
+.form-control:focus,
+.form-select:focus,
+.site-form input:focus,
+.site-form select:focus,
+.site-form textarea:focus {
+    border-color: var(--sarf-accent);
+    box-shadow: 0 0 0 0.25rem rgba(49, 93, 98, 0.18);
+}
+
+@media (min-width: 992px) {
+    .split-copy {
+        padding-right: 3rem;
+    }
+}
+
+@media (max-width: 767.98px) {
+    .page-intro {
+        padding: 3.5rem 0 2.5rem;
+    }
+
+    .section-block {
+        padding: 3.5rem 0;
+    }
+
+    .aquarium-hero {
+        min-height: 17rem;
+    }
+
+    .aquarium-panel {
+        min-height: 15rem;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html {
+        scroll-behavior: auto;
+    }
+
+    *,
+    *::before,
+    *::after {
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+    }
+}
