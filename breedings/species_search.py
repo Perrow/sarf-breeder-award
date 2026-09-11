@@ -21,10 +21,12 @@ def _match_details(species, query):
     if any(_contains(name, query) for name in current_names):
         return None
 
-    for synonym in species.synonyms.all():
-        name = synonym.scientific_name or synonym.common_name
-        if _contains(name, query):
-            return {"type": "synonym", "value": name}
+    for synonym in species.scientific_synonyms.all():
+        if _contains(synonym.scientific_name, query):
+            return {"type": "synonym", "value": synonym.scientific_name}
+    for synonym in species.common_name_synonyms.all():
+        if _contains(synonym.common_name, query):
+            return {"type": "synonym", "value": synonym.common_name}
 
     for geography in species.geographies.all():
         if _contains(geography.name, query):
@@ -51,7 +53,7 @@ def species_search_results(request):
     species = list(
         Species.objects.search(query)
         .select_related("genus")
-        .prefetch_related("synonyms", "geographies")
+        .prefetch_related("scientific_synonyms", "common_name_synonyms", "geographies")
         .order_by("genus__scientific_name", "scientific_name")[:10]
     )
 
@@ -91,7 +93,7 @@ def species_catalogue(request):
 def species_information(request, pk):
     species = get_object_or_404(
         Species.objects.select_related("genus").prefetch_related(
-            "geographies", "synonyms", "external_links"
+            "geographies", "scientific_synonyms", "common_name_synonyms", "external_links"
         ),
         pk=pk,
     )
@@ -124,8 +126,8 @@ def species_information(request, pk):
     context = {
         "species": species,
         "species_groups": species.get_species_groups(),
-        "scientific_synonyms": species.synonyms.exclude(scientific_name=""),
-        "common_synonyms": species.synonyms.exclude(common_name=""),
+        "scientific_synonyms": species.scientific_synonyms.all(),
+        "common_synonyms": species.common_name_synonyms.all(),
         "approved_breedings": approved_breedings,
         "reclassification_requests": reclassification_requests,
         "pending_reclassification": pending_reclassification,

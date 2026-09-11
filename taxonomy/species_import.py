@@ -7,7 +7,14 @@ from urllib.request import Request, urlopen
 from django.core.exceptions import ValidationError
 from django.db import transaction
 
-from .models import Geography, Genus, Species, SpeciesLink, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesLink,
+)
 
 
 class SpeciesImportError(ValueError):
@@ -162,10 +169,9 @@ def _fetch_page_title(url):
 
 
 def _ensure_common_synonym(species, common_name, stats):
-    _, created = SpeciesSynonym.objects.get_or_create(
+    _, created = CommonNameSpeciesSynonym.objects.get_or_create(
         species=species,
         common_name=common_name,
-        defaults={"scientific_name": ""},
     )
     stats["synonyms_created" if created else "synonyms_reused"] += 1
 
@@ -217,7 +223,7 @@ def _find_existing_species(genus, genus_name, scientific_name):
 
     old_full_name = f"{genus_name} {scientific_name}"
     synonym_matches = list(
-        SpeciesSynonym.objects.filter(scientific_name__iexact=old_full_name)
+        ScientificSpeciesSynonym.objects.filter(scientific_name__iexact=old_full_name)
         .select_related("species__genus")[:2]
     )
     if len(synonym_matches) > 1:
@@ -296,10 +302,9 @@ def _import_species_row(row, stats):
         _ensure_common_synonym(species, common_name, stats)
 
     for synonym in scientific_synonyms:
-        _, created = SpeciesSynonym.objects.get_or_create(
+        _, created = ScientificSpeciesSynonym.objects.get_or_create(
             species=species,
             scientific_name=synonym,
-            defaults={"common_name": ""},
         )
         stats["synonyms_created" if created else "synonyms_reused"] += 1
 

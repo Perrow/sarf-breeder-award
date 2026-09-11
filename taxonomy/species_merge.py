@@ -1,6 +1,6 @@
 from django.db import transaction
 
-from .models import SpeciesLink, SpeciesSynonym
+from .models import CommonNameSpeciesSynonym, ScientificSpeciesSynonym, SpeciesLink
 
 
 @transaction.atomic
@@ -20,36 +20,30 @@ def merge_species(source, target):
     source_full_name = f"{source.genus.scientific_name} {source.scientific_name}"
     target_full_name = f"{target.genus.scientific_name} {target.scientific_name}"
     if source_full_name != target_full_name:
-        SpeciesSynonym.objects.get_or_create(
+        ScientificSpeciesSynonym.objects.get_or_create(
             species=target,
             scientific_name=source_full_name,
-            defaults={"common_name": ""},
         )
 
     for name in (source.common_name, source.english_name):
         if name and name not in {target.common_name, target.english_name}:
-            SpeciesSynonym.objects.get_or_create(
+            CommonNameSpeciesSynonym.objects.get_or_create(
                 species=target,
                 common_name=name,
-                defaults={"scientific_name": ""},
             )
 
-    for synonym in source.synonyms.all():
-        if synonym.scientific_name:
-            if synonym.scientific_name != target_full_name:
-                SpeciesSynonym.objects.get_or_create(
-                    species=target,
-                    scientific_name=synonym.scientific_name,
-                    defaults={"common_name": ""},
-                )
-        elif synonym.common_name and synonym.common_name not in {
-            target.common_name,
-            target.english_name,
-        }:
-            SpeciesSynonym.objects.get_or_create(
+    for synonym in source.scientific_synonyms.all():
+        if synonym.scientific_name != target_full_name:
+            ScientificSpeciesSynonym.objects.get_or_create(
+                species=target,
+                scientific_name=synonym.scientific_name,
+            )
+
+    for synonym in source.common_name_synonyms.all():
+        if synonym.common_name not in {target.common_name, target.english_name}:
+            CommonNameSpeciesSynonym.objects.get_or_create(
                 species=target,
                 common_name=synonym.common_name,
-                defaults={"scientific_name": ""},
             )
 
     for link in source.external_links.all():

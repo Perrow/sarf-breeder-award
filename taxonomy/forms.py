@@ -1,6 +1,6 @@
 from django import forms
 
-from .models import Genus, Species, SpeciesSynonym
+from .models import CommonNameSpeciesSynonym, Genus, ScientificSpeciesSynonym, Species
 
 
 class SpeciesImportForm(forms.Form):
@@ -29,7 +29,7 @@ class ScientificSynonymForm(forms.ModelForm):
     species_name = forms.CharField(label="Artnamn", max_length=100)
 
     class Meta:
-        model = SpeciesSynonym
+        model = ScientificSpeciesSynonym
         fields = ()
 
     def __init__(self, *args, **kwargs):
@@ -44,23 +44,18 @@ class ScientificSynonymForm(forms.ModelForm):
             f'{self.cleaned_data["genus_name"].strip()} '
             f'{self.cleaned_data["species_name"].strip()}'
         )
-        self.instance.common_name = ""
         return super().save(commit=commit)
 
 
 class CommonNameSynonymForm(forms.ModelForm):
     class Meta:
-        model = SpeciesSynonym
+        model = CommonNameSpeciesSynonym
         fields = ("common_name",)
-
-    def save(self, commit=True):
-        self.instance.scientific_name = ""
-        return super().save(commit=commit)
 
 
 class SpeciesAdminForm(forms.ModelForm):
     promote_synonym = forms.ModelChoiceField(
-        queryset=SpeciesSynonym.objects.none(),
+        queryset=ScientificSpeciesSynonym.objects.none(),
         required=False,
         label="Gör synonym till aktuellt vetenskapligt namn",
         help_text=(
@@ -76,9 +71,9 @@ class SpeciesAdminForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         if self.instance and self.instance.pk:
-            self.fields["promote_synonym"].queryset = SpeciesSynonym.objects.filter(
+            self.fields["promote_synonym"].queryset = ScientificSpeciesSynonym.objects.filter(
                 species=self.instance,
-            ).exclude(scientific_name="")
+            )
 
     def clean(self):
         cleaned_data = super().clean()
