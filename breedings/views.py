@@ -86,9 +86,9 @@ def _association_leaderboard_rows(selected_year):
 
 def leaderboards(request):
     selected_year = _leaderboard_year(request.GET.get("year"))
-    leaderboard_type = request.GET.get("type", "individual")
+    leaderboard_type = request.GET.get("type", "association")
     if leaderboard_type not in {"individual", "association"}:
-        leaderboard_type = "individual"
+        leaderboard_type = "association"
 
     leaderboard = (
         _individual_leaderboard_rows(selected_year)
