@@ -17,12 +17,11 @@
 <div class="table-responsive">
 <table class="table table-striped align-middle">
     <thead>
-        <tr><th>Placering</th><th>Medlem</th><th class="text-end">Poäng</th></tr>
+        <tr><th>Medlem</th><th class="text-end">Poäng</th></tr>
     </thead>
     <tbody>
         {% for row in leaderboard %}
         <tr>
-            <td>{{ forloop.counter }}</td>
             <td><a href="{% url 'association_member_breeding_list' association.pk row.user.pk %}?year={{ selected_year }}&list=contribution&leaderboard={{ view_mode }}">{{ row.name }}</a></td>
             <td class="text-end">{% if view_mode == 'contribution' %}{{ row.contribution_points }}{% else %}{{ row.individual_points }}{% endif %}</td>
         </tr>

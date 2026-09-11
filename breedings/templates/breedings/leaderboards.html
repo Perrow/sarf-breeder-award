@@ -17,11 +17,10 @@
     {% if leaderboard %}
     <div class="table-responsive">
     <table class="table table-striped align-middle">
-        <thead><tr><th>Placering</th><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead>
+        <thead><tr><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead>
         <tbody>
         {% for row in leaderboard %}
             <tr>
-                <td>{{ forloop.counter }}</td>
                 <td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}&view=contribution">{{ row.association.name }}</a></td>
                 <td class="text-end">{{ row.grower_count }}</td>
                 <td class="text-end">{{ row.points }}</td>
@@ -37,10 +36,10 @@
     {% if leaderboard %}
     <div class="table-responsive">
     <table class="table table-striped align-middle">
-        <thead><tr><th>Placering</th><th>Användare</th><th class="text-end">Poäng</th></tr></thead>
+        <thead><tr><th>Användare</th><th class="text-end">Poäng</th></tr></thead>
         <tbody>
         {% for row in leaderboard %}
-            <tr><td>{{ forloop.counter }}</td><td>{{ row.name }}</td><td class="text-end">{{ row.points }}</td></tr>
+            <tr><td>{{ row.name }}</td><td class="text-end">{{ row.points }}</td></tr>
         {% endfor %}
         </tbody>
     </table>

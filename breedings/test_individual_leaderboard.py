@@ -66,6 +66,7 @@ class IndividualLeaderboardTests(TestCase):
         self.assertContains(response, "Individuell topplista")
         self.assertContains(response, "AkvaristA")
         self.assertContains(response, "AkvaristB")
+        self.assertNotContains(response, "Placering")
         content = response.content.decode()
         self.assertLess(content.index("AkvaristB"), content.index("AkvaristA"))
 
@@ -103,7 +104,7 @@ class IndividualLeaderboardTests(TestCase):
 
         response = self.client.get(reverse("individual_leaderboard"), {"year": current_year})
 
-        self.assertContains(response, "<td>1</td>", html=True)
+        self.assertEqual(len(response.context["leaderboard"]), 1)
         self.assertContains(response, "AkvaristA")
 
     def test_invalid_year_falls_back_to_current_year(self):
