@@ -4,7 +4,7 @@ from django.utils import timezone
 from associations.models import Association
 from taxonomy.models import Species
 
-from .models import BreedingRegistration
+from .models import BreedingRegistration, SpeciesReclassificationRequest
 
 
 class BreedingRegistrationForm(forms.ModelForm):
@@ -118,3 +118,37 @@ class BreedingRegistrationForm(forms.ModelForm):
             self.add_error("description", "Beskrivning är obligatorisk för silver- och guldodlingar.")
 
         return cleaned_data
+
+
+class SpeciesReclassificationRequestForm(forms.ModelForm):
+    class Meta:
+        model = SpeciesReclassificationRequest
+        fields = ("requested_breeding_class", "reason")
+        labels = {
+            "requested_breeding_class": "Önskad odlingsklass",
+            "reason": "Motivering",
+        }
+        widgets = {
+            "reason": forms.Textarea(attrs={"rows": 6}),
+        }
+
+    def __init__(self, species, *args, **kwargs):
+        self.species = species
+        super().__init__(*args, **kwargs)
+        self.fields["requested_breeding_class"].choices = [
+            choice
+            for choice in Species.BreedingClass.choices
+            if choice[0] != species.breeding_class
+        ]
+
+    def clean_reason(self):
+        reason = self.cleaned_data["reason"].strip()
+        if not reason:
+            raise forms.ValidationError("Motivering måste anges.")
+        return reason
+
+    def clean_requested_breeding_class(self):
+        requested_class = self.cleaned_data["requested_breeding_class"]
+        if requested_class == self.species.breeding_class:
+            raise forms.ValidationError("Den önskade klassen måste skilja sig från den nuvarande.")
+        return requested_class

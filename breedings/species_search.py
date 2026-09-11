@@ -5,7 +5,7 @@ from django.urls import reverse
 
 from taxonomy.models import Species
 
-from .models import BreedingRegistration
+from .models import BreedingRegistration, SpeciesReclassificationRequest
 
 
 def _contains(text, query):
@@ -113,11 +113,21 @@ def species_information(request, pk):
         }
         for registration in approved
     ]
+    reclassification_requests = SpeciesReclassificationRequest.objects.filter(
+        species=species,
+        requester=request.user,
+    ).select_related("decided_by")
+    pending_reclassification = SpeciesReclassificationRequest.objects.filter(
+        species=species,
+        status=SpeciesReclassificationRequest.Status.PENDING,
+    ).exists()
     context = {
         "species": species,
         "species_groups": species.get_species_groups(),
         "scientific_synonyms": species.synonyms.exclude(scientific_name=""),
         "common_synonyms": species.synonyms.exclude(common_name=""),
         "approved_breedings": approved_breedings,
+        "reclassification_requests": reclassification_requests,
+        "pending_reclassification": pending_reclassification,
     }
     return render(request, "breedings/species_information.html", context)

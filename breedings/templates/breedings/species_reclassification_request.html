@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Begär omklassning | {{ species }} | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'species_information' species.pk %}">← Till arten</a></p>
+
+<div class="form-page">
+    <h1>Begär omklassning</h1>
+    <p class="lead">
+        {{ species.common_name }}{% if species.common_name %} – {% endif %}<em>{{ species }}</em>
+    </p>
+    <p>Nuvarande odlingsklass: <strong>{{ species.get_breeding_class_display }}</strong></p>
+    <p class="text-body-secondary">
+        Beskriv varför du tycker att artens odlingsklass bör ändras. Begäran granskas av en odlingsansvarig eller systemadministratör innan klassningen ändras.
+    </p>
+
+    <form method="post" class="site-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="form-field">
+            {{ form.requested_breeding_class.label_tag }}
+            {{ form.requested_breeding_class }}
+            {{ form.requested_breeding_class.errors }}
+        </div>
+        <div class="form-field">
+            {{ form.reason.label_tag }}
+            {{ form.reason }}
+            {{ form.reason.errors }}
+        </div>
+        <div class="form-actions">
+            <button class="btn btn-primary" type="submit">Skicka begäran</button>
+        </div>
+    </form>
+</div>
+{% endblock %}

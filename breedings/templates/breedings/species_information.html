@@ -10,8 +10,39 @@
         <h1><em>{{ species }}</em></h1>
         <p class="lead mb-0">{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</p>
     </div>
-    <span class="badge text-bg-secondary fs-6">{{ species.get_breeding_class_display }}</span>
+    <div class="text-end">
+        <span class="badge text-bg-secondary fs-6">{{ species.get_breeding_class_display }}</span>
+        <div class="mt-2">
+            {% if pending_reclassification %}
+                <span class="text-body-secondary">Omklassning väntar på beslut</span>
+            {% else %}
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'species_reclassification_request' species.pk %}">Föreslå ändrad klassning</a>
+            {% endif %}
+        </div>
+    </div>
 </div>
+
+{% if reclassification_requests %}
+<section class="mb-4">
+    <h2 class="h4">Mina omklassningsbegäranden</h2>
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Skapad</th><th>Från</th><th>Till</th><th>Status</th><th>Kommentar</th></tr></thead>
+            <tbody>
+            {% for item in reclassification_requests %}
+                <tr>
+                    <td>{{ item.created_at }}</td>
+                    <td>{{ item.get_current_breeding_class_display }}</td>
+                    <td>{{ item.get_requested_breeding_class_display }}</td>
+                    <td>{{ item.get_status_display }}</td>
+                    <td>{{ item.decision_comment|default:"–" }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endif %}
 
 <div class="row g-4 mb-4">
     <section class="col-md-6">
