@@ -242,15 +242,3 @@ class SpeciesAdmin(admin.ModelAdmin):
         return ", ".join(
             obj.get_species_groups(include_hidden=True).values_list("name", flat=True)
         )
-
-
-@admin.register(SpeciesSynonym)
-class SpeciesSynonymAdmin(admin.ModelAdmin):
-    list_display = ("scientific_name", "species")
-    search_fields = (
-        "scientific_name",
-        "common_name",
-        "species__scientific_name",
-        "species__common_name",
-        "species__genus__scientific_name",
-    )
