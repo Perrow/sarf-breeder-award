@@ -90,8 +90,8 @@ class CompetitionYearRulesTests(TestCase):
         self.assertNotContains(individual_response, "Odlare")
         self.assertNotContains(association_response, "Testföreningen")
 
-    def test_same_species_counts_only_once_in_same_year_and_highest_points_win(self):
-        year = timezone.localdate().year
+    def test_same_species_counts_only_once_in_historical_year_and_highest_points_win(self):
+        year = timezone.localdate().year - 1
         self.create_registration(
             self.species_a,
             date(year, 2, 1),
@@ -130,8 +130,8 @@ class CompetitionYearRulesTests(TestCase):
         self.assertEqual(competition_points(self.user, year), 3)
         self.assertEqual(association_competition_points(self.association, year), 3)
 
-    def test_species_deduplication_happens_before_association_genus_limit(self):
-        year = timezone.localdate().year
+    def test_species_deduplication_happens_before_historical_association_genus_limit(self):
+        year = timezone.localdate().year - 1
         AssociationCompetitionLimit.objects.create(
             effective_from_year=year,
             genus=self.genus,

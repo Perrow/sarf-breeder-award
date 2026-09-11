@@ -36,12 +36,12 @@ class LeaderboardNavigationTests(TestCase):
             f"?year={self.previous_year}&type=association",
         )
 
-    def test_shared_page_defaults_to_individual(self):
+    def test_shared_page_defaults_to_association(self):
         response = self.client.get(reverse("leaderboards"))
 
-        self.assertEqual(response.context["leaderboard_type"], "individual")
-        self.assertContains(response, "Individuell")
+        self.assertEqual(response.context["leaderboard_type"], "association")
         self.assertContains(response, "Förening")
+        self.assertContains(response, "Individuell")
 
     def test_association_member_page_has_requested_modes_and_preserves_year(self):
         response = self.client.get(

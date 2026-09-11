@@ -2,7 +2,7 @@ from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.test import TestCase
-from django.urls import reverse
+from django.urls import NoReverseMatch, reverse
 
 from .models import Genus, Species, SpeciesSynonym
 
@@ -71,24 +71,10 @@ class SpeciesAlternativeNameAdminTests(TestCase):
         )
         self.client.force_login(self.admin_user)
 
-    def test_admin_can_create_common_alternative_name(self):
-        response = self.client.post(
-            reverse("admin:taxonomy_speciessynonym_add"),
-            {
-                "species": self.species.pk,
-                "scientific_name": "",
-                "common_name": "Panda cory",
-                "_save": "Spara",
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        self.assertTrue(
-            SpeciesSynonym.objects.filter(
-                species=self.species,
-                common_name="Panda cory",
-            ).exists()
-        )
+    def test_standalone_synonym_admin_is_not_exposed(self):
+        self.assertNotIn(SpeciesSynonym, admin.site._registry)
+        with self.assertRaises(NoReverseMatch):
+            reverse("admin:taxonomy_speciessynonym_add")
 
     def test_species_admin_searches_by_common_alternative_name(self):
         SpeciesSynonym.objects.create(

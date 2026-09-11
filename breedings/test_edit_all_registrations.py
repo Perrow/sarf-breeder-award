@@ -70,10 +70,10 @@ class EditAllRegistrationsTests(TestCase):
             "action": action,
         }
 
-    def test_detail_offers_edit_for_non_draft_registration(self):
+    def test_detail_offers_edit_for_rejected_registration(self):
         registration = self._registration(
             self.silver,
-            BreedingRegistration.Status.SUBMITTED,
+            BreedingRegistration.Status.REJECTED,
         )
 
         response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
