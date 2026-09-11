@@ -78,7 +78,15 @@
                 {% endif %}
             </td>
             <td>{{ registration.get_status_display }}</td>
-            <td>{{ registration.get_awarded_breeding_class_display|default:"–" }}</td>
+            <td>
+                {% if registration.awarded_breeding_class %}
+                    {{ registration.get_awarded_breeding_class_display }}
+                {% elif registration.species %}
+                    <span class="text-body-secondary">{{ registration.species.get_breeding_class_display }}</span>
+                {% else %}
+                    –
+                {% endif %}
+            </td>
             <td class="text-center">
                 {% if registration.review_comment %}
                     <span title="Granskningskommentar finns" aria-label="Granskningskommentar finns">💬</span>
