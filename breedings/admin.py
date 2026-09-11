@@ -19,11 +19,18 @@ from .models import (
 )
 
 
+BREEDING_MANAGER_GROUP = "Odlingsansvarig"
+
+
 BREEDING_CLASS_POINTS = {
     Species.BreedingClass.BRONZE: 1,
     Species.BreedingClass.SILVER: 2,
     Species.BreedingClass.GOLD: 3,
 }
+
+
+def is_breeding_manager(user):
+    return user.groups.filter(name=BREEDING_MANAGER_GROUP).exists()
 
 
 class ReviewDecisionForm(forms.Form):
@@ -149,14 +156,23 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
     )
 
     def get_queryset(self, request):
-        return super().get_queryset(request).filter(association__in=managed_associations(request.user))
+        queryset = super().get_queryset(request)
+        if is_breeding_manager(request.user):
+            return queryset
+        return queryset.filter(association__in=managed_associations(request.user))
 
     def has_module_permission(self, request):
-        return is_system_admin(request.user) or is_association_admin(request.user)
+        return (
+            is_system_admin(request.user)
+            or is_association_admin(request.user)
+            or is_breeding_manager(request.user)
+        )
 
     def has_view_permission(self, request, obj=None):
         if not self.has_module_permission(request):
             return False
+        if is_breeding_manager(request.user):
+            return True
         if obj is None:
             return True
         return managed_associations(request.user).filter(pk=obj.association_id).exists()
