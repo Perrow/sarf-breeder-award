@@ -226,7 +226,9 @@ När en synonym görs till aktuellt namn tas den bort ur synonym-listan och det 
 
 På artens adminsida finns stöd för att slå ihop en art med en annan art.
 
-Använd funktionen när två artposter egentligen representerar samma art. Den valda målarten behålls och källarten tas bort.
+Sammanslagningen startas från den **gamla artposten**, alltså den post som ska tas bort. Öppna den gamla arten i admin och välj funktionen **Slå ihop**. Därefter väljer du den **nya artposten** som mål för sammanslagningen. Målarten är den post som ska finnas kvar efter operationen.
+
+Använd funktionen när två artposter egentligen representerar samma art. Den valda målarten behålls och den gamla källarten tas bort.
 
 Vid sammanslagningen flyttas relevanta relationer till målarten, bland annat:
 
@@ -520,7 +522,7 @@ Använd grupper och Django-rättigheter för att undvika att ge fler privilegier
 | Hantera externa artlänkar | På artens redigeringssida |
 | Importera artregister | Taxonomy → Arter → Importera arter |
 | Byta aktuellt vetenskapligt namn | På artens redigeringssida |
-| Slå ihop dubblettarter | På artens redigeringssida → Slå ihop |
+| Slå ihop dubblettarter | Öppna den gamla arten → Slå ihop → välj den nya arten som mål |
 | Lösa fritexttaxonomi | Odlingsregistreringar → Lös taxonomi |
 | Godkänna/avslå odling | Odlingsregistreringar → Granska |
 | Ställa standardgräns för föreningstävling | Inställningar för föreningstävling |
