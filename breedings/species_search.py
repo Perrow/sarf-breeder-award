@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse
-from django.shortcuts import get_object_or_404, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
 from taxonomy.models import Species
@@ -33,6 +33,25 @@ def _match_details(species, query):
             return {"type": "geography", "value": geography.name}
 
     return None
+
+
+def _species_catalogue_results(query):
+    if not query:
+        return []
+    return list(
+        Species.objects.search(query)
+        .select_related("genus")
+        .prefetch_related("geographies")
+        .order_by("genus__scientific_name", "scientific_name")[:50]
+    )
+
+
+def _render_species_catalogue(request, query):
+    return render(
+        request,
+        "breedings/species_catalogue.html",
+        {"query": query, "results": _species_catalogue_results(query)},
+    )
 
 
 @login_required
@@ -74,19 +93,17 @@ def species_search_results(request):
 @login_required
 def species_catalogue(request):
     query = request.GET.get("q", "").strip()
-    results = []
     if query:
-        results = list(
-            Species.objects.search(query)
-            .select_related("genus")
-            .prefetch_related("geographies")
-            .order_by("genus__scientific_name", "scientific_name")[:50]
-        )
-    return render(
-        request,
-        "breedings/species_catalogue.html",
-        {"query": query, "results": results},
-    )
+        return redirect("species_catalogue_search", query=query, permanent=True)
+    return _render_species_catalogue(request, "")
+
+
+@login_required
+def species_catalogue_search(request, query):
+    query = query.strip()
+    if not query:
+        return redirect("species_catalogue")
+    return _render_species_catalogue(request, query)
 
 
 @login_required

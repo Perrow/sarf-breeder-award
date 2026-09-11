@@ -22,6 +22,11 @@ urlpatterns = [
         name="association_member_breeding_list",
     ),
     path("arter/", species_search.species_catalogue, name="species_catalogue"),
+    path(
+        "arter/listor/<str:query>/",
+        species_search.species_catalogue_search,
+        name="species_catalogue_search",
+    ),
     path("arter/<int:pk>/", species_search.species_information, name="species_information"),
     path(
         "arter/<int:pk>/omklassificera/",

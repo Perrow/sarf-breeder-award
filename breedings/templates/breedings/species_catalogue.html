@@ -6,7 +6,11 @@
 <h1>Arter</h1>
 <p>Sök efter en art för att se namn, klassificering, geografi, synonymer, länkar och godkända odlingar.</p>
 
-<form method="get" class="mb-4" role="search">
+<form method="get"
+      action="{% url 'species_catalogue' %}"
+      class="mb-4"
+      role="search"
+      data-search-url-template="{% url 'species_catalogue_search' '__query__' %}">
     <label class="form-label" for="species-query">Sök art</label>
     <div class="input-group">
         <input class="form-control" id="species-query" name="q" value="{{ query }}" autocomplete="off">
@@ -33,4 +37,17 @@
         <p>Inga arter matchade sökningen.</p>
     {% endif %}
 {% endif %}
+
+<script>
+    document.querySelector('form[role="search"][data-search-url-template]').addEventListener('submit', function (event) {
+        const input = this.querySelector('input[name="q"]');
+        const query = input.value.trim();
+        if (!query) {
+            return;
+        }
+
+        event.preventDefault();
+        window.location.href = this.dataset.searchUrlTemplate.replace('__query__', encodeURIComponent(query));
+    });
+</script>
 {% endblock %}
