@@ -12,7 +12,6 @@ class AccountNameTests(TestCase):
             password="test-password-123",
             first_name="Anna",
             last_name="Andersson",
-            display_name="Anna A",
             public_username="akvaristen",
         )
         self.client.force_login(self.user)
@@ -22,7 +21,6 @@ class AccountNameTests(TestCase):
             "first_name": "Eva",
             "last_name": "Eriksson",
             "public_username": "akvaristen",
-            "display_name": "Anna A",
             "location": "",
             "avatar_url": "",
             "associations": [],
