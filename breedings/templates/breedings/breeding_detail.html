@@ -14,6 +14,10 @@
                 <button class="btn btn-outline-primary" type="submit">Återgå till utkast</button>
             </form>
         {% endif %}
+        <form method="post" action="{% url 'breeding_delete' registration.pk %}" onsubmit="return confirm('Vill du verkligen ta bort odlingsrapporten?');">
+            {% csrf_token %}
+            <button class="btn btn-outline-danger" type="submit">Ta bort</button>
+        </form>
     </div>
 </div>
 
