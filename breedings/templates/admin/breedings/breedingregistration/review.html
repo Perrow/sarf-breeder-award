@@ -19,6 +19,15 @@
     </div>
 </div>
 
+{% if registration.proposed_genus_name or registration.proposed_species_name or registration.proposed_common_name %}
+<div class="module" style="padding: 1.25rem;">
+    <h2>Art angiven i fritext</h2>
+    <p style="font-size: 1.25rem; margin: 0;">
+        {% if registration.proposed_common_name %}{{ registration.proposed_common_name }} – {% endif %}<em>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</em>
+    </p>
+</div>
+{% endif %}
+
 <div class="module">
     <h2>Odlarens beskrivning</h2>
     <div style="max-width: 70rem; line-height: 1.5; padding: 0 1rem 1rem;">
@@ -49,10 +58,6 @@
     <div style="padding: 1rem;">
         <dl>
             <dt>Inskickad</dt><dd>{{ registration.submitted_at|default:"–" }}</dd>
-            <dt>Föreslaget släkte</dt><dd>{{ registration.proposed_genus_name|default:"–" }}</dd>
-            <dt>Föreslaget artnamn</dt><dd>{{ registration.proposed_species_name|default:"–" }}</dd>
-            <dt>Föreslaget populärnamn</dt><dd>{{ registration.proposed_common_name|default:"–" }}</dd>
-            <dt>Registrerings-ID</dt><dd>{{ registration.pk }}</dd>
         </dl>
     </div>
 </details>
