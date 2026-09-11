@@ -88,11 +88,14 @@ class BreedingReviewUiTests(TestCase):
         self.assertContains(response, "Corydoras panda på FishBase")
         self.assertContains(response, "https://example.com/fishbase/corydoras-panda")
 
-    def test_secondary_information_is_collapsed_under_more_information(self):
+    def test_secondary_information_and_free_text_species_use_current_layout(self):
         response = self.client.get(self.review_url())
         content = response.content.decode()
 
+        self.assertContains(response, "Art angiven i fritext")
+        self.assertContains(response, "Tidigare namn")
+        self.assertContains(response, "Tidigare släkte tidigare-art")
         self.assertContains(response, "Mer information")
         self.assertIn("<details", content)
-        self.assertContains(response, "Föreslaget släkte")
-        self.assertContains(response, "Registrerings-ID")
+        self.assertNotContains(response, "Föreslaget släkte")
+        self.assertNotContains(response, "Registrerings-ID")
