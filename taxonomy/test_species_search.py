@@ -1,6 +1,12 @@
 from django.test import TestCase
 
-from .models import Geography, Genus, Species, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+)
 
 
 class SpeciesSearchTests(TestCase):
@@ -12,11 +18,11 @@ class SpeciesSearchTests(TestCase):
             common_name="Pandapansarmal",
             breeding_class=Species.BreedingClass.SILVER,
         )
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Hoplisoma panda",
         )
-        SpeciesSynonym.objects.create(
+        CommonNameSpeciesSynonym.objects.create(
             species=self.species,
             common_name="Panda cory",
         )
@@ -69,7 +75,7 @@ class SpeciesSearchTests(TestCase):
             common_name="Gul labidochromis",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(species=yellow, common_name="Citronciklid")
+        CommonNameSpeciesSynonym.objects.create(species=yellow, common_name="Citronciklid")
         self.assertEqual(list(Species.objects.search("gul cik")), [yellow])
 
     def test_all_terms_must_match_same_species(self):
