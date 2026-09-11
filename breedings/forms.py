@@ -55,14 +55,15 @@ class BreedingRegistrationForm(forms.ModelForm):
         self.fields["description"].required = False
 
         selected_species = getattr(self.instance, "species", None)
-        initial_species = self.initial.get("species")
-        if initial_species:
-            if isinstance(initial_species, Species):
-                selected_species = initial_species
-            else:
-                selected_species = Species.objects.filter(pk=initial_species).first()
-        elif self.is_bound and self.data.get("species"):
+        if self.is_bound and self.data.get("species"):
             selected_species = Species.objects.filter(pk=self.data.get("species")).first()
+        else:
+            initial_species = self.initial.get("species")
+            if initial_species:
+                if isinstance(initial_species, Species):
+                    selected_species = initial_species
+                else:
+                    selected_species = Species.objects.filter(pk=initial_species).first()
 
         self.manual_review_required = bool(
             selected_species
