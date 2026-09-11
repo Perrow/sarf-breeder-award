@@ -55,6 +55,78 @@ class BreedingRegistration(models.Model):
         return f"{self.owner} – {species_name} – {self.breeding_date}"
 
 
+class SpeciesReclassificationRequest(models.Model):
+    class Status(models.TextChoices):
+        PENDING = "pending", "Väntar på beslut"
+        APPROVED = "approved", "Godkänd"
+        REJECTED = "rejected", "Avslagen"
+
+    species = models.ForeignKey(
+        Species,
+        on_delete=models.PROTECT,
+        related_name="reclassification_requests",
+        verbose_name="art",
+    )
+    requester = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        related_name="species_reclassification_requests",
+        verbose_name="begärd av",
+    )
+    current_breeding_class = models.CharField(
+        max_length=6,
+        choices=Species.BreedingClass.choices,
+        verbose_name="klass vid begäran",
+    )
+    requested_breeding_class = models.CharField(
+        max_length=6,
+        choices=Species.BreedingClass.choices,
+        verbose_name="önskad klass",
+    )
+    reason = models.TextField(verbose_name="motivering")
+    status = models.CharField(
+        max_length=8,
+        choices=Status.choices,
+        default=Status.PENDING,
+        verbose_name="status",
+    )
+    created_at = models.DateTimeField(auto_now_add=True, verbose_name="skapad")
+    decided_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="decided_species_reclassification_requests",
+        verbose_name="beslutad av",
+    )
+    decided_at = models.DateTimeField(null=True, blank=True, verbose_name="beslutad")
+    decision_comment = models.TextField(blank=True, verbose_name="beslutskommentar")
+
+    class Meta:
+        ordering = ("-created_at", "-pk")
+        verbose_name = "omklassningsbegäran"
+        verbose_name_plural = "omklassningsbegäranden"
+        constraints = [
+            models.UniqueConstraint(
+                fields=("species",),
+                condition=Q(status="pending"),
+                name="unique_pending_reclassification_per_species",
+            ),
+        ]
+
+    def clean(self):
+        super().clean()
+        if self.requested_breeding_class == self.current_breeding_class:
+            raise ValidationError(
+                {"requested_breeding_class": "Den önskade klassen måste skilja sig från den nuvarande."}
+            )
+        if self.reason is not None and not self.reason.strip():
+            raise ValidationError({"reason": "Motivering måste anges."})
+
+    def __str__(self):
+        return f"{self.species}: {self.get_current_breeding_class_display()} → {self.get_requested_breeding_class_display()}"
+
+
 class AssociationCompetitionSettings(models.Model):
     effective_from_year = models.PositiveIntegerField(
         default=current_competition_year,
