@@ -8,6 +8,8 @@
     <div class="d-flex gap-2">
         {% if registration.status == "draft" %}
             <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera utkast</a>
+        {% elif registration.status == "approved" and registration.awarded_breeding_class == "bronze" and not registration.reviewer_id %}
+            <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera odling</a>
         {% elif registration.status == "submitted" %}
             <form method="post" action="{% url 'breeding_return_to_draft' registration.pk %}">
                 {% csrf_token %}
