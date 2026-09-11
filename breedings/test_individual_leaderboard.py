@@ -33,7 +33,6 @@ class IndividualLeaderboardTests(TestCase):
             password="test-password-123",
             first_name="Privat",
             last_name="Person A",
-            display_name="Hemligt namn A",
             public_username="AkvaristA",
         )
         self.user_b = get_user_model().objects.create_user(
@@ -42,7 +41,6 @@ class IndividualLeaderboardTests(TestCase):
             password="test-password-123",
             first_name="Privat",
             last_name="Person B",
-            display_name="Hemligt namn B",
             public_username="AkvaristB",
         )
 
@@ -126,7 +124,6 @@ class IndividualLeaderboardTests(TestCase):
 
         self.assertContains(response, "AkvaristA")
         self.assertNotContains(response, "private-a@example.com")
-        self.assertNotContains(response, "Hemligt namn A")
         self.assertNotContains(response, "Privat Person A")
 
     def test_navigation_links_to_leaderboards_for_anonymous_visitor(self):
