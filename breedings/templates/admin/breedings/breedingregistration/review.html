@@ -1,23 +1,27 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-<div class="module">
-    <h2>{{ registration.species }}</h2>
-    <p>
-        <strong>Odlingsklass:</strong> {{ registration.species.get_breeding_class_display }}
-        &nbsp;·&nbsp;
-        <strong>Odlingsdatum:</strong> {{ registration.breeding_date }}
-    </p>
-    <p>
-        <strong>Odlare:</strong> {{ registration.owner }}
-        &nbsp;·&nbsp;
-        <strong>Förening:</strong> {{ registration.association }}
-    </p>
+<div class="module" style="padding: 1.25rem;">
+    <div style="display: flex; justify-content: space-between; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
+        <div>
+            <h2 style="font-size: 2rem; line-height: 1.2; margin: 0 0 .5rem;">
+                {% if registration.species.common_name %}{{ registration.species.common_name }} – {% endif %}<em>{{ registration.species }}</em>
+            </h2>
+            <div style="font-size: 1.5rem; font-weight: 700; margin-bottom: .75rem;">
+                {{ registration.species.get_breeding_class_display }}
+            </div>
+            <p style="margin: 0; line-height: 1.7;">
+                <strong>Odlingsdatum:</strong> {{ registration.breeding_date }}<br>
+                <strong>Odlare:</strong> {{ registration.owner }}<br>
+                <strong>Förening:</strong> {{ registration.association }}
+            </p>
+        </div>
+    </div>
 </div>
 
 <div class="module">
     <h2>Odlarens beskrivning</h2>
-    <div style="max-width: 70rem; line-height: 1.5;">
+    <div style="max-width: 70rem; line-height: 1.5; padding: 0 1rem 1rem;">
         {{ registration.description|default:"Ingen beskrivning angiven."|linebreaksbr }}
     </div>
 </div>
