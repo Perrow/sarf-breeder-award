@@ -10,6 +10,7 @@ class UserProfileValidationTests(TestCase):
             email="profile-validation@example.com",
             password="test-password-123",
             public_username="ProfileValidation",
+            avatar_url="https://example.com/avatar.png",
         )
         self.other_user = get_user_model().objects.create_user(
             username="other@example.com",
@@ -32,18 +33,26 @@ class UserProfileValidationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Detta fält måste fyllas i.")
 
-    def test_invalid_avatar_url_is_rejected(self):
+    def test_avatar_field_is_not_visible_in_account_edit(self):
+        response = self.client.get(reverse("account_edit"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Profilbild (URL)")
+        self.assertContains(response, 'type="hidden" name="avatar_url"', html=False)
+
+    def test_existing_avatar_is_preserved_when_profile_is_saved(self):
         response = self.client.post(
             reverse("account_edit"),
             {
                 "public_username": "ProfileValidation",
                 "location": "Uppsala",
-                "avatar_url": "inte-en-url",
+                "avatar_url": "https://example.com/changed.png",
             },
         )
 
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Fyll i en giltig URL.")
+        self.assertRedirects(response, reverse("account"))
+        self.user.refresh_from_db()
+        self.assertEqual(self.user.avatar_url, "https://example.com/avatar.png")
 
     def test_direct_post_cannot_update_another_user(self):
         response = self.client.post(
