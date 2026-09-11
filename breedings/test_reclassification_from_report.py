@@ -26,7 +26,7 @@ class ReclassificationFromReportTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def test_report_with_species_links_to_reclassification(self):
+    def test_report_with_species_shows_reclassification_button_next_to_class(self):
         registration = BreedingRegistration.objects.create(
             owner=self.user,
             association=self.association,
@@ -36,13 +36,22 @@ class ReclassificationFromReportTests(TestCase):
         )
 
         response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
+        content = response.content.decode()
+        reclassification_url = reverse(
+            "species_reclassification_request",
+            args=[self.species.pk],
+        )
 
         self.assertContains(response, "Föreslå ändrad klassning")
         self.assertContains(response, "btn btn-sm btn-outline-primary")
         self.assertContains(
             response,
-            f'href="{reverse("species_reclassification_request", args=[self.species.pk])}"',
+            f'href="{reclassification_url}"',
             html=False,
+        )
+        self.assertLess(
+            content.index("badge text-bg-secondary fs-6"),
+            content.index(f'href="{reclassification_url}"'),
         )
 
     def test_report_without_species_does_not_offer_reclassification(self):
