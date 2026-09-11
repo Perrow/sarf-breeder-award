@@ -2,7 +2,13 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxonomy.models import Geography, Genus, Species, SpeciesSynonym
+from taxonomy.models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+)
 
 
 class SpeciesSelectionTests(TestCase):
@@ -21,11 +27,11 @@ class SpeciesSelectionTests(TestCase):
             english_name="Bronze corydoras",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Callichthys aeneus",
         )
-        SpeciesSynonym.objects.create(
+        CommonNameSpeciesSynonym.objects.create(
             species=self.species,
             common_name="Brunpansarmal",
         )
@@ -82,7 +88,9 @@ class SpeciesSelectionTests(TestCase):
         )
 
     def test_direct_match_takes_priority_over_matching_synonym(self):
-        SpeciesSynonym.objects.create(species=self.species, common_name="Metallpansarmal old")
+        CommonNameSpeciesSynonym.objects.create(
+            species=self.species, common_name="Metallpansarmal old"
+        )
 
         response = self.search("Metallpansarmal")
 
