@@ -34,7 +34,8 @@
         {% if registration.species.common_name or registration.species.english_name %}
             <p class="lead mb-1">{{ registration.species.common_name }}{% if registration.species.english_name %}{% if registration.species.common_name %} · {% endif %}{{ registration.species.english_name }}{% endif %}</p>
         {% endif %}
-        <p class="text-body-secondary mb-0">Din odling: {{ registration.breeding_date }}</p>
+        <p class="text-body-secondary mb-1">Din odling: {{ registration.breeding_date }}</p>
+        <p class="mb-0"><a href="{% url 'species_reclassification_request' registration.species.pk %}">Föreslå ändrad odlingsklass</a></p>
     </div>
     <span class="badge text-bg-secondary fs-6">{{ registration.species.get_breeding_class_display }}</span>
 </div>
