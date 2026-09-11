@@ -1,8 +1,13 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
+from django.utils import timezone
 
-from .models import Achievement, AchievementLevel, UserAchievement
+from associations.models import Association
+from breedings.models import BreedingRegistration
+from taxonomy.models import Genus, Species
+
+from .models import Achievement, AchievementLevel, AchievementRequirement, UserAchievement
 
 
 class AchievementCardInteractionTests(TestCase):
@@ -62,3 +67,66 @@ class AchievementCardInteractionTests(TestCase):
 
         self.assertContains(response, "<strong>Nivå:</strong> Silver", html=True)
         self.assertNotContains(response, "Detaljerad beskrivning")
+
+    def test_modal_shows_completed_requirements_and_distance_to_next_level(self):
+        association = Association.objects.create(name="Testförening")
+        genus = Genus.objects.create(scientific_name="Corydoras")
+        species_a = Species.objects.create(
+            genus=genus,
+            scientific_name="aeneus",
+            common_name="Metallpansarmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        species_b = Species.objects.create(
+            genus=genus,
+            scientific_name="panda",
+            common_name="Pandapansarmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        achievement = Achievement.objects.create(name="Pansarmalsodlare")
+        bronze = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Brons",
+            order=1,
+        )
+        silver = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Silver",
+            order=2,
+        )
+        bronze_requirement = AchievementRequirement.objects.create(
+            level=bronze,
+            kind=AchievementRequirement.Kind.SPECIES_COUNT,
+            value=1,
+        )
+        bronze_requirement.genera.add(genus)
+        silver_requirement = AchievementRequirement.objects.create(
+            level=silver,
+            kind=AchievementRequirement.Kind.SPECIES_COUNT,
+            value=2,
+        )
+        silver_requirement.genera.add(genus)
+        BreedingRegistration.objects.create(
+            owner=self.user,
+            association=association,
+            species=species_a,
+            breeding_date=timezone.localdate(),
+            description="Test",
+            status=BreedingRegistration.Status.APPROVED,
+            awarded_breeding_class=Species.BreedingClass.BRONZE,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=bronze,
+            achievement_name=achievement.name,
+            level_name=bronze.name,
+        )
+
+        response = self.client.get(reverse("breeding_list"))
+
+        self.assertContains(response, "Krav som du har uppfyllt")
+        self.assertContains(response, "1 av 1 art inom Corydoras")
+        self.assertContains(response, "Nästa nivå: Silver")
+        self.assertContains(response, "För att komma upp i nästa nivå behöver du:")
+        self.assertContains(response, "odla en art till inom Corydoras.")
+        self.assertNotContains(response, str(species_b))
