@@ -75,9 +75,9 @@
                 {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
             </div>
         {% endfor %}
-        <input type="submit" value="Spara beslut">
+        <input class="button" type="submit" value="Spara beslut">
         {% if next_registration %}
-            <input type="submit" name="save_and_next" value="Spara och visa nästa">
+            <input class="button" type="submit" name="save_and_next" value="Spara och visa nästa">
         {% endif %}
     </form>
 </div>
