@@ -4,7 +4,15 @@ from django.urls import reverse
 from django.utils import timezone
 
 from associations.models import Association
-from taxonomy.models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
+from taxonomy.models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesGroup,
+    SpeciesLink,
+)
 
 from .models import BreedingRegistration
 
@@ -32,10 +40,10 @@ class SpeciesInformationTests(TestCase):
         self.species.geographies.add(geography)
         group = SpeciesGroup.objects.create(name="Pansarmalar")
         group.species.add(self.species)
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species, scientific_name="Hoplisoma panda"
         )
-        SpeciesSynonym.objects.create(
+        CommonNameSpeciesSynonym.objects.create(
             species=self.species, common_name="Pandamal"
         )
         SpeciesLink.objects.create(
