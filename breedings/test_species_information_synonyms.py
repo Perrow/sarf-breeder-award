@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from taxonomy.models import Genus, Species, SpeciesSynonym
+from taxonomy.models import Genus, ScientificSpeciesSynonym, Species
 
 
 class SpeciesInformationSynonymDisplayTests(TestCase):
@@ -26,7 +26,7 @@ class SpeciesInformationSynonymDisplayTests(TestCase):
         self.assertContains(response, "Populärnamnssynonymer")
 
     def test_scientific_synonym_section_is_shown_when_present(self):
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Hoplisoma panda",
         )

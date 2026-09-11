@@ -14,7 +14,15 @@ from .forms import (
     SpeciesImportForm,
     SpeciesMergeForm,
 )
-from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesGroup,
+    SpeciesLink,
+)
 from .species_import import SpeciesImportError, import_species_file
 from .species_merge import merge_species
 
@@ -41,27 +49,21 @@ class SpeciesGroupAdmin(admin.ModelAdmin):
 
 
 class ScientificSynonymInline(admin.TabularInline):
-    model = SpeciesSynonym
+    model = ScientificSpeciesSynonym
     form = ScientificSynonymForm
     extra = 0
     verbose_name = "vetenskaplig synonym"
     verbose_name_plural = "vetenskapliga synonymer"
     fields = ("genus_name", "species_name")
 
-    def get_queryset(self, request):
-        return super().get_queryset(request).exclude(scientific_name="")
-
 
 class CommonNameSynonymInline(admin.TabularInline):
-    model = SpeciesSynonym
+    model = CommonNameSpeciesSynonym
     form = CommonNameSynonymForm
     extra = 0
     verbose_name = "populärnamnssynonym"
     verbose_name_plural = "populärnamnssynonymer"
     fields = ("common_name",)
-
-    def get_queryset(self, request):
-        return super().get_queryset(request).exclude(common_name="")
 
 
 class SpeciesLinkInline(admin.TabularInline):
@@ -102,8 +104,8 @@ class SpeciesAdmin(admin.ModelAdmin):
         "genus__scientific_name",
         "common_name",
         "english_name",
-        "synonyms__scientific_name",
-        "synonyms__common_name",
+        "scientific_synonyms__scientific_name",
+        "common_name_synonyms__common_name",
     )
     filter_horizontal = ("geographies",)
     inlines = (ScientificSynonymInline, CommonNameSynonymInline, SpeciesLinkInline)
@@ -219,11 +221,13 @@ class SpeciesAdmin(admin.ModelAdmin):
         super().save_related(request, form, formsets, change)
         synonym = form.cleaned_data.get("promote_synonym")
         if synonym is not None:
-            SpeciesSynonym.objects.filter(pk=synonym.pk, species=form.instance).delete()
-            SpeciesSynonym.objects.get_or_create(
+            ScientificSpeciesSynonym.objects.filter(
+                pk=synonym.pk,
+                species=form.instance,
+            ).delete()
+            ScientificSpeciesSynonym.objects.get_or_create(
                 species=form.instance,
                 scientific_name=form.previous_scientific_name,
-                defaults={"common_name": ""},
             )
 
     def get_form(self, request, obj=None, change=False, **kwargs):

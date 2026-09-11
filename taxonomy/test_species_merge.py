@@ -7,7 +7,15 @@ from django.urls import reverse
 
 from associations.models import Association
 from breedings.models import BreedingRegistration
-from .models import Geography, Genus, Species, SpeciesGroup, SpeciesLink, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    Geography,
+    Genus,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesGroup,
+    SpeciesLink,
+)
 from .species_merge import merge_species
 
 
@@ -44,11 +52,11 @@ class SpeciesMergeTests(TestCase):
             breeding_date=date(2026, 9, 10),
             description="Testodling",
         )
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.source,
             scientific_name="Hoplosoma aeneum",
         )
-        SpeciesSynonym.objects.create(
+        CommonNameSpeciesSynonym.objects.create(
             species=self.source,
             common_name="Metallmal",
         )
@@ -69,21 +77,33 @@ class SpeciesMergeTests(TestCase):
         self.assertEqual(breeding.species, self.target)
         self.assertFalse(Species.objects.filter(pk=self.source.pk).exists())
         self.assertTrue(
-            self.target.synonyms.filter(scientific_name="Corydoras aeneus").exists()
+            self.target.scientific_synonyms.filter(scientific_name="Corydoras aeneus").exists()
         )
         self.assertTrue(
-            self.target.synonyms.filter(scientific_name="Hoplosoma aeneum").exists()
+            self.target.scientific_synonyms.filter(scientific_name="Hoplosoma aeneum").exists()
         )
-        self.assertTrue(self.target.synonyms.filter(common_name="Metallpansarmal").exists())
-        self.assertTrue(self.target.synonyms.filter(common_name="Bronze cory").exists())
-        self.assertTrue(self.target.synonyms.filter(common_name="Metallmal").exists())
+        self.assertTrue(
+            self.target.common_name_synonyms.filter(common_name="Metallpansarmal").exists()
+        )
+        self.assertTrue(
+            self.target.common_name_synonyms.filter(common_name="Bronze cory").exists()
+        )
+        self.assertTrue(
+            self.target.common_name_synonyms.filter(common_name="Metallmal").exists()
+        )
         self.assertTrue(self.target.external_links.filter(url="https://example.org/source").exists())
         self.assertTrue(group.species.filter(pk=self.target.pk).exists())
         self.assertTrue(self.target.geographies.filter(pk=geography.pk).exists())
 
     def test_merge_deduplicates_synonyms_links_and_geographies_and_completes_link_metadata(self):
-        SpeciesSynonym.objects.create(species=self.source, common_name="Gemensamt namn")
-        SpeciesSynonym.objects.create(species=self.target, common_name="Gemensamt namn")
+        CommonNameSpeciesSynonym.objects.create(
+            species=self.source,
+            common_name="Gemensamt namn",
+        )
+        CommonNameSpeciesSynonym.objects.create(
+            species=self.target,
+            common_name="Gemensamt namn",
+        )
         SpeciesLink.objects.create(
             species=self.source,
             url="https://example.org/shared",
@@ -103,7 +123,8 @@ class SpeciesMergeTests(TestCase):
         merge_species(self.source, self.target)
 
         self.assertEqual(
-            self.target.synonyms.filter(common_name="Gemensamt namn").count(), 1
+            self.target.common_name_synonyms.filter(common_name="Gemensamt namn").count(),
+            1,
         )
         link = self.target.external_links.get(url="https://example.org/shared")
         self.assertEqual(link.title, "Shared page")
@@ -131,7 +152,7 @@ class SpeciesMergeTests(TestCase):
         breeding.refresh_from_db()
         self.assertEqual(breeding.species, self.source)
         self.assertFalse(
-            self.target.synonyms.filter(scientific_name="Corydoras aeneus").exists()
+            self.target.scientific_synonyms.filter(scientific_name="Corydoras aeneus").exists()
         )
 
 

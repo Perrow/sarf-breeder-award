@@ -2,7 +2,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Genus, Species, SpeciesSynonym
+from .models import Genus, ScientificSpeciesSynonym, Species
 
 
 class SpeciesAdminRenameTests(TestCase):
@@ -32,14 +32,14 @@ class SpeciesAdminRenameTests(TestCase):
             "is_active": "on",
             "geographies": [],
             "promote_synonym": "",
-            "synonyms-TOTAL_FORMS": "0",
-            "synonyms-INITIAL_FORMS": "0",
-            "synonyms-MIN_NUM_FORMS": "0",
-            "synonyms-MAX_NUM_FORMS": "1000",
-            "synonyms-2-TOTAL_FORMS": "0",
-            "synonyms-2-INITIAL_FORMS": "0",
-            "synonyms-2-MIN_NUM_FORMS": "0",
-            "synonyms-2-MAX_NUM_FORMS": "1000",
+            "scientific_synonyms-TOTAL_FORMS": "0",
+            "scientific_synonyms-INITIAL_FORMS": "0",
+            "scientific_synonyms-MIN_NUM_FORMS": "0",
+            "scientific_synonyms-MAX_NUM_FORMS": "1000",
+            "common_name_synonyms-TOTAL_FORMS": "0",
+            "common_name_synonyms-INITIAL_FORMS": "0",
+            "common_name_synonyms-MIN_NUM_FORMS": "0",
+            "common_name_synonyms-MAX_NUM_FORMS": "1000",
             "external_links-TOTAL_FORMS": "0",
             "external_links-INITIAL_FORMS": "0",
             "external_links-MIN_NUM_FORMS": "0",
@@ -64,7 +64,7 @@ class SpeciesAdminRenameTests(TestCase):
         self.assertEqual(self.species.scientific_name, "splendens")
 
     def test_admin_can_promote_scientific_synonym_to_current_name(self):
-        synonym = SpeciesSynonym.objects.create(
+        synonym = ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Brochis splendens",
         )
@@ -75,11 +75,11 @@ class SpeciesAdminRenameTests(TestCase):
             self._post_data(
                 promote_synonym=synonym.pk,
                 **{
-                    "synonyms-TOTAL_FORMS": "1",
-                    "synonyms-INITIAL_FORMS": "1",
-                    "synonyms-0-id": synonym.pk,
-                    "synonyms-0-genus_name": "Brochis",
-                    "synonyms-0-species_name": "splendens",
+                    "scientific_synonyms-TOTAL_FORMS": "1",
+                    "scientific_synonyms-INITIAL_FORMS": "1",
+                    "scientific_synonyms-0-id": synonym.pk,
+                    "scientific_synonyms-0-genus_name": "Brochis",
+                    "scientific_synonyms-0-species_name": "splendens",
                 },
             ),
         )
@@ -89,9 +89,9 @@ class SpeciesAdminRenameTests(TestCase):
         self.assertEqual(self.species.pk, species_pk)
         self.assertEqual(self.species.genus, self.other_genus)
         self.assertEqual(self.species.scientific_name, "splendens")
-        self.assertFalse(SpeciesSynonym.objects.filter(pk=synonym.pk).exists())
+        self.assertFalse(ScientificSpeciesSynonym.objects.filter(pk=synonym.pk).exists())
         self.assertTrue(
-            SpeciesSynonym.objects.filter(
+            ScientificSpeciesSynonym.objects.filter(
                 species=self.species,
                 scientific_name="Corydoras aeneus",
             ).exists()
@@ -104,7 +104,7 @@ class SpeciesAdminRenameTests(TestCase):
             common_name="Annan art",
             breeding_class=Species.BreedingClass.SILVER,
         )
-        synonym = SpeciesSynonym.objects.create(
+        synonym = ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Brochis splendens",
         )
@@ -114,11 +114,11 @@ class SpeciesAdminRenameTests(TestCase):
             self._post_data(
                 promote_synonym=synonym.pk,
                 **{
-                    "synonyms-TOTAL_FORMS": "1",
-                    "synonyms-INITIAL_FORMS": "1",
-                    "synonyms-0-id": synonym.pk,
-                    "synonyms-0-genus_name": "Brochis",
-                    "synonyms-0-species_name": "splendens",
+                    "scientific_synonyms-TOTAL_FORMS": "1",
+                    "scientific_synonyms-INITIAL_FORMS": "1",
+                    "scientific_synonyms-0-id": synonym.pk,
+                    "scientific_synonyms-0-genus_name": "Brochis",
+                    "scientific_synonyms-0-species_name": "splendens",
                 },
             ),
         )
@@ -128,4 +128,4 @@ class SpeciesAdminRenameTests(TestCase):
         self.species.refresh_from_db()
         self.assertEqual(self.species.genus, self.genus)
         self.assertEqual(self.species.scientific_name, "aeneus")
-        self.assertTrue(SpeciesSynonym.objects.filter(pk=synonym.pk).exists())
+        self.assertTrue(ScientificSpeciesSynonym.objects.filter(pk=synonym.pk).exists())

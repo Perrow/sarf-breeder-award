@@ -4,7 +4,12 @@ from unittest.mock import patch
 from django.conf import settings
 from django.test import TestCase
 
-from .models import Species, SpeciesLink, SpeciesSynonym
+from .models import (
+    CommonNameSpeciesSynonym,
+    ScientificSpeciesSynonym,
+    Species,
+    SpeciesLink,
+)
 from .species_import import import_species_file
 
 
@@ -22,15 +27,21 @@ class BundledSpeciesDataTests(TestCase):
             import_species_file(path)
 
         species_count = Species.objects.count()
-        synonym_count = SpeciesSynonym.objects.count()
+        scientific_synonym_count = ScientificSpeciesSynonym.objects.count()
+        common_name_synonym_count = CommonNameSpeciesSynonym.objects.count()
         link_count = SpeciesLink.objects.count()
         self.assertEqual(species_count, 21)
-        self.assertGreater(synonym_count, 0)
+        self.assertGreater(scientific_synonym_count + common_name_synonym_count, 0)
         self.assertGreater(link_count, 0)
 
         for path in files:
             import_species_file(path)
 
         self.assertEqual(Species.objects.count(), species_count)
-        self.assertEqual(SpeciesSynonym.objects.count(), synonym_count)
+        self.assertEqual(
+            ScientificSpeciesSynonym.objects.count(), scientific_synonym_count
+        )
+        self.assertEqual(
+            CommonNameSpeciesSynonym.objects.count(), common_name_synonym_count
+        )
         self.assertEqual(SpeciesLink.objects.count(), link_count)
