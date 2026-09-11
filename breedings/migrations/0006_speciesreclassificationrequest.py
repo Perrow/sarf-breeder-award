@@ -34,6 +34,10 @@ class Migration(migrations.Migration):
         ),
         migrations.AddConstraint(
             model_name="speciesreclassificationrequest",
-            constraint=models.UniqueConstraint(condition=models.Q(("status", "pending")), fields=("species",), name="unique_pending_reclassification_per_species"),
+            constraint=models.UniqueConstraint(
+                condition=models.Q(status="pending"),
+                fields=("species",),
+                name="unique_pending_reclassification_per_species",
+            ),
         ),
     ]
