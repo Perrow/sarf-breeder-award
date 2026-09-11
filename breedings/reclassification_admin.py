@@ -42,7 +42,6 @@ class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
         "created_at",
         "decided_by",
         "decided_at",
-        "decision_comment",
     )
     actions = ("approve_requests", "reject_requests")
 
@@ -60,6 +59,12 @@ class SpeciesReclassificationRequestAdmin(admin.ModelAdmin):
 
     def has_delete_permission(self, request, obj=None):
         return False
+
+    def get_readonly_fields(self, request, obj=None):
+        readonly = list(super().get_readonly_fields(request, obj))
+        if obj is not None and obj.status != SpeciesReclassificationRequest.Status.PENDING:
+            readonly.append("decision_comment")
+        return readonly
 
     @admin.action(description="Godkänn valda omklassningsbegäranden")
     def approve_requests(self, request, queryset):
