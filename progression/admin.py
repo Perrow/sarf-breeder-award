@@ -11,6 +11,7 @@ from .models import (
     AchievementBackground,
     AchievementLevel,
     AchievementRequirement,
+    RequirementTextTemplate,
     UserAchievement,
 )
 from .services import revalidate_achievement
@@ -249,6 +250,28 @@ class AchievementRequirementAdmin(admin.ModelAdmin):
         )
 
 
+@admin.register(RequirementTextTemplate)
+class RequirementTextTemplateAdmin(admin.ModelAdmin):
+    list_display = ("kind", "achieved_template", "next_level_template")
+    fields = ("kind", "achieved_template", "next_level_template")
+    readonly_fields = ("kind",)
+
+    def has_module_permission(self, request):
+        return request.user.is_superuser
+
+    def has_view_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_change_permission(self, request, obj=None):
+        return request.user.is_superuser
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+
 @admin.register(UserAchievement)
 class UserAchievementAdmin(admin.ModelAdmin):
     list_display = (
@@ -286,7 +309,8 @@ def _get_app_list(request, app_label=None):
     progression_order = {
         "Achievement": 0,
         "AchievementBackground": 1,
-        "UserAchievement": 2,
+        "RequirementTextTemplate": 2,
+        "UserAchievement": 3,
     }
     hidden_progression_models = {"AchievementLevel", "AchievementRequirement"}
 
