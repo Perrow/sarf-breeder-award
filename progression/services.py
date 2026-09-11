@@ -4,7 +4,13 @@ from django.utils import timezone
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
-from .models import Achievement, AchievementBackground, AchievementRequirement, UserAchievement
+from .models import (
+    Achievement,
+    AchievementBackground,
+    AchievementRequirement,
+    RequirementTextTemplate,
+    UserAchievement,
+)
 
 
 def _registrations_for(user, year=None):
@@ -211,55 +217,52 @@ def _requirement_scope(requirement):
     return ", ".join(names)
 
 
-def _requirement_target_text(requirement, scope):
-    if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
-        unit = "art" if requirement.value == 1 else "arter"
-        text = f"Odla {requirement.value} {unit}"
-    elif requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
-        unit = "odling" if requirement.value == 1 else "odlingar"
-        text = f"Gör {requirement.value} {unit}"
-    else:
-        text = f"Samla {requirement.value} poäng"
-    if scope:
-        text += f" inom {scope}"
-    return text + "."
+def _unit_forms(kind):
+    if kind == AchievementRequirement.Kind.SPECIES_COUNT:
+        return "art", "arter", "en art"
+    if kind == AchievementRequirement.Kind.BREEDING_COUNT:
+        return "odling", "odlingar", "en odling"
+    return "poäng", "poäng", "1 poäng"
+
+
+def _quantity_text(value, singular, plural, one_text):
+    if value == 1:
+        return one_text
+    return f"{value} {plural}"
 
 
 def _requirement_progress(requirement, registrations):
     current = _requirement_current_value(requirement, registrations)
+    missing = max(requirement.value - current, 0)
     scope = _requirement_scope(requirement)
-    if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
-        unit = "art" if requirement.value == 1 else "arter"
-    elif requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
-        unit = "odling" if requirement.value == 1 else "odlingar"
-    else:
-        unit = "poäng"
-    return {
+    singular, plural, one_text = _unit_forms(requirement.kind)
+    target_unit = singular if requirement.value == 1 else plural
+    missing_unit = singular if missing == 1 else plural
+    context = {
         "current": current,
         "target": requirement.value,
-        "missing": max(requirement.value - current, 0),
-        "unit": unit,
+        "missing": missing,
+        "unit": singular,
+        "target_unit": target_unit,
+        "missing_unit": missing_unit,
+        "target_text": _quantity_text(requirement.value, singular, plural, one_text),
+        "missing_text": _quantity_text(missing, singular, plural, one_text),
         "scope": scope,
-        "summary": _requirement_target_text(requirement, scope),
-        "kind": requirement.kind,
+        "scope_suffix": f" inom {scope}" if scope else "",
     }
-
-
-def _next_requirement_text(progress):
-    missing = progress["missing"]
-    if missing <= 0:
-        return "Kravet är redan uppfyllt."
-
-    if progress["kind"] == AchievementRequirement.Kind.SPECIES_COUNT:
-        action = "odla en art till" if missing == 1 else f"odla {missing} arter till"
-    elif progress["kind"] == AchievementRequirement.Kind.BREEDING_COUNT:
-        action = "göra en odling till" if missing == 1 else f"göra {missing} odlingar till"
-    else:
-        action = "samla 1 poäng till" if missing == 1 else f"samla {missing} poäng till"
-
-    if progress["scope"]:
-        action += f" inom {progress['scope']}"
-    return action + "."
+    achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
+        requirement.kind
+    )
+    return {
+        **context,
+        "kind": requirement.kind,
+        "achieved_text": achieved_template.format(**context),
+        "remaining_text": (
+            "Kravet är redan uppfyllt."
+            if missing <= 0
+            else next_template.format(**context)
+        ),
+    }
 
 
 def _presentation_for(earned, all_registrations=None):
@@ -299,8 +302,6 @@ def _presentation_for(earned, all_registrations=None):
             _requirement_progress(requirement, registrations)
             for requirement in next_level.requirements.all()
         ]
-        for progress in next_progress:
-            progress["remaining_text"] = _next_requirement_text(progress)
 
     return {
         "earned": earned,
