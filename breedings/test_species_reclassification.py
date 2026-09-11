@@ -162,10 +162,10 @@ class SpeciesReclassificationTests(TestCase):
 
         self.client.force_login(self.manager)
         response = self.client.post(
-            reverse("admin:breedings_speciesreclassificationrequest_changelist"),
+            reverse("admin:breedings_speciesreclassificationrequest_change", args=[request.pk]),
             {
-                "action": "approve_requests",
-                "_selected_action": [request.pk],
+                "decision_comment": "Godkänd efter granskning",
+                "_approve": "Godkänn",
             },
             follow=True,
         )
@@ -204,13 +204,19 @@ class SpeciesReclassificationTests(TestCase):
         )
         self.client.force_login(self.manager)
 
-        self.client.post(
-            reverse("admin:breedings_speciesreclassificationrequest_changelist"),
-            {"action": "reject_requests", "_selected_action": [request.pk]},
+        response = self.client.post(
+            reverse("admin:breedings_speciesreclassificationrequest_change", args=[request.pk]),
+            {
+                "decision_comment": "Avslås efter granskning",
+                "_reject": "Avslå",
+            },
             follow=True,
         )
 
+        self.assertEqual(response.status_code, 200)
         request.refresh_from_db()
         self.species.refresh_from_db()
         self.assertEqual(request.status, SpeciesReclassificationRequest.Status.REJECTED)
+        self.assertEqual(request.decided_by, self.manager)
+        self.assertIsNotNone(request.decided_at)
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.SILVER)
