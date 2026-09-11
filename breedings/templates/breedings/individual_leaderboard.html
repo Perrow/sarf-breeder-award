@@ -12,12 +12,11 @@
 <div class="table-responsive">
 <table class="table table-striped align-middle">
     <thead>
-        <tr><th scope="col">Placering</th><th scope="col">Användare</th><th scope="col">Poäng</th></tr>
+        <tr><th scope="col">Användare</th><th scope="col">Poäng</th></tr>
     </thead>
     <tbody>
         {% for row in leaderboard %}
         <tr>
-            <td>{{ forloop.counter }}</td>
             <td>{{ row.name }}</td>
             <td>{{ row.points }}</td>
         </tr>
