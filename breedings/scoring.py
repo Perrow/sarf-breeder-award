@@ -35,6 +35,14 @@ def points_for_registration(registration):
     return points_for_breeding_class(registration.awarded_breeding_class)
 
 
+def competition_points_for_registration(registration, year):
+    if registration.status != BreedingRegistration.Status.APPROVED:
+        return None
+    if year == timezone.localdate().year and registration.species_id:
+        return points_for_breeding_class(registration.species.breeding_class)
+    return points_for_registration(registration)
+
+
 def registration_is_timely_for_competition_year(registration, year):
     if registration.breeding_date.year != year:
         return False
@@ -74,23 +82,28 @@ def career_points(user):
 
 
 def competition_points(user, year):
-    registrations = BreedingRegistration.objects.filter(
-        owner=user,
-        status=BreedingRegistration.Status.APPROVED,
-        breeding_date__year=year,
-    ).only(
-        "species_id",
-        "status",
-        "awarded_breeding_class",
-        "breeding_date",
-        "submitted_at",
+    registrations = (
+        BreedingRegistration.objects.filter(
+            owner=user,
+            status=BreedingRegistration.Status.APPROVED,
+            breeding_date__year=year,
+        )
+        .select_related("species")
+        .only(
+            "species_id",
+            "species__breeding_class",
+            "status",
+            "awarded_breeding_class",
+            "breeding_date",
+            "submitted_at",
+        )
     )
 
     best_points_by_species = {}
     for registration in registrations:
         if not registration_is_timely_for_competition_year(registration, year):
             continue
-        points = points_for_registration(registration)
+        points = competition_points_for_registration(registration, year)
         if points is None:
             continue
         if registration.species_id is None:
@@ -188,6 +201,7 @@ def _association_year_results(association, year):
             "owner_id",
             "species_id",
             "species__genus_id",
+            "species__breeding_class",
             "status",
             "awarded_breeding_class",
             "breeding_date",
@@ -198,7 +212,7 @@ def _association_year_results(association, year):
     for registration in registrations:
         if not registration_is_timely_for_competition_year(registration, year):
             continue
-        points = points_for_registration(registration)
+        points = competition_points_for_registration(registration, year)
         if points is not None and registration.species_id is not None:
             registrations_by_user[registration.owner_id].append((registration, points))
 
