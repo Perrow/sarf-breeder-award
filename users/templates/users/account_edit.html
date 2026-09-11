@@ -8,6 +8,7 @@
 
     <form method="post" class="site-form">
         {% csrf_token %}
+        <p class="text-body-secondary">För- och efternamn är frivilliga och visas bara för administratörer. Föreningarnas administratörer kan ta bort ditt medlemskap om de inte kan avgöra vem du är.</p>
         {{ form.as_p }}
         <div class="form-actions">
             <button class="btn btn-primary" type="submit">Spara</button>
