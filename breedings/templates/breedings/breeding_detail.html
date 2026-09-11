@@ -23,24 +23,60 @@
     </div>
 </div>
 
+{% if registration.species %}
+<div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+    <div>
+        <h2 class="h3 mb-1"><em>{{ registration.species }}</em></h2>
+        {% if registration.species.common_name or registration.species.english_name %}
+            <p class="lead mb-1">{{ registration.species.common_name }}{% if registration.species.english_name %}{% if registration.species.common_name %} · {% endif %}{{ registration.species.english_name }}{% endif %}</p>
+        {% endif %}
+        <p class="text-body-secondary mb-0">Din odling: {{ registration.breeding_date }}</p>
+    </div>
+    <span class="badge text-bg-secondary fs-6">{{ registration.species.get_breeding_class_display }}</span>
+</div>
+{% else %}
+<div class="mb-4">
+    <h2 class="h4">Föreslagen art</h2>
+    <p class="mb-1"><em>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</em>{% if registration.proposed_common_name %} · {{ registration.proposed_common_name }}{% endif %}</p>
+    <p class="text-body-secondary mb-0">Din odling: {{ registration.breeding_date }}</p>
+</div>
+{% endif %}
+
 <dl class="row">
-    <dt class="col-sm-4">Användare</dt><dd class="col-sm-8">{{ registration.owner }}</dd>
     <dt class="col-sm-4">Förening</dt><dd class="col-sm-8">{{ registration.association }}</dd>
-    <dt class="col-sm-4">Art</dt><dd class="col-sm-8">{% if registration.species %}{{ registration.species }}{% else %}Inte vald{% endif %}</dd>
-    <dt class="col-sm-4">Föreslaget släkte</dt><dd class="col-sm-8">{{ registration.proposed_genus_name|default:"–" }}</dd>
-    <dt class="col-sm-4">Föreslaget artnamn</dt><dd class="col-sm-8">{{ registration.proposed_species_name|default:"–" }}</dd>
-    <dt class="col-sm-4">Föreslaget populärnamn</dt><dd class="col-sm-8">{{ registration.proposed_common_name|default:"–" }}</dd>
-    <dt class="col-sm-4">Taxonomi behöver lösas</dt><dd class="col-sm-8">{{ registration.taxonomy_needs_resolution|yesno:"Ja,Nej" }}</dd>
-    <dt class="col-sm-4">Odlingsdatum</dt><dd class="col-sm-8">{{ registration.breeding_date }}</dd>
-    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|linebreaksbr }}</dd>
+    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|default:"–"|linebreaksbr }}</dd>
     <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ registration.get_status_display }}</dd>
     <dt class="col-sm-4">Inskickad</dt><dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
     <dt class="col-sm-4">Godkänd</dt><dd class="col-sm-8">{{ registration.approved_at|default:"–" }}</dd>
     <dt class="col-sm-4">Tilldelad odlingsklass</dt><dd class="col-sm-8">{{ registration.get_awarded_breeding_class_display|default:"–" }}</dd>
     <dt class="col-sm-4">Tilldelade poäng</dt><dd class="col-sm-8">{{ registration.awarded_points|default_if_none:"–" }}</dd>
-    <dt class="col-sm-4">Granskare</dt><dd class="col-sm-8">{{ registration.reviewer|default:"–" }}</dd>
     <dt class="col-sm-4">Granskningskommentar</dt><dd class="col-sm-8">{{ registration.review_comment|default:"–"|linebreaksbr }}</dd>
 </dl>
 
-<p><a href="{% url 'breeding_list' %}">Till mina odlingar</a></p>
+{% if registration.species %}
+<section class="mt-4">
+    <h2 class="h4">Andra odlingar av samma art</h2>
+    {% if other_breedings %}
+    <div class="table-responsive">
+        <table class="table align-middle">
+            <thead><tr><th>Datum</th><th>Odlare</th><th>Förening</th><th>Klass</th></tr></thead>
+            <tbody>
+            {% for breeding in other_breedings %}
+                <tr>
+                    <td>{{ breeding.breeding_date }}</td>
+                    <td>{{ breeding.breeder }}</td>
+                    <td>{{ breeding.association }}</td>
+                    <td>{{ breeding.breeding_class }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+        <p>Det finns inga andra godkända odlingar registrerade för arten.</p>
+    {% endif %}
+</section>
+{% endif %}
+
+<p class="mt-4"><a href="{% url 'breeding_list' %}">Till mina odlingar</a></p>
 {% endblock %}
