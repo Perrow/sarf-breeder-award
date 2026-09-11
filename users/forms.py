@@ -8,6 +8,10 @@ from .models import User
 
 
 PUBLIC_USERNAME_HELP = "Detta namn visas offentligt, bland annat i topplistor."
+PRIVATE_NAME_HELP = (
+    "För- och efternamn är frivilliga och visas bara för administratörer. "
+    "Föreningarnas administratörer kan ta bort ditt medlemskap om de inte kan avgöra vem du är."
+)
 
 
 def _association_field():
@@ -115,6 +119,18 @@ class EmailAuthenticationForm(AuthenticationForm):
 
 
 class ProfileForm(forms.ModelForm):
+    first_name = forms.CharField(
+        label="Förnamn",
+        max_length=150,
+        required=False,
+        help_text=PRIVATE_NAME_HELP,
+    )
+    last_name = forms.CharField(
+        label="Efternamn",
+        max_length=150,
+        required=False,
+        help_text=PRIVATE_NAME_HELP,
+    )
     display_name = forms.CharField(label="Visningsnamn", max_length=150)
     public_username = forms.CharField(
         label="Publikt användarnamn",
@@ -125,7 +141,14 @@ class ProfileForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ("public_username", "display_name", "location", "avatar_url")
+        fields = (
+            "first_name",
+            "last_name",
+            "public_username",
+            "display_name",
+            "location",
+            "avatar_url",
+        )
         labels = {
             "location": "Ort",
             "avatar_url": "Profilbild (URL)",
@@ -153,6 +176,12 @@ class ProfileForm(forms.ModelForm):
         if not display_name:
             raise forms.ValidationError("Ange ett visningsnamn.")
         return display_name
+
+    def clean_first_name(self):
+        return self.cleaned_data["first_name"].strip()
+
+    def clean_last_name(self):
+        return self.cleaned_data["last_name"].strip()
 
     def clean_location(self):
         return self.cleaned_data["location"].strip()
