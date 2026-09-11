@@ -6,8 +6,8 @@
 <p><a href="{% url 'association_scoring_rules' %}?year={{ selected_year }}">Så räknas föreningspoängen och vilka begränsningar gäller</a></p>
 {% include "breedings/includes/leaderboard_year_selector.html" %}
 {% if leaderboard %}
-<div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Placering</th><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead><tbody>
-{% for row in leaderboard %}<tr><td>{{ forloop.counter }}</td><td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}">{{ row.association.name }}</a></td><td class="text-end">{{ row.grower_count }}</td><td class="text-end">{{ row.points }}</td></tr>{% endfor %}
+<div class="table-responsive"><table class="table table-striped align-middle"><thead><tr><th>Förening</th><th class="text-end">Antal odlare</th><th class="text-end">Poäng</th></tr></thead><tbody>
+{% for row in leaderboard %}<tr><td><a href="{% url 'association_member_leaderboard' row.association.pk %}?year={{ selected_year }}">{{ row.association.name }}</a></td><td class="text-end">{{ row.grower_count }}</td><td class="text-end">{{ row.points }}</td></tr>{% endfor %}
 </tbody></table></div>
 {% else %}<p>Det finns inga godkända odlingsresultat för {{ selected_year }}.</p>{% endif %}
 {% endblock %}
