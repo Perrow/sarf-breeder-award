@@ -8,10 +8,6 @@ from .models import User
 
 
 PUBLIC_USERNAME_HELP = "Detta namn visas offentligt, bland annat i topplistor."
-PRIVATE_NAME_HELP = (
-    "För- och efternamn är frivilliga och visas bara för administratörer. "
-    "Föreningarnas administratörer kan ta bort ditt medlemskap om de inte kan avgöra vem du är."
-)
 
 
 def _association_field():
@@ -123,13 +119,11 @@ class ProfileForm(forms.ModelForm):
         label="Förnamn",
         max_length=150,
         required=False,
-        help_text=PRIVATE_NAME_HELP,
     )
     last_name = forms.CharField(
         label="Efternamn",
         max_length=150,
         required=False,
-        help_text=PRIVATE_NAME_HELP,
     )
     display_name = forms.CharField(label="Visningsnamn", max_length=150)
     public_username = forms.CharField(
