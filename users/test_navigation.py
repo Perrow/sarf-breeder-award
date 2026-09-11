@@ -26,10 +26,13 @@ class NavigationTests(TestCase):
     def test_anonymous_login_is_presented_as_button(self):
         navigation = self._navigation_html(self.client.get(reverse("home")))
 
-        self.assertIn(
-            f'<a class="btn btn-primary ms-md-2" href="{reverse("login")}">Logga in</a>',
-            navigation,
-        )
+        login_href = f'href="{reverse("login")}"'
+        self.assertIn(login_href, navigation)
+        login_anchor_start = navigation.rfind("<a ", 0, navigation.index("Logga in"))
+        login_anchor_end = navigation.index("</a>", login_anchor_start)
+        login_anchor = navigation[login_anchor_start:login_anchor_end]
+        self.assertIn("btn", login_anchor)
+        self.assertIn("btn-primary", login_anchor)
 
     def test_logout_remains_a_post_action(self):
         user = get_user_model().objects.create_user(

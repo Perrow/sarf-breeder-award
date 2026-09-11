@@ -1,53 +1,100 @@
 {% extends "base.html" %}
 
 {% block title %}Startsida | Odlingskampanjen{% endblock %}
+{% block main_class %}flex-grow-1{% endblock %}
 
 {% block content %}
-<section class="py-5">
-    <div class="row justify-content-center">
-        <div class="col-12 col-lg-9">
-            <div class="text-center mb-5">
-                <h1 class="display-5 fw-semibold">Odlingskampanjen</h1>
-                <p class="lead mt-3">
-                    Odlingskampanjen vill inspirera akvarister att odla fler akvariefiskar och samtidigt
-                    bidra till att samla erfarenhet och kunskap om arternas förutsättningar och behov.
-                </p>
-            </div>
+<section class="page-intro">
+    <div class="container site-shell">
+        <div class="section-eyebrow">Sveriges akvarieföreningars riksförbund</div>
+        <h1>Odlingskampanjen</h1>
+        <p class="lead">
+            Odlingskampanjen vill inspirera akvarister att odla fler akvariefiskar och samtidigt bidra
+            till att samla erfarenhet och kunskap om arternas förutsättningar och behov.
+        </p>
+        <div class="d-flex flex-wrap gap-2 mt-4">
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary px-4 py-2" href="{% url 'species_select' %}">Registrera odling</a>
+                <a class="btn btn-outline-primary px-4 py-2" href="{% url 'breeding_list' %}">Min sida</a>
+            {% else %}
+                <a class="btn btn-primary px-4 py-2" href="{% url 'register' %}">Skapa konto</a>
+                <a class="btn btn-outline-primary px-4 py-2" href="{% url 'leaderboards' %}">Visa topplistor</a>
+            {% endif %}
+        </div>
+    </div>
+</section>
 
-            <div class="row g-4">
-                <div class="col-12 col-md-6">
-                    <div class="h-100 p-4 border rounded-3 bg-body-tertiary">
-                        <h2 class="h4">Vem kan delta?</h2>
-                        <p class="mb-0">
-                            Akvarister som är medlemmar i en förening ansluten till Sveriges
-                            akvarieföreningars riksförbund (SARF) kan delta i Odlingskampanjen.
-                        </p>
-                    </div>
-                </div>
-                <div class="col-12 col-md-6">
-                    <div class="h-100 p-4 border rounded-3 bg-body-tertiary">
-                        <h2 class="h4">Vad registreras?</h2>
-                        <p class="mb-0">
-                            Du registrerar dina lyckade odlingar. Arterna klassificeras efter
-                            odlingssvårighet och uppgifterna används för att följa odlingsresultat
-                            över tid.
-                        </p>
-                    </div>
-                </div>
-            </div>
+<div class="container site-shell">
+    <div class="aquarium-hero" role="img" aria-label="Stiliserad akvariemiljö i gröna och blå toner"></div>
+</div>
 
-            <div class="mt-5 text-center text-body-secondary">
-                <p class="mb-2">
-                    Den här tjänsten är den nya digitala versionen av SARF:s Odlingskampanj.
+<section class="section-block">
+    <div class="container site-shell">
+        <div class="editorial-note p-4 p-md-5">
+            <div class="section-eyebrow">Odlingskampanjen</div>
+            <h2 class="h3 mt-2 mb-3">Odla, registrera och följ resultaten</h2>
+            <p class="mb-0">
+                Akvarister som är medlemmar i en förening ansluten till SARF kan delta. Du registrerar
+                dina lyckade odlingar och arterna klassificeras efter odlingssvårighet. Resultaten används
+                för att följa odlingen över tid och uppmärksamma både odlare och föreningar.
+            </p>
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container site-shell">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 split-copy">
+                <div class="section-eyebrow">Registrering</div>
+                <h2 class="section-title">Registrera din odling</h2>
+                <p class="mt-4">
+                    Välj arten du har odlat, ange datum och de uppgifter som behövs för registreringen.
+                    Kända bronsarter kan godkännas direkt medan andra odlingar skickas vidare för granskning.
                 </p>
-                <p class="mb-0">
-                    <a href="https://sites.google.com/view/sarfakvarist/aktiviteter/odlingskampanjen"
-                       target="_blank" rel="noopener noreferrer">
-                        Läs om Odlingskampanjen hos SARF
-                    </a>
-                </p>
+                {% if user.is_authenticated %}
+                    <a class="btn btn-primary px-4 py-2 mt-2" href="{% url 'species_select' %}">Registrera odling</a>
+                {% else %}
+                    <a class="btn btn-primary px-4 py-2 mt-2" href="{% url 'login' %}">Logga in för att registrera</a>
+                {% endif %}
+            </div>
+            <div class="col-lg-6">
+                <div class="aquarium-panel" role="img" aria-label="Stiliserad akvariemiljö"></div>
             </div>
         </div>
+    </div>
+</section>
+
+<section class="section-block soft-band">
+    <div class="container site-shell">
+        <div class="row g-5 align-items-center">
+            <div class="col-lg-6 order-lg-2">
+                <div class="section-eyebrow">Resultat</div>
+                <h2 class="section-title">Följ odlingen i topplistorna</h2>
+                <p class="mt-4">
+                    Se hur föreningarna ligger till och byt till andra topplistor eller tidigare år när du vill
+                    fördjupa dig i resultaten.
+                </p>
+                <a class="btn btn-outline-primary px-4 py-2 mt-2" href="{% url 'leaderboards' %}">Visa topplistor</a>
+            </div>
+            <div class="col-lg-6 order-lg-1">
+                <div class="aquarium-panel" role="img" aria-label="Stiliserad akvariemiljö"></div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="section-block">
+    <div class="container site-shell rules-copy">
+        <div class="section-eyebrow">Så fungerar det</div>
+        <h2 class="section-title">Odlingsklasser</h2>
+        <p class="mt-4">
+            Arterna är indelade i brons, silver och guld efter odlingssvårighet. Klassningen används när
+            odlingar registreras och ligger till grund för poäng, statistik och utmärkelser.
+        </p>
+        {% if user.is_authenticated %}
+            <p class="mb-0"><a href="{% url 'species_catalogue' %}">Utforska arter och deras odlingsklass</a></p>
+        {% endif %}
     </div>
 </section>
 {% endblock %}
