@@ -29,7 +29,10 @@ class UserProfileTests(TestCase):
         self.assertNotContains(response, "Visningsnamn")
         self.assertNotContains(response, 'name="public_username"')
 
-    def test_user_can_update_own_profile_on_edit_page(self):
+    def test_user_can_update_own_profile_on_edit_page_without_changing_avatar(self):
+        self.user.avatar_url = "https://example.com/original.jpg"
+        self.user.save(update_fields=("avatar_url",))
+
         response = self.client.post(
             reverse("account_edit"),
             {
@@ -45,7 +48,7 @@ class UserProfileTests(TestCase):
         self.user.refresh_from_db()
         self.assertEqual(self.user.public_username, "PellePublic")
         self.assertEqual(self.user.location, "Uppsala")
-        self.assertEqual(self.user.avatar_url, "https://example.com/pelle.jpg")
+        self.assertEqual(self.user.avatar_url, "https://example.com/original.jpg")
 
         account_response = self.client.get(reverse("account"))
         self.assertContains(account_response, "PellePublic")
