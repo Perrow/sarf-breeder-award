@@ -15,17 +15,15 @@ class UserProfileValidationTests(TestCase):
             username="other@example.com",
             email="other@example.com",
             password="test-password-123",
-            display_name="Oförändrad",
             public_username="OtherUser",
         )
         self.client.force_login(self.user)
 
-    def test_whitespace_display_name_is_rejected(self):
+    def test_whitespace_public_username_is_rejected(self):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "public_username": "ProfileValidation",
-                "display_name": "   ",
+                "public_username": "   ",
                 "location": "Uppsala",
                 "avatar_url": "",
             },
@@ -39,7 +37,6 @@ class UserProfileValidationTests(TestCase):
             reverse("account_edit"),
             {
                 "public_username": "ProfileValidation",
-                "display_name": "Pelle",
                 "location": "Uppsala",
                 "avatar_url": "inte-en-url",
             },
@@ -52,8 +49,7 @@ class UserProfileValidationTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "public_username": "ProfileValidation",
-                "display_name": "Pelle",
+                "public_username": "ProfileValidationChanged",
                 "location": "Uppsala",
                 "avatar_url": "",
                 "user_id": self.other_user.pk,
@@ -62,4 +58,4 @@ class UserProfileValidationTests(TestCase):
 
         self.assertRedirects(response, reverse("account"))
         self.other_user.refresh_from_db()
-        self.assertEqual(self.other_user.display_name, "Oförändrad")
+        self.assertEqual(self.other_user.public_username, "OtherUser")
