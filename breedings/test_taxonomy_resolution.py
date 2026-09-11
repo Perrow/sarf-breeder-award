@@ -6,7 +6,7 @@ from django.utils import timezone
 
 from associations.admin import ASSOCIATION_ADMIN_GROUP
 from associations.models import Association, Membership
-from taxonomy.models import Genus, Species, SpeciesSynonym
+from taxonomy.models import Genus, ScientificSpeciesSynonym, Species
 
 from .models import BreedingRegistration
 
@@ -75,7 +75,7 @@ class TaxonomyResolutionTests(TestCase):
         self.assertContains(response, 'id="taxonomy-submit"')
 
     def test_shared_search_finds_synonym_and_returns_current_name(self):
-        SpeciesSynonym.objects.create(
+        ScientificSpeciesSynonym.objects.create(
             species=self.species,
             scientific_name="Apistogramma oldname",
         )
