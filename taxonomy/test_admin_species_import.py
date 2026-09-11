@@ -5,7 +5,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Species, SpeciesLink, SpeciesSynonym
+from .models import CommonNameSpeciesSynonym, ScientificSpeciesSynonym, Species, SpeciesLink
 
 
 class SpeciesAdminImportTests(TestCase):
@@ -77,7 +77,8 @@ class SpeciesAdminImportTests(TestCase):
         self.assertContains(response, "Importen slutfördes")
         self.assertContains(response, "Skapade 1, återanvända 0")
         self.assertEqual(Species.objects.count(), 1)
-        self.assertEqual(SpeciesSynonym.objects.count(), 3)
+        self.assertEqual(ScientificSpeciesSynonym.objects.count(), 1)
+        self.assertEqual(CommonNameSpeciesSynonym.objects.count(), 2)
         self.assertEqual(SpeciesLink.objects.count(), 1)
 
     def test_reimport_does_not_create_duplicates(self):
@@ -88,7 +89,8 @@ class SpeciesAdminImportTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertEqual(Species.objects.count(), 1)
-        self.assertEqual(SpeciesSynonym.objects.count(), 3)
+        self.assertEqual(ScientificSpeciesSynonym.objects.count(), 1)
+        self.assertEqual(CommonNameSpeciesSynonym.objects.count(), 2)
         self.assertEqual(SpeciesLink.objects.count(), 1)
 
     def test_invalid_file_shows_error_without_partial_species(self):
