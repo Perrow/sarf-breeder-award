@@ -1,6 +1,6 @@
 from django.urls import path
 
-from . import delete_actions, report_detail, species_search, user_actions, views
+from . import delete_actions, reclassification, report_detail, species_search, user_actions, views
 
 urlpatterns = [
     path("topplistor/", views.leaderboards, name="leaderboards"),
@@ -23,6 +23,11 @@ urlpatterns = [
     ),
     path("arter/", species_search.species_catalogue, name="species_catalogue"),
     path("arter/<int:pk>/", species_search.species_information, name="species_information"),
+    path(
+        "arter/<int:pk>/omklassificera/",
+        reclassification.request_species_reclassification,
+        name="species_reclassification_request",
+    ),
     path("odlingar/", views.breeding_list, name="breeding_list"),
     path("odlingar/valj-art/", species_search.species_select, name="species_select"),
     path("odlingar/artsok/", species_search.species_search_results, name="species_search_results"),
