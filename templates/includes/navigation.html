@@ -6,10 +6,10 @@
         </button>
         <div class="collapse navbar-collapse" id="mainNavigation">
             <ul class="navbar-nav ms-auto mb-2 mb-md-0">
-                <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
                 {% if user.is_authenticated %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'species_catalogue' %}">Arter</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'breeding_list' %}">Min sida</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'species_catalogue' %}">Arter</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">Konto</a></li>
                     <li class="nav-item">
                         <form method="post" action="{% url 'logout' %}">
@@ -18,7 +18,8 @@
                         </form>
                     </li>
                 {% else %}
-                    <li class="nav-item"><a class="nav-link" href="{% url 'login' %}">Logga in</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
+                    <li class="nav-item d-flex align-items-center"><a class="btn btn-primary ms-md-2" href="{% url 'login' %}">Logga in</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Skapa konto</a></li>
                 {% endif %}
             </ul>
