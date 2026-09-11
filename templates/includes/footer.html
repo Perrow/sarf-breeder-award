@@ -2,8 +2,15 @@
     <div class="container site-shell">
         <div class="row g-4 align-items-start">
             <div class="col-md-7">
-                <p class="h5 mb-2 text-white">Sveriges akvarieföreningars riksförbund</p>
-                <p class="mb-0">Odlingskampanjen uppmuntrar akvarister att odla fler arter och dela resultaten med föreningsrörelsen.</p>
+                <div class="d-flex align-items-start gap-3">
+                    {% if site_branding and site_branding.footer_logo %}
+                        <img src="{{ site_branding.footer_logo.url }}" alt="" style="max-height:80px;max-width:140px;width:auto;height:auto;" aria-hidden="true">
+                    {% endif %}
+                    <div>
+                        <p class="h5 mb-2 text-white">Sveriges akvarieföreningars riksförbund</p>
+                        <p class="mb-0">Odlingskampanjen uppmuntrar akvarister att odla fler arter och dela resultaten med föreningsrörelsen.</p>
+                    </div>
+                </div>
             </div>
             <div class="col-md-5 text-md-end">
                 <p class="mb-1 fw-semibold text-white">Odlingskampanjen</p>
