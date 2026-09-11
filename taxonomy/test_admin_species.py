@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from .admin import CommonNameSynonymInline, ScientificSynonymInline, SpeciesAdmin
-from .models import Genus, Species, SpeciesGroup, SpeciesSynonym
+from .models import Genus, ScientificSpeciesSynonym, Species, SpeciesGroup
 
 
 class SpeciesAdminTests(TestCase):
@@ -28,14 +28,14 @@ class SpeciesAdminTests(TestCase):
 
     def _empty_synonym_management_forms(self):
         return {
-            "synonyms-TOTAL_FORMS": "0",
-            "synonyms-INITIAL_FORMS": "0",
-            "synonyms-MIN_NUM_FORMS": "0",
-            "synonyms-MAX_NUM_FORMS": "1000",
-            "synonyms-2-TOTAL_FORMS": "0",
-            "synonyms-2-INITIAL_FORMS": "0",
-            "synonyms-2-MIN_NUM_FORMS": "0",
-            "synonyms-2-MAX_NUM_FORMS": "1000",
+            "scientific_synonyms-TOTAL_FORMS": "0",
+            "scientific_synonyms-INITIAL_FORMS": "0",
+            "scientific_synonyms-MIN_NUM_FORMS": "0",
+            "scientific_synonyms-MAX_NUM_FORMS": "1000",
+            "common_name_synonyms-TOTAL_FORMS": "0",
+            "common_name_synonyms-INITIAL_FORMS": "0",
+            "common_name_synonyms-MIN_NUM_FORMS": "0",
+            "common_name_synonyms-MAX_NUM_FORMS": "1000",
         }
 
     def _empty_links_management_form(self):
@@ -128,16 +128,16 @@ class SpeciesAdminTests(TestCase):
             "english_name": "",
             "breeding_class": Species.BreedingClass.BRONZE,
             "is_active": "on",
-            "synonyms-TOTAL_FORMS": "1",
-            "synonyms-INITIAL_FORMS": "0",
-            "synonyms-MIN_NUM_FORMS": "0",
-            "synonyms-MAX_NUM_FORMS": "1000",
-            "synonyms-0-genus_name": "Hoplisoma",
-            "synonyms-0-species_name": "aeneum",
-            "synonyms-2-TOTAL_FORMS": "0",
-            "synonyms-2-INITIAL_FORMS": "0",
-            "synonyms-2-MIN_NUM_FORMS": "0",
-            "synonyms-2-MAX_NUM_FORMS": "1000",
+            "scientific_synonyms-TOTAL_FORMS": "1",
+            "scientific_synonyms-INITIAL_FORMS": "0",
+            "scientific_synonyms-MIN_NUM_FORMS": "0",
+            "scientific_synonyms-MAX_NUM_FORMS": "1000",
+            "scientific_synonyms-0-genus_name": "Hoplisoma",
+            "scientific_synonyms-0-species_name": "aeneum",
+            "common_name_synonyms-TOTAL_FORMS": "0",
+            "common_name_synonyms-INITIAL_FORMS": "0",
+            "common_name_synonyms-MIN_NUM_FORMS": "0",
+            "common_name_synonyms-MAX_NUM_FORMS": "1000",
             "_save": "Spara",
         }
         post_data.update(self._empty_links_management_form())
@@ -149,14 +149,17 @@ class SpeciesAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertTrue(
-            SpeciesSynonym.objects.filter(
+            ScientificSpeciesSynonym.objects.filter(
                 species=self.species,
                 scientific_name="Hoplisoma aeneum",
             ).exists()
         )
 
     def test_admin_searches_species_by_synonym(self):
-        SpeciesSynonym.objects.create(species=self.species, scientific_name="Hoplisoma aeneum")
+        ScientificSpeciesSynonym.objects.create(
+            species=self.species,
+            scientific_name="Hoplisoma aeneum",
+        )
         response = self.client.get(
             reverse("admin:taxonomy_species_changelist"),
             {"q": "Hoplisoma"},
