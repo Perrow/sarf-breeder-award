@@ -7,6 +7,12 @@
     <h1>Odlingsrapport</h1>
     <div class="d-flex gap-2">
         <a class="btn btn-outline-primary" href="{% url 'breeding_edit' registration.pk %}">Redigera</a>
+        {% if registration.status == "submitted" %}
+            <form method="post" action="{% url 'breeding_return_to_draft' registration.pk %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-primary" type="submit">Återgå till utkast</button>
+            </form>
+        {% endif %}
         <form method="post" action="{% url 'breeding_delete' registration.pk %}" onsubmit="return confirm('Vill du verkligen ta bort odlingsrapporten?');">
             {% csrf_token %}
             <button class="btn btn-outline-danger" type="submit">Ta bort</button>

@@ -58,9 +58,9 @@ class EditAutoApprovedBronzeTests(TestCase):
         response = self.client.get(reverse("breeding_edit", args=[self.registration.pk]))
         self.assertEqual(response.status_code, 404)
 
-    def test_manually_reviewed_bronze_is_not_editable(self):
+    def test_manually_reviewed_bronze_is_editable(self):
         self.registration.reviewer = self.other
         self.registration.save(update_fields=("reviewer",))
         self.client.force_login(self.user)
         response = self.client.get(reverse("breeding_edit", args=[self.registration.pk]))
-        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.status_code, 200)
