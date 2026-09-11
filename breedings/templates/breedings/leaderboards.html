@@ -6,8 +6,8 @@
 <h1>Topplistor</h1>
 
 <div class="btn-group mb-4" role="group" aria-label="Typ av topplista">
-    <a class="btn {% if leaderboard_type == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?type=individual&year={{ selected_year }}">Individuell</a>
     <a class="btn {% if leaderboard_type == 'association' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?type=association&year={{ selected_year }}">Förening</a>
+    <a class="btn {% if leaderboard_type == 'individual' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?type=individual&year={{ selected_year }}">Individuell</a>
 </div>
 
 {% include "breedings/includes/leaderboard_year_selector.html" %}
