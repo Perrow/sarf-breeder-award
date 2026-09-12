@@ -18,17 +18,18 @@
 {% if rows %}
 <div class="table-responsive">
 <table class="table table-striped align-middle">
+    <caption class="visually-hidden">Odlingar för {{ member_name }} under {{ selected_year }}</caption>
     <thead>
         <tr>
-            <th>Art</th>
-            <th>Odlingsdatum</th>
-            <th class="text-end">Poäng</th>
+            <th scope="col">Art</th>
+            <th scope="col">Odlingsdatum</th>
+            <th scope="col" class="text-end">Poäng</th>
         </tr>
     </thead>
     <tbody>
         {% for row in rows %}
         <tr>
-            <td>{{ row.registration.species }}</td>
+            <th scope="row" class="fw-normal">{{ row.registration.species }}</th>
             <td>{{ row.registration.breeding_date }}</td>
             <td class="text-end">{{ row.points }}</td>
         </tr>
