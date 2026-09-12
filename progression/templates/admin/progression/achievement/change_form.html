@@ -4,6 +4,11 @@
 {{ block.super }}
 {% if original %}
 <li>
+    <a href="{% url 'admin:progression_achievement_requirements_bulk' original.pk %}">
+        Lägg till krav för alla nivåer
+    </a>
+</li>
+<li>
     <form method="post" action="{% url 'admin:progression_achievement_revalidate' original.pk %}" style="display:inline;">
         {% csrf_token %}
         <button type="submit" class="button" onclick="return confirm('Granska utdelade utmärkelser mot nu gällande krav? Ogiltiga utdelningar tas bort och saknade giltiga utdelningar skapas.');">

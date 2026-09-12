@@ -1,7 +1,9 @@
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
+from django.template.response import TemplateResponse
 from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
@@ -10,6 +12,8 @@ from .forms import (
     AchievementAdminForm,
     AchievementBackgroundAdminForm,
     AchievementLevelAdminForm,
+    AchievementRequirementKindForm,
+    BulkAchievementRequirementsForm,
 )
 from .models import (
     Achievement,
@@ -102,12 +106,118 @@ class AchievementAdmin(admin.ModelAdmin):
     def get_urls(self):
         custom_urls = [
             path(
+                "<path:object_id>/requirements/bulk/",
+                self.admin_site.admin_view(self.bulk_requirements_view),
+                name="progression_achievement_requirements_bulk",
+            ),
+            path(
                 "<path:object_id>/revalidate/",
                 self.admin_site.admin_view(self.revalidate_view),
                 name="progression_achievement_revalidate",
             ),
         ]
         return custom_urls + super().get_urls()
+
+    def bulk_requirements_view(self, request, object_id):
+        achievement = self.get_object(request, object_id)
+        if achievement is None:
+            return redirect("admin:progression_achievement_changelist")
+
+        requirement_admin = self.admin_site._registry[AchievementRequirement]
+        if (
+            not self.has_change_permission(request, achievement)
+            or not requirement_admin.has_add_permission(request)
+            or not requirement_admin.has_change_permission(request)
+        ):
+            raise PermissionDenied
+
+        available_kinds = {value for value, _label in AchievementRequirement.Kind.choices}
+        default_kind = AchievementRequirement.Kind.choices[0][0]
+        if request.method == "POST":
+            selected_kind = request.POST.get("kind", default_kind)
+        else:
+            selected_kind = request.GET.get("kind", default_kind)
+        if selected_kind not in available_kinds:
+            selected_kind = default_kind
+
+        kind_form = AchievementRequirementKindForm(
+            request.GET or None,
+            initial={"kind": selected_kind},
+        )
+        if request.method == "GET" and kind_form.is_valid():
+            selected_kind = kind_form.cleaned_data["kind"]
+
+        values_form = BulkAchievementRequirementsForm(
+            request.POST or None,
+            achievement=achievement,
+            kind=selected_kind,
+        )
+        if request.method == "POST" and values_form.is_valid():
+            with transaction.atomic():
+                existing = list(
+                    AchievementRequirement.objects.select_for_update()
+                    .filter(
+                        level__in=values_form.levels,
+                        kind=selected_kind,
+                        genera__isnull=True,
+                        species_groups__isnull=True,
+                    )
+                    .order_by("pk")
+                )
+                existing_by_level = {}
+                for requirement in existing:
+                    existing_by_level.setdefault(requirement.level_id, []).append(requirement)
+                if any(len(items) > 1 for items in existing_by_level.values()):
+                    values_form.add_error(
+                        None,
+                        "Kraven ändrades samtidigt. Ladda om sidan och försök igen.",
+                    )
+                else:
+                    for level in values_form.levels:
+                        value = values_form.cleaned_data[values_form.field_name(level)]
+                        matches = existing_by_level.get(level.pk, [])
+                        if matches:
+                            requirement = matches[0]
+                            if requirement.value != value:
+                                requirement.value = value
+                                requirement.save(update_fields=("value",))
+                        else:
+                            AchievementRequirement.objects.create(
+                                level=level,
+                                kind=selected_kind,
+                                value=value,
+                            )
+
+                    messages.success(
+                        request,
+                        f"{len(values_form.levels)} nivåkrav sparades.",
+                    )
+                    return redirect(
+                        reverse(
+                            "admin:progression_achievement_change",
+                            args=[achievement.pk],
+                        )
+                    )
+
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "original": achievement,
+            "achievement": achievement,
+            "title": f"Krav för alla nivåer – {achievement}",
+            "kind_form": kind_form,
+            "values_form": values_form,
+            "value_rows": values_form.rows(),
+            "selected_kind": selected_kind,
+            "change_url": reverse(
+                "admin:progression_achievement_change", args=[achievement.pk]
+            ),
+        }
+        return TemplateResponse(
+            request,
+            "admin/progression/achievement/requirements_bulk.html",
+            context,
+        )
 
     def revalidate_view(self, request, object_id):
         if request.method != "POST":

@@ -2,7 +2,12 @@ from pathlib import PurePosixPath
 
 from django import forms
 
-from .models import Achievement, AchievementBackground, AchievementLevel
+from .models import (
+    Achievement,
+    AchievementBackground,
+    AchievementLevel,
+    AchievementRequirement,
+)
 
 
 def _distinct_image_names(*querysets):
@@ -115,3 +120,70 @@ class AchievementLevelAdminForm(_ExistingImageMixin, forms.ModelForm):
     class Meta:
         model = AchievementLevel
         fields = "__all__"
+
+
+class AchievementRequirementKindForm(forms.Form):
+    kind = forms.ChoiceField(
+        choices=AchievementRequirement.Kind.choices,
+        label="Kravtyp",
+    )
+
+
+class BulkAchievementRequirementsForm(forms.Form):
+    kind = forms.ChoiceField(
+        choices=AchievementRequirement.Kind.choices,
+        widget=forms.HiddenInput(attrs={"id": "bulk-requirement-kind"}),
+    )
+
+    def __init__(self, *args, achievement, kind, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.achievement = achievement
+        self.kind = kind
+        self.levels = list(achievement.levels.order_by("order", "name"))
+        self.fields["kind"].initial = kind
+
+        requirements = AchievementRequirement.objects.filter(
+            level__in=self.levels,
+            kind=kind,
+            genera__isnull=True,
+            species_groups__isnull=True,
+        ).order_by("pk")
+        requirements_by_level = {}
+        for requirement in requirements:
+            requirements_by_level.setdefault(requirement.level_id, []).append(requirement)
+
+        self.duplicate_levels = [
+            level
+            for level in self.levels
+            if len(requirements_by_level.get(level.pk, [])) > 1
+        ]
+        self.existing_requirements = {
+            level_id: level_requirements[0]
+            for level_id, level_requirements in requirements_by_level.items()
+            if len(level_requirements) == 1
+        }
+
+        for level in self.levels:
+            existing = self.existing_requirements.get(level.pk)
+            self.fields[self.field_name(level)] = forms.IntegerField(
+                label=f"Kravvärde för {level.name}",
+                min_value=1,
+                initial=existing.value if existing else None,
+            )
+
+    @staticmethod
+    def field_name(level):
+        return f"level_{level.pk}"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.duplicate_levels:
+            names = ", ".join(level.name for level in self.duplicate_levels)
+            raise forms.ValidationError(
+                "Det finns flera generella krav av den valda typen för följande "
+                f"nivåer: {names}. Ta bort dubbletterna innan du fortsätter."
+            )
+        return cleaned_data
+
+    def rows(self):
+        return [(level, self[self.field_name(level)]) for level in self.levels]
