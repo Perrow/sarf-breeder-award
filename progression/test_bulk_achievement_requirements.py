@@ -59,11 +59,21 @@ class BulkAchievementRequirementsAdminTests(TestCase):
         self.assertContains(response, 'value="10"')
         self.assertContains(response, "utan avgränsning till släkte eller artgrupp")
 
+    def test_visible_kind_selector_is_submitted_with_requirement_values(self):
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, 200)
+        content = response.content.decode()
+        self.assertEqual(content.count('name="kind"'), 1)
+        self.assertContains(response, '<select name="kind"')
+        self.assertNotContains(response, 'type="hidden" name="kind"')
+
     def test_post_creates_general_requirement_for_every_level(self):
         response = self.client.post(
             self.url,
             {
                 "kind": AchievementRequirement.Kind.SPECIES_COUNT,
+                "_save_requirements": "1",
                 f"level_{self.bronze.pk}": 5,
                 f"level_{self.silver.pk}": 12,
             },
@@ -101,6 +111,7 @@ class BulkAchievementRequirementsAdminTests(TestCase):
             self.url,
             {
                 "kind": AchievementRequirement.Kind.BREEDING_COUNT,
+                "_save_requirements": "1",
                 f"level_{self.bronze.pk}": 4,
                 f"level_{self.silver.pk}": 8,
             },
@@ -130,6 +141,7 @@ class BulkAchievementRequirementsAdminTests(TestCase):
             self.url,
             {
                 "kind": AchievementRequirement.Kind.POINTS,
+                "_save_requirements": "1",
                 f"level_{self.bronze.pk}": 20,
                 f"level_{self.silver.pk}": 0,
             },
@@ -162,6 +174,7 @@ class BulkAchievementRequirementsAdminTests(TestCase):
             self.url,
             {
                 "kind": AchievementRequirement.Kind.POINTS,
+                "_save_requirements": "1",
                 f"level_{self.bronze.pk}": 30,
                 f"level_{self.silver.pk}": 40,
             },

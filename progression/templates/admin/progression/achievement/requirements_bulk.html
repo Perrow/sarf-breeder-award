@@ -15,19 +15,18 @@
 <div id="content-main">
     <p>Välj kravtyp och ange ett kravvärde för varje nivå. Endast generella krav utan avgränsning till släkte eller artgrupp ändras.</p>
 
-    <form method="get" class="module aligned">
-        <div class="form-row">
-            {{ kind_form.kind.errors }}
-            {{ kind_form.kind.label_tag }}
-            {{ kind_form.kind }}
-            <button type="submit" class="button">Visa nivåer</button>
-        </div>
-    </form>
-
-    {% if value_rows %}
     <form method="post" novalidate>
         {% csrf_token %}
-        {{ values_form.kind }}
+        <div class="form-row">
+            {{ values_form.kind.errors }}
+            {{ values_form.kind.label_tag }}
+            {{ values_form.kind }}
+            <button type="submit" name="_select_kind" value="1" class="button" formnovalidate>
+                Visa nivåer
+            </button>
+        </div>
+
+        {% if value_rows %}
         {{ values_form.non_field_errors }}
         <table>
             <caption class="visually-hidden">Kravvärden för utmärkelsens nivåer</caption>
@@ -53,13 +52,15 @@
             </tbody>
         </table>
         <div class="submit-row">
-            <input type="submit" value="Spara krav" class="default">
+            <button type="submit" name="_save_requirements" value="1" class="default">
+                Spara krav
+            </button>
             <a href="{{ change_url }}" class="closelink">Avbryt</a>
         </div>
+        {% else %}
+        <p class="help">Lägg först till minst en nivå på utmärkelsen.</p>
+        <p><a href="{{ change_url }}" class="button">Tillbaka till utmärkelsen</a></p>
+        {% endif %}
     </form>
-    {% else %}
-    <p class="help">Lägg först till minst en nivå på utmärkelsen.</p>
-    <p><a href="{{ change_url }}" class="button">Tillbaka till utmärkelsen</a></p>
-    {% endif %}
 </div>
 {% endblock %}

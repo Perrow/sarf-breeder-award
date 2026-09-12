@@ -12,7 +12,6 @@ from .forms import (
     AchievementAdminForm,
     AchievementBackgroundAdminForm,
     AchievementLevelAdminForm,
-    AchievementRequirementKindForm,
     BulkAchievementRequirementsForm,
 )
 from .models import (
@@ -140,19 +139,20 @@ class AchievementAdmin(admin.ModelAdmin):
         if selected_kind not in available_kinds:
             selected_kind = default_kind
 
-        kind_form = AchievementRequirementKindForm(
-            request.GET or None,
-            initial={"kind": selected_kind},
-        )
-        if request.method == "GET" and kind_form.is_valid():
-            selected_kind = kind_form.cleaned_data["kind"]
-
         values_form = BulkAchievementRequirementsForm(
-            request.POST or None,
+            (
+                request.POST
+                if request.method == "POST" and "_save_requirements" in request.POST
+                else None
+            ),
             achievement=achievement,
             kind=selected_kind,
         )
-        if request.method == "POST" and values_form.is_valid():
+        if (
+            request.method == "POST"
+            and "_save_requirements" in request.POST
+            and values_form.is_valid()
+        ):
             with transaction.atomic():
                 existing = list(
                     AchievementRequirement.objects.select_for_update()
@@ -205,7 +205,6 @@ class AchievementAdmin(admin.ModelAdmin):
             "original": achievement,
             "achievement": achievement,
             "title": f"Krav för alla nivåer – {achievement}",
-            "kind_form": kind_form,
             "values_form": values_form,
             "value_rows": values_form.rows(),
             "selected_kind": selected_kind,

@@ -122,17 +122,10 @@ class AchievementLevelAdminForm(_ExistingImageMixin, forms.ModelForm):
         fields = "__all__"
 
 
-class AchievementRequirementKindForm(forms.Form):
-    kind = forms.ChoiceField(
-        choices=AchievementRequirement.Kind.choices,
-        label="Kravtyp",
-    )
-
-
 class BulkAchievementRequirementsForm(forms.Form):
     kind = forms.ChoiceField(
         choices=AchievementRequirement.Kind.choices,
-        widget=forms.HiddenInput(attrs={"id": "bulk-requirement-kind"}),
+        label="Kravtyp",
     )
 
     def __init__(self, *args, achievement, kind, **kwargs):
