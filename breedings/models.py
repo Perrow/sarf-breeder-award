@@ -108,7 +108,7 @@ class SpeciesReclassificationRequest(models.Model):
             output_field=models.BigIntegerField(),
         ),
         output_field=models.BigIntegerField(),
-        db_persist=True,
+        db_persist=False,
         null=True,
         editable=False,
     )
