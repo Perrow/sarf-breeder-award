@@ -93,6 +93,10 @@ class AchievementBackgroundAdminForm(_ExistingImageMixin, forms.ModelForm):
         "existing_image": ("image", _background_image_names),
     }
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["image"].required = False
+
     class Meta:
         model = AchievementBackground
         fields = "__all__"
