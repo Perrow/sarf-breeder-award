@@ -57,18 +57,23 @@
 <table class="table align-middle">
     <thead>
         <tr>
-            <th>Datum</th>
+            <th class="d-none d-sm-table-cell">Datum</th>
             <th>Art</th>
             <th>Status</th>
             <th>Klass</th>
             <th><span class="visually-hidden">Granskningskommentar</span></th>
-            <th></th>
+            <th class="d-none d-sm-table-cell"></th>
         </tr>
     </thead>
     <tbody>
     {% for registration in registrations %}
-        <tr>
-            <td>{{ registration.breeding_date }}</td>
+        {% if registration.status == "draft" %}
+            {% url 'breeding_edit' registration.pk as row_url %}
+        {% else %}
+            {% url 'breeding_detail' registration.pk as row_url %}
+        {% endif %}
+        <tr data-mobile-href="{{ row_url }}">
+            <td class="d-none d-sm-table-cell">{{ registration.breeding_date }}</td>
             <td>
                 {% if registration.species %}
                     {{ registration.species }}
@@ -92,7 +97,7 @@
                     <span title="Granskningskommentar finns" aria-label="Granskningskommentar finns">💬</span>
                 {% endif %}
             </td>
-            <td class="text-nowrap">
+            <td class="text-nowrap d-none d-sm-table-cell">
                 {% if registration.status == "draft" %}
                     <a href="{% url 'breeding_edit' registration.pk %}">Redigera</a>
                 {% else %}
@@ -104,6 +109,42 @@
     </tbody>
 </table>
 </div>
+
+<script>
+(() => {
+    const mobile = window.matchMedia('(max-width: 575.98px)');
+    const rows = document.querySelectorAll('[data-mobile-href]');
+
+    const updateRows = () => {
+        rows.forEach((row) => {
+            if (mobile.matches) {
+                row.tabIndex = 0;
+                row.setAttribute('role', 'link');
+                row.classList.add('cursor-pointer');
+            } else {
+                row.removeAttribute('tabindex');
+                row.removeAttribute('role');
+                row.classList.remove('cursor-pointer');
+            }
+        });
+    };
+
+    rows.forEach((row) => {
+        row.addEventListener('click', (event) => {
+            if (!mobile.matches || event.target.closest('a, button, input, select, textarea')) return;
+            window.location.href = row.dataset.mobileHref;
+        });
+        row.addEventListener('keydown', (event) => {
+            if (!mobile.matches || (event.key !== 'Enter' && event.key !== ' ')) return;
+            event.preventDefault();
+            window.location.href = row.dataset.mobileHref;
+        });
+    });
+
+    updateRows();
+    mobile.addEventListener('change', updateRows);
+})();
+</script>
 {% else %}
 <p>Du har ännu inga odlingsregistreringar.</p>
 {% endif %}
