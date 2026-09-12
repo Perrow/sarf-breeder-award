@@ -5,6 +5,7 @@ Breeder Award Program for multiple associations.
 ## Requirements
 
 - Python 3.12 or newer
+- MariaDB 10.10.1 or newer
 
 ## Local setup
 
@@ -26,7 +27,9 @@ Linux/macOS:
 source .venv/bin/activate
 ```
 
-Install dependencies and initialize the database:
+Install dependencies and configure a local MariaDB server by following
+[`docs/mariadb.md`](docs/mariadb.md). Export the required `MARIADB_*`
+environment variables before initializing the database:
 
 ```bash
 python -m pip install -r requirements.txt
@@ -40,6 +43,9 @@ python manage.py runserver
 ```
 
 The development site is then available at `http://127.0.0.1:8000/`. The Django administration site is available at `/admin/`.
+
+For an Ubuntu production installation with Gunicorn, Nginx, systemd and HTTPS,
+follow [`docs/server-setup.md`](docs/server-setup.md).
 
 ## Production security
 
@@ -63,7 +69,8 @@ The application is named **Odlingskampanjen** and uses Swedish throughout, inclu
 
 ## BA-001 – Django project
 
-The repository contains the initial Django project scaffold using SQLite.
+The repository contains the Django project scaffold. MariaDB is the standard
+database for local development, tests and future production environments.
 
 ## BA-002 – Custom User model
 

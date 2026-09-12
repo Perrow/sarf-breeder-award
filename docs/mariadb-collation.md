@@ -42,6 +42,6 @@ textfält ärver databasens standardcollation. `SpeciesLink.url` är ett medvete
 undantag och använder `utf8mb4_bin`, eftersom sökväg och frågesträng i en URL
 kan vara skiftlägeskänsliga.
 
-SQLite används övergångsvis fram till databasbytet och registrerar lokala
-collationer med samma namn och samma likhetsregler. Den slutliga verifieringen
-mot MariaDB görs i DB-004.
+SQLite-collationerna finns kvar enbart för isolerade kompatibilitets- och
+migrationstester. Normal lokal utveckling och den ordinarie testsviten använder
+MariaDB. Den fullständiga MariaDB-verifieringen byggs ut i DB-004.
