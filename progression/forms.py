@@ -54,12 +54,12 @@ class _ExistingImageMixin:
                 )
         return cleaned_data
 
-    def save(self, commit=True):
+    def _post_clean(self):
         for existing_field, (model_field, _) in self.existing_field_map.items():
             selected = self.cleaned_data.get(existing_field)
             if selected:
                 getattr(self.instance, model_field).name = selected
-        return super().save(commit=commit)
+        super()._post_clean()
 
 
 class AchievementAdminForm(_ExistingImageMixin, forms.ModelForm):
