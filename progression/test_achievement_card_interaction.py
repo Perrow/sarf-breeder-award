@@ -109,6 +109,7 @@ class AchievementCardInteractionTests(TestCase):
         self.assertContains(response, f'data-bs-target="#achievement-modal-{earned.pk}"')
         self.assertContains(response, 'aria-label="Interaktiv – visa detaljer"')
         self.assertContains(response, 'aria-label="Stäng"')
+        self.assertContains(response, 'class="modal-title fs-4 mb-0"')
         self.assertContains(response, '>Interaktiv</h2>')
         self.assertContains(response, '<p class="mb-0">Silver</p>', html=True)
         self.assertNotContains(response, "Nivå:")
@@ -141,7 +142,7 @@ class AchievementCardInteractionTests(TestCase):
 
         self.assertContains(response, "Krav som du har uppfyllt")
         self.assertContains(response, "Odla en art inom Corydoras.")
-        self.assertContains(response, "Nästa nivå: Silver")
+        self.assertNotContains(response, "Nästa nivå: Silver")
         self.assertContains(response, "För att komma upp i nästa nivå behöver du:")
         self.assertContains(response, "Odla en art till inom Corydoras.")
         self.assertNotContains(response, str(species_b))
