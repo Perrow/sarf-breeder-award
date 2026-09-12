@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='speciesreclassificationrequest',
             name='pending_species_key',
-            field=models.GeneratedField(db_persist=True, expression=models.Case(models.When(status='pending', then=models.F('species')), default=models.Value(None), output_field=models.BigIntegerField()), null=True, output_field=models.BigIntegerField()),
+            field=models.GeneratedField(db_persist=False, expression=models.Case(models.When(status='pending', then=models.F('species')), default=models.Value(None), output_field=models.BigIntegerField()), null=True, output_field=models.BigIntegerField()),
         ),
         migrations.AddConstraint(
             model_name='associationcompetitionlimit',
