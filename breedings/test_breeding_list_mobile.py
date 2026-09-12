@@ -32,7 +32,9 @@ class BreedingListMobileMarkupTests(SimpleTestCase):
         html = self._render_registration("draft")
         edit_url = reverse("breeding_edit", args=[42])
 
-        self.assertIn('<th class="d-none d-sm-table-cell">Datum</th>', html)
+        self.assertIn(
+            '<th scope="col" class="d-none d-sm-table-cell">Datum</th>', html
+        )
         self.assertIn('<td class="d-none d-sm-table-cell">2026-09-12</td>', html)
         self.assertIn('class="text-nowrap d-none d-sm-table-cell"', html)
         self.assertIn(f'data-mobile-href="{edit_url}"', html)
