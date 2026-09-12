@@ -1,4 +1,5 @@
 from django.conf import settings
+import django.core.validators
 from django.db import migrations, models
 import django.db.models.deletion
 
@@ -26,7 +27,18 @@ class Migration(migrations.Migration):
         migrations.AlterField(
             model_name="achievementbackground",
             name="tint_color",
-            field=models.CharField(blank=True, help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.", max_length=7, verbose_name="färgning"),
+            field=models.CharField(
+                blank=True,
+                help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.",
+                max_length=7,
+                validators=[
+                    django.core.validators.RegexValidator(
+                        message="Färgen måste anges som #RRGGBB.",
+                        regex="^#[0-9A-Fa-f]{6}$",
+                    )
+                ],
+                verbose_name="färgning",
+            ),
         ),
         migrations.AlterField(
             model_name="achievementrequirement",
