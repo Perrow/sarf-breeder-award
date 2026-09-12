@@ -34,6 +34,8 @@ Importfilen är JSON med formatversion 1:
 
 `breeding_class` är `bronze`, `silver` eller `gold`. Fältet krävs när en ny art skapas men kan utelämnas när en befintlig art bara kompletteras.
 
+`cl_number` är valfritt och används för L-, C- och CW-nummer, till exempel `L046`, `C123` eller `CW009`. Whitespace tas bort och värdet normaliseras till versaler, så exempelvis `l 046` sparas som `L046` och `cw 009` som `CW009`. För en befintlig art kompletteras fältet bara om arten ännu saknar C/L-nummer.
+
 `swedish_names` är en lista med svenska populärnamn. Minst ett svenskt namn krävs när en ny art skapas. För en befintlig art är listan valfri. Det första namnet används som primärt svenskt namn om arten saknar ett; annars bevaras befintligt primärnamn och ett nytt första namn registreras som synonym när det skiljer sig.
 
 `english_names` är valfri. Det första namnet används som primärt engelskt namn om det saknas; övriga alternativa namn lagras som synonymer.
@@ -50,31 +52,32 @@ För en art som ännu inte finns måste importposten minst innehålla:
 
 ```json
 {
-  "genus": "Aulonocara",
-  "scientific_name": "stuartgranti",
-  "breeding_class": "silver",
-  "swedish_names": ["Påfågelciklid"],
-  "geographies": ["Afrika", "Malawi"]
+  "genus": "Hypancistrus",
+  "scientific_name": "zebra",
+  "breeding_class": "gold",
+  "swedish_names": ["Zebramal"],
+  "cl_number": "L 046"
 }
 ```
 
-`geographies` är valfritt även vid ny art. Saknas `breeding_class` eller `swedish_names` när en ny art behöver skapas avbryts den artposten med valideringsfel. Importen är atomisk per artpost, så en misslyckad post ska inte lämna kvar delvis skapad data.
+`cl_number` och `geographies` är valfria även vid ny art. Saknas `breeding_class` eller `swedish_names` när en ny art behöver skapas avbryts den artposten med valideringsfel. Importen är atomisk per artpost, så en misslyckad post ska inte lämna kvar delvis skapad data.
 
 ## Kompletterande import av en befintlig art
 
-När arten redan finns räcker `genus` + `scientific_name` tillsammans med de fält som ska kompletteras. Exempel som lägger till ytterligare geografi och en extern länk:
+När arten redan finns räcker `genus` + `scientific_name` tillsammans med de fält som ska kompletteras. Exempel som lägger till ett C/L-nummer, ytterligare geografi och en extern länk:
 
 ```json
 {
   "version": 1,
   "species": [
     {
-      "genus": "Aulonocara",
-      "scientific_name": "stuartgranti",
-      "geographies": ["Malawi"],
+      "genus": "Hypancistrus",
+      "scientific_name": "zebra",
+      "cl_number": "L 046",
+      "geographies": ["Sydamerika"],
       "links": [
         {
-          "url": "https://example.org/malawi-reference",
+          "url": "https://example.org/hypancistrus-zebra",
           "source_name": "Example"
         }
       ]
@@ -83,7 +86,7 @@ När arten redan finns räcker `genus` + `scientific_name` tillsammans med de f�
 }
 ```
 
-Kompletteringsimporten är additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, geografier, länkar eller `breeding_class`. Angivna geografier läggs till; andra befintliga geografier ligger kvar. Samma fil kan importeras flera gånger utan att skapa dubbletter.
+Kompletteringsimporten är additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, geografier, länkar, `breeding_class` eller `cl_number`. Ett angivet `cl_number` fyller ett tomt fält men ersätter inte ett redan registrerat nummer. Angivna geografier läggs till; andra befintliga geografier ligger kvar. Samma fil kan importeras flera gånger utan att skapa dubbletter.
 
 ## Import via gammalt vetenskapligt namn
 

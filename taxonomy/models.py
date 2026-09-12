@@ -4,6 +4,12 @@ from django.db.models import Q, Value
 from django.db.models.functions import Concat, Lower
 
 
+def normalize_cl_number(value):
+    if not value:
+        return ""
+    return "".join(value.split()).upper()
+
+
 class Genus(models.Model):
     scientific_name = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=True)
@@ -62,6 +68,7 @@ class SpeciesQuerySet(models.QuerySet):
                 Q(full_scientific_name__icontains=term)
                 | Q(common_name__icontains=term)
                 | Q(english_name__icontains=term)
+                | Q(cl_number__icontains=term)
                 | Q(scientific_synonyms__scientific_name__icontains=term)
                 | Q(common_name_synonyms__common_name__icontains=term)
                 | Q(geographies__name__icontains=term)
@@ -79,6 +86,7 @@ class Species(models.Model):
     scientific_name = models.CharField(max_length=100, verbose_name="artnamn")
     common_name = models.CharField(max_length=200, verbose_name="populärnamn")
     english_name = models.CharField(max_length=200, blank=True, verbose_name="engelskt namn")
+    cl_number = models.CharField(max_length=50, blank=True, verbose_name="C/L-nummer")
     breeding_class = models.CharField(max_length=6, choices=BreedingClass.choices, verbose_name="odlingsklass")
     geographies = models.ManyToManyField(Geography, blank=True, related_name="species", verbose_name="geografier")
     is_active = models.BooleanField(default=True, verbose_name="aktiv")
@@ -101,6 +109,10 @@ class Species(models.Model):
         if errors:
             raise ValidationError(errors)
 
+    def save(self, *args, **kwargs):
+        self.cl_number = normalize_cl_number(self.cl_number)
+        super().save(*args, **kwargs)
+
     def get_species_groups(self, include_hidden=False):
         groups = SpeciesGroup.objects.filter(Q(genera=self.genus) | Q(species=self)).distinct()
         if not include_hidden:
@@ -108,7 +120,10 @@ class Species(models.Model):
         return groups
 
     def __str__(self):
-        return f"{self.genus} {self.scientific_name}"
+        name = f"{self.genus} {self.scientific_name}"
+        if self.cl_number:
+            return f"{name} ({self.cl_number})"
+        return name
 
 
 class ScientificSpeciesSynonym(models.Model):

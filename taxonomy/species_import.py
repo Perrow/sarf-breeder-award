@@ -14,6 +14,7 @@ from .models import (
     ScientificSpeciesSynonym,
     Species,
     SpeciesLink,
+    normalize_cl_number,
 )
 
 
@@ -243,6 +244,9 @@ def _import_species_row(row, stats):
     genus_name = _required_text(row, "genus")
     scientific_name = _required_text(row, "scientific_name")
     breeding_class = _optional_text(row, "breeding_class")
+    cl_number = _optional_text(row, "cl_number")
+    if cl_number is not None:
+        cl_number = normalize_cl_number(cl_number)
     if breeding_class is not None and breeding_class not in Species.BreedingClass.values:
         raise SpeciesImportError(
             f"Ogiltig breeding_class '{breeding_class}'. Tillåtna värden är: "
@@ -277,12 +281,17 @@ def _import_species_row(row, stats):
             scientific_name=scientific_name,
             common_name=swedish_names[0],
             english_name=english_names[0] if english_names else "",
+            cl_number=cl_number or "",
             breeding_class=breeding_class,
         )
         stats["species_created"] += 1
     else:
         stats["genera_reused"] += 1
         stats["species_reused"] += 1
+
+        if cl_number is not None and not species.cl_number:
+            species.cl_number = cl_number
+            species.save(update_fields=["cl_number"])
 
         if swedish_names:
             if not species.common_name:
