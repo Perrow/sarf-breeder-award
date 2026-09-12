@@ -1,8 +1,16 @@
 from pathlib import PurePosixPath
 
 from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
 
-from .models import Achievement, AchievementBackground, AchievementLevel
+from taxonomy.models import Genus, SpeciesGroup
+
+from .models import (
+    Achievement,
+    AchievementBackground,
+    AchievementLevel,
+    AchievementRequirement,
+)
 
 
 def _distinct_image_names(*querysets):
@@ -115,3 +123,86 @@ class AchievementLevelAdminForm(_ExistingImageMixin, forms.ModelForm):
     class Meta:
         model = AchievementLevel
         fields = "__all__"
+
+
+class BulkAchievementRequirementsForm(forms.Form):
+    kind = forms.ChoiceField(
+        choices=AchievementRequirement.Kind.choices,
+        label="Kravtyp",
+        widget=forms.Select(attrs={"onchange": "this.form.submit()"}),
+    )
+    genera = forms.ModelMultipleChoiceField(
+        queryset=Genus.objects.all(),
+        required=False,
+        label="Släkten",
+        widget=FilteredSelectMultiple("släkten", is_stacked=False),
+    )
+    species_groups = forms.ModelMultipleChoiceField(
+        queryset=SpeciesGroup.objects.all(),
+        required=False,
+        label="Artgrupper",
+        widget=FilteredSelectMultiple("artgrupper", is_stacked=False),
+    )
+
+    def __init__(self, *args, achievement, kind, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.achievement = achievement
+        self.kind = kind
+        self.levels = list(achievement.levels.order_by("order", "name"))
+        self.fields["kind"].initial = kind
+
+        requirements = AchievementRequirement.objects.filter(
+            level__in=self.levels,
+            kind=kind,
+        ).prefetch_related("genera", "species_groups").order_by("pk")
+        requirements_by_level = {}
+        for requirement in requirements:
+            requirements_by_level.setdefault(requirement.level_id, []).append(requirement)
+
+        self.duplicate_levels = [
+            level
+            for level in self.levels
+            if len(requirements_by_level.get(level.pk, [])) > 1
+        ]
+        self.existing_requirements = {
+            level_id: level_requirements[0]
+            for level_id, level_requirements in requirements_by_level.items()
+            if len(level_requirements) == 1
+        }
+        scope_signatures = {
+            (
+                tuple(sorted(genus.pk for genus in requirement.genera.all())),
+                tuple(sorted(group.pk for group in requirement.species_groups.all())),
+            )
+            for requirement in self.existing_requirements.values()
+        }
+        self.has_different_existing_scopes = len(scope_signatures) > 1
+        if len(scope_signatures) == 1:
+            genus_ids, group_ids = scope_signatures.pop()
+            self.fields["genera"].initial = genus_ids
+            self.fields["species_groups"].initial = group_ids
+
+        for level in self.levels:
+            existing = self.existing_requirements.get(level.pk)
+            self.fields[self.field_name(level)] = forms.IntegerField(
+                label=f"Kravvärde för {level.name}",
+                min_value=1,
+                initial=existing.value if existing else None,
+            )
+
+    @staticmethod
+    def field_name(level):
+        return f"level_{level.pk}"
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if self.duplicate_levels:
+            names = ", ".join(level.name for level in self.duplicate_levels)
+            raise forms.ValidationError(
+                "Det finns flera krav av den valda typen för följande "
+                f"nivåer: {names}. Ta bort dubbletterna innan du fortsätter."
+            )
+        return cleaned_data
+
+    def rows(self):
+        return [(level, self[self.field_name(level)]) for level in self.levels]

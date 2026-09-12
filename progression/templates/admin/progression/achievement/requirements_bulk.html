@@ -1,0 +1,253 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block extrahead %}
+{{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
+{{ values_form.media }}
+<style>
+    .bulk-requirements {
+        max-width: 1100px;
+    }
+
+    .bulk-requirements__intro {
+        max-width: 70rem;
+        margin: 0 0 20px;
+        color: var(--body-quiet-color);
+    }
+
+    .bulk-requirements__section {
+        margin-bottom: 20px;
+        overflow: visible;
+    }
+
+    .bulk-requirements__section h2 {
+        margin: 0;
+    }
+
+    .bulk-requirements__section-body {
+        padding: 16px;
+    }
+
+    .bulk-requirements__field {
+        display: grid;
+        grid-template-columns: minmax(140px, 190px) minmax(0, 1fr);
+        gap: 16px;
+        align-items: start;
+        padding: 12px 0;
+    }
+
+    .bulk-requirements__field:first-child {
+        padding-top: 0;
+    }
+
+    .bulk-requirements__field:last-child {
+        padding-bottom: 0;
+    }
+
+    .bulk-requirements__field + .bulk-requirements__field {
+        border-top: 1px solid var(--hairline-color);
+    }
+
+    .bulk-requirements__field-label {
+        padding-top: 7px;
+        font-weight: 600;
+    }
+
+    .bulk-requirements__field-control select:not(.filtered) {
+        min-width: 18rem;
+    }
+
+    .bulk-requirements__scope-help {
+        margin: 12px 0 0;
+    }
+
+    .bulk-requirements__warning {
+        margin: 16px 0 0;
+        padding: 12px 16px;
+        border-left: 4px solid var(--message-warning-bg, #f5dd5d);
+        background: var(--darkened-bg);
+    }
+
+    .bulk-requirements__table {
+        width: 100%;
+        margin: 0;
+    }
+
+    .bulk-requirements__table th,
+    .bulk-requirements__table td {
+        vertical-align: middle;
+    }
+
+    .bulk-requirements__table .order-column {
+        width: 6rem;
+        text-align: center;
+    }
+
+    .bulk-requirements__table .value-column {
+        width: 15rem;
+    }
+
+    .bulk-requirements__table input[type="number"] {
+        width: 9rem;
+    }
+
+    .bulk-requirements__order {
+        display: inline-block;
+        min-width: 2rem;
+        padding: 3px 8px;
+        border-radius: 999px;
+        background: var(--darkened-bg);
+        text-align: center;
+        font-variant-numeric: tabular-nums;
+    }
+
+    .bulk-requirements__level-name {
+        font-weight: 600;
+    }
+
+    .bulk-requirements__table .errorlist {
+        margin: 0 0 6px;
+    }
+
+    .bulk-requirements__empty {
+        padding: 20px;
+    }
+
+    @media (max-width: 767px) {
+        .bulk-requirements__field {
+            grid-template-columns: 1fr;
+            gap: 6px;
+        }
+
+        .bulk-requirements__field-label {
+            padding-top: 0;
+        }
+
+        .bulk-requirements__field-control select:not(.filtered) {
+            min-width: 0;
+            width: 100%;
+        }
+
+        .bulk-requirements__table .value-column {
+            width: auto;
+        }
+    }
+</style>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}">
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+    <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+    &rsaquo; <a href="{% url 'admin:app_list' app_label=opts.app_label %}">{{ opts.app_config.verbose_name }}</a>
+    &rsaquo; <a href="{% url 'admin:progression_achievement_changelist' %}">{{ opts.verbose_name_plural|capfirst }}</a>
+    &rsaquo; <a href="{{ change_url }}">{{ achievement }}</a>
+    &rsaquo; Krav för alla nivåer
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main" class="bulk-requirements">
+    <p class="bulk-requirements__intro">
+        Välj vilken kravtyp som ska hanteras, ange eventuella begränsningar och fyll sedan i kravvärdet för varje nivå. Släkten och artgrupper gäller gemensamt för samtliga nivåer.
+    </p>
+
+    <form method="post" novalidate>
+        {% csrf_token %}
+
+        <section class="module bulk-requirements__section">
+            <h2>Krav och begränsningar</h2>
+            <div class="bulk-requirements__section-body">
+                <div class="bulk-requirements__field">
+                    <div class="bulk-requirements__field-label">
+                        {{ values_form.kind.label_tag }}
+                    </div>
+                    <div class="bulk-requirements__field-control">
+                        {{ values_form.kind.errors }}
+                        {{ values_form.kind }}
+                    </div>
+                </div>
+
+                <div class="bulk-requirements__field">
+                    <div class="bulk-requirements__field-label">
+                        {{ values_form.genera.label_tag }}
+                    </div>
+                    <div class="bulk-requirements__field-control">
+                        {{ values_form.genera.errors }}
+                        {{ values_form.genera }}
+                    </div>
+                </div>
+
+                <div class="bulk-requirements__field">
+                    <div class="bulk-requirements__field-label">
+                        {{ values_form.species_groups.label_tag }}
+                    </div>
+                    <div class="bulk-requirements__field-control">
+                        {{ values_form.species_groups.errors }}
+                        {{ values_form.species_groups }}
+                    </div>
+                </div>
+
+                <p class="help bulk-requirements__scope-help">
+                    Lämna både släkten och artgrupper tomma för att kravet ska gälla utan avgränsning till släkte eller artgrupp.
+                </p>
+
+                {% if has_different_existing_scopes %}
+                <p class="bulk-requirements__warning">
+                    <strong>Observera:</strong> De befintliga begränsningarna skiljer sig mellan nivåerna. Valen ovan ersätter dem när kraven sparas.
+                </p>
+                {% endif %}
+            </div>
+        </section>
+
+        {% if value_rows %}
+        {{ values_form.non_field_errors }}
+        <section class="module bulk-requirements__section">
+            <h2>Kravvärden per nivå</h2>
+            <table class="bulk-requirements__table">
+                <caption class="visually-hidden">Kravvärden för utmärkelsens nivåer</caption>
+                <thead>
+                    <tr>
+                        <th scope="col" class="order-column">Ordning</th>
+                        <th scope="col">Nivå</th>
+                        <th scope="col" class="value-column">Kravvärde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for level, field in value_rows %}
+                    <tr>
+                        <td class="order-column"><span class="bulk-requirements__order">{{ level.order }}</span></td>
+                        <th scope="row" class="bulk-requirements__level-name">{{ level.name }}</th>
+                        <td class="value-column">
+                            {{ field.errors }}
+                            {{ field }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <div class="submit-row">
+            <button type="submit" name="_save_requirements" value="1" class="default">
+                Spara krav
+            </button>
+            <a href="{{ change_url }}" class="closelink">Avbryt</a>
+        </div>
+        {% else %}
+        <section class="module bulk-requirements__section">
+            <h2>Nivåer saknas</h2>
+            <div class="bulk-requirements__empty">
+                <p class="help">Lägg först till minst en nivå på utmärkelsen innan krav kan registreras.</p>
+                <p><a href="{{ change_url }}" class="button">Tillbaka till utmärkelsen</a></p>
+            </div>
+        </section>
+        {% endif %}
+    </form>
+</div>
+{% endblock %}
