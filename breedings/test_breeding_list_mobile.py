@@ -39,13 +39,20 @@ class BreedingListMobileMarkupTests(SimpleTestCase):
         self.assertIn('class="text-nowrap d-none d-sm-table-cell"', html)
         self.assertIn(f'data-mobile-href="{edit_url}"', html)
         self.assertIn(f'href="{edit_url}">Redigera</a>', html)
+        self.assertIn('data-mobile-row-link href="' + edit_url + '"', html)
+        self.assertIn("Redigera odling", html)
 
-    def test_non_draft_row_targets_detail_and_has_keyboard_activation(self):
+    def test_non_draft_row_targets_detail_and_has_accessible_keyboard_link(self):
         html = self._render_registration("approved")
         detail_url = reverse("breeding_detail", args=[42])
 
         self.assertIn(f'data-mobile-href="{detail_url}"', html)
         self.assertIn(f'href="{detail_url}">Visa</a>', html)
-        self.assertIn("row.tabIndex = 0", html)
-        self.assertIn("row.setAttribute('role', 'link')", html)
-        self.assertIn("event.key !== 'Enter' && event.key !== ' '", html)
+        self.assertIn('data-mobile-row-link href="' + detail_url + '"', html)
+        self.assertIn("Visa odling", html)
+        self.assertIn('class="visually-hidden-focusable d-sm-none"', html)
+        self.assertNotIn("row.tabIndex = 0", html)
+        self.assertNotIn("row.setAttribute('role', 'link')", html)
+        self.assertIn("event.target.closest('a, button, input, select, textarea')", html)
+        self.assertIn("event.key !== ' '", html)
+        self.assertIn("link.click()", html)
