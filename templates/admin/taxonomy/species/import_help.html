@@ -16,25 +16,26 @@
   "version": 1,
   "species": [
     {
-      "genus": "Aulonocara",
-      "scientific_name": "stuartgranti",
-      "breeding_class": "bronze",
-      "swedish_names": ["Påfågelciklid"],
-      "english_names": ["Flavescent peacock"],
+      "genus": "Hypancistrus",
+      "scientific_name": "zebra",
+      "breeding_class": "gold",
+      "swedish_names": ["Zebramal"],
+      "cl_number": "L 046",
+      "english_names": [],
       "scientific_synonyms": [],
-      "geographies": ["Afrika", "Malawi"],
+      "geographies": ["Sydamerika"],
       "links": [
         {
-          "url": "https://example.org/aulonocara-stuartgranti",
+          "url": "https://example.org/hypancistrus-zebra",
           "source_name": "Example",
-          "title": "Aulonocara stuartgranti"
+          "title": "Hypancistrus zebra"
         }
       ]
     }
   ]
 }</pre>
 
-    <p>För en ny art krävs <code>genus</code>, <code>scientific_name</code>, <code>breeding_class</code> och minst ett värde i <code>swedish_names</code>. <code>geographies</code> är valfritt och kan innehålla flera geografier.</p>
+    <p>För en ny art krävs <code>genus</code>, <code>scientific_name</code>, <code>breeding_class</code> och minst ett värde i <code>swedish_names</code>. <code>cl_number</code> och <code>geographies</code> är valfria.</p>
 
     <h3>Kompletteringsimport av en befintlig art</h3>
     <p>För en art som redan finns räcker det att ange <code>genus</code> och <code>scientific_name</code> plus de uppgifter som ska läggas till.</p>
@@ -42,15 +43,10 @@
   "version": 1,
   "species": [
     {
-      "genus": "Aulonocara",
-      "scientific_name": "stuartgranti",
-      "geographies": ["Malawi"],
-      "links": [
-        {
-          "url": "https://new.example.org/aulonocara-stuartgranti",
-          "source_name": "New Example"
-        }
-      ]
+      "genus": "Hypancistrus",
+      "scientific_name": "zebra",
+      "cl_number": "L 046",
+      "geographies": ["Sydamerika"]
     }
   ]
 }</pre>
@@ -60,6 +56,8 @@
       <li>Importen är additiv. Utelämnade fält tar inte bort eller nollställer befintlig information.</li>
       <li>Samma fil kan importeras flera gånger utan att skapa dubbletter av arter, synonymer, geografier eller länkar.</li>
       <li>Matchning på genus och vetenskapligt artnamn är skiftlägesokänslig.</li>
+      <li>C/L-nummer normaliseras genom att whitespace tas bort och bokstäver görs versala, till exempel <code>L 046</code> → <code>L046</code> och <code>cw 009</code> → <code>CW009</code>.</li>
+      <li>Vid kompletteringsimport fylls <code>cl_number</code> bara om arten ännu saknar ett nummer; ett befintligt nummer skrivs inte över.</li>
       <li>Geografier matchas också skiftlägesokänsligt. Befintlig stavning bevaras.</li>
       <li>Angivna geografier läggs till på arten. Geografier som inte finns med i en kompletteringsfil tas inte bort.</li>
       <li>Om aktuellt vetenskapligt namn inte hittas försöker importen matcha ett gammalt vetenskapligt namn som finns registrerat som synonym.</li>
@@ -76,6 +74,7 @@
         <tr><th><code>genus</code></th><td>Vetenskapligt släktnamn. Alltid obligatoriskt.</td></tr>
         <tr><th><code>scientific_name</code></th><td>Vetenskapligt artnamn/artepitet. Alltid obligatoriskt.</td></tr>
         <tr><th><code>breeding_class</code></th><td><code>bronze</code>, <code>silver</code> eller <code>gold</code>. Krävs när en ny art skapas.</td></tr>
+        <tr><th><code>cl_number</code></th><td>Valfritt L-, C- eller CW-nummer. Whitespace tas bort och värdet lagras med versaler.</td></tr>
         <tr><th><code>swedish_names</code></th><td>Lista med svenska populärnamn. Minst ett krävs när en ny art skapas.</td></tr>
         <tr><th><code>english_names</code></th><td>Valfri lista med engelska populärnamn.</td></tr>
         <tr><th><code>scientific_synonyms</code></th><td>Valfri lista med tidigare eller alternativa vetenskapliga namn.</td></tr>
