@@ -46,6 +46,8 @@ The development site is then available at `http://127.0.0.1:8000/`. The Django a
 
 For an Ubuntu production installation with Gunicorn, Nginx, systemd and HTTPS,
 follow [`docs/server-setup.md`](docs/server-setup.md).
+Production backup, restore and restore verification are documented in
+[`docs/backup-restore.md`](docs/backup-restore.md).
 
 ## Production security
 

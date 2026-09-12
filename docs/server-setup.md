@@ -31,25 +31,39 @@ Läs därefter in systemets tidszoner:
 sudo mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mariadb mysql
 ```
 
-## 2. Skapa produktionsdatabasen
+## 2. Skapa produktionsdatabasen och konton med minsta behörighet
 
-Öppna `sudo mariadb` och välj ett unikt, långt lösenord:
+Använd separata konton för normal drift, migreringar och backup. Då kan
+webbprocessen inte ändra databasens schema och backupkontot kan inte skriva data.
+Öppna `sudo mariadb` och välj tre unika, långa lösenord:
 
 ```sql
 CREATE DATABASE breeder_awards
     CHARACTER SET utf8mb4
     COLLATE uca1400_swedish_as_ci;
 
-CREATE USER 'breeder_awards'@'127.0.0.1'
-    IDENTIFIED BY 'byt-till-ett-langt-slumpat-losenord';
+CREATE USER 'breeder_awards_app'@'127.0.0.1'
+    IDENTIFIED BY 'byt-till-appens-losenord';
+CREATE USER 'breeder_awards_deploy'@'127.0.0.1'
+    IDENTIFIED BY 'byt-till-deploy-losenordet';
+CREATE USER 'breeder_awards_backup'@'127.0.0.1'
+    IDENTIFIED BY 'byt-till-backup-losenordet';
 
-GRANT ALL PRIVILEGES ON breeder_awards.*
-    TO 'breeder_awards'@'127.0.0.1';
+GRANT SELECT, INSERT, UPDATE, DELETE ON breeder_awards.*
+    TO 'breeder_awards_app'@'127.0.0.1';
+
+GRANT SELECT, INSERT, UPDATE, DELETE, CREATE, DROP, INDEX, ALTER, REFERENCES
+    ON breeder_awards.* TO 'breeder_awards_deploy'@'127.0.0.1';
+
+GRANT SELECT, SHOW VIEW, TRIGGER ON breeder_awards.*
+    TO 'breeder_awards_backup'@'127.0.0.1';
 FLUSH PRIVILEGES;
 ```
 
-Produktionsanvändaren får inte behörighet till `test_breeder_awards`. Kör inte
-testsviten med produktionsmiljön eller produktionsanvändaren.
+Kontrollera rättigheterna med `SHOW GRANTS FOR
+'breeder_awards_app'@'127.0.0.1';` och motsvarande kommando för de andra två
+kontona. Inget produktionskonto får behörighet till `test_breeder_awards`. Kör
+inte testsviten med produktionsmiljön eller produktionskontona.
 
 ## 3. Installera applikationen
 
@@ -91,8 +105,8 @@ DJANGO_ENV=production
 DJANGO_SECRET_KEY=byt-till-den-genererade-nyckeln
 DJANGO_ALLOWED_HOSTS=example.org,www.example.org
 MARIADB_DATABASE=breeder_awards
-MARIADB_USER=breeder_awards
-MARIADB_PASSWORD=byt-till-databaslosenordet
+MARIADB_USER=breeder_awards_app
+MARIADB_PASSWORD=byt-till-appens-losenord
 MARIADB_HOST=127.0.0.1
 MARIADB_PORT=3306
 ```
@@ -105,19 +119,38 @@ sudo chown root:breeder-awards /etc/breeder-awards.env
 sudo chmod 640 /etc/breeder-awards.env
 ```
 
+Skapa även `/etc/breeder-awards-deploy.env`, endast läsbar för root:
+
+```dotenv
+MARIADB_USER=breeder_awards_deploy
+MARIADB_PASSWORD=byt-till-deploy-losenordet
+```
+
+```bash
+sudo chown root:root /etc/breeder-awards-deploy.env
+sudo chmod 600 /etc/breeder-awards-deploy.env
+```
+
 Kontrollera inställningarna, migrera och samla statiska filer:
 
 ```bash
-sudo -u breeder-awards bash -c '
+sudo bash -c '
   set -a
   source /etc/breeder-awards.env
+  source /etc/breeder-awards-deploy.env
   set +a
   cd /var/www/breeder-awards
-  .venv/bin/python manage.py check --deploy
-  .venv/bin/python manage.py migrate
-  .venv/bin/python manage.py collectstatic --noinput
+  sudo -u breeder-awards --preserve-env \
+    .venv/bin/python manage.py check --deploy
+  sudo -u breeder-awards --preserve-env \
+    .venv/bin/python manage.py migrate
+  sudo -u breeder-awards --preserve-env \
+    .venv/bin/python manage.py collectstatic --noinput
 '
 ```
+
+Kontrollera därefter driftförutsättningarna enligt
+[backup- och återställningsguiden](backup-restore.md#verifiera-driftförutsättningarna).
 
 ## 5. Kör Django med systemd och Gunicorn
 
@@ -212,22 +245,27 @@ därför sätta headern enligt konfigurationen ovan.
 
 ## 7. Uppdatera servern
 
-Ta databas- och mediabackup före en uppdatering. Uppdatera därefter från `main`:
+Ta databas- och mediabackup enligt [backupguiden](backup-restore.md) före en
+uppdatering. Uppdatera därefter från `main`:
 
 ```bash
 sudo -u breeder-awards bash -c '
-  set -a
-  source /etc/breeder-awards.env
-  set +a
   cd /var/www/breeder-awards
   git pull --ff-only
   .venv/bin/python -m pip install -r requirements.txt
-  .venv/bin/python manage.py migrate
   .venv/bin/python manage.py collectstatic --noinput
+'
+sudo bash -c '
+  set -a
+  source /etc/breeder-awards.env
+  source /etc/breeder-awards-deploy.env
+  set +a
+  cd /var/www/breeder-awards
+  sudo -u breeder-awards --preserve-env \
+    .venv/bin/python manage.py migrate
 '
 sudo systemctl restart breeder-awards
 sudo systemctl status breeder-awards --no-pager
 ```
 
-Kontrollera efteråt webbplatsen och tjänstens logg. Fullständiga backup- och
-återställningsrutiner hanteras separat i DB-005.
+Kontrollera efteråt webbplatsen och tjänstens logg.
