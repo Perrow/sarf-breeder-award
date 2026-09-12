@@ -5,6 +5,7 @@ from django.test import SimpleTestCase
 from associations.models import Association, Membership
 from progression.admin import AchievementAdmin, AchievementBackgroundAdmin
 from progression.models import (
+    Achievement,
     AchievementBackground,
     AchievementRequirement,
     RequirementTextTemplate,
@@ -55,7 +56,7 @@ class SwedishAdminTextTests(SimpleTestCase):
         self.assertIn("platshållare", RequirementTextTemplate.PLACEHOLDER_HELP)
         self.assertNotIn("placeholders", RequirementTextTemplate.PLACEHOLDER_HELP)
 
-        achievement_admin = AchievementAdmin(admin.site._registry[AchievementAdmin.model].model, admin.site)
+        achievement_admin = AchievementAdmin(Achievement, admin.site)
         self.assertEqual(str(achievement_admin.preview(None)), "Spara utmärkelsen för att visa förhandsvisningen.")
 
         background_admin = AchievementBackgroundAdmin(AchievementBackground, admin.site)
