@@ -58,6 +58,10 @@
         min-width: 18rem;
     }
 
+    .bulk-requirements__scope-help {
+        margin: 12px 0 0;
+    }
+
     .bulk-requirements__warning {
         margin: 16px 0 0;
         padding: 12px 16px;
@@ -188,6 +192,10 @@
                         {{ values_form.species_groups }}
                     </div>
                 </div>
+
+                <p class="help bulk-requirements__scope-help">
+                    Lämna både släkten och artgrupper tomma för att kravet ska gälla utan avgränsning till släkte eller artgrupp.
+                </p>
 
                 {% if has_different_existing_scopes %}
                 <p class="bulk-requirements__warning">
