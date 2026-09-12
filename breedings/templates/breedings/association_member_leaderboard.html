@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>{{ association.name }}</h1>
+{% if association.website_url %}
+<p><a href="{{ association.website_url }}" target="_blank" rel="noopener">Besök föreningens hemsida</a></p>
+{% endif %}
 <p class="text-body-secondary">Medlemstopplista för {{ selected_year }}.</p>
 
 {% include "breedings/includes/leaderboard_year_selector.html" %}
