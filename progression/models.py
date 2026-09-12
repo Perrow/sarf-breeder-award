@@ -304,7 +304,7 @@ class UserAchievement(models.Model):
     achievement_period_key = models.GeneratedField(
         expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
         output_field=models.IntegerField(),
-        db_persist=True,
+        db_persist=False,
         editable=False,
     )
     achieved_at = models.DateTimeField(auto_now_add=True)
