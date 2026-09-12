@@ -1,49 +1,105 @@
-# Lokal MariaDB
+# MariaDB lokalt och på server
 
 Applikationen använder MariaDB som enda normal databasbackend. SQLite används
 inte längre för lokal utveckling eller tester. MariaDB 10.10.1 eller senare
-krävs för projektets UCA 14-collationer.
+krävs för projektets UCA 14-collationer. MariaDB 10.11 LTS rekommenderas.
 
-## Installera server och byggberoenden i Ubuntu/WSL
+## Kontrollera versionen först
+
+```bash
+mariadb --version
+```
+
+Ubuntu 22.04 installerar MariaDB 10.6 från sin vanliga paketkälla. Den versionen
+saknar `uca1400_swedish_as_ci` och kan därför inte användas av projektet. Ubuntu
+24.04 levererar MariaDB 10.11 och kan använda distributionens paket direkt.
+
+### Ubuntu 24.04
 
 ```bash
 sudo apt update
-sudo apt install mariadb-server python3-dev default-libmysqlclient-dev build-essential pkg-config
+sudo apt install mariadb-server mariadb-client python3-dev \
+    default-libmysqlclient-dev build-essential pkg-config
 sudo systemctl enable --now mariadb
 ```
 
-`default-libmysqlclient-dev`, `build-essential` och `pkg-config` behövs för att
-installera Python-paketet `mysqlclient` på Linux. Installera därefter projektets
-Python-beroenden i den aktiverade virtuella miljön:
+### Ubuntu 22.04 och WSL
+
+Konfigurera MariaDB:s officiella paketkälla innan MariaDB installeras:
 
 ```bash
+sudo apt update
+sudo apt install curl apt-transport-https
+curl -LsS https://r.mariadb.com/downloads/mariadb_repo_setup \
+    | sudo bash -s -- \
+        --mariadb-server-version="mariadb-10.11" \
+        --skip-maxscale
+sudo apt update
+sudo apt install mariadb-server mariadb-client python3-dev \
+    default-libmysqlclient-dev build-essential pkg-config
+sudo systemctl enable --now mariadb
+```
+
+Om MariaDB 10.6 redan var installerad ska relevanta databaser säkerhetskopieras
+först. Uppgradera sedan paketen, starta servern och kör uppgraderingsverktyget i
+den ordningen:
+
+```bash
+sudo systemctl stop mariadb
+sudo apt install mariadb-server mariadb-client
+sudo systemctl start mariadb
+sudo mariadb-upgrade
+sudo systemctl restart mariadb
+```
+
+I WSL utan systemd används `sudo service mariadb start` och
+`sudo service mariadb restart` i stället. Kontrollera därefter att rätt version
+och collation finns:
+
+```bash
+mariadb --version
+sudo mariadb -e "SHOW COLLATION LIKE 'uca1400_swedish_as_ci';"
+```
+
+## Installera Python-beroenden
+
+`default-libmysqlclient-dev`, `build-essential` och `pkg-config` behövs för
+Python-paketet `mysqlclient`, som tillhandahåller modulen `MySQLdb`.
+
+Skapa och aktivera den virtuella miljön från projektkatalogen:
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+python -m pip install --upgrade pip
 python -m pip install -r requirements.txt
+```
+
+Verifiera vid problem med drivrutinen:
+
+```bash
+python -c "import MySQLdb; print('mysqlclient fungerar')"
 ```
 
 ## Läs in tidszonsdata
 
-Projektet använder `USE_TZ=True`. MariaDB-serverns tidszonstabeller måste därför
-läsas in en gång per server för att Djangos tidszonskonverteringar ska fungera:
+Projektet använder `USE_TZ=True`. MariaDB-serverns tidszonstabeller måste läsas
+in en gång per server:
 
 ```bash
 sudo mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mariadb mysql
 ```
 
-På installationer där verktyget har det äldre namnet används i stället:
+På installationer där verktyget har det äldre namnet används:
 
 ```bash
 sudo mysql_tzinfo_to_sql /usr/share/zoneinfo | sudo mariadb mysql
 ```
 
-## Skapa databas och användare
+## Lokal databas och användare
 
-Välj egna lösenord och checka inte in dem i Git. Öppna MariaDB-klienten:
-
-```bash
-sudo mariadb
-```
-
-Skapa utvecklingsdatabasen och användaren:
+Öppna MariaDB-klienten med `sudo mariadb` och kör följande. Använd samma lösenord
+som senare anges i `.env`:
 
 ```sql
 CREATE DATABASE breeder_awards
@@ -60,51 +116,68 @@ GRANT ALL PRIVILEGES ON test_breeder_awards.*
 FLUSH PRIVILEGES;
 ```
 
-Databasanslutningen sätter dessutom `default_storage_engine=INNODB` för varje
-session, så att tabeller som Django skapar använder InnoDB och därmed stöder
-transaktioner och främmande nycklar.
+Den extra behörigheten behövs för att Django ska kunna skapa och ta bort
+`test_breeder_awards` när testsviten körs. På produktionsservern ska
+applikationsanvändaren endast få behörighet till produktionsdatabasen.
 
-## Miljövariabler
+Databasanslutningen sätter `default_storage_engine=INNODB` för varje session.
 
-Samtliga anslutningsvärden är obligatoriska:
+## Lokal `.env`
 
-```bash
-export MARIADB_DATABASE=breeder_awards
-export MARIADB_USER=breeder_awards
-export MARIADB_PASSWORD='byt-till-ett-lokalt-losenord'
-export MARIADB_HOST=127.0.0.1
-export MARIADB_PORT=3306
+Skapa `.env` i projektets rot. Filen är ignorerad av Git och får inte checkas in:
+
+```dotenv
+MARIADB_DATABASE=breeder_awards
+MARIADB_USER=breeder_awards
+MARIADB_PASSWORD=byt-till-ett-lokalt-losenord
+MARIADB_HOST=127.0.0.1
+MARIADB_PORT=3306
 ```
 
-Variablerna måste finnas i miljön för webbservern och för kommandon som
-`migrate`, `test`, `pulltest` och `run`. Lägg dem exempelvis i en lokal fil som
-är ignorerad av Git och läs in den i skalet innan skripten körs. `.env` är redan
-ignorerad, men applikationen läser inte automatiskt in filen.
-
-## Initiera och verifiera
-
-Skapa alla tabeller i den tomma databasen och kontrollera anslutningen:
+Applikationen läser inte `.env` automatiskt. Läs in den i varje nytt terminalfönster:
 
 ```bash
-python manage.py migrate
+set -a
+source .env
+set +a
+```
+
+Startas webbservern i bakgrunden måste även den processen startas om efter att
+miljövariablerna har ändrats.
+
+## Initiera, köra och testa lokalt
+
+```bash
 python manage.py check --database default
-```
-
-Starta därefter applikationen som vanligt:
-
-```bash
+python manage.py migrate
 ./run
 ```
 
-Kör hela testsviten mot den separata testdatabasen:
+Webbplatsen finns då på `http://127.0.0.1:8000/`. Kör hela testsviten i ett
+annat terminalfönster där `.env` också har lästs in:
 
 ```bash
 python manage.py test
 ```
 
-Django skapar automatiskt `test_breeder_awards` med `utf8mb4` och
-`uca1400_swedish_as_ci` under testkörningen och tar normalt bort den efteråt.
-Behåll den mellan körningar med `--keepdb` om det behövs.
+Skriptet `./pulltest` hämtar aktuell kod, migrerar databasen och kör hela
+testsviten. Även det kräver att den virtuella miljön är aktiverad och `.env`
+inläst.
 
 Databasens teckenuppsättning och collation kan kontrolleras enligt
 [collationdokumentationen](mariadb-collation.md).
+
+## Felsökning
+
+- `No module named 'MySQLdb'`: aktivera `.venv` och installera
+  `requirements.txt`; installera byggberoendena ovan om installationen misslyckas.
+- `Unknown database 'breeder_awards'`: skapa databasen enligt SQL-kommandona ovan
+  och kontrollera `MARIADB_DATABASE`.
+- `Unknown collation 'uca1400_swedish_as_ci'`: MariaDB är äldre än 10.10.1.
+- `Can't connect ... mysqld.sock`: starta MariaDB innan `mariadb-upgrade` eller
+  Django-kommandot körs.
+- `Access denied`: kontrollera användare, lösenord, värdnamnet `127.0.0.1` och
+  resultatet från `SHOW GRANTS FOR 'breeder_awards'@'127.0.0.1';`.
+
+För installation av hela applikationen i drift, se
+[serverinstallationen](server-setup.md).
