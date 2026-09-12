@@ -12,11 +12,20 @@
             </button>
             <div class="collapse navbar-collapse" id="mainNavigation">
                 <ul class="navbar-nav ms-auto mb-2 mb-md-0 align-items-md-center">
+                    {% with current_url=request.resolver_match.url_name %}
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'breeding_list' %}">Min sida</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'species_catalogue' %}">Arter</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'account' %}">Konto</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'breeding_list' or current_url == 'species_select' or current_url == 'species_search_results' or current_url == 'breeding_create' or current_url == 'breeding_detail' or current_url == 'breeding_edit' or current_url == 'breeding_delete' or current_url == 'breeding_return_to_draft' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'breeding_list' %}"{% if current_url == 'breeding_list' or current_url == 'species_select' or current_url == 'species_search_results' or current_url == 'breeding_create' or current_url == 'breeding_detail' or current_url == 'breeding_edit' or current_url == 'breeding_delete' or current_url == 'breeding_return_to_draft' %} aria-current="page"{% endif %}>Min sida</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'leaderboards' or current_url == 'individual_leaderboard' or current_url == 'association_leaderboard' or current_url == 'association_scoring_rules' or current_url == 'association_member_leaderboard' or current_url == 'association_member_breeding_list' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'leaderboards' %}"{% if current_url == 'leaderboards' or current_url == 'individual_leaderboard' or current_url == 'association_leaderboard' or current_url == 'association_scoring_rules' or current_url == 'association_member_leaderboard' or current_url == 'association_member_breeding_list' %} aria-current="page"{% endif %}>Topplistor</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'species_catalogue' or current_url == 'species_catalogue_search' or current_url == 'species_information' or current_url == 'species_reclassification_request' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'species_catalogue' %}"{% if current_url == 'species_catalogue' or current_url == 'species_catalogue_search' or current_url == 'species_information' or current_url == 'species_reclassification_request' %} aria-current="page"{% endif %}>Arter</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'account' or current_url == 'account_edit' or current_url == 'achievements' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'account' %}"{% if current_url == 'account' or current_url == 'account_edit' or current_url == 'achievements' %} aria-current="page"{% endif %}>Konto</a>
+                        </li>
                         <li class="nav-item ms-md-2">
                             <form method="post" action="{% url 'logout' %}">
                                 {% csrf_token %}
@@ -24,10 +33,13 @@
                             </form>
                         </li>
                     {% else %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'leaderboards' %}">Topplistor</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'register' %}">Skapa konto</a></li>
-                        <li class="nav-item ms-md-2 d-flex align-items-center"><a class="btn btn-primary btn-sm" href="{% url 'login' %}">Logga in</a></li>
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'leaderboards' or current_url == 'individual_leaderboard' or current_url == 'association_leaderboard' or current_url == 'association_scoring_rules' or current_url == 'association_member_leaderboard' or current_url == 'association_member_breeding_list' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'leaderboards' %}"{% if current_url == 'leaderboards' or current_url == 'individual_leaderboard' or current_url == 'association_leaderboard' or current_url == 'association_scoring_rules' or current_url == 'association_member_leaderboard' or current_url == 'association_member_breeding_list' %} aria-current="page"{% endif %}>Topplistor</a>
+                        </li>
+                        <li class="nav-item"><a class="nav-link{% if current_url == 'register' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'register' %}"{% if current_url == 'register' %} aria-current="page"{% endif %}>Skapa konto</a></li>
+                        <li class="nav-item ms-md-2 d-flex align-items-center"><a class="btn btn-primary btn-sm{% if current_url == 'login' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'login' %}"{% if current_url == 'login' %} aria-current="page"{% endif %}>Logga in</a></li>
                     {% endif %}
+                    {% endwith %}
                 </ul>
             </div>
         </div>
