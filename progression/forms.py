@@ -126,6 +126,7 @@ class BulkAchievementRequirementsForm(forms.Form):
     kind = forms.ChoiceField(
         choices=AchievementRequirement.Kind.choices,
         label="Kravtyp",
+        widget=forms.Select(attrs={"onchange": "this.form.submit()"}),
     )
 
     def __init__(self, *args, achievement, kind, **kwargs):

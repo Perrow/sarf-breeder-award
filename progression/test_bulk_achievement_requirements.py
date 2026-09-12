@@ -65,8 +65,12 @@ class BulkAchievementRequirementsAdminTests(TestCase):
         self.assertEqual(response.status_code, 200)
         content = response.content.decode()
         self.assertEqual(content.count('name="kind"'), 1)
-        self.assertContains(response, '<select name="kind"')
+        self.assertContains(
+            response,
+            '<select name="kind" onchange="this.form.submit()"',
+        )
         self.assertNotContains(response, 'type="hidden" name="kind"')
+        self.assertNotContains(response, "Visa nivåer")
 
     def test_post_creates_general_requirement_for_every_level(self):
         response = self.client.post(
