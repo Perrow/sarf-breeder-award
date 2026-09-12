@@ -17,6 +17,7 @@
 
     <form method="post" class="site-form">
         {% csrf_token %}
+        {% include "includes/form_error_summary.html" %}
         {{ form.non_field_errors }}
         <div class="form-field">
             {{ form.requested_breeding_class.label_tag }}

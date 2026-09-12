@@ -8,6 +8,7 @@
         <h1>Skapa konto</h1>
         <form method="post" class="site-form">
             {% csrf_token %}
+            {% include "includes/form_error_summary.html" %}
             {{ form.as_p }}
             <div class="form-actions">
                 <button class="btn btn-primary" type="submit">Skapa konto</button>
