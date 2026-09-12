@@ -11,13 +11,14 @@
 {% if leaderboard %}
 <div class="table-responsive">
 <table class="table table-striped align-middle">
+    <caption class="visually-hidden">Individuell topplista för {{ selected_year }}</caption>
     <thead>
         <tr><th scope="col">Användare</th><th scope="col">Poäng</th></tr>
     </thead>
     <tbody>
         {% for row in leaderboard %}
         <tr>
-            <td>{{ row.name }}</td>
+            <th scope="row" class="fw-normal">{{ row.name }}</th>
             <td>{{ row.points }}</td>
         </tr>
         {% endfor %}

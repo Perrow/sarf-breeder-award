@@ -27,11 +27,12 @@
     <h2 class="h4">Mina omklassningsbegäranden</h2>
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>Skapad</th><th>Från</th><th>Till</th><th>Status</th><th>Kommentar</th></tr></thead>
+            <caption class="visually-hidden">Mina omklassningsbegäranden för {{ species }}</caption>
+            <thead><tr><th scope="col">Skapad</th><th scope="col">Från</th><th scope="col">Till</th><th scope="col">Status</th><th scope="col">Kommentar</th></tr></thead>
             <tbody>
             {% for item in reclassification_requests %}
                 <tr>
-                    <td>{{ item.created_at }}</td>
+                    <th scope="row" class="fw-normal">{{ item.created_at }}</th>
                     <td>{{ item.get_current_breeding_class_display }}</td>
                     <td>{{ item.get_requested_breeding_class_display }}</td>
                     <td>{{ item.get_status_display }}</td>
@@ -95,11 +96,12 @@
     {% if approved_breedings %}
     <div class="table-responsive">
         <table class="table align-middle">
-            <thead><tr><th>Datum</th><th>Odlare</th><th>Förening</th><th>Klass</th></tr></thead>
+            <caption class="visually-hidden">Godkända odlingar för {{ species }}</caption>
+            <thead><tr><th scope="col">Datum</th><th scope="col">Odlare</th><th scope="col">Förening</th><th scope="col">Klass</th></tr></thead>
             <tbody>
             {% for breeding in approved_breedings %}
                 <tr>
-                    <td>{{ breeding.breeding_date }}</td>
+                    <th scope="row" class="fw-normal">{{ breeding.breeding_date }}</th>
                     <td>{{ breeding.breeder }}</td>
                     <td>{{ breeding.association }}</td>
                     <td>{{ breeding.breeding_class }}</td>
