@@ -4,6 +4,12 @@ from django.db.models import Q, Value
 from django.db.models.functions import Concat, Lower
 
 
+def normalize_cl_number(value):
+    if not value:
+        return ""
+    return "".join(value.split()).upper()
+
+
 class Genus(models.Model):
     scientific_name = models.CharField(max_length=100, unique=True)
     is_active = models.BooleanField(default=True)
@@ -102,6 +108,10 @@ class Species(models.Model):
             errors["common_name"] = "Ange ett populärnamn."
         if errors:
             raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.cl_number = normalize_cl_number(self.cl_number)
+        super().save(*args, **kwargs)
 
     def get_species_groups(self, include_hidden=False):
         groups = SpeciesGroup.objects.filter(Q(genera=self.genus) | Q(species=self)).distinct()
