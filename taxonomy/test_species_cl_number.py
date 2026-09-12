@@ -21,6 +21,23 @@ class SpeciesClNumberTests(TestCase):
         self.assertEqual(species.cl_number, "L046")
         self.assertEqual(str(species), "Hypancistrus zebra (L046)")
 
+    def test_cl_numbers_are_normalized_without_whitespace_and_in_uppercase(self):
+        cases = (
+            ("L 046", "L046"),
+            ("c 123", "C123"),
+            ("cw  009", "CW009"),
+        )
+        for index, (entered, expected) in enumerate(cases, start=1):
+            with self.subTest(entered=entered):
+                species = Species.objects.create(
+                    genus=self.genus,
+                    scientific_name=f"test{index}",
+                    common_name=f"Test {index}",
+                    cl_number=entered,
+                    breeding_class=Species.BreedingClass.BRONZE,
+                )
+                self.assertEqual(species.cl_number, expected)
+
     def test_species_without_cl_number_keeps_existing_display(self):
         species = Species.objects.create(
             genus=self.genus,
@@ -32,7 +49,7 @@ class SpeciesClNumberTests(TestCase):
         self.assertEqual(species.cl_number, "")
         self.assertEqual(str(species), "Hypancistrus inspector")
 
-    def test_species_search_matches_cl_number(self):
+    def test_species_search_matches_cl_number_with_spaces(self):
         species = Species.objects.create(
             genus=self.genus,
             scientific_name="zebra",
@@ -41,6 +58,7 @@ class SpeciesClNumberTests(TestCase):
             breeding_class=Species.BreedingClass.GOLD,
         )
 
+        self.assertEqual(species.cl_number, "L046")
         self.assertEqual(list(Species.objects.search("L 046")), [species])
 
     def test_admin_form_contains_cl_number_field(self):
