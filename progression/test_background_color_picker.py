@@ -34,8 +34,14 @@ class AchievementBackgroundColorPickerTests(TestCase):
         self.assertIn("picker.type = 'color'", script)
         self.assertIn("hexInput.value = picker.value.toUpperCase()", script)
         self.assertIn("mix-blend-mode:color", script)
+        self.assertIn("tintLayer.style.maskImage = maskValue", script)
+        self.assertIn("tintLayer.style.webkitMaskImage = maskValue", script)
+        self.assertIn("mask-size:contain", script)
+        self.assertIn("mask-repeat:no-repeat", script)
+        self.assertIn("mask-position:center", script)
         self.assertIn("hexInput.addEventListener('input', syncFromText)", script)
         self.assertIn("reader.readAsDataURL(file)", script)
+        self.assertIn("updateMask();", script)
 
     def test_color_picker_is_disabled_for_lifetime_background(self):
         script = (
