@@ -48,7 +48,11 @@ def get_database_settings(environ=None):
             "PORT": port,
             "OPTIONS": {
                 "charset": "utf8mb4",
-                "init_command": "SET default_storage_engine=INNODB",
+                "init_command": (
+                    "SET sql_mode='STRICT_TRANS_TABLES', "
+                    "default_storage_engine=INNODB"
+                ),
+                "isolation_level": "read committed",
             },
             "TEST": {
                 "CHARSET": "utf8mb4",

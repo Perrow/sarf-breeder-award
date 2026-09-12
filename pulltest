@@ -3,4 +3,4 @@ set -euo pipefail
 
 git pull
 python manage.py migrate
-python manage.py test
+./mariadbtest
