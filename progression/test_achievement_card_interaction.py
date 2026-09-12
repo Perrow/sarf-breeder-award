@@ -109,7 +109,11 @@ class AchievementCardInteractionTests(TestCase):
         self.assertContains(response, f'data-bs-target="#achievement-modal-{earned.pk}"')
         self.assertContains(response, 'aria-label="Interaktiv – visa detaljer"')
         self.assertContains(response, 'aria-label="Stäng"')
-        self.assertContains(response, "<strong>Nivå:</strong> Silver", html=True)
+        self.assertContains(response, '>Interaktiv</h2>')
+        self.assertContains(response, '<p class="mb-0">Silver</p>', html=True)
+        self.assertNotContains(response, "Nivå:")
+        self.assertContains(response, 'class="modal-content shadow-lg text-center"')
+        self.assertContains(response, 'class="modal-body text-center"')
         self.assertContains(response, "Detaljerad beskrivning")
         self.assertNotContains(response, 'data-bs-toggle="popover"')
 
@@ -126,7 +130,8 @@ class AchievementCardInteractionTests(TestCase):
 
         response = self.client.get(reverse("breeding_list"))
 
-        self.assertContains(response, "<strong>Nivå:</strong> Silver", html=True)
+        self.assertContains(response, '<p class="mb-0">Silver</p>', html=True)
+        self.assertNotContains(response, "Nivå:")
         self.assertNotContains(response, "Detaljerad beskrivning")
 
     def test_modal_uses_default_requirement_texts(self):
