@@ -159,8 +159,6 @@ class AchievementAdmin(admin.ModelAdmin):
                     .filter(
                         level__in=values_form.levels,
                         kind=selected_kind,
-                        genera__isnull=True,
-                        species_groups__isnull=True,
                     )
                     .order_by("pk")
                 )
@@ -182,11 +180,15 @@ class AchievementAdmin(admin.ModelAdmin):
                                 requirement.value = value
                                 requirement.save(update_fields=("value",))
                         else:
-                            AchievementRequirement.objects.create(
+                            requirement = AchievementRequirement.objects.create(
                                 level=level,
                                 kind=selected_kind,
                                 value=value,
                             )
+                        requirement.genera.set(values_form.cleaned_data["genera"])
+                        requirement.species_groups.set(
+                            values_form.cleaned_data["species_groups"]
+                        )
 
                     messages.success(
                         request,
@@ -207,6 +209,9 @@ class AchievementAdmin(admin.ModelAdmin):
             "title": f"Krav för alla nivåer – {achievement}",
             "values_form": values_form,
             "value_rows": values_form.rows(),
+            "has_different_existing_scopes": (
+                values_form.has_different_existing_scopes
+            ),
             "selected_kind": selected_kind,
             "change_url": reverse(
                 "admin:progression_achievement_change", args=[achievement.pk]

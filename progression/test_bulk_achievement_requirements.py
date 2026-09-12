@@ -3,7 +3,7 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 
-from taxonomy.models import Genus
+from taxonomy.models import Genus, SpeciesGroup
 
 from .models import Achievement, AchievementLevel, AchievementRequirement
 
@@ -98,41 +98,39 @@ class BulkAchievementRequirementsAdminTests(TestCase):
             [("Brons", 5), ("Silver", 12)],
         )
 
-    def test_post_updates_general_requirements_without_changing_scoped_ones(self):
-        general = AchievementRequirement.objects.create(
+    def test_post_applies_same_scope_to_requirements_for_every_level(self):
+        existing = AchievementRequirement.objects.create(
             level=self.bronze,
             kind=AchievementRequirement.Kind.BREEDING_COUNT,
             value=2,
         )
-        scoped = AchievementRequirement.objects.create(
-            level=self.bronze,
-            kind=AchievementRequirement.Kind.BREEDING_COUNT,
-            value=99,
-        )
-        scoped.genera.add(Genus.objects.create(scientific_name="Corydoras"))
+        genus = Genus.objects.create(scientific_name="Corydoras")
+        group = SpeciesGroup.objects.create(name="Pansarmalar")
 
         self.client.post(
             self.url,
             {
                 "kind": AchievementRequirement.Kind.BREEDING_COUNT,
                 "_save_requirements": "1",
+                "genera": [genus.pk],
+                "species_groups": [group.pk],
                 f"level_{self.bronze.pk}": 4,
                 f"level_{self.silver.pk}": 8,
             },
         )
 
-        general.refresh_from_db()
-        scoped.refresh_from_db()
-        self.assertEqual(general.value, 4)
-        self.assertEqual(scoped.value, 99)
-        self.assertEqual(scoped.genera.count(), 1)
+        requirements = AchievementRequirement.objects.filter(
+            level__achievement=self.achievement,
+            kind=AchievementRequirement.Kind.BREEDING_COUNT,
+        ).order_by("level__order")
         self.assertEqual(
-            AchievementRequirement.objects.filter(
-                level=self.bronze,
-                kind=AchievementRequirement.Kind.BREEDING_COUNT,
-            ).count(),
-            2,
+            list(requirements.values_list("value", flat=True)),
+            [4, 8],
         )
+        for requirement in requirements:
+            self.assertEqual(list(requirement.genera.all()), [genus])
+            self.assertEqual(list(requirement.species_groups.all()), [group])
+        self.assertEqual(requirements.first().pk, existing.pk)
 
     def test_invalid_value_does_not_make_partial_changes(self):
         existing = AchievementRequirement.objects.create(

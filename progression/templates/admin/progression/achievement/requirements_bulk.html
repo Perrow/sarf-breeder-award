@@ -1,6 +1,11 @@
 {% extends "admin/base_site.html" %}
 {% load i18n %}
 
+{% block extrahead %}
+{{ block.super }}
+{{ values_form.media }}
+{% endblock %}
+
 {% block breadcrumbs %}
 <div class="breadcrumbs">
     <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
@@ -13,7 +18,7 @@
 
 {% block content %}
 <div id="content-main">
-    <p>Välj kravtyp och ange ett kravvärde för varje nivå. Endast generella krav utan avgränsning till släkte eller artgrupp ändras.</p>
+    <p>Välj kravtyp, eventuella begränsningar och ett kravvärde för varje nivå. Samma begränsningar används för samtliga nivåer.</p>
 
     <form method="post" novalidate>
         {% csrf_token %}
@@ -22,6 +27,22 @@
             {{ values_form.kind.label_tag }}
             {{ values_form.kind }}
         </div>
+        <div class="form-row">
+            {{ values_form.genera.errors }}
+            {{ values_form.genera.label_tag }}
+            {{ values_form.genera }}
+        </div>
+        <div class="form-row">
+            {{ values_form.species_groups.errors }}
+            {{ values_form.species_groups.label_tag }}
+            {{ values_form.species_groups }}
+        </div>
+
+        {% if has_different_existing_scopes %}
+        <p class="warning">
+            De befintliga begränsningarna skiljer sig mellan nivåerna. Valen ovan ersätter dem när kraven sparas.
+        </p>
+        {% endif %}
 
         {% if value_rows %}
         {{ values_form.non_field_errors }}

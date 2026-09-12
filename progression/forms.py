@@ -1,6 +1,9 @@
 from pathlib import PurePosixPath
 
 from django import forms
+from django.contrib.admin.widgets import FilteredSelectMultiple
+
+from taxonomy.models import Genus, SpeciesGroup
 
 from .models import (
     Achievement,
@@ -128,6 +131,18 @@ class BulkAchievementRequirementsForm(forms.Form):
         label="Kravtyp",
         widget=forms.Select(attrs={"onchange": "this.form.submit()"}),
     )
+    genera = forms.ModelMultipleChoiceField(
+        queryset=Genus.objects.all(),
+        required=False,
+        label="Släkten",
+        widget=FilteredSelectMultiple("släkten", is_stacked=False),
+    )
+    species_groups = forms.ModelMultipleChoiceField(
+        queryset=SpeciesGroup.objects.all(),
+        required=False,
+        label="Artgrupper",
+        widget=FilteredSelectMultiple("artgrupper", is_stacked=False),
+    )
 
     def __init__(self, *args, achievement, kind, **kwargs):
         super().__init__(*args, **kwargs)
@@ -139,9 +154,7 @@ class BulkAchievementRequirementsForm(forms.Form):
         requirements = AchievementRequirement.objects.filter(
             level__in=self.levels,
             kind=kind,
-            genera__isnull=True,
-            species_groups__isnull=True,
-        ).order_by("pk")
+        ).prefetch_related("genera", "species_groups").order_by("pk")
         requirements_by_level = {}
         for requirement in requirements:
             requirements_by_level.setdefault(requirement.level_id, []).append(requirement)
@@ -156,6 +169,18 @@ class BulkAchievementRequirementsForm(forms.Form):
             for level_id, level_requirements in requirements_by_level.items()
             if len(level_requirements) == 1
         }
+        scope_signatures = {
+            (
+                tuple(sorted(genus.pk for genus in requirement.genera.all())),
+                tuple(sorted(group.pk for group in requirement.species_groups.all())),
+            )
+            for requirement in self.existing_requirements.values()
+        }
+        self.has_different_existing_scopes = len(scope_signatures) > 1
+        if len(scope_signatures) == 1:
+            genus_ids, group_ids = scope_signatures.pop()
+            self.fields["genera"].initial = genus_ids
+            self.fields["species_groups"].initial = group_ids
 
         for level in self.levels:
             existing = self.existing_requirements.get(level.pk)
@@ -174,7 +199,7 @@ class BulkAchievementRequirementsForm(forms.Form):
         if self.duplicate_levels:
             names = ", ".join(level.name for level in self.duplicate_levels)
             raise forms.ValidationError(
-                "Det finns flera generella krav av den valda typen för följande "
+                "Det finns flera krav av den valda typen för följande "
                 f"nivåer: {names}. Ta bort dubbletterna innan du fortsätter."
             )
         return cleaned_data
