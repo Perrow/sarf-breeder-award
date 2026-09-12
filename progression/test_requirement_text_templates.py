@@ -26,7 +26,7 @@ class RequirementTextTemplateTests(TestCase):
         with self.assertRaises(ValidationError) as error:
             template.save()
 
-        self.assertIn("Okända placeholders: unknown", str(error.exception))
+        self.assertIn("Okända platshållare: unknown", str(error.exception))
 
     def test_malformed_template_is_rejected(self):
         template = RequirementTextTemplate.objects.get(
