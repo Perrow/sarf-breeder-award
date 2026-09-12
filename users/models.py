@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
+from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
+
 
 class User(AbstractUser):
     """Application user model."""
@@ -10,6 +12,7 @@ class User(AbstractUser):
         unique=True,
         null=True,
         blank=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="publikt användarnamn",
     )
     location = models.CharField(max_length=150, blank=True, verbose_name="ort")

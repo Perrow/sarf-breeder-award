@@ -1,7 +1,12 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.db.models import Q, Value
-from django.db.models.functions import Concat, Lower
+from django.db.models.functions import Concat
+
+from breeder_awards.db_collations import (
+    CASE_INSENSITIVE_COLLATION,
+    CASE_SENSITIVE_COLLATION,
+)
 
 
 def normalize_cl_number(value):
@@ -11,7 +16,11 @@ def normalize_cl_number(value):
 
 
 class Genus(models.Model):
-    scientific_name = models.CharField(max_length=100, unique=True)
+    scientific_name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+    )
     is_active = models.BooleanField(default=True)
 
     class Meta:
@@ -24,7 +33,12 @@ class Genus(models.Model):
 
 
 class SpeciesGroup(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name="namn")
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
     is_visible = models.BooleanField(default=True, verbose_name="synlig för användare")
     genera = models.ManyToManyField(Genus, blank=True, related_name="species_groups", verbose_name="släkten")
     species = models.ManyToManyField("Species", blank=True, related_name="direct_species_groups", verbose_name="arter")
@@ -39,13 +53,17 @@ class SpeciesGroup(models.Model):
 
 
 class Geography(models.Model):
-    name = models.CharField(max_length=100, verbose_name="namn")
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
 
     class Meta:
         ordering = ["name"]
         verbose_name = "geografi"
         verbose_name_plural = "geografier"
-        constraints = [models.UniqueConstraint(Lower("name"), name="unique_geography_name_ci")]
 
     def __str__(self):
         return self.name
@@ -83,7 +101,11 @@ class Species(models.Model):
         GOLD = "gold", "Guld"
 
     genus = models.ForeignKey(Genus, on_delete=models.PROTECT, related_name="species", verbose_name="släkte")
-    scientific_name = models.CharField(max_length=100, verbose_name="artnamn")
+    scientific_name = models.CharField(
+        max_length=100,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="artnamn",
+    )
     common_name = models.CharField(max_length=200, verbose_name="populärnamn")
     english_name = models.CharField(max_length=200, blank=True, verbose_name="engelskt namn")
     cl_number = models.CharField(max_length=50, blank=True, verbose_name="C/L-nummer")
@@ -128,7 +150,11 @@ class Species(models.Model):
 
 class ScientificSpeciesSynonym(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE, related_name="scientific_synonyms", verbose_name="art")
-    scientific_name = models.CharField(max_length=200, verbose_name="vetenskapligt namn")
+    scientific_name = models.CharField(
+        max_length=200,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="vetenskapligt namn",
+    )
 
     class Meta:
         ordering = ["scientific_name"]
@@ -142,7 +168,11 @@ class ScientificSpeciesSynonym(models.Model):
 
 class CommonNameSpeciesSynonym(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE, related_name="common_name_synonyms", verbose_name="art")
-    common_name = models.CharField(max_length=200, verbose_name="populärnamn")
+    common_name = models.CharField(
+        max_length=200,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="populärnamn",
+    )
 
     class Meta:
         ordering = ["common_name"]
@@ -156,7 +186,11 @@ class CommonNameSpeciesSynonym(models.Model):
 
 class SpeciesLink(models.Model):
     species = models.ForeignKey(Species, on_delete=models.CASCADE, related_name="external_links", verbose_name="art")
-    url = models.URLField(max_length=500, verbose_name="URL")
+    url = models.URLField(
+        max_length=500,
+        db_collation=CASE_SENSITIVE_COLLATION,
+        verbose_name="URL",
+    )
     title = models.CharField(max_length=300, blank=True, verbose_name="sidtitel")
     source_name = models.CharField(max_length=100, verbose_name="källa")
 

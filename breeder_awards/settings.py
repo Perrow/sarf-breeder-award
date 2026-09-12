@@ -28,6 +28,7 @@ CSRF_COOKIE_SECURE = IS_PRODUCTION
 SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https") if IS_PRODUCTION else None
 
 INSTALLED_APPS = [
+    "breeder_awards.apps.BreederAwardsConfig",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
