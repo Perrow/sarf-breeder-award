@@ -301,6 +301,12 @@ class UserAchievement(models.Model):
     level_name = models.CharField(max_length=100)
     level_description = models.CharField(max_length=300, blank=True)
     calendar_year = models.PositiveIntegerField(null=True, blank=True)
+    achievement_period_key = models.GeneratedField(
+        expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
+        output_field=models.IntegerField(),
+        db_persist=True,
+        editable=False,
+    )
     achieved_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
@@ -312,14 +318,8 @@ class UserAchievement(models.Model):
         )
         constraints = [
             models.UniqueConstraint(
-                fields=("user", "level"),
-                condition=models.Q(calendar_year__isnull=True),
-                name="unique_lifetime_user_achievement",
-            ),
-            models.UniqueConstraint(
-                fields=("user", "level", "calendar_year"),
-                condition=models.Q(calendar_year__isnull=False),
-                name="unique_yearly_user_achievement",
+                fields=("user", "level", "achievement_period_key"),
+                name="unique_user_achievement_period",
             ),
         ]
         verbose_name = "uppnådd"
