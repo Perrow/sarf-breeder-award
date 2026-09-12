@@ -2,6 +2,7 @@
 import os
 from pathlib import Path
 
+from .database_config import get_database_settings
 from .email_config import get_email_settings
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -73,12 +74,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "breeder_awards.wsgi.application"
 
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.sqlite3",
-        "NAME": BASE_DIR / "db.sqlite3",
-    }
-}
+DATABASES = get_database_settings()
 
 AUTH_USER_MODEL = "users.User"
 LOGIN_URL = "login"
