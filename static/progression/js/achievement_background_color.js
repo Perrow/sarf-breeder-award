@@ -38,13 +38,21 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tintLayer = document.createElement('span');
         tintLayer.setAttribute('aria-hidden', 'true');
-        tintLayer.style.cssText = 'position:absolute;inset:0;mix-blend-mode:color;';
+        tintLayer.style.cssText = 'position:absolute;inset:0;mix-blend-mode:color;mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center;';
 
         wrapper.append(previewImage, tintLayer);
         previewRoot.replaceChildren(wrapper);
     }
 
     const isHex = (value) => /^#[0-9a-fA-F]{6}$/.test(value);
+
+    const updateMask = () => {
+        if (!tintLayer) return;
+        const source = previewImage?.src || '';
+        const maskValue = source ? `url("${source}")` : 'none';
+        tintLayer.style.maskImage = maskValue;
+        tintLayer.style.webkitMaskImage = maskValue;
+    };
 
     const updateTint = (value) => {
         if (tintLayer) tintLayer.style.background = isHex(value) ? value : 'transparent';
@@ -62,6 +70,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     picker.value = isHex(hexInput.value.trim()) ? hexInput.value.trim() : '#000000';
+    updateMask();
     syncFromText();
     updateAvailability();
 
@@ -81,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
         reader.addEventListener('load', () => {
             previewImage.src = reader.result;
             previewImage.style.display = '';
+            updateMask();
         });
         reader.readAsDataURL(file);
     });
