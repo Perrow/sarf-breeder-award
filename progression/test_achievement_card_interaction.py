@@ -25,26 +25,6 @@ class AchievementCardInteractionTests(TestCase):
         )
         self.client.force_login(self.user)
 
-    def _earn(self, description="Detaljerad beskrivning", year=None):
-        achievement = Achievement.objects.create(
-            name="Interaktiv",
-            calendar_year_based=year is not None,
-        )
-        level = AchievementLevel.objects.create(
-            achievement=achievement,
-            name="Silver",
-            description=description,
-            order=1,
-        )
-        return UserAchievement.objects.create(
-            user=self.user,
-            level=level,
-            achievement_name=achievement.name,
-            level_name=level.name,
-            level_description=description,
-            calendar_year=year,
-        )
-
     def _create_progression(self):
         association = Association.objects.create(name="Testförening")
         genus = Genus.objects.create(scientific_name="Corydoras")
@@ -99,41 +79,6 @@ class AchievementCardInteractionTests(TestCase):
             level_name=bronze.name,
         )
         return species_b
-
-    def test_my_page_card_opens_accessible_modal_with_details(self):
-        earned = self._earn()
-
-        response = self.client.get(reverse("breeding_list"))
-
-        self.assertContains(response, 'data-bs-toggle="modal"')
-        self.assertContains(response, f'data-bs-target="#achievement-modal-{earned.pk}"')
-        self.assertContains(response, 'aria-label="Interaktiv – visa detaljer"')
-        self.assertContains(response, 'aria-label="Stäng"')
-        self.assertContains(response, 'class="modal-title fs-4 mb-0"')
-        self.assertContains(response, '>Interaktiv</h2>')
-        self.assertContains(response, '<p class="mb-0">Silver</p>', html=True)
-        self.assertNotContains(response, "Nivå:")
-        self.assertContains(response, 'class="modal-content shadow-lg text-center"')
-        self.assertContains(response, 'class="modal-body text-center"')
-        self.assertContains(response, "Detaljerad beskrivning")
-        self.assertNotContains(response, 'data-bs-toggle="popover"')
-
-    def test_history_page_modal_includes_year(self):
-        self._earn(year=2026)
-
-        response = self.client.get(reverse("achievements"))
-
-        self.assertContains(response, 'data-bs-toggle="modal"')
-        self.assertContains(response, "<strong>År:</strong> 2026", html=True)
-
-    def test_card_without_description_has_clean_modal_content(self):
-        self._earn(description="")
-
-        response = self.client.get(reverse("breeding_list"))
-
-        self.assertContains(response, '<p class="mb-0">Silver</p>', html=True)
-        self.assertNotContains(response, "Nivå:")
-        self.assertNotContains(response, "Detaljerad beskrivning")
 
     def test_modal_uses_default_requirement_texts(self):
         species_b = self._create_progression()

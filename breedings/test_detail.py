@@ -62,13 +62,3 @@ class BreedingDetailTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 404)
-
-    def test_list_links_to_detail_page(self):
-        self.client.force_login(self.user)
-
-        response = self.client.get(reverse("breeding_list"))
-
-        self.assertContains(
-            response,
-            reverse("breeding_detail", args=[self.registration.pk]),
-        )

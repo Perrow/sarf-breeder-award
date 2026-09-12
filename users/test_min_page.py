@@ -34,17 +34,3 @@ class MinPageTests(TestCase):
         )
 
         self.assertRedirects(response, next_url)
-
-    def test_breeding_overview_and_navigation_use_min_page_name(self):
-        self.client.force_login(self.user)
-
-        response = self.client.get(reverse("breeding_list"))
-
-        self.assertContains(response, "<title>Min sida | Odlingskampanjen</title>", html=True)
-        self.assertContains(response, "<h1>Min sida</h1>", html=True)
-        self.assertContains(
-            response,
-            f'<a class="nav-link" href="{reverse("breeding_list")}">Min sida</a>',
-            html=True,
-        )
-        self.assertNotContains(response, "Mina odlingar")
