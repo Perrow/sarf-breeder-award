@@ -24,7 +24,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='userachievement',
             name='achievement_period_key',
-            field=models.GeneratedField(db_persist=True, expression=django.db.models.functions.comparison.Coalesce('calendar_year', models.Value(-1)), output_field=models.IntegerField()),
+            field=models.GeneratedField(db_persist=False, expression=django.db.models.functions.comparison.Coalesce('calendar_year', models.Value(-1)), output_field=models.IntegerField()),
         ),
         migrations.AddConstraint(
             model_name='userachievement',
