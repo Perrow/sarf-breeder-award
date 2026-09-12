@@ -20,12 +20,13 @@
 
     <div class="modal fade" id="achievement-modal-{{ presentation.earned.pk }}" tabindex="-1" aria-labelledby="achievement-modal-title-{{ presentation.earned.pk }}" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title fs-5" id="achievement-modal-title-{{ presentation.earned.pk }}">{{ presentation.earned.achievement_name }}</h2>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Stäng"></button>
+            <div class="modal-content shadow-lg text-center">
+                <div class="modal-header position-relative justify-content-center flex-column text-center">
+                    <h2 class="modal-title fs-5 mb-0" id="achievement-modal-title-{{ presentation.earned.pk }}">{{ presentation.earned.achievement_name }}</h2>
+                    <p class="mb-0">{{ presentation.earned.level_name }}</p>
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Stäng"></button>
                 </div>
-                <div class="modal-body text-start">
+                <div class="modal-body text-center">
                     {% if presentation.background_image or presentation.overlay or presentation.level_overlay %}
                     <div class="mx-auto mb-4" style="position:relative;width:200px;height:250px;overflow:hidden;">
                         {% if presentation.background_image %}
@@ -37,14 +38,13 @@
                     </div>
                     {% endif %}
 
-                    <p class="mb-2"><strong>Nivå:</strong> {{ presentation.earned.level_name }}</p>
                     {% if show_year and presentation.earned.calendar_year %}<p class="mb-2"><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>{% endif %}
                     {% if presentation.earned.level_description %}<p>{{ presentation.earned.level_description }}</p>{% endif %}
 
                     {% if presentation.requirements %}
                     <section class="mt-4" aria-labelledby="achievement-requirements-{{ presentation.earned.pk }}">
                         <h3 class="h6" id="achievement-requirements-{{ presentation.earned.pk }}">Krav som du har uppfyllt</h3>
-                        <ul class="mb-0">
+                        <ul class="list-unstyled mb-0">
                             {% for requirement in presentation.requirements %}
                             <li>{{ requirement.achieved_text }}</li>
                             {% endfor %}
@@ -57,7 +57,7 @@
                         <h3 class="h6" id="achievement-next-level-{{ presentation.earned.pk }}">Nästa nivå: {{ presentation.next_level.name }}</h3>
                         {% if presentation.next_requirements %}
                         <p class="mb-2">För att komma upp i nästa nivå behöver du:</p>
-                        <ul class="mb-0">
+                        <ul class="list-unstyled mb-0">
                             {% for requirement in presentation.next_requirements %}
                             <li>{{ requirement.remaining_text }}</li>
                             {% endfor %}
