@@ -6,6 +6,11 @@ from django.urls import path, reverse
 from django.utils import timezone
 from django.utils.html import format_html, format_html_join
 
+from .forms import (
+    AchievementAdminForm,
+    AchievementBackgroundAdminForm,
+    AchievementLevelAdminForm,
+)
 from .models import (
     Achievement,
     AchievementBackground,
@@ -88,6 +93,7 @@ class AchievementLevelInline(admin.TabularInline):
 
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
+    form = AchievementAdminForm
     list_display = ("name", "calendar_year_based", "has_image", "has_background")
     inlines = (AchievementLevelInline,)
     readonly_fields = ("preview",)
@@ -151,6 +157,7 @@ class AchievementAdmin(admin.ModelAdmin):
 
 @admin.register(AchievementBackground)
 class AchievementBackgroundAdmin(admin.ModelAdmin):
+    form = AchievementBackgroundAdminForm
     list_display = ("background_type", "tint_color", "preview")
     readonly_fields = ("preview",)
     ordering = ("calendar_year",)
@@ -168,10 +175,19 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
 
 @admin.register(AchievementLevel)
 class AchievementLevelAdmin(admin.ModelAdmin):
+    form = AchievementLevelAdminForm
     list_display = ("achievement", "name", "order")
     list_filter = ("achievement",)
     readonly_fields = ("requirements_summary",)
-    fields = ("achievement", "name", "description", "image", "order", "requirements_summary")
+    fields = (
+        "achievement",
+        "name",
+        "description",
+        "image",
+        "existing_image",
+        "order",
+        "requirements_summary",
+    )
 
     def response_change(self, request, obj):
         if _uses_special_save_action(request):
