@@ -4,7 +4,13 @@ from django.utils import timezone
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
-from .models import Achievement, AchievementBackground, AchievementRequirement, UserAchievement
+from .models import (
+    Achievement,
+    AchievementBackground,
+    AchievementRequirement,
+    RequirementTextTemplate,
+    UserAchievement,
+)
 
 
 def _registrations_for(user, year=None):
@@ -40,12 +46,12 @@ def _matching_registrations(requirement, registrations):
     ]
 
 
-def _requirement_is_met(requirement, registrations):
+def _requirement_current_value(requirement, registrations):
     matching = _matching_registrations(requirement, registrations)
     if requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
-        return len(matching) >= requirement.value
+        return len(matching)
     if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
-        return len({registration.species_id for registration in matching}) >= requirement.value
+        return len({registration.species_id for registration in matching})
 
     best_points_by_species = {}
     for registration in matching:
@@ -56,7 +62,11 @@ def _requirement_is_met(requirement, registrations):
             points,
             best_points_by_species.get(registration.species_id, 0),
         )
-    return sum(best_points_by_species.values()) >= requirement.value
+    return sum(best_points_by_species.values())
+
+
+def _requirement_is_met(requirement, registrations):
+    return _requirement_current_value(requirement, registrations) >= requirement.value
 
 
 def _level_is_met(level, registrations):
@@ -199,7 +209,63 @@ def achievements_for_user(user):
     )
 
 
-def _presentation_for(earned):
+def _requirement_scope(requirement):
+    names = [str(genus) for genus in requirement.genera.all()]
+    names.extend(group.name for group in requirement.species_groups.all())
+    if not names:
+        return ""
+    return ", ".join(names)
+
+
+def _unit_forms(kind):
+    if kind == AchievementRequirement.Kind.SPECIES_COUNT:
+        return "art", "arter", "en art"
+    if kind == AchievementRequirement.Kind.BREEDING_COUNT:
+        return "odling", "odlingar", "en odling"
+    return "poäng", "poäng", "1 poäng"
+
+
+def _quantity_text(value, singular, plural, one_text):
+    if value == 1:
+        return one_text
+    return f"{value} {plural}"
+
+
+def _requirement_progress(requirement, registrations):
+    current = _requirement_current_value(requirement, registrations)
+    missing = max(requirement.value - current, 0)
+    scope = _requirement_scope(requirement)
+    singular, plural, one_text = _unit_forms(requirement.kind)
+    target_unit = singular if requirement.value == 1 else plural
+    missing_unit = singular if missing == 1 else plural
+    context = {
+        "current": current,
+        "target": requirement.value,
+        "missing": missing,
+        "unit": singular,
+        "target_unit": target_unit,
+        "missing_unit": missing_unit,
+        "target_text": _quantity_text(requirement.value, singular, plural, one_text),
+        "missing_text": _quantity_text(missing, singular, plural, one_text),
+        "scope": scope,
+        "scope_suffix": f" inom {scope}" if scope else "",
+    }
+    achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
+        requirement.kind
+    )
+    return {
+        **context,
+        "kind": requirement.kind,
+        "achieved_text": achieved_template.format(**context),
+        "remaining_text": (
+            "Kravet är redan uppfyllt."
+            if missing <= 0
+            else next_template.format(**context)
+        ),
+    }
+
+
+def _presentation_for(earned, all_registrations=None):
     fallback_background = (
         AchievementBackground.for_year(earned.calendar_year)
         if earned.calendar_year is not None
@@ -207,6 +273,36 @@ def _presentation_for(earned):
     )
     achievement = earned.level.achievement
     custom_background = achievement.background_image if achievement.background_image else None
+    all_registrations = all_registrations if all_registrations is not None else _registrations_for(earned.user)
+    registrations = (
+        [
+            registration
+            for registration in all_registrations
+            if registration.breeding_date.year == earned.calendar_year
+        ]
+        if earned.calendar_year is not None
+        else all_registrations
+    )
+    requirements = list(
+        earned.level.requirements.prefetch_related("genera", "species_groups").all()
+    )
+    next_level = (
+        achievement.levels.filter(order__gt=earned.level.order)
+        .order_by("order")
+        .prefetch_related("requirements__genera", "requirements__species_groups")
+        .first()
+    )
+    current_progress = [
+        _requirement_progress(requirement, registrations)
+        for requirement in requirements
+    ]
+    next_progress = []
+    if next_level:
+        next_progress = [
+            _requirement_progress(requirement, registrations)
+            for requirement in next_level.requirements.all()
+        ]
+
     return {
         "earned": earned,
         "background": fallback_background,
@@ -222,11 +318,16 @@ def _presentation_for(earned):
         ),
         "overlay": achievement.image if achievement.image else None,
         "level_overlay": earned.level.image if earned.level.image else None,
+        "requirements": current_progress,
+        "next_level": next_level,
+        "next_requirements": next_progress,
     }
 
 
 def achievement_presentations_for_user(user):
-    return [_presentation_for(earned) for earned in achievements_for_user(user)]
+    earned = achievements_for_user(user)
+    registrations = _registrations_for(user)
+    return [_presentation_for(item, registrations) for item in earned]
 
 
 def _highest_level_per_achievement(earned):
@@ -242,6 +343,7 @@ def _highest_level_per_achievement(earned):
 def latest_achievement_presentations_for_user(user, limit=6):
     current_year = timezone.localdate().year
     earned = achievements_for_user(user)
+    registrations = _registrations_for(user)
     yearly = _highest_level_per_achievement(
         item for item in earned if item.calendar_year == current_year
     )
@@ -252,21 +354,22 @@ def latest_achievement_presentations_for_user(user, limit=6):
     career.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
     return {
         "year": current_year,
-        "yearly": [_presentation_for(item) for item in yearly[:limit]],
-        "career": [_presentation_for(item) for item in career[:limit]],
+        "yearly": [_presentation_for(item, registrations) for item in yearly[:limit]],
+        "career": [_presentation_for(item, registrations) for item in career[:limit]],
     }
 
 
 def all_achievement_presentations_for_user(user):
     earned = achievements_for_user(user)
+    registrations = _registrations_for(user)
     earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
 
-    career = [_presentation_for(item) for item in earned if item.calendar_year is None]
+    career = [_presentation_for(item, registrations) for item in earned if item.calendar_year is None]
     yearly_by_year = {}
     for item in earned:
         if item.calendar_year is None:
             continue
-        yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item))
+        yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item, registrations))
 
     yearly = [
         {"year": year, "achievements": yearly_by_year[year]}
