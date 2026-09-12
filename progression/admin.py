@@ -36,10 +36,15 @@ def _image_preview(background=None, overlay=None, custom_background=None):
             background.image.url,
         )
 
-    if background and background.tint_color:
+    if background and background.tint_color and background.image:
         tint_html = format_html(
-            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;"></span>',
+            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;'
+            "mask-image:url('{}');-webkit-mask-image:url('{}');mask-size:contain;"
+            "-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;"
+            'mask-position:center;-webkit-mask-position:center;"></span>',
             background.tint_color,
+            background.image.url,
+            background.image.url,
         )
 
     if overlay:
