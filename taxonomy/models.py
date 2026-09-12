@@ -20,13 +20,14 @@ class Genus(models.Model):
         max_length=100,
         unique=True,
         db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="vetenskapligt namn",
     )
-    is_active = models.BooleanField(default=True)
+    is_active = models.BooleanField(default=True, verbose_name="aktiv")
 
     class Meta:
         ordering = ["scientific_name"]
-        verbose_name = "genus"
-        verbose_name_plural = "genera"
+        verbose_name = "släkte"
+        verbose_name_plural = "släkten"
 
     def __str__(self):
         return self.scientific_name
