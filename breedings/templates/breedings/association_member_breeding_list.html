@@ -20,16 +20,16 @@
 <table class="table table-striped align-middle">
     <thead>
         <tr>
-            <th>Odlingsdatum</th>
             <th>Art</th>
+            <th>Odlingsdatum</th>
             <th class="text-end">Poäng</th>
         </tr>
     </thead>
     <tbody>
         {% for row in rows %}
         <tr>
-            <td>{{ row.registration.breeding_date }}</td>
             <td>{{ row.registration.species }}</td>
+            <td>{{ row.registration.breeding_date }}</td>
             <td class="text-end">{{ row.points }}</td>
         </tr>
         {% endfor %}
