@@ -5,6 +5,7 @@ from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
 
+from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
 from taxonomy.models import Genus, SpeciesGroup
 
 from .image_validators import validate_achievement_overlay, validate_award_image_dimensions
@@ -17,7 +18,12 @@ hex_color_validator = RegexValidator(
 
 
 class Achievement(models.Model):
-    name = models.CharField(max_length=100, unique=True, verbose_name="namn")
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
     calendar_year_based = models.BooleanField(
         default=False,
         verbose_name="ska uppnås inom kalenderår",
@@ -113,7 +119,11 @@ class AchievementLevel(models.Model):
         related_name="levels",
         verbose_name="utmärkelse",
     )
-    name = models.CharField(max_length=15, verbose_name="nivånamn")
+    name = models.CharField(
+        max_length=15,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="nivånamn",
+    )
     description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
     image = models.ImageField(
         upload_to="achievements/level_images/",
@@ -208,6 +218,7 @@ class RequirementTextTemplate(models.Model):
         max_length=20,
         choices=AchievementRequirement.Kind.choices,
         unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="kravtyp",
     )
     achieved_template = models.CharField(
