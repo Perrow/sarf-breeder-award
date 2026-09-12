@@ -121,6 +121,8 @@ Den extra behörigheten behövs för att Django ska kunna skapa och ta bort
 applikationsanvändaren endast få behörighet till produktionsdatabasen.
 
 Databasanslutningen sätter `default_storage_engine=INNODB` för varje session.
+Den aktiverar även `STRICT_TRANS_TABLES` och använder Djangos normala
+isolationsnivå `read committed`.
 
 ## Lokal `.env`
 
@@ -157,12 +159,18 @@ Webbplatsen finns då på `http://127.0.0.1:8000/`. Kör hela testsviten i ett
 annat terminalfönster där `.env` också har lästs in:
 
 ```bash
-python manage.py test
+./mariadbtest
 ```
 
-Skriptet `./pulltest` hämtar aktuell kod, migrerar databasen och kör hela
-testsviten. Även det kräver att den virtuella miljön är aktiverad och `.env`
-inläst.
+`mariadbtest` avbryter om anslutningen inte går till MariaDB. Kommandot kör
+Djangos databaskontroller, kontrollerar att modeller och migrationer stämmer
+överens och kör därefter hela testsviten. Django skapar testdatabasen från noll
+genom att applicera hela migrationshistoriken och tar bort den efter körningen.
+Använd därför inte `--keepdb` för denna verifiering.
+
+Skriptet `./pulltest` hämtar aktuell kod, migrerar databasen och kör samma
+MariaDB-verifiering. Även det kräver att den virtuella miljön är aktiverad och
+`.env` inläst.
 
 Databasens teckenuppsättning och collation kan kontrolleras enligt
 [collationdokumentationen](mariadb-collation.md).

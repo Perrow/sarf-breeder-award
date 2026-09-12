@@ -1,0 +1,18 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+python manage.py shell --command '
+from django.core.exceptions import ImproperlyConfigured
+from django.db import connection
+
+connection.ensure_connection()
+if connection.vendor != "mysql" or not connection.mysql_is_mariadb:
+    raise ImproperlyConfigured(
+        "MariaDB-verifieringen får inte köras med SQLite eller MySQL."
+    )
+print(f"Verifierar med MariaDB {connection.mysql_version}.")
+'
+
+python manage.py check --database default
+python manage.py makemigrations --check --dry-run
+python manage.py test --noinput

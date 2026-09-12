@@ -24,15 +24,16 @@ class MariaDbConfigurationTests(SimpleTestCase):
         self.assertEqual(database["HOST"], "127.0.0.1")
         self.assertEqual(database["PORT"], 3306)
 
-    def test_configuration_requests_utf8mb4_and_innodb(self):
+    def test_configuration_requests_utf8mb4_innodb_and_strict_mode(self):
         database = get_database_settings(self.environ)["default"]
         options = database["OPTIONS"]
 
         self.assertEqual(options["charset"], "utf8mb4")
         self.assertEqual(
             options["init_command"],
-            "SET default_storage_engine=INNODB",
+            "SET sql_mode='STRICT_TRANS_TABLES', default_storage_engine=INNODB",
         )
+        self.assertEqual(options["isolation_level"], "read committed")
         self.assertEqual(database["TEST"]["CHARSET"], "utf8mb4")
         self.assertEqual(
             database["TEST"]["COLLATION"],
