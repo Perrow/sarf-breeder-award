@@ -1,8 +1,9 @@
 {% extends "admin/base_site.html" %}
-{% load i18n %}
+{% load i18n static %}
 
 {% block extrahead %}
 {{ block.super }}
+<script src="{% url 'admin:jsi18n' %}"></script>
 {{ values_form.media }}
 <style>
     .bulk-requirements {
@@ -55,11 +56,6 @@
 
     .bulk-requirements__field-control select:not(.filtered) {
         min-width: 18rem;
-    }
-
-    .bulk-requirements__field-control .selector {
-        width: 100%;
-        max-width: 850px;
     }
 
     .bulk-requirements__warning {
@@ -134,6 +130,11 @@
         }
     }
 </style>
+{% endblock %}
+
+{% block extrastyle %}
+{{ block.super }}
+<link rel="stylesheet" href="{% static 'admin/css/forms.css' %}">
 {% endblock %}
 
 {% block breadcrumbs %}
