@@ -55,14 +55,15 @@
 {% if registrations %}
 <div class="table-responsive">
 <table class="table align-middle">
+    <caption class="visually-hidden">Mina odlingsregistreringar</caption>
     <thead>
         <tr>
-            <th>Art</th>
-            <th class="d-none d-sm-table-cell">Datum</th>
-            <th>Status</th>
-            <th>Klass</th>
-            <th><span class="visually-hidden">Granskningskommentar</span></th>
-            <th class="d-none d-sm-table-cell"></th>
+            <th scope="col">Art</th>
+            <th scope="col" class="d-none d-sm-table-cell">Datum</th>
+            <th scope="col">Status</th>
+            <th scope="col">Klass</th>
+            <th scope="col"><span class="visually-hidden">Granskningskommentar</span></th>
+            <th scope="col" class="d-none d-sm-table-cell"><span class="visually-hidden">Åtgärd</span></th>
         </tr>
     </thead>
     <tbody>
@@ -73,14 +74,14 @@
             {% url 'breeding_detail' registration.pk as row_url %}
         {% endif %}
         <tr data-mobile-href="{{ row_url }}">
-            <td>
+            <th scope="row" class="fw-normal">
                 {% if registration.species %}
                     {{ registration.species }}
                 {% else %}
                     {{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}
                     {% if registration.proposed_common_name %}<span class="text-body-secondary">({{ registration.proposed_common_name }})</span>{% endif %}
                 {% endif %}
-            </td>
+            </th>
             <td class="d-none d-sm-table-cell">{{ registration.breeding_date }}</td>
             <td>{{ registration.get_status_display }}</td>
             <td>
