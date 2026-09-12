@@ -22,7 +22,7 @@ class MariaDbRuntimeTests(TransactionTestCase):
             character_set, collation = cursor.fetchone()
 
         self.assertEqual(character_set, "utf8mb4")
-        self.assertEqual(collation, "uca1400_swedish_as_ci")
+        self.assertEqual(collation, "utf8mb4_uca1400_swedish_as_ci")
 
     def test_session_uses_strict_sql_mode(self):
         with connection.cursor() as cursor:
@@ -97,7 +97,10 @@ class MariaDbRuntimeTests(TransactionTestCase):
 
     def test_db003_collations_exist_on_actual_columns(self):
         expected_collations = {
-            ("taxonomy_geography", "name"): "uca1400_swedish_as_ci",
+            (
+                "taxonomy_geography",
+                "name",
+            ): "utf8mb4_uca1400_swedish_as_ci",
             ("taxonomy_specieslink", "url"): "utf8mb4_bin",
         }
 
