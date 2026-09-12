@@ -44,6 +44,9 @@ python manage.py runserver
 
 The development site is then available at `http://127.0.0.1:8000/`. The Django administration site is available at `/admin/`.
 
+For an Ubuntu production installation with Gunicorn, Nginx, systemd and HTTPS,
+follow [`docs/server-setup.md`](docs/server-setup.md).
+
 ## Production security
 
 Production must run with `DJANGO_ENV=production`. In production, the application requires `DJANGO_SECRET_KEY` to be supplied from the deployment environment or another secret store; no development fallback is used. `DJANGO_ALLOWED_HOSTS` must contain a comma-separated list of the public host names served by the deployment.
