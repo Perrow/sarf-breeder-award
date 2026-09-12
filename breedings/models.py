@@ -101,6 +101,17 @@ class SpeciesReclassificationRequest(models.Model):
     )
     decided_at = models.DateTimeField(null=True, blank=True, verbose_name="beslutad")
     decision_comment = models.TextField(blank=True, verbose_name="beslutskommentar")
+    pending_species_key = models.GeneratedField(
+        expression=models.Case(
+            models.When(status=Status.PENDING, then=models.F("species")),
+            default=models.Value(None),
+            output_field=models.BigIntegerField(),
+        ),
+        output_field=models.BigIntegerField(),
+        db_persist=False,
+        null=True,
+        editable=False,
+    )
 
     class Meta:
         ordering = ("-created_at", "-pk")
@@ -108,8 +119,7 @@ class SpeciesReclassificationRequest(models.Model):
         verbose_name_plural = "omklassningsbegäranden"
         constraints = [
             models.UniqueConstraint(
-                fields=("species",),
-                condition=Q(status="pending"),
+                fields=("pending_species_key",),
                 name="unique_pending_reclassification_per_species",
             ),
         ]
@@ -201,12 +211,10 @@ class AssociationCompetitionLimit(models.Model):
             ),
             models.UniqueConstraint(
                 fields=("effective_from_year", "genus"),
-                condition=Q(genus__isnull=False),
                 name="unique_association_genus_limit_per_year",
             ),
             models.UniqueConstraint(
                 fields=("effective_from_year", "species_group"),
-                condition=Q(species_group__isnull=False),
                 name="unique_association_group_limit_per_year",
             ),
         ]
