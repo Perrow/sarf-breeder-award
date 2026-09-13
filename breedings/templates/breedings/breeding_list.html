@@ -1,60 +1,31 @@
 {% extends "base.html" %}
-{% load manual_awards %}
+{% load manual_awards demerit_badges %}
 
 {% block title %}Min sida | Odlingskampanjen{% endblock %}
 
 {% block content %}
 {% manual_awards_for request.user as manual_awards %}
-{% if manual_awards %}
-<h2 class="h4">Manuellt utdelade utmärkelser</h2>
-<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
-    {% for grant in manual_awards %}
-        {% include "progression/includes/manual_award_card.html" with grant=grant %}
-    {% endfor %}
-</div>
-{% endif %}
-
-{% with yearly_count=yearly_achievements|length career_count=career_achievements|length %}
-{% with achievement_count=yearly_count|add:career_count %}
-{% if achievement_count < 6 %}
+{% demerit_badges_for request.user as demerit_badges %}
+{% lifetime_award_background as award_background %}
 <h2 class="h4">Utmärkelser</h2>
-{% if achievement_count %}
+{% if manual_awards or demerit_badges or yearly_achievements or career_achievements %}
 <div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
     {% for presentation in yearly_achievements %}
         {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
     {% endfor %}
     {% for presentation in career_achievements %}
         {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+    {% for grant in manual_awards %}
+        {% include "progression/includes/manual_award_card.html" with grant=grant award_background=award_background %}
+    {% endfor %}
+    {% for grant in demerit_badges %}
+        {% include "progression/includes/demerit_badge_card.html" with grant=grant award_background=award_background %}
     {% endfor %}
 </div>
 {% else %}
 <p class="text-body-secondary">Du har ännu inga utmärkelser.</p>
 {% endif %}
-{% else %}
-<h2 class="h4">Årsutmärkelser för innevarande år</h2>
-{% if yearly_achievements %}
-<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
-    {% for presentation in yearly_achievements %}
-        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
-    {% endfor %}
-</div>
-{% else %}
-<p class="text-body-secondary">Du har ännu ingen årsutmärkelse för innevarande år.</p>
-{% endif %}
-
-<h2 class="h4">Senaste karriärsutmärkelser</h2>
-{% if career_achievements %}
-<div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
-    {% for presentation in career_achievements %}
-        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
-    {% endfor %}
-</div>
-{% else %}
-<p class="text-body-secondary">Du har ännu ingen karriärsutmärkelse.</p>
-{% endif %}
-{% endif %}
-{% endwith %}
-{% endwith %}
 
 <p><a href="{% url 'achievements' %}">Visa alla utmärkelser</a></p>
 
