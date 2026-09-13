@@ -30,6 +30,11 @@ class Achievement(models.Model):
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="namn",
     )
+    description = models.CharField(
+        max_length=300,
+        blank=True,
+        verbose_name="beskrivning",
+    )
     achievement_type = models.CharField(
         max_length=20,
         choices=Type.choices,
