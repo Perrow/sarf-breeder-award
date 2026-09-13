@@ -1,12 +1,1 @@
-<article class="card flex-shrink-0" style="width: 12rem;">
-    {% if grant.award.image %}
-        <img src="{{ grant.award.image.url }}" class="card-img-top p-2" alt="">
-    {% endif %}
-    <div class="card-body">
-        <h3 class="h6 card-title mb-1">{{ grant.award.name }}</h3>
-        {% if grant.award.description %}
-            <p class="card-text small mb-2">{{ grant.award.description }}</p>
-        {% endif %}
-        <p class="card-text small text-body-secondary mb-0">Utdelad {{ grant.awarded_on }}</p>
-    </div>
-</article>
+{% include "progression/includes/simple_award_card.html" with modal_prefix="manual-award" object_pk=grant.pk name=grant.award.name description=grant.award.description image=grant.award.image background_image=award_background meta=grant.awarded_on %}
