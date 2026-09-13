@@ -1,54 +1,75 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import AchievementBackground, SelfmadeBadge, UserSelfmadeBadge
+from .models import Achievement, AchievementBackground, AchievementLevel, AchievementRequirement
+from .services import remove_selfmade_level, select_selfmade_level
 
 
 @login_required
 def selfmade_badges(request):
-    badges = SelfmadeBadge.objects.filter(active=True).order_by("name")
-    awarded_badge_ids = set(
-        UserSelfmadeBadge.objects.filter(user=request.user).values_list("badge_id", flat=True)
+    levels = (
+        AchievementLevel.objects.filter(
+            achievement__achievement_type=Achievement.Type.SELFMADE,
+            achievement__active=True,
+            requirements__kind=AchievementRequirement.Kind.SELF_SELECTED,
+        )
+        .select_related("achievement")
+        .distinct()
+        .order_by("achievement__name", "order", "name")
     )
-    award_background = AchievementBackground.lifetime()
+    selected_level_ids = set(
+        request.user.achievements.filter(
+            level__achievement__achievement_type=Achievement.Type.SELFMADE,
+        ).values_list("level_id", flat=True)
+    )
     return render(
         request,
         "progression/selfmade_badges.html",
         {
-            "badges": badges,
-            "awarded_badge_ids": awarded_badge_ids,
-            "award_background": award_background,
+            "levels": levels,
+            "selected_level_ids": selected_level_ids,
+            "award_background": AchievementBackground.lifetime(),
         },
     )
 
 
 @login_required
 @require_POST
-def award_selfmade_badge(request, badge_id):
-    badge = get_object_or_404(SelfmadeBadge, pk=badge_id, active=True)
-    _, created = UserSelfmadeBadge.objects.get_or_create(
-        user=request.user,
-        badge=badge,
+def award_selfmade_badge(request, level_id):
+    level = get_object_or_404(
+        AchievementLevel.objects.select_related("achievement"),
+        pk=level_id,
+        achievement__achievement_type=Achievement.Type.SELFMADE,
+        achievement__active=True,
     )
+    try:
+        _, created = select_selfmade_level(request.user, level)
+    except ValidationError:
+        return redirect("selfmade_badges")
     if created:
-        messages.success(request, f"Du har valt utmärkelsen {badge.name}.")
+        messages.success(request, f"Du har valt {level.achievement.name} – {level.name}.")
     else:
-        messages.info(request, f"Du har redan valt utmärkelsen {badge.name}.")
+        messages.info(request, f"Du har redan valt {level.achievement.name} – {level.name}.")
     return redirect("selfmade_badges")
 
 
 @login_required
 @require_POST
-def remove_selfmade_badge(request, badge_id):
-    badge = get_object_or_404(SelfmadeBadge, pk=badge_id)
-    deleted, _ = UserSelfmadeBadge.objects.filter(
-        user=request.user,
-        badge=badge,
-    ).delete()
+def remove_selfmade_badge(request, level_id):
+    level = get_object_or_404(
+        AchievementLevel.objects.select_related("achievement"),
+        pk=level_id,
+        achievement__achievement_type=Achievement.Type.SELFMADE,
+    )
+    try:
+        deleted = remove_selfmade_level(request.user, level)
+    except ValidationError:
+        return redirect("selfmade_badges")
     if deleted:
-        messages.success(request, f"Du har tagit bort utmärkelsen {badge.name}.")
+        messages.success(request, f"Du har tagit bort {level.achievement.name} – {level.name}.")
     else:
-        messages.info(request, f"Du hade inte valt utmärkelsen {badge.name}.")
+        messages.info(request, f"Du hade inte valt {level.achievement.name} – {level.name}.")
     return redirect("selfmade_badges")
