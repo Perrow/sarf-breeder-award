@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import DeMeritBadge, UserDeMeritBadge
+from .models import AchievementBackground, DeMeritBadge, UserDeMeritBadge
 
 
 @login_required
@@ -12,12 +12,14 @@ def demerit_badges(request):
     awarded_badge_ids = set(
         UserDeMeritBadge.objects.filter(user=request.user).values_list("badge_id", flat=True)
     )
+    award_background = AchievementBackground.lifetime()
     return render(
         request,
         "progression/demerit_badges.html",
         {
             "badges": badges,
             "awarded_badge_ids": awarded_badge_ids,
+            "award_background": award_background,
         },
     )
 
