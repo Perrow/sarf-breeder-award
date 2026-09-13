@@ -120,7 +120,12 @@ class Species(models.Model):
         ordering = ["genus__scientific_name", "scientific_name"]
         verbose_name = "art"
         verbose_name_plural = "arter"
-        constraints = [models.UniqueConstraint(fields=("genus", "scientific_name"), name="unique_genus_species_scientific_name")]
+        constraints = [
+            models.UniqueConstraint(
+                fields=("genus", "scientific_name", "cl_number"),
+                name="unique_genus_species_scientific_name_cl_number",
+            )
+        ]
 
     def clean(self):
         super().clean()
