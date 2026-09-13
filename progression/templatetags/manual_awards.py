@@ -1,6 +1,6 @@
 from django import template
 
-from progression.models import AchievementBackground, UserManualAward
+from progression.models import Achievement, AchievementBackground, UserAchievement
 
 
 register = template.Library()
@@ -9,8 +9,15 @@ register = template.Library()
 @register.simple_tag
 def manual_awards_for(user):
     if not getattr(user, "is_authenticated", False):
-        return UserManualAward.objects.none()
-    return UserManualAward.objects.filter(user=user).select_related("award").order_by("-awarded_on", "award__name", "pk")
+        return UserAchievement.objects.none()
+    return (
+        UserAchievement.objects.filter(
+            user=user,
+            level__achievement__achievement_type=Achievement.Type.MANUAL,
+        )
+        .select_related("level__achievement")
+        .order_by("-achieved_at", "achievement_name", "level__order", "pk")
+    )
 
 
 @register.simple_tag
