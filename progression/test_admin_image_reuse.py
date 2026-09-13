@@ -37,7 +37,7 @@ class AchievementAdminImageReuseTests(TestCase):
         form = AchievementAdminForm(
             data={
                 "name": "Återanvändare",
-                "calendar_year_based": False,
+                "achievement_type": Achievement.Type.CAREER,
                 "existing_image": source.image.name,
                 "existing_background_image": "",
             }
@@ -89,7 +89,7 @@ class AchievementAdminImageReuseTests(TestCase):
         form = AchievementAdminForm(
             data={
                 "name": "Konflikt",
-                "calendar_year_based": False,
+                "achievement_type": Achievement.Type.CAREER,
                 "existing_image": source.image.name,
                 "existing_background_image": "",
             },
