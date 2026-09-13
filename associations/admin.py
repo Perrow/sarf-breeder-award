@@ -1,4 +1,6 @@
+from django import forms
 from django.contrib import admin
+from django.db import models
 
 from .models import Association, Membership
 
@@ -40,8 +42,38 @@ def _permission_associations(user):
 
 @admin.register(Association)
 class AssociationAdmin(admin.ModelAdmin):
-    list_display = ("name", "organization_number", "email", "phone", "city")
-    search_fields = ("name", "organization_number", "email", "city")
+    list_display = ("name", "email", "contact_person", "website_url")
+    search_fields = ("name", "email", "contact_person", "note")
+    fieldsets = (
+        (
+            "Förening",
+            {
+                "fields": ("name", "website_url"),
+            },
+        ),
+        (
+            "Kontakt",
+            {
+                "fields": ("email", "contact_person"),
+            },
+        ),
+        (
+            "Anteckning",
+            {
+                "fields": ("note",),
+            },
+        ),
+    )
+    formfield_overrides = {
+        models.TextField: {
+            "widget": forms.Textarea(
+                attrs={
+                    "rows": 6,
+                    "style": "width:min(100%, 50rem);",
+                }
+            )
+        }
+    }
 
     def get_queryset(self, request):
         return super().get_queryset(request).filter(pk__in=_permission_associations(request.user))
