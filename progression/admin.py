@@ -135,6 +135,7 @@ class AchievementAdmin(admin.ModelAdmin):
     readonly_fields = ("preview",)
     fields = (
         "name",
+        "description",
         "achievement_type",
         "active",
         "image",
