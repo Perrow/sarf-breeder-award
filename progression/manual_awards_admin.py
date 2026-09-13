@@ -1,5 +1,6 @@
 from django.contrib import admin
 
+from .forms import ManualAwardAdminForm, SelfmadeBadgeAdminForm
 from .models import ManualAward, SelfmadeBadge, UserManualAward
 
 
@@ -22,9 +23,17 @@ class SuperuserOnlyAdminMixin:
 
 @admin.register(ManualAward)
 class ManualAwardAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
+    form = ManualAwardAdminForm
     list_display = ("name", "description")
     search_fields = ("name", "description")
-    fields = ("name", "description", "image")
+    fields = (
+        "name",
+        "description",
+        "image",
+        "existing_image",
+        "background_image",
+        "existing_background_image",
+    )
 
 
 @admin.register(UserManualAward)
@@ -38,7 +47,16 @@ class UserManualAwardAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
 
 @admin.register(SelfmadeBadge)
 class SelfmadeBadgeAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
+    form = SelfmadeBadgeAdminForm
     list_display = ("name", "active", "description")
     list_filter = ("active",)
     search_fields = ("name", "description")
-    fields = ("name", "description", "image", "active")
+    fields = (
+        "name",
+        "description",
+        "image",
+        "existing_image",
+        "background_image",
+        "existing_background_image",
+        "active",
+    )
