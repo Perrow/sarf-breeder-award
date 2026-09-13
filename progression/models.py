@@ -4,7 +4,6 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
-from django.utils import timezone
 
 from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
 from taxonomy.models import Genus, SpeciesGroup
@@ -19,16 +18,29 @@ hex_color_validator = RegexValidator(
 
 
 class Achievement(models.Model):
+    class Type(models.TextChoices):
+        CAREER = "career", "Karriärsutmärkelse"
+        YEARLY = "yearly", "Årsutmärkelse"
+        MANUAL = "manual", "Manuellt utdelad utmärkelse"
+        SELFMADE = "selfmade", "Egenvald utmärkelse"
+
     name = models.CharField(
         max_length=100,
         unique=True,
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="namn",
     )
+    achievement_type = models.CharField(
+        max_length=20,
+        choices=Type.choices,
+        default=Type.CAREER,
+        verbose_name="typ",
+    )
     calendar_year_based = models.BooleanField(
         default=False,
         verbose_name="ska uppnås inom kalenderår",
     )
+    active = models.BooleanField(default=True, verbose_name="aktiv")
     image = models.ImageField(
         upload_to="achievements/images/",
         blank=True,
@@ -46,6 +58,10 @@ class Achievement(models.Model):
         ordering = ("name",)
         verbose_name = "utmärkelse"
         verbose_name_plural = "utmärkelser"
+
+    def clean(self):
+        super().clean()
+        self.calendar_year_based = self.achievement_type == self.Type.YEARLY
 
     def save(self, *args, **kwargs):
         self.full_clean()
@@ -121,7 +137,7 @@ class AchievementLevel(models.Model):
         verbose_name="utmärkelse",
     )
     name = models.CharField(
-        max_length=15,
+        max_length=100,
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="nivånamn",
     )
@@ -137,14 +153,8 @@ class AchievementLevel(models.Model):
     class Meta:
         ordering = ("achievement__name", "order", "name")
         constraints = [
-            models.UniqueConstraint(
-                fields=("achievement", "order"),
-                name="unique_achievement_level_order",
-            ),
-            models.UniqueConstraint(
-                fields=("achievement", "name"),
-                name="unique_achievement_level_name",
-            ),
+            models.UniqueConstraint(fields=("achievement", "order"), name="unique_achievement_level_order"),
+            models.UniqueConstraint(fields=("achievement", "name"), name="unique_achievement_level_name"),
         ]
         verbose_name = "nivå"
         verbose_name_plural = "nivåer"
@@ -162,6 +172,11 @@ class AchievementRequirement(models.Model):
         POINTS = "points", "Poäng"
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
         SPECIES_COUNT = "species_count", "Antal arter"
+        MANUAL_ASSIGNMENT = "manual_assignment", "Manuell tilldelning"
+        SELF_SELECTED = "self_selected", "Egenvald"
+
+    AUTOMATIC_KINDS = {Kind.POINTS, Kind.BREEDING_COUNT, Kind.SPECIES_COUNT}
+    EXPLICIT_KINDS = {Kind.MANUAL_ASSIGNMENT, Kind.SELF_SELECTED}
 
     level = models.ForeignKey(
         AchievementLevel,
@@ -169,8 +184,8 @@ class AchievementRequirement(models.Model):
         related_name="requirements",
         verbose_name="nivå",
     )
-    kind = models.CharField(max_length=20, choices=Kind.choices, verbose_name="kravtyp")
-    value = models.PositiveIntegerField(verbose_name="kravvärde")
+    kind = models.CharField(max_length=24, choices=Kind.choices, verbose_name="kravtyp")
+    value = models.PositiveIntegerField(null=True, blank=True, verbose_name="kravvärde")
     genera = models.ManyToManyField(
         Genus,
         blank=True,
@@ -191,22 +206,31 @@ class AchievementRequirement(models.Model):
 
     def clean(self):
         super().clean()
-        if self.value is not None and self.value < 1:
-            raise ValidationError({"value": "Kravvärdet måste vara minst 1."})
+        errors = {}
+        if self.kind in self.AUTOMATIC_KINDS:
+            if self.value is None or self.value < 1:
+                errors["value"] = "Kravvärdet måste vara minst 1."
+        elif self.value is not None:
+            errors["value"] = "Kravvärde används inte för manuella eller egenvalda krav."
+
+        if self.level_id:
+            achievement_type = self.level.achievement.achievement_type
+            allowed = {
+                Achievement.Type.CAREER: self.AUTOMATIC_KINDS,
+                Achievement.Type.YEARLY: self.AUTOMATIC_KINDS,
+                Achievement.Type.MANUAL: {self.Kind.MANUAL_ASSIGNMENT},
+                Achievement.Type.SELFMADE: {self.Kind.SELF_SELECTED},
+            }[achievement_type]
+            if self.kind not in allowed:
+                errors["kind"] = "Kravtypen är inte tillåten för den här utmärkelsetypen."
+        if errors:
+            raise ValidationError(errors)
 
 
 class RequirementTextTemplate(models.Model):
     ALLOWED_PLACEHOLDERS = {
-        "current",
-        "target",
-        "missing",
-        "unit",
-        "target_unit",
-        "missing_unit",
-        "target_text",
-        "missing_text",
-        "scope",
-        "scope_suffix",
+        "current", "target", "missing", "unit", "target_unit", "missing_unit",
+        "target_text", "missing_text", "scope", "scope_suffix",
     }
     PLACEHOLDER_HELP = (
         "Tillgängliga platshållare: {current}, {target}, {missing}, {unit}, "
@@ -216,22 +240,14 @@ class RequirementTextTemplate(models.Model):
     )
 
     kind = models.CharField(
-        max_length=20,
+        max_length=24,
         choices=AchievementRequirement.Kind.choices,
         unique=True,
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="kravtyp",
     )
-    achieved_template = models.CharField(
-        max_length=300,
-        verbose_name="uppnådda krav",
-        help_text=PLACEHOLDER_HELP,
-    )
-    next_level_template = models.CharField(
-        max_length=300,
-        verbose_name="till nästa nivå",
-        help_text=PLACEHOLDER_HELP,
-    )
+    achieved_template = models.CharField(max_length=300, verbose_name="uppnådda krav", help_text=PLACEHOLDER_HELP)
+    next_level_template = models.CharField(max_length=300, verbose_name="till nästa nivå", help_text=PLACEHOLDER_HELP)
 
     class Meta:
         ordering = ("kind",)
@@ -241,18 +257,9 @@ class RequirementTextTemplate(models.Model):
     @classmethod
     def defaults_for_kind(cls, kind):
         defaults = {
-            AchievementRequirement.Kind.SPECIES_COUNT: (
-                "Odla {target_text}{scope_suffix}.",
-                "Odla {missing_text} till{scope_suffix}.",
-            ),
-            AchievementRequirement.Kind.BREEDING_COUNT: (
-                "Gör {target_text}{scope_suffix}.",
-                "Gör {missing_text} till{scope_suffix}.",
-            ),
-            AchievementRequirement.Kind.POINTS: (
-                "Samla {target_text}{scope_suffix}.",
-                "Samla {missing_text} till{scope_suffix}.",
-            ),
+            AchievementRequirement.Kind.SPECIES_COUNT: ("Odla {target_text}{scope_suffix}.", "Odla {missing_text} till{scope_suffix}."),
+            AchievementRequirement.Kind.BREEDING_COUNT: ("Gör {target_text}{scope_suffix}.", "Gör {missing_text} till{scope_suffix}."),
+            AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }
         return defaults[kind]
 
@@ -275,9 +282,7 @@ class RequirementTextTemplate(models.Model):
             raise ValidationError(f"Ogiltig mall: {error}") from error
         unknown = fields - cls.ALLOWED_PLACEHOLDERS
         if unknown:
-            raise ValidationError(
-                "Okända platshållare: " + ", ".join(sorted(unknown))
-            )
+            raise ValidationError("Okända platshållare: " + ", ".join(sorted(unknown)))
 
     def clean(self):
         super().clean()
@@ -324,12 +329,7 @@ class UserAchievement(models.Model):
     achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
 
     class Meta:
-        ordering = (
-            "achievement_name",
-            "calendar_year",
-            "level__order",
-            "achieved_at",
-        )
+        ordering = ("achievement_name", "calendar_year", "level__order", "achieved_at")
         constraints = [
             models.UniqueConstraint(
                 fields=("user", "level", "achievement_period_key"),
@@ -342,125 +342,3 @@ class UserAchievement(models.Model):
     def __str__(self):
         suffix = f" ({self.calendar_year})" if self.calendar_year else ""
         return f"{self.user}: {self.achievement_name} – {self.level_name}{suffix}"
-
-
-class ManualAward(models.Model):
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        db_collation=CASE_INSENSITIVE_COLLATION,
-        verbose_name="namn",
-    )
-    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
-    image = models.ImageField(
-        upload_to="achievements/manual/",
-        blank=True,
-        validators=[validate_achievement_overlay],
-        verbose_name="utmärkelsebild",
-    )
-    background_image = models.ImageField(
-        upload_to="achievements/custom_backgrounds/",
-        blank=True,
-        validators=[validate_award_image_dimensions],
-        verbose_name="egen bakgrundsbild",
-    )
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "manuell utmärkelse"
-        verbose_name_plural = "manuella utmärkelser"
-
-    def __str__(self):
-        return self.name
-
-
-class UserManualAward(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="manual_awards",
-        verbose_name="användare",
-    )
-    award = models.ForeignKey(
-        ManualAward,
-        on_delete=models.PROTECT,
-        related_name="grants",
-        verbose_name="utmärkelse",
-    )
-    awarded_on = models.DateField(default=timezone.localdate, verbose_name="utdelningsdatum")
-    note = models.TextField(blank=True, verbose_name="anteckning")
-
-    class Meta:
-        ordering = ("-awarded_on", "award__name", "pk")
-        constraints = [
-            models.UniqueConstraint(
-                fields=("user", "award", "awarded_on"),
-                name="unique_manual_award_grant_per_day",
-            ),
-        ]
-        verbose_name = "manuell utdelning"
-        verbose_name_plural = "manuella utdelningar"
-
-    def __str__(self):
-        return f"{self.user}: {self.award} ({self.awarded_on})"
-
-
-class SelfmadeBadge(models.Model):
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        db_collation=CASE_INSENSITIVE_COLLATION,
-        verbose_name="namn",
-    )
-    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
-    image = models.ImageField(
-        upload_to="achievements/selfmade/",
-        blank=True,
-        validators=[validate_achievement_overlay],
-        verbose_name="märkesbild",
-    )
-    background_image = models.ImageField(
-        upload_to="achievements/custom_backgrounds/",
-        blank=True,
-        validators=[validate_award_image_dimensions],
-        verbose_name="egen bakgrundsbild",
-    )
-    active = models.BooleanField(default=True, verbose_name="aktiv")
-
-    class Meta:
-        ordering = ("name",)
-        verbose_name = "egenvald utmärkelse"
-        verbose_name_plural = "egenvalda utmärkelser"
-
-    def __str__(self):
-        return self.name
-
-
-class UserSelfmadeBadge(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="selfmade_badges",
-        verbose_name="användare",
-    )
-    badge = models.ForeignKey(
-        SelfmadeBadge,
-        on_delete=models.PROTECT,
-        related_name="grants",
-        verbose_name="egenvald utmärkelse",
-    )
-    awarded_at = models.DateTimeField(auto_now_add=True, verbose_name="egenvald")
-
-    class Meta:
-        ordering = ("-awarded_at", "badge__name", "pk")
-        constraints = [
-            models.UniqueConstraint(
-                fields=("user", "badge"),
-                name="unique_user_selfmade_badge",
-            ),
-        ]
-        verbose_name = "egenvald utmärkelse"
-        verbose_name_plural = "egenvalda utmärkelser"
-
-    def __str__(self):
-        return f"{self.user}: {self.badge}"
