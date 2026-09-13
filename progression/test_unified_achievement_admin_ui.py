@@ -27,7 +27,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
         )
         self.client.force_login(self.admin)
 
-    def test_progression_admin_menu_only_shows_achievements(self):
+    def test_progression_admin_menu_has_creation_and_assignment_entries(self):
         request = RequestFactory().get("/admin/")
         request.user = self.admin
 
@@ -39,7 +39,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         self.assertEqual(
             [model["object_name"] for model in progression_app["models"]],
-            ["Achievement"],
+            ["Achievement", "ManualAwardAssignment"],
+        )
+        self.assertEqual(
+            [model["name"] for model in progression_app["models"]],
+            ["Utmärkelser", "Tilldela utmärkelser"],
         )
 
     def test_achievement_form_uses_type_dropdown_and_common_fields(self):
@@ -172,6 +176,34 @@ class UnifiedAchievementAdminUiTests(TestCase):
         self.assertRedirects(
             response,
             reverse("admin:progression_achievement_change", args=[achievement.pk]),
+        )
+        self.assertTrue(
+            UserAchievement.objects.filter(user=self.user, level=level).exists()
+        )
+
+    def test_separate_assignment_admin_assigns_manual_level(self):
+        achievement = Achievement.objects.create(
+            name="Separat utdelning",
+            achievement_type=Achievement.Type.MANUAL,
+        )
+        level = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Silver",
+            order=1,
+        )
+        AchievementRequirement.objects.create(
+            level=level,
+            kind=AchievementRequirement.Kind.MANUAL_ASSIGNMENT,
+        )
+
+        response = self.client.post(
+            reverse("admin:progression_manualawardassignment_add"),
+            {"user": self.user.pk, "level": level.pk},
+        )
+
+        self.assertRedirects(
+            response,
+            reverse("admin:progression_manualawardassignment_changelist"),
         )
         self.assertTrue(
             UserAchievement.objects.filter(user=self.user, level=level).exists()
