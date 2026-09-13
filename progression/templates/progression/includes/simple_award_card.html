@@ -1,0 +1,42 @@
+<article class="flex-shrink-0 text-center" data-achievement="{{ name }}">
+    <button
+        type="button"
+        class="border-0 bg-transparent p-0"
+        data-bs-toggle="modal"
+        data-bs-target="#{{ modal_prefix }}-modal-{{ object_pk }}"
+        aria-label="{{ name }} – visa detaljer"
+    >
+        {% if background_image or image %}
+        <div style="position:relative;width:150px;height:188px;overflow:hidden;">
+            {% if background_image %}
+            <img src="{{ background_image.url }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:150px;height:188px;object-fit:contain;">
+            {% endif %}
+            {% if image %}<img src="{{ image.url }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:150px;height:188px;object-fit:contain;z-index:2;">{% endif %}
+        </div>
+        {% endif %}
+    </button>
+
+    <div class="modal fade" id="{{ modal_prefix }}-modal-{{ object_pk }}" tabindex="-1" aria-labelledby="{{ modal_prefix }}-modal-title-{{ object_pk }}" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content shadow-lg text-center">
+                <div class="modal-header position-relative justify-content-center flex-column text-center">
+                    <h2 class="modal-title fs-4 mb-0" id="{{ modal_prefix }}-modal-title-{{ object_pk }}">{{ name }}</h2>
+                    {% if subtitle %}<p class="mb-0">{{ subtitle }}</p>{% endif %}
+                    <button type="button" class="btn-close position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Stäng"></button>
+                </div>
+                <div class="modal-body text-center">
+                    {% if background_image or image %}
+                    <div class="mx-auto mb-4" style="position:relative;width:200px;height:250px;overflow:hidden;">
+                        {% if background_image %}
+                        <img src="{{ background_image.url }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">
+                        {% endif %}
+                        {% if image %}<img src="{{ image.url }}" alt="" aria-hidden="true" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:2;">{% endif %}
+                    </div>
+                    {% endif %}
+                    {% if description %}<p>{{ description }}</p>{% endif %}
+                    {% if meta %}<p class="mb-0 text-body-secondary">{{ meta }}</p>{% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
