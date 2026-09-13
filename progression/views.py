@@ -4,7 +4,7 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import Achievement, AchievementBackground, AchievementLevel, AchievementRequirement
+from .models import Achievement, AchievementBackground, AchievementLevel
 from .services import remove_selfmade_level, select_selfmade_level
 
 
@@ -14,10 +14,8 @@ def selfmade_badges(request):
         AchievementLevel.objects.filter(
             achievement__achievement_type=Achievement.Type.SELFMADE,
             achievement__active=True,
-            requirements__kind=AchievementRequirement.Kind.SELF_SELECTED,
         )
         .select_related("achievement")
-        .distinct()
         .order_by("achievement__name", "order", "name")
     )
     selected_level_ids = set(
