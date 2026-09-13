@@ -138,6 +138,17 @@ class DeMeritBadgeTests(TestCase):
         self.assertContains(response, "De-merit badges")
         self.assertContains(response, "Glömde doppvärmaren")
         self.assertContains(response, "De-merit badge · självtilldelad")
+        self.assertContains(response, 'class="flex-shrink-0 text-center"')
+
+    def test_awarded_badge_is_in_shared_award_list_on_my_page(self):
+        UserDeMeritBadge.objects.create(user=self.user, badge=self.badge)
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("breeding_list"))
+
+        self.assertContains(response, '<h2 class="h4">Utmärkelser</h2>', html=True)
+        self.assertContains(response, "Glömde doppvärmaren")
+        self.assertNotContains(response, '<h2 class="h4">De-merit badges</h2>', html=True)
 
     def test_inactive_awarded_badge_remains_visible_among_achievements(self):
         UserDeMeritBadge.objects.create(user=self.user, badge=self.badge)
