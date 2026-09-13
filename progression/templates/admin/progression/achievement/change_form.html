@@ -3,18 +3,26 @@
 {% block object-tools-items %}
 {{ block.super }}
 {% if original %}
-<li>
-    <a href="{% url 'admin:progression_achievement_requirements_bulk' original.pk %}">
-        Lägg till krav för alla nivåer
-    </a>
-</li>
-<li>
-    <form method="post" action="{% url 'admin:progression_achievement_revalidate' original.pk %}" style="display:inline;">
-        {% csrf_token %}
-        <button type="submit" class="button" onclick="return confirm('Granska utdelade utmärkelser mot nu gällande krav? Ogiltiga utdelningar tas bort och saknade giltiga utdelningar skapas.');">
-            Granska utdelade utmärkelser
-        </button>
-    </form>
-</li>
+    {% if original.achievement_type == "career" or original.achievement_type == "yearly" %}
+    <li>
+        <a href="{% url 'admin:progression_achievement_requirements_bulk' original.pk %}">
+            Lägg till krav för alla nivåer
+        </a>
+    </li>
+    <li>
+        <form method="post" action="{% url 'admin:progression_achievement_revalidate' original.pk %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" class="button" onclick="return confirm('Granska utdelade utmärkelser mot nu gällande krav? Ogiltiga utdelningar tas bort och saknade giltiga utdelningar skapas.');">
+                Granska utdelade utmärkelser
+            </button>
+        </form>
+    </li>
+    {% elif original.achievement_type == "manual" %}
+    <li>
+        <a href="{% url 'admin:progression_achievement_assign_manual' original.pk %}">
+            Tilldela nivå
+        </a>
+    </li>
+    {% endif %}
 {% endif %}
 {% endblock %}
