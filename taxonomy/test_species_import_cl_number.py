@@ -73,3 +73,41 @@ class SpeciesClNumberImportTests(TestCase):
         species.refresh_from_db()
 
         self.assertEqual(species.cl_number, "L046")
+
+    def test_full_reimport_without_cl_number_matches_empty_cl_variant(self):
+        genus = Genus.objects.create(scientific_name="Ancistrus")
+        Species.objects.create(
+            genus=genus,
+            scientific_name="sp.",
+            common_name="Ancistrus",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        Species.objects.create(
+            genus=genus,
+            scientific_name="sp.",
+            common_name="L184",
+            cl_number="L184",
+            breeding_class=Species.BreedingClass.SILVER,
+        )
+        path = self._write_file(
+            {
+                "genus": "Ancistrus",
+                "scientific_name": "sp.",
+                "breeding_class": "bronze",
+                "swedish_names": ["Ancistrus"],
+            }
+        )
+
+        import_species_file(path)
+
+        self.assertEqual(
+            Species.objects.filter(genus=genus, scientific_name="sp.").count(),
+            2,
+        )
+        self.assertTrue(
+            Species.objects.filter(
+                genus=genus,
+                scientific_name="sp.",
+                cl_number="",
+            ).exists()
+        )
