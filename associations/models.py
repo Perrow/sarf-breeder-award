@@ -4,15 +4,19 @@ from django.db import models
 
 
 class Association(models.Model):
-    name = models.CharField(max_length=200)
-    organization_number = models.CharField(max_length=50, blank=True)
-    email = models.EmailField(blank=True)
-    phone = models.CharField(max_length=50, blank=True)
+    name = models.CharField(max_length=200, verbose_name="namn")
+    organization_number = models.CharField(max_length=50, blank=True, verbose_name="organisationsnummer")
+    email = models.EmailField(blank=True, verbose_name="e-post")
+    phone = models.CharField(max_length=50, blank=True, verbose_name="telefon")
     website_url = models.URLField(max_length=500, blank=True, verbose_name="hemsida")
-    address = models.CharField(max_length=255, blank=True)
-    postal_code = models.CharField(max_length=20, blank=True)
-    city = models.CharField(max_length=100, blank=True)
-    description = models.TextField(blank=True)
+    address = models.CharField(max_length=255, blank=True, verbose_name="adress")
+    postal_code = models.CharField(max_length=20, blank=True, verbose_name="postnummer")
+    city = models.CharField(max_length=100, blank=True, verbose_name="ort")
+    description = models.TextField(blank=True, verbose_name="beskrivning")
+
+    class Meta:
+        verbose_name = "förening"
+        verbose_name_plural = "föreningar"
 
     def clean(self):
         super().clean()
@@ -28,17 +32,21 @@ class Membership(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="memberships",
+        verbose_name="användare",
     )
     association = models.ForeignKey(
         Association,
         on_delete=models.CASCADE,
         related_name="memberships",
+        verbose_name="förening",
     )
-    member_number = models.CharField(max_length=100, blank=True)
-    phone = models.CharField(max_length=50, blank=True)
-    association_data = models.TextField(blank=True)
+    member_number = models.CharField(max_length=100, blank=True, verbose_name="medlemsnummer")
+    phone = models.CharField(max_length=50, blank=True, verbose_name="telefon")
+    association_data = models.TextField(blank=True, verbose_name="föreningsuppgifter")
 
     class Meta:
+        verbose_name = "medlemskap"
+        verbose_name_plural = "medlemskap"
         constraints = [
             models.UniqueConstraint(
                 fields=("user", "association"),

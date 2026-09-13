@@ -60,7 +60,7 @@ class AchievementBackground(models.Model):
         blank=True,
         unique=True,
         verbose_name="kalenderår",
-        help_text="Lämna tomt för lifetime-bakgrunden.",
+        help_text="Lämna tomt för livstidsbakgrunden.",
     )
     image = models.ImageField(
         upload_to="achievements/backgrounds/",
@@ -72,7 +72,7 @@ class AchievementBackground(models.Model):
         blank=True,
         validators=[hex_color_validator],
         verbose_name="färgning",
-        help_text="Valfri färg i formatet #RRGGBB. Används bara för års-bakgrunder.",
+        help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.",
     )
 
     class Meta:
@@ -85,12 +85,12 @@ class AchievementBackground(models.Model):
         errors = {}
         if self.calendar_year is None:
             if self.tint_color:
-                errors["tint_color"] = "Lifetime-bakgrunden kan inte ha års-färgning."
+                errors["tint_color"] = "Livstidsbakgrunden kan inte ha årsfärgning."
             lifetime_query = AchievementBackground.objects.filter(calendar_year__isnull=True)
             if self.pk:
                 lifetime_query = lifetime_query.exclude(pk=self.pk)
             if lifetime_query.exists():
-                errors["calendar_year"] = "Det kan bara finnas en lifetime-bakgrund."
+                errors["calendar_year"] = "Det kan bara finnas en livstidsbakgrund."
         if errors:
             raise ValidationError(errors)
 
@@ -108,7 +108,7 @@ class AchievementBackground(models.Model):
 
     def __str__(self):
         if self.calendar_year is None:
-            return "Lifetime"
+            return "Livstid"
         return str(self.calendar_year)
 
 
@@ -174,7 +174,7 @@ class AchievementRequirement(models.Model):
         Genus,
         blank=True,
         related_name="achievement_requirements",
-        verbose_name="genera",
+        verbose_name="släkten",
     )
     species_groups = models.ManyToManyField(
         SpeciesGroup,
@@ -208,7 +208,7 @@ class RequirementTextTemplate(models.Model):
         "scope_suffix",
     }
     PLACEHOLDER_HELP = (
-        "Tillgängliga placeholders: {current}, {target}, {missing}, {unit}, "
+        "Tillgängliga platshållare: {current}, {target}, {missing}, {unit}, "
         "{target_unit}, {missing_unit}, {target_text}, {missing_text}, "
         "{scope}, {scope_suffix}. {scope_suffix} innehåller ' inom …' när ett "
         "släkte eller en artgrupp finns, annars tom text."
@@ -271,11 +271,11 @@ class RequirementTextTemplate(models.Model):
                 if field_name
             }
         except ValueError as error:
-            raise ValidationError(f"Ogiltig template: {error}") from error
+            raise ValidationError(f"Ogiltig mall: {error}") from error
         unknown = fields - cls.ALLOWED_PLACEHOLDERS
         if unknown:
             raise ValidationError(
-                "Okända placeholders: " + ", ".join(sorted(unknown))
+                "Okända platshållare: " + ", ".join(sorted(unknown))
             )
 
     def clean(self):
@@ -302,23 +302,25 @@ class UserAchievement(models.Model):
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name="achievements",
+        verbose_name="användare",
     )
     level = models.ForeignKey(
         AchievementLevel,
         on_delete=models.PROTECT,
         related_name="user_achievements",
+        verbose_name="nivå",
     )
-    achievement_name = models.CharField(max_length=100)
-    level_name = models.CharField(max_length=100)
-    level_description = models.CharField(max_length=300, blank=True)
-    calendar_year = models.PositiveIntegerField(null=True, blank=True)
+    achievement_name = models.CharField(max_length=100, verbose_name="utmärkelse")
+    level_name = models.CharField(max_length=100, verbose_name="nivånamn")
+    level_description = models.CharField(max_length=300, blank=True, verbose_name="nivåbeskrivning")
+    calendar_year = models.PositiveIntegerField(null=True, blank=True, verbose_name="kalenderår")
     achievement_period_key = models.GeneratedField(
         expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
         output_field=models.IntegerField(),
         db_persist=False,
         editable=False,
     )
-    achieved_at = models.DateTimeField(auto_now_add=True)
+    achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
 
     class Meta:
         ordering = (

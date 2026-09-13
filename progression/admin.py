@@ -256,7 +256,7 @@ class AchievementAdmin(admin.ModelAdmin):
     @admin.display(description="Förhandsvisning")
     def preview(self, obj):
         if not obj or not obj.pk:
-            return "Spara utmärkelsen för att visa preview."
+            return "Spara utmärkelsen för att visa förhandsvisningen."
         background = (
             AchievementBackground.for_year(timezone.localdate().year)
             if obj.calendar_year_based
@@ -278,12 +278,12 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
 
     @admin.display(description="Typ/år")
     def background_type(self, obj):
-        return obj.calendar_year if obj.calendar_year is not None else "Lifetime"
+        return obj.calendar_year if obj.calendar_year is not None else "Livstid"
 
     @admin.display(description="Förhandsvisning")
     def preview(self, obj):
         if not obj or not obj.pk:
-            return "Spara bakgrunden för att visa preview."
+            return "Spara bakgrunden för att visa förhandsvisningen."
         return _image_preview(obj)
 
 
@@ -349,7 +349,7 @@ class AchievementLevelAdmin(admin.ModelAdmin):
                 rows,
             )
             table = format_html(
-                '<table><thead><tr><th>Typ</th><th>Värde</th><th>Genera</th>'
+                '<table><thead><tr><th>Typ</th><th>Värde</th><th>Släkten</th>'
                 "<th>Artgrupper</th><th></th></tr></thead><tbody>{}</tbody></table>",
                 body,
             )
