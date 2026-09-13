@@ -12,7 +12,8 @@ class Association(models.Model):
     address = models.CharField(max_length=255, blank=True, verbose_name="adress")
     postal_code = models.CharField(max_length=20, blank=True, verbose_name="postnummer")
     city = models.CharField(max_length=100, blank=True, verbose_name="ort")
-    description = models.TextField(blank=True, verbose_name="beskrivning")
+    contact_person = models.CharField(max_length=200, blank=True, verbose_name="kontaktperson")
+    note = models.TextField(blank=True, verbose_name="anteckning")
 
     class Meta:
         verbose_name = "förening"
