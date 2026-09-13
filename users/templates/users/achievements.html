@@ -1,11 +1,11 @@
 {% extends "base.html" %}
-{% load manual_awards demerit_badges %}
+{% load manual_awards selfmade_badges %}
 
 {% block title %}Alla utmärkelser | Odlingskampanjen{% endblock %}
 
 {% block content %}
 {% manual_awards_for request.user as manual_awards %}
-{% demerit_badges_for request.user as demerit_badges %}
+{% selfmade_badges_for request.user as selfmade_badges %}
 {% lifetime_award_background as award_background %}
 <h1>Alla utmärkelser</h1>
 
@@ -20,17 +20,17 @@
 <p class="text-body-secondary">Du har ännu ingen manuellt utdelad utmärkelse.</p>
 {% endif %}
 
-<h2 class="h4 mt-4">De-merit badges</h2>
-{% if demerit_badges %}
+<h2 class="h4 mt-4">Egenvalda utmärkelser</h2>
+{% if selfmade_badges %}
 <div class="d-flex flex-wrap gap-3 mb-3">
-    {% for grant in demerit_badges %}
-        {% include "progression/includes/demerit_badge_card.html" with grant=grant award_background=award_background %}
+    {% for grant in selfmade_badges %}
+        {% include "progression/includes/selfmade_badge_card.html" with grant=grant award_background=award_background %}
     {% endfor %}
 </div>
 {% else %}
-<p class="text-body-secondary">Du har ännu inget de-merit badge.</p>
+<p class="text-body-secondary">Du har ännu ingen egenvald utmärkelse.</p>
 {% endif %}
-<p><a href="{% url 'demerit_badges' %}">Välj de-merit badges</a></p>
+<p><a href="{% url 'selfmade_badges' %}">Välj egenvalda utmärkelser</a></p>
 
 <h2 class="h4 mt-4">Karriärsutmärkelser</h2>
 {% if career_achievements %}
