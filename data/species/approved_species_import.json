@@ -15,7 +15,7 @@
     },
     {
       "genus": "Ancistrus",
-      "scientific_name": "sp. L184",
+      "scientific_name": "sp.",
       "breeding_class": "bronze",
       "swedish_names": ["Brilliant skäggmunsmal"],
       "english_names": ["Brilliant bristlenose"],
@@ -23,7 +23,7 @@
     },
     {
       "genus": "Ancistrus",
-      "scientific_name": "sp. L519",
+      "scientific_name": "sp.",
       "breeding_class": "bronze",
       "swedish_names": ["Kiefner 2"],
       "cl_number": "L519"
@@ -212,7 +212,7 @@
     },
     {
       "genus": "Osteogaster",
-      "scientific_name": "sp. CW010",
+      "scientific_name": "sp.",
       "breeding_class": "silver",
       "swedish_names": ["Orangebandad pansarmal"],
       "english_names": ["Gold Laser Cory"],
@@ -220,7 +220,7 @@
     },
     {
       "genus": "Panaqolus",
-      "scientific_name": "sp. L397",
+      "scientific_name": "sp.",
       "breeding_class": "gold",
       "swedish_names": ["L397"],
       "english_names": ["L397 Alenquer Tiger Pleco"],
