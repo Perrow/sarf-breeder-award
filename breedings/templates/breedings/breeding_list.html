@@ -6,9 +6,9 @@
 {% block content %}
 {% manual_awards_for request.user as manual_awards %}
 {% demerit_badges_for request.user as demerit_badges %}
-{% lifetime_award_background as award_background %}
 <h2 class="h4">Utmärkelser</h2>
 {% if manual_awards or demerit_badges or yearly_achievements or career_achievements %}
+{% if manual_awards or demerit_badges %}{% lifetime_award_background as award_background %}{% endif %}
 <div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
     {% for presentation in yearly_achievements %}
         {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
