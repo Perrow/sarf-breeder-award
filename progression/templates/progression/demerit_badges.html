@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}De-merit badges | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>De-merit badges</h1>
+<p class="text-body-secondary">Här kan du ge dig själv märken för misstag och missöden du vill bära med humor.</p>
+
+{% if badges %}
+<div class="row g-3">
+    {% for badge in badges %}
+    <div class="col-sm-6 col-lg-4">
+        <article class="card h-100">
+            {% if badge.image %}
+                <img src="{{ badge.image.url }}" class="card-img-top p-3" alt="">
+            {% endif %}
+            <div class="card-body d-flex flex-column">
+                <h2 class="h5 card-title">{{ badge.name }}</h2>
+                {% if badge.description %}
+                    <p class="card-text">{{ badge.description }}</p>
+                {% endif %}
+                {% if badge.id in awarded_badge_ids %}
+                    <p class="mt-auto mb-0 text-body-secondary">Redan tilldelat</p>
+                {% else %}
+                    <form method="post" action="{% url 'award_demerit_badge' badge.pk %}" class="mt-auto">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-primary">Tilldela mig märket</button>
+                    </form>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Det finns inga aktiva de-merit badges just nu.</p>
+{% endif %}
+
+<p class="mt-4"><a href="{% url 'achievements' %}">Tillbaka till Alla utmärkelser</a></p>
+{% endblock %}
