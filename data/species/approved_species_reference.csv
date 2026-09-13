@@ -1,8 +1,8 @@
 scientific_name,swedish_names,english_names,cl_number,breeding_class,existing_import,needs_swedish_name,source_scientific_names,source_rows
 Amatitlania nanolutea,Gul zebraciklid,,,bronze,no,no,Amatitlania nanolutea,1
 Ancistrus sp.,Ancistrus,,,bronze,no,no,Ancistrus sp.,10
-Ancistrus sp. L184,Brilliant skäggmunsmal,Brilliant bristlenose,L184,bronze,no,no,Ancistrus sp.,1
-Ancistrus sp. L519,Kiefner 2,,L519,bronze,no,no,Ancistrus sp.,2
+Ancistrus sp.,Brilliant skäggmunsmal,Brilliant bristlenose,L184,bronze,no,no,Ancistrus sp.,1
+Ancistrus sp.,Kiefner 2,,L519,bronze,no,no,Ancistrus sp.,2
 Andinoacara pulcher,Blå ciklid,Blue acara,,bronze,no,no,Andinoacara pulcher,1
 Apistogramma borellii,Gul dvärgciklid,,,silver,no,no,Apistogramma borellii,1
 Apistogramma macmasteri,,,,silver,no,yes,Apistogramma Macmasteri,1
@@ -25,7 +25,7 @@ Chromaphyosemion bivittatum,Tvåstrecks lyrstjärtskilli,,,bronze,no,no,Chromaph
 Chromaphyosemion splendopleure,Splendid killi,,,bronze,no,no,Chromaphyosemion splendopleure,1
 Cleithracara maronii,Nyckelhålsciklid,Keyhole cichlid,,silver,no,no,Cleithracara maronii,1
 Corydoras aurofrenatus,,,,gold,no,yes,Corydoras aurofrenatus,1
-Corydoras sp. C124,,,C124,silver,no,yes,Corydoras sp. C124,2
+Corydoras sp.,,,C124,silver,no,yes,Corydoras sp. C124,2
 Danio margaritatus,Galaxyrasbora,,,silver,no,no,Danio margaritatus,1
 Danio rerio,Zebrafisk | Leoparddanio,Zebrafish | Zebra danio,,bronze,yes,no,Danio rerio,1
 Desmocaris trispinosa,Nigeriansk hängande räka,,,bronze,no,no,Desmocaris trispinosa,1
@@ -51,8 +51,8 @@ Hoplisoma paleatum,Fläckig pansarmal,Peppered corydoras | Peppered cory,,bronze
 Hoplisoma panda,"Panda, Snow white",,,bronze,no,no,Hoplisoma panda,4
 Hoplisoma polystictum,,,,gold,no,yes,Hoplisoma polystictum,2
 Hoplisoma simile,,,,silver,no,yes,Hoplisoma simile | Hoplisoma similis,3
-Hoplisoma sp. C150,,,C150,gold,no,yes,Hoplisoma sp. C150,1
-Hoplisoma sp. CW140,,,CW140,silver,no,yes,Hoplisoma sp. CW140,2
+Hoplisoma sp.,,,C150,gold,no,yes,Hoplisoma sp. C150,1
+Hoplisoma sp.,,,CW140,silver,no,yes,Hoplisoma sp. CW140,2
 Hoplisoma sterbai,,,,silver,no,yes,Hoplisoma sterbai,4
 Hoplisoma weitzmani,,,,gold,no,yes,Hoplisoma weitzmani,3
 Hypancistrus seideli,L333 | Gul kungtigerspleco,L333,L333,gold,no,no,Hypancistrus sp.,3
@@ -78,12 +78,12 @@ Neolamprologus brichardi,Prinsessan av burundi,,,bronze,no,no,Neolamprologus bri
 Neolamprologus multifasciatus,,,,bronze,no,yes,Lamprologus multifasciatus,1
 Osteogaster aenea,Metallpansarmal | Bronspansarmal,Bronze corydoras | Bronze cory,,bronze,yes,no,Osteogaster aenea,1
 Osteogaster schultzei,,,,gold,no,yes,Osteogaster schultzei,1
-Osteogaster sp. CW009,,Green Laser Cory,CW009,gold,no,yes,Osteogaster sp. CW009,3
-Osteogaster sp. CW010,Orangebandad pansarmal,Gold Laser Cory,CW010,silver,no,no,Osteogaster sp. CW010,3
-Osteogaster sp. CW014,,,CW014,gold,no,yes,Osteogaster sp. CW014,3
+Osteogaster sp.,,Green Laser Cory,CW009,gold,no,yes,Osteogaster sp. CW009,3
+Osteogaster sp.,Orangebandad pansarmal,Gold Laser Cory,CW010,silver,no,no,Osteogaster sp. CW010,3
+Osteogaster sp.,,,CW014,gold,no,yes,Osteogaster sp. CW014,3
 Osteogaster venezuelanus,,,,silver,no,yes,Osteogaster venezuelanus,1
 Osteogaster zygata,,,,silver,no,yes,Osteogaster zygata,1
-Panaqolus sp. L397,L397,L397 Alenquer Tiger Pleco,L397,gold,no,no,Panaqolus sp.,1
+Panaqolus sp.,L397,L397 Alenquer Tiger Pleco,L397,gold,no,no,Panaqolus sp.,1
 Pelvicachromis pulcher,Palettciklid,Kribensis | Rainbow krib,,bronze,yes,no,Pelvicachromis pulcher,1
 Phalloceros caudimaculatus,,Dusky millions fish,,bronze,no,yes,Phalloceros caudimaculatus,1
 Platystacus cotylephorus,Spräcklig banjomal,,,gold,no,no,Platystacus cotylephorus,1
@@ -97,7 +97,7 @@ Pseudomugil luminatus,Red neon,,,bronze,no,no,Pseudomugil luminatus,1
 Pterophyllum altum,Altum orrinoco,,,gold,no,no,Pterophyllum altum,1
 Puntius titteya,Kopparbarb,Cherry barb,,bronze,no,no,Puntius titteya,1
 Scleromystax barbatus,,,,silver,no,yes,Scleromystax barbatus,1
-Scleromystax sp. CW038,,,CW038,gold,no,yes,Scleromystax sp.,1
+Scleromystax sp.,,,CW038,gold,no,yes,Scleromystax sp.,1
 Steatocranus casuarius,,Lionhead cichlid,,bronze,no,yes,Steatocranus casuarius,1
 Tanichthys micagemmae,Dvärgkardinal,,,bronze,no,no,Tanichthys micagemmae,1
 Trichopodus trichopterus,Blå gurami | Trepunktsgurami | Blå Marmorgurami,Three spot gourami | Blue gourami,,bronze,yes,no,Trichopodus trichopterus,1
