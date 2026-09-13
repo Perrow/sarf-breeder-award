@@ -144,7 +144,7 @@ class AchievementLevel(models.Model):
         verbose_name="utmärkelse",
     )
     name = models.CharField(
-        max_length=100,
+        max_length=15,
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="nivånamn",
     )
