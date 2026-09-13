@@ -26,11 +26,12 @@ class UnifiedAchievementAdminUiTests(TestCase):
         )
         self.client.force_login(self.admin)
 
-    def test_achievement_form_uses_type_dropdown_and_common_image_fields(self):
+    def test_achievement_form_uses_type_dropdown_and_common_fields(self):
         form = AchievementAdminForm()
 
         self.assertIn("achievement_type", form.fields)
         self.assertNotIn("calendar_year_based", form.fields)
+        self.assertIn("description", form.fields)
         self.assertIn("image", form.fields)
         self.assertIn("existing_image", form.fields)
         self.assertIn("background_image", form.fields)
@@ -160,14 +161,16 @@ class UnifiedAchievementAdminUiTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
-    def test_shared_card_displays_manual_type_in_detail_modal(self):
+    def test_shared_card_displays_type_and_description_in_detail_modal(self):
         achievement = Achievement.objects.create(
             name="Gemensamt kort",
+            description="Beskrivning av hela utmärkelsen.",
             achievement_type=Achievement.Type.MANUAL,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Silver",
+            description="Beskrivning av nivån.",
             order=1,
         )
         AchievementRequirement.objects.create(
@@ -179,7 +182,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
             level=level,
             achievement_name=achievement.name,
             level_name=level.name,
-            level_description="",
+            level_description=level.description,
         )
         self.client.force_login(self.user)
 
@@ -187,4 +190,6 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         self.assertContains(response, "Gemensamt kort")
         self.assertContains(response, "Manuellt utdelad utmärkelse")
+        self.assertContains(response, "Beskrivning av hela utmärkelsen.")
+        self.assertContains(response, "Beskrivning av nivån.")
         self.assertContains(response, 'id="achievement-modal-', count=1)
