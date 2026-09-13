@@ -1,6 +1,7 @@
 from django import template
 
-from progression.models import Achievement, UserAchievement
+from progression.models import Achievement
+from progression.services import achievement_presentations_for_user
 
 
 register = template.Library()
@@ -9,12 +10,10 @@ register = template.Library()
 @register.simple_tag
 def selfmade_badges_for(user):
     if not getattr(user, "is_authenticated", False):
-        return UserAchievement.objects.none()
-    return (
-        UserAchievement.objects.filter(
-            user=user,
-            level__achievement__achievement_type=Achievement.Type.SELFMADE,
-        )
-        .select_related("level__achievement")
-        .order_by("-achieved_at", "achievement_name", "level__order", "pk")
-    )
+        return []
+    return [
+        presentation
+        for presentation in achievement_presentations_for_user(user)
+        if presentation["earned"].level.achievement.achievement_type
+        == Achievement.Type.SELFMADE
+    ]
