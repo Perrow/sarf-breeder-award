@@ -9,21 +9,26 @@ from progression.models import Achievement, ManualAward, SelfmadeBadge
 
 class SharedAwardImageTests(TestCase):
     def setUp(self):
-        self.achievement = Achievement.objects.create(
-            name="Delad bildkälla",
+        self.achievement = Achievement.objects.create(name="Delad bildkälla")
+        Achievement.objects.filter(pk=self.achievement.pk).update(
             image="achievements/images/shared-overlay.png",
             background_image="achievements/custom_backgrounds/shared-background.png",
         )
-        self.manual_award = ManualAward.objects.create(
-            name="Manuell bildkälla",
+        self.achievement.refresh_from_db()
+
+        self.manual_award = ManualAward.objects.create(name="Manuell bildkälla")
+        ManualAward.objects.filter(pk=self.manual_award.pk).update(
             image="achievements/manual/manual-overlay.png",
             background_image="achievements/custom_backgrounds/manual-background.png",
         )
-        self.selfmade_badge = SelfmadeBadge.objects.create(
-            name="Egenvald bildkälla",
+        self.manual_award.refresh_from_db()
+
+        self.selfmade_badge = SelfmadeBadge.objects.create(name="Egenvald bildkälla")
+        SelfmadeBadge.objects.filter(pk=self.selfmade_badge.pk).update(
             image="achievements/selfmade/selfmade-overlay.png",
             background_image="achievements/custom_backgrounds/selfmade-background.png",
         )
+        self.selfmade_badge.refresh_from_db()
 
     def test_manual_award_can_reuse_images_from_all_award_types(self):
         form = ManualAwardAdminForm()
