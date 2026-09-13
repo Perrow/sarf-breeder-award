@@ -37,3 +37,18 @@ def award_selfmade_badge(request, badge_id):
     else:
         messages.info(request, f"Du har redan valt utmärkelsen {badge.name}.")
     return redirect("selfmade_badges")
+
+
+@login_required
+@require_POST
+def remove_selfmade_badge(request, badge_id):
+    badge = get_object_or_404(SelfmadeBadge, pk=badge_id)
+    deleted, _ = UserSelfmadeBadge.objects.filter(
+        user=request.user,
+        badge=badge,
+    ).delete()
+    if deleted:
+        messages.success(request, f"Du har tagit bort utmärkelsen {badge.name}.")
+    else:
+        messages.info(request, f"Du hade inte valt utmärkelsen {badge.name}.")
+    return redirect("selfmade_badges")
