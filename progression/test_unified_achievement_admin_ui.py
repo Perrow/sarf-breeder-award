@@ -1,5 +1,6 @@
+from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from progression.forms import AchievementAdminForm
@@ -25,6 +26,21 @@ class UnifiedAchievementAdminUiTests(TestCase):
             password="Test-password-123",
         )
         self.client.force_login(self.admin)
+
+    def test_progression_admin_menu_only_shows_achievements(self):
+        request = RequestFactory().get("/admin/")
+        request.user = self.admin
+
+        progression_app = next(
+            app
+            for app in admin.site.get_app_list(request)
+            if app["app_label"] == "progression"
+        )
+
+        self.assertEqual(
+            [model["object_name"] for model in progression_app["models"]],
+            ["Achievement"],
+        )
 
     def test_achievement_form_uses_type_dropdown_and_common_fields(self):
         form = AchievementAdminForm()
