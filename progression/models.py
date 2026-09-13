@@ -358,6 +358,12 @@ class ManualAward(models.Model):
         validators=[validate_achievement_overlay],
         verbose_name="utmärkelsebild",
     )
+    background_image = models.ImageField(
+        upload_to="achievements/custom_backgrounds/",
+        blank=True,
+        validators=[validate_award_image_dimensions],
+        verbose_name="egen bakgrundsbild",
+    )
 
     class Meta:
         ordering = ("name",)
@@ -412,6 +418,12 @@ class SelfmadeBadge(models.Model):
         blank=True,
         validators=[validate_achievement_overlay],
         verbose_name="märkesbild",
+    )
+    background_image = models.ImageField(
+        upload_to="achievements/custom_backgrounds/",
+        blank=True,
+        validators=[validate_award_image_dimensions],
+        verbose_name="egen bakgrundsbild",
     )
     active = models.BooleanField(default=True, verbose_name="aktiv")
 
