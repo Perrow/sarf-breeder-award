@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils import timezone
 
 from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
 from taxonomy.models import Genus, SpeciesGroup
@@ -18,28 +19,10 @@ hex_color_validator = RegexValidator(
 
 
 class Achievement(models.Model):
-    name = models.CharField(
-        max_length=100,
-        unique=True,
-        db_collation=CASE_INSENSITIVE_COLLATION,
-        verbose_name="namn",
-    )
-    calendar_year_based = models.BooleanField(
-        default=False,
-        verbose_name="ska uppnås inom kalenderår",
-    )
-    image = models.ImageField(
-        upload_to="achievements/images/",
-        blank=True,
-        validators=[validate_achievement_overlay],
-        verbose_name="utmärkelsebild",
-    )
-    background_image = models.ImageField(
-        upload_to="achievements/custom_backgrounds/",
-        blank=True,
-        validators=[validate_award_image_dimensions],
-        verbose_name="egen bakgrundsbild",
-    )
+    name = models.CharField(max_length=100, unique=True, db_collation=CASE_INSENSITIVE_COLLATION, verbose_name="namn")
+    calendar_year_based = models.BooleanField(default=False, verbose_name="ska uppnås inom kalenderår")
+    image = models.ImageField(upload_to="achievements/images/", blank=True, validators=[validate_achievement_overlay], verbose_name="utmärkelsebild")
+    background_image = models.ImageField(upload_to="achievements/custom_backgrounds/", blank=True, validators=[validate_award_image_dimensions], verbose_name="egen bakgrundsbild")
 
     class Meta:
         ordering = ("name",)
@@ -55,25 +38,9 @@ class Achievement(models.Model):
 
 
 class AchievementBackground(models.Model):
-    calendar_year = models.PositiveIntegerField(
-        null=True,
-        blank=True,
-        unique=True,
-        verbose_name="kalenderår",
-        help_text="Lämna tomt för livstidsbakgrunden.",
-    )
-    image = models.ImageField(
-        upload_to="achievements/backgrounds/",
-        validators=[validate_award_image_dimensions],
-        verbose_name="bakgrundsbild",
-    )
-    tint_color = models.CharField(
-        max_length=7,
-        blank=True,
-        validators=[hex_color_validator],
-        verbose_name="färgning",
-        help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.",
-    )
+    calendar_year = models.PositiveIntegerField(null=True, blank=True, unique=True, verbose_name="kalenderår", help_text="Lämna tomt för livstidsbakgrunden.")
+    image = models.ImageField(upload_to="achievements/backgrounds/", validators=[validate_award_image_dimensions], verbose_name="bakgrundsbild")
+    tint_color = models.CharField(max_length=7, blank=True, validators=[hex_color_validator], verbose_name="färgning", help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.")
 
     class Meta:
         ordering = ("calendar_year",)
@@ -113,37 +80,17 @@ class AchievementBackground(models.Model):
 
 
 class AchievementLevel(models.Model):
-    achievement = models.ForeignKey(
-        Achievement,
-        on_delete=models.CASCADE,
-        related_name="levels",
-        verbose_name="utmärkelse",
-    )
-    name = models.CharField(
-        max_length=15,
-        db_collation=CASE_INSENSITIVE_COLLATION,
-        verbose_name="nivånamn",
-    )
+    achievement = models.ForeignKey(Achievement, on_delete=models.CASCADE, related_name="levels", verbose_name="utmärkelse")
+    name = models.CharField(max_length=15, db_collation=CASE_INSENSITIVE_COLLATION, verbose_name="nivånamn")
     description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
-    image = models.ImageField(
-        upload_to="achievements/level_images/",
-        blank=True,
-        validators=[validate_achievement_overlay],
-        verbose_name="nivåbild",
-    )
+    image = models.ImageField(upload_to="achievements/level_images/", blank=True, validators=[validate_achievement_overlay], verbose_name="nivåbild")
     order = models.PositiveIntegerField(verbose_name="ordning")
 
     class Meta:
         ordering = ("achievement__name", "order", "name")
         constraints = [
-            models.UniqueConstraint(
-                fields=("achievement", "order"),
-                name="unique_achievement_level_order",
-            ),
-            models.UniqueConstraint(
-                fields=("achievement", "name"),
-                name="unique_achievement_level_name",
-            ),
+            models.UniqueConstraint(fields=("achievement", "order"), name="unique_achievement_level_order"),
+            models.UniqueConstraint(fields=("achievement", "name"), name="unique_achievement_level_name"),
         ]
         verbose_name = "nivå"
         verbose_name_plural = "nivåer"
@@ -162,26 +109,11 @@ class AchievementRequirement(models.Model):
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
         SPECIES_COUNT = "species_count", "Antal arter"
 
-    level = models.ForeignKey(
-        AchievementLevel,
-        on_delete=models.CASCADE,
-        related_name="requirements",
-        verbose_name="nivå",
-    )
+    level = models.ForeignKey(AchievementLevel, on_delete=models.CASCADE, related_name="requirements", verbose_name="nivå")
     kind = models.CharField(max_length=20, choices=Kind.choices, verbose_name="kravtyp")
     value = models.PositiveIntegerField(verbose_name="kravvärde")
-    genera = models.ManyToManyField(
-        Genus,
-        blank=True,
-        related_name="achievement_requirements",
-        verbose_name="släkten",
-    )
-    species_groups = models.ManyToManyField(
-        SpeciesGroup,
-        blank=True,
-        related_name="achievement_requirements",
-        verbose_name="artgrupper",
-    )
+    genera = models.ManyToManyField(Genus, blank=True, related_name="achievement_requirements", verbose_name="släkten")
+    species_groups = models.ManyToManyField(SpeciesGroup, blank=True, related_name="achievement_requirements", verbose_name="artgrupper")
 
     class Meta:
         ordering = ("level", "pk")
@@ -195,42 +127,12 @@ class AchievementRequirement(models.Model):
 
 
 class RequirementTextTemplate(models.Model):
-    ALLOWED_PLACEHOLDERS = {
-        "current",
-        "target",
-        "missing",
-        "unit",
-        "target_unit",
-        "missing_unit",
-        "target_text",
-        "missing_text",
-        "scope",
-        "scope_suffix",
-    }
-    PLACEHOLDER_HELP = (
-        "Tillgängliga platshållare: {current}, {target}, {missing}, {unit}, "
-        "{target_unit}, {missing_unit}, {target_text}, {missing_text}, "
-        "{scope}, {scope_suffix}. {scope_suffix} innehåller ' inom …' när ett "
-        "släkte eller en artgrupp finns, annars tom text."
-    )
+    ALLOWED_PLACEHOLDERS = {"current", "target", "missing", "unit", "target_unit", "missing_unit", "target_text", "missing_text", "scope", "scope_suffix"}
+    PLACEHOLDER_HELP = ("Tillgängliga platshållare: {current}, {target}, {missing}, {unit}, {target_unit}, {missing_unit}, {target_text}, {missing_text}, {scope}, {scope_suffix}. {scope_suffix} innehåller ' inom …' när ett släkte eller en artgrupp finns, annars tom text.")
 
-    kind = models.CharField(
-        max_length=20,
-        choices=AchievementRequirement.Kind.choices,
-        unique=True,
-        db_collation=CASE_INSENSITIVE_COLLATION,
-        verbose_name="kravtyp",
-    )
-    achieved_template = models.CharField(
-        max_length=300,
-        verbose_name="uppnådda krav",
-        help_text=PLACEHOLDER_HELP,
-    )
-    next_level_template = models.CharField(
-        max_length=300,
-        verbose_name="till nästa nivå",
-        help_text=PLACEHOLDER_HELP,
-    )
+    kind = models.CharField(max_length=20, choices=AchievementRequirement.Kind.choices, unique=True, db_collation=CASE_INSENSITIVE_COLLATION, verbose_name="kravtyp")
+    achieved_template = models.CharField(max_length=300, verbose_name="uppnådda krav", help_text=PLACEHOLDER_HELP)
+    next_level_template = models.CharField(max_length=300, verbose_name="till nästa nivå", help_text=PLACEHOLDER_HELP)
 
     class Meta:
         ordering = ("kind",)
@@ -240,18 +142,9 @@ class RequirementTextTemplate(models.Model):
     @classmethod
     def defaults_for_kind(cls, kind):
         defaults = {
-            AchievementRequirement.Kind.SPECIES_COUNT: (
-                "Odla {target_text}{scope_suffix}.",
-                "Odla {missing_text} till{scope_suffix}.",
-            ),
-            AchievementRequirement.Kind.BREEDING_COUNT: (
-                "Gör {target_text}{scope_suffix}.",
-                "Gör {missing_text} till{scope_suffix}.",
-            ),
-            AchievementRequirement.Kind.POINTS: (
-                "Samla {target_text}{scope_suffix}.",
-                "Samla {missing_text} till{scope_suffix}.",
-            ),
+            AchievementRequirement.Kind.SPECIES_COUNT: ("Odla {target_text}{scope_suffix}.", "Odla {missing_text} till{scope_suffix}."),
+            AchievementRequirement.Kind.BREEDING_COUNT: ("Gör {target_text}{scope_suffix}.", "Gör {missing_text} till{scope_suffix}."),
+            AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }
         return defaults[kind]
 
@@ -265,18 +158,12 @@ class RequirementTextTemplate(models.Model):
     @classmethod
     def _validate_template(cls, value):
         try:
-            fields = {
-                field_name.split(".", 1)[0].split("[", 1)[0]
-                for _, field_name, _, _ in Formatter().parse(value)
-                if field_name
-            }
+            fields = {field_name.split(".", 1)[0].split("[", 1)[0] for _, field_name, _, _ in Formatter().parse(value) if field_name}
         except ValueError as error:
             raise ValidationError(f"Ogiltig mall: {error}") from error
         unknown = fields - cls.ALLOWED_PLACEHOLDERS
         if unknown:
-            raise ValidationError(
-                "Okända platshållare: " + ", ".join(sorted(unknown))
-            )
+            raise ValidationError("Okända platshållare: " + ", ".join(sorted(unknown)))
 
     def clean(self):
         super().clean()
@@ -298,46 +185,51 @@ class RequirementTextTemplate(models.Model):
 
 
 class UserAchievement(models.Model):
-    user = models.ForeignKey(
-        settings.AUTH_USER_MODEL,
-        on_delete=models.CASCADE,
-        related_name="achievements",
-        verbose_name="användare",
-    )
-    level = models.ForeignKey(
-        AchievementLevel,
-        on_delete=models.PROTECT,
-        related_name="user_achievements",
-        verbose_name="nivå",
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="achievements", verbose_name="användare")
+    level = models.ForeignKey(AchievementLevel, on_delete=models.PROTECT, related_name="user_achievements", verbose_name="nivå")
     achievement_name = models.CharField(max_length=100, verbose_name="utmärkelse")
     level_name = models.CharField(max_length=100, verbose_name="nivånamn")
     level_description = models.CharField(max_length=300, blank=True, verbose_name="nivåbeskrivning")
     calendar_year = models.PositiveIntegerField(null=True, blank=True, verbose_name="kalenderår")
-    achievement_period_key = models.GeneratedField(
-        expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
-        output_field=models.IntegerField(),
-        db_persist=False,
-        editable=False,
-    )
+    achievement_period_key = models.GeneratedField(expression=models.functions.Coalesce("calendar_year", models.Value(-1)), output_field=models.IntegerField(), db_persist=False, editable=False)
     achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
 
     class Meta:
-        ordering = (
-            "achievement_name",
-            "calendar_year",
-            "level__order",
-            "achieved_at",
-        )
-        constraints = [
-            models.UniqueConstraint(
-                fields=("user", "level", "achievement_period_key"),
-                name="unique_user_achievement_period",
-            ),
-        ]
+        ordering = ("achievement_name", "calendar_year", "level__order", "achieved_at")
+        constraints = [models.UniqueConstraint(fields=("user", "level", "achievement_period_key"), name="unique_user_achievement_period")]
         verbose_name = "uppnådd"
         verbose_name_plural = "uppnådda"
 
     def __str__(self):
         suffix = f" ({self.calendar_year})" if self.calendar_year else ""
         return f"{self.user}: {self.achievement_name} – {self.level_name}{suffix}"
+
+
+class ManualAward(models.Model):
+    name = models.CharField(max_length=100, unique=True, db_collation=CASE_INSENSITIVE_COLLATION, verbose_name="namn")
+    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
+    image = models.ImageField(upload_to="achievements/manual/", blank=True, validators=[validate_achievement_overlay], verbose_name="utmärkelsebild")
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "manuell utmärkelse"
+        verbose_name_plural = "manuella utmärkelser"
+
+    def __str__(self):
+        return self.name
+
+
+class UserManualAward(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="manual_awards", verbose_name="användare")
+    award = models.ForeignKey(ManualAward, on_delete=models.PROTECT, related_name="grants", verbose_name="utmärkelse")
+    awarded_on = models.DateField(default=timezone.localdate, verbose_name="utdelningsdatum")
+    note = models.TextField(blank=True, verbose_name="anteckning")
+
+    class Meta:
+        ordering = ("-awarded_on", "award__name", "pk")
+        constraints = [models.UniqueConstraint(fields=("user", "award", "awarded_on"), name="unique_manual_award_grant_per_day")]
+        verbose_name = "manuell utdelning"
+        verbose_name_plural = "manuella utdelningar"
+
+    def __str__(self):
+        return f"{self.user}: {self.award} ({self.awarded_on})"
