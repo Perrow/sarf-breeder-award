@@ -61,6 +61,8 @@ class Achievement(models.Model):
 
     def clean(self):
         super().clean()
+        if self.calendar_year_based and self.achievement_type == self.Type.CAREER:
+            self.achievement_type = self.Type.YEARLY
         self.calendar_year_based = self.achievement_type == self.Type.YEARLY
 
     def save(self, *args, **kwargs):
