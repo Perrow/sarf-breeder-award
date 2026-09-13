@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import DeMeritBadge, ManualAward, UserManualAward
+from .models import ManualAward, SelfmadeBadge, UserManualAward
 
 
 class SuperuserOnlyAdminMixin:
@@ -36,8 +36,8 @@ class UserManualAwardAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
     autocomplete_fields = ("award",)
 
 
-@admin.register(DeMeritBadge)
-class DeMeritBadgeAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
+@admin.register(SelfmadeBadge)
+class SelfmadeBadgeAdmin(SuperuserOnlyAdminMixin, admin.ModelAdmin):
     list_display = ("name", "active", "description")
     list_filter = ("active",)
     search_fields = ("name", "description")
