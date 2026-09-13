@@ -399,7 +399,7 @@ class UserManualAward(models.Model):
         return f"{self.user}: {self.award} ({self.awarded_on})"
 
 
-class DeMeritBadge(models.Model):
+class SelfmadeBadge(models.Model):
     name = models.CharField(
         max_length=100,
         unique=True,
@@ -408,7 +408,7 @@ class DeMeritBadge(models.Model):
     )
     description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
     image = models.ImageField(
-        upload_to="achievements/demerit/",
+        upload_to="achievements/selfmade/",
         blank=True,
         validators=[validate_achievement_overlay],
         verbose_name="märkesbild",
@@ -417,38 +417,38 @@ class DeMeritBadge(models.Model):
 
     class Meta:
         ordering = ("name",)
-        verbose_name = "de-merit badge"
-        verbose_name_plural = "de-merit badges"
+        verbose_name = "egenvald utmärkelse"
+        verbose_name_plural = "egenvalda utmärkelser"
 
     def __str__(self):
         return self.name
 
 
-class UserDeMeritBadge(models.Model):
+class UserSelfmadeBadge(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="demerit_badges",
+        related_name="selfmade_badges",
         verbose_name="användare",
     )
     badge = models.ForeignKey(
-        DeMeritBadge,
+        SelfmadeBadge,
         on_delete=models.PROTECT,
         related_name="grants",
-        verbose_name="de-merit badge",
+        verbose_name="egenvald utmärkelse",
     )
-    awarded_at = models.DateTimeField(auto_now_add=True, verbose_name="självtilldelad")
+    awarded_at = models.DateTimeField(auto_now_add=True, verbose_name="egenvald")
 
     class Meta:
         ordering = ("-awarded_at", "badge__name", "pk")
         constraints = [
             models.UniqueConstraint(
                 fields=("user", "badge"),
-                name="unique_user_demerit_badge",
+                name="unique_user_selfmade_badge",
             ),
         ]
-        verbose_name = "självtilldelat de-merit badge"
-        verbose_name_plural = "självtilldelade de-merit badges"
+        verbose_name = "egenvald utmärkelse"
+        verbose_name_plural = "egenvalda utmärkelser"
 
     def __str__(self):
         return f"{self.user}: {self.badge}"
