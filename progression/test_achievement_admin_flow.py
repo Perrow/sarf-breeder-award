@@ -213,6 +213,7 @@ class AchievementAdminFlowTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, reverse("admin:progression_achievement_changelist"))
-        self.assertContains(response, reverse("admin:progression_achievementbackground_changelist"))
+        self.assertContains(response, reverse("admin:progression_manualawardassignment_changelist"))
+        self.assertNotContains(response, reverse("admin:progression_achievementbackground_changelist"))
         self.assertNotContains(response, reverse("admin:progression_achievementlevel_changelist"))
         self.assertNotContains(response, reverse("admin:progression_achievementrequirement_changelist"))
