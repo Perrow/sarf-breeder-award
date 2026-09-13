@@ -10,6 +10,8 @@ from .models import (
     AchievementBackground,
     AchievementLevel,
     AchievementRequirement,
+    ManualAward,
+    SelfmadeBadge,
 )
 
 
@@ -34,6 +36,8 @@ def _overlay_image_names():
     return _distinct_image_names(
         (Achievement.objects.all(), "image"),
         (AchievementLevel.objects.all(), "image"),
+        (ManualAward.objects.all(), "image"),
+        (SelfmadeBadge.objects.all(), "image"),
     )
 
 
@@ -41,6 +45,8 @@ def _background_image_names():
     return _distinct_image_names(
         (Achievement.objects.all(), "background_image"),
         (AchievementBackground.objects.all(), "image"),
+        (ManualAward.objects.all(), "background_image"),
+        (SelfmadeBadge.objects.all(), "background_image"),
     )
 
 
@@ -88,6 +94,48 @@ class AchievementAdminForm(_ExistingImageMixin, forms.ModelForm):
 
     class Meta:
         model = Achievement
+        fields = "__all__"
+
+
+class ManualAwardAdminForm(_ExistingImageMixin, forms.ModelForm):
+    existing_image = forms.ChoiceField(
+        required=False,
+        label="Återanvänd utmärkelsebild",
+        help_text="Välj en redan uppladdad utmärkelse- eller nivåbild. Filnamn och lagringsplats visas i listan.",
+    )
+    existing_background_image = forms.ChoiceField(
+        required=False,
+        label="Återanvänd bakgrundsbild",
+        help_text="Välj en redan uppladdad bakgrundsbild. Filnamn och lagringsplats visas i listan.",
+    )
+    existing_field_map = {
+        "existing_image": ("image", _overlay_image_names),
+        "existing_background_image": ("background_image", _background_image_names),
+    }
+
+    class Meta:
+        model = ManualAward
+        fields = "__all__"
+
+
+class SelfmadeBadgeAdminForm(_ExistingImageMixin, forms.ModelForm):
+    existing_image = forms.ChoiceField(
+        required=False,
+        label="Återanvänd utmärkelsebild",
+        help_text="Välj en redan uppladdad utmärkelse- eller nivåbild. Filnamn och lagringsplats visas i listan.",
+    )
+    existing_background_image = forms.ChoiceField(
+        required=False,
+        label="Återanvänd bakgrundsbild",
+        help_text="Välj en redan uppladdad bakgrundsbild. Filnamn och lagringsplats visas i listan.",
+    )
+    existing_field_map = {
+        "existing_image": ("image", _overlay_image_names),
+        "existing_background_image": ("background_image", _background_image_names),
+    }
+
+    class Meta:
+        model = SelfmadeBadge
         fields = "__all__"
 
 
