@@ -397,3 +397,58 @@ class UserManualAward(models.Model):
 
     def __str__(self):
         return f"{self.user}: {self.award} ({self.awarded_on})"
+
+
+class DeMeritBadge(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
+    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
+    image = models.ImageField(
+        upload_to="achievements/demerit/",
+        blank=True,
+        validators=[validate_achievement_overlay],
+        verbose_name="märkesbild",
+    )
+    active = models.BooleanField(default=True, verbose_name="aktiv")
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "de-merit badge"
+        verbose_name_plural = "de-merit badges"
+
+    def __str__(self):
+        return self.name
+
+
+class UserDeMeritBadge(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="demerit_badges",
+        verbose_name="användare",
+    )
+    badge = models.ForeignKey(
+        DeMeritBadge,
+        on_delete=models.PROTECT,
+        related_name="grants",
+        verbose_name="de-merit badge",
+    )
+    awarded_at = models.DateTimeField(auto_now_add=True, verbose_name="självtilldelad")
+
+    class Meta:
+        ordering = ("-awarded_at", "badge__name", "pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("user", "badge"),
+                name="unique_user_demerit_badge",
+            ),
+        ]
+        verbose_name = "självtilldelat de-merit badge"
+        verbose_name_plural = "självtilldelade de-merit badges"
+
+    def __str__(self):
+        return f"{self.user}: {self.badge}"
