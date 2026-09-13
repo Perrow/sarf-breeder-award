@@ -4,8 +4,16 @@ from django.core.exceptions import ValidationError
 from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.http import require_POST
 
-from .models import Achievement, AchievementBackground, AchievementLevel
+from .models import Achievement, AchievementBackground, AchievementLevel, AchievementRequirement
 from .services import remove_selfmade_level, select_selfmade_level
+
+
+def _ensure_self_selected_requirement(level):
+    if not level.requirements.exists():
+        AchievementRequirement.objects.create(
+            level=level,
+            kind=AchievementRequirement.Kind.SELF_SELECTED,
+        )
 
 
 @login_required
@@ -43,6 +51,7 @@ def award_selfmade_badge(request, level_id):
         achievement__achievement_type=Achievement.Type.SELFMADE,
         achievement__active=True,
     )
+    _ensure_self_selected_requirement(level)
     try:
         _, created = select_selfmade_level(request.user, level)
     except ValidationError:
@@ -62,6 +71,7 @@ def remove_selfmade_badge(request, level_id):
         pk=level_id,
         achievement__achievement_type=Achievement.Type.SELFMADE,
     )
+    _ensure_self_selected_requirement(level)
     try:
         deleted = remove_selfmade_level(request.user, level)
     except ValidationError:
