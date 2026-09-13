@@ -218,6 +218,7 @@ def _select_species_match(
     scientific_label,
     cl_number,
     allow_cl_fallback=False,
+    match_empty_cl=False,
 ):
     if cl_number is not None:
         exact_match = queryset.filter(cl_number=cl_number).first()
@@ -225,6 +226,8 @@ def _select_species_match(
             return exact_match
         if not allow_cl_fallback:
             return None
+    elif match_empty_cl:
+        return queryset.filter(cl_number="").first()
 
     matches = list(queryset[:2])
     if len(matches) > 1:
@@ -240,6 +243,7 @@ def _find_existing_species(
     scientific_name,
     cl_number,
     allow_cl_fallback=False,
+    match_empty_cl=False,
 ):
     if genus is not None:
         species = _select_species_match(
@@ -250,6 +254,7 @@ def _find_existing_species(
             f"{genus_name} {scientific_name}",
             cl_number,
             allow_cl_fallback=allow_cl_fallback,
+            match_empty_cl=match_empty_cl,
         )
         if species is not None:
             return species
@@ -270,6 +275,15 @@ def _find_existing_species(
             return exact_synonym_matches[0].species
         if not allow_cl_fallback:
             return None
+    elif match_empty_cl:
+        empty_cl_matches = list(
+            synonym_queryset.filter(species__cl_number="")[:2]
+        )
+        if len(empty_cl_matches) > 1:
+            raise SpeciesImportError(
+                f"Det gamla vetenskapliga namnet '{old_full_name}' är tvetydigt för arter utan C/L-nummer."
+            )
+        return empty_cl_matches[0].species if empty_cl_matches else None
 
     synonym_matches = list(synonym_queryset[:2])
     if len(synonym_matches) > 1:
@@ -311,6 +325,7 @@ def _import_species_row(row, stats):
         scientific_name,
         cl_number,
         allow_cl_fallback=breeding_class is None,
+        match_empty_cl=breeding_class is not None and cl_number is None,
     )
 
     if species is None:
