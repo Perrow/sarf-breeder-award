@@ -1,0 +1,306 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "nanolutea",
+      "breeding_class": "bronze",
+      "swedish_names": ["Gul zebraciklid"]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "bronze",
+      "swedish_names": ["Ancistrus"]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp. L184",
+      "breeding_class": "bronze",
+      "swedish_names": ["Brilliant skäggmunsmal"],
+      "english_names": ["Brilliant bristlenose"],
+      "cl_number": "L184"
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp. L519",
+      "breeding_class": "bronze",
+      "swedish_names": ["Kiefner 2"],
+      "cl_number": "L519"
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": ["Blå ciklid"],
+      "english_names": ["Blue acara"]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "borellii",
+      "breeding_class": "silver",
+      "swedish_names": ["Gul dvärgciklid"]
+    },
+    {
+      "genus": "Australoheros",
+      "scientific_name": "scitulus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Scitulusciklid"]
+    },
+    {
+      "genus": "Badis",
+      "scientific_name": "singenensis",
+      "breeding_class": "silver",
+      "swedish_names": ["Badis sp. ´Buxar´"]
+    },
+    {
+      "genus": "Boraras",
+      "scientific_name": "maculatus",
+      "breeding_class": "silver",
+      "swedish_names": ["Dvärg rasbora"]
+    },
+    {
+      "genus": "Boraras",
+      "scientific_name": "naevus",
+      "breeding_class": "silver",
+      "swedish_names": ["Jordgubbs rasbora"]
+    },
+    {
+      "genus": "Carinotetraodon",
+      "scientific_name": "travancoricus",
+      "breeding_class": "gold",
+      "swedish_names": ["Dvärg kulfisk"]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "asiatica",
+      "breeding_class": "bronze",
+      "swedish_names": ["Liten ormhuvudsfisk"]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "socolofi",
+      "breeding_class": "bronze",
+      "swedish_names": ["Socolofi"]
+    },
+    {
+      "genus": "Chromaphyosemion",
+      "scientific_name": "bivittatum",
+      "breeding_class": "bronze",
+      "swedish_names": ["Tvåstrecks lyrstjärtskilli"]
+    },
+    {
+      "genus": "Chromaphyosemion",
+      "scientific_name": "splendopleure",
+      "breeding_class": "bronze",
+      "swedish_names": ["Splendid killi"]
+    },
+    {
+      "genus": "Cleithracara",
+      "scientific_name": "maronii",
+      "breeding_class": "silver",
+      "swedish_names": ["Nyckelhålsciklid"],
+      "english_names": ["Keyhole cichlid"]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "margaritatus",
+      "breeding_class": "silver",
+      "swedish_names": ["Galaxyrasbora"]
+    },
+    {
+      "genus": "Desmocaris",
+      "scientific_name": "trispinosa",
+      "breeding_class": "bronze",
+      "swedish_names": ["Nigeriansk hängande räka"]
+    },
+    {
+      "genus": "Gastrodermus",
+      "scientific_name": "nanus",
+      "breeding_class": "gold",
+      "swedish_names": ["Corydoras"],
+      "scientific_synonyms": ["Corydoras nanus"]
+    },
+    {
+      "genus": "Gastrodermus",
+      "scientific_name": "pygmaeus",
+      "breeding_class": "silver",
+      "swedish_names": ["Pygmepansarmal"]
+    },
+    {
+      "genus": "Geophagus",
+      "scientific_name": "brasiliensis",
+      "breeding_class": "bronze",
+      "swedish_names": ["Brasiliansk jordätare"]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "panda",
+      "breeding_class": "bronze",
+      "swedish_names": ["Panda, Snow white"]
+    },
+    {
+      "genus": "Hypancistrus",
+      "scientific_name": "seideli",
+      "breeding_class": "gold",
+      "swedish_names": ["L333", "Gul kungtigerspleco"],
+      "english_names": ["L333"],
+      "scientific_synonyms": ["Hypancistrus sp. L333"],
+      "cl_number": "L333"
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "flammeus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Riotetra"]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "pulchripinnis",
+      "breeding_class": "bronze",
+      "swedish_names": ["Citrontetra"],
+      "english_names": ["Lemon tetra"]
+    },
+    {
+      "genus": "Ivanacara",
+      "scientific_name": "bimaculata",
+      "breeding_class": "silver",
+      "swedish_names": ["Praktacara"]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "ornatus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Gul julle"]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"hongi\"",
+      "breeding_class": "bronze",
+      "swedish_names": ["Hongi"]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"perlmutt\"",
+      "breeding_class": "bronze",
+      "swedish_names": ["Perlmutt"]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "boulengeri",
+      "breeding_class": "silver",
+      "swedish_names": ["Boulengers snäckskalsciklid"]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "pittieri",
+      "breeding_class": "silver",
+      "swedish_names": ["Diamanttetra", "Briljant tetra"]
+    },
+    {
+      "genus": "Neocaridina",
+      "scientific_name": "davidi",
+      "breeding_class": "bronze",
+      "swedish_names": ["Körsbärsräka"],
+      "scientific_synonyms": ["Neocaridina davidii"]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brichardi",
+      "breeding_class": "bronze",
+      "swedish_names": ["Prinsessan av burundi"]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp. CW010",
+      "breeding_class": "silver",
+      "swedish_names": ["Orangebandad pansarmal"],
+      "english_names": ["Gold Laser Cory"],
+      "cl_number": "CW010"
+    },
+    {
+      "genus": "Panaqolus",
+      "scientific_name": "sp. L397",
+      "breeding_class": "gold",
+      "swedish_names": ["L397"],
+      "english_names": ["L397 Alenquer Tiger Pleco"],
+      "cl_number": "L397"
+    },
+    {
+      "genus": "Platystacus",
+      "scientific_name": "cotylephorus",
+      "breeding_class": "gold",
+      "swedish_names": ["Spräcklig banjomal"]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "latipinna",
+      "breeding_class": "bronze",
+      "swedish_names": ["Ballongmolly", "Silvermolly"]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "salvatoris",
+      "breeding_class": "bronze",
+      "swedish_names": ["Liberty molly"]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "wingei",
+      "breeding_class": "bronze",
+      "swedish_names": ["Endlers guppy", "Guppy"]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "luminatus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Red neon"]
+    },
+    {
+      "genus": "Pterophyllum",
+      "scientific_name": "altum",
+      "breeding_class": "gold",
+      "swedish_names": ["Altum orrinoco"]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "titteya",
+      "breeding_class": "bronze",
+      "swedish_names": ["Kopparbarb"],
+      "english_names": ["Cherry barb"]
+    },
+    {
+      "genus": "Tanichthys",
+      "scientific_name": "micagemmae",
+      "breeding_class": "bronze",
+      "swedish_names": ["Dvärgkardinal"]
+    },
+    {
+      "genus": "Trichromis",
+      "scientific_name": "salvini",
+      "breeding_class": "silver",
+      "swedish_names": ["Salvini ciklid"],
+      "english_names": ["Yellow belly cichlid"],
+      "scientific_synonyms": ["Cichlasoma salvini"]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "montezumae",
+      "breeding_class": "silver",
+      "swedish_names": ["Montezuma svärdbärare"]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "nezahualcoyotl",
+      "breeding_class": "bronze",
+      "swedish_names": ["Nordlig bergsvärdbärare"]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "variatus",
+      "breeding_class": "bronze",
+      "swedish_names": ["Indianplaty", "Variabel platy"],
+      "english_names": ["Variable platyfish"]
+    }
+  ]
+}
