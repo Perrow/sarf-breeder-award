@@ -4,15 +4,19 @@
 
 {% block content %}
 <h1>Egenvalda utmärkelser</h1>
-<p class="text-body-secondary">Här kan du välja märken som symboliserar bra och mindre bra saker som hänt dig under din tid som akvarist.</p>
+<p class="text-body-secondary">Här kan du välja märken som symboliserar bra och mindre bra saker som hänt dig under din tid som akvarist. Tryck på ett märke för att läsa mer om det.</p>
 
 {% if badges %}
 <div class="d-flex flex-wrap gap-3 mb-4">
     {% for badge in badges %}
     <div class="text-center">
         {% include "progression/includes/simple_award_card.html" with modal_prefix="selfmade-catalog" object_pk=badge.pk name=badge.name subtitle="Egenvald utmärkelse" description=badge.description image=badge.image background_image=award_background.image %}
+        <p class="mb-1 mt-2 fw-semibold">{{ badge.name }}</p>
         {% if badge.id in awarded_badge_ids %}
-            <p class="small text-body-secondary mt-2 mb-0">Redan vald</p>
+            <form method="post" action="{% url 'remove_selfmade_badge' badge.pk %}" class="mt-2">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-outline-secondary btn-sm">Ta bort utmärkelsen</button>
+            </form>
         {% else %}
             <form method="post" action="{% url 'award_selfmade_badge' badge.pk %}" class="mt-2">
                 {% csrf_token %}
