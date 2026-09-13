@@ -104,6 +104,34 @@ class SelfmadeBadgeTests(TestCase):
             1,
         )
 
+    def test_selected_badge_can_be_removed(self):
+        UserSelfmadeBadge.objects.create(user=self.user, badge=self.badge)
+        self.client.force_login(self.user)
+
+        response = self.client.post(reverse("remove_selfmade_badge", args=[self.badge.pk]))
+
+        self.assertRedirects(response, reverse("selfmade_badges"))
+        self.assertFalse(
+            UserSelfmadeBadge.objects.filter(user=self.user, badge=self.badge).exists()
+        )
+
+    def test_removal_only_affects_logged_in_users_selection(self):
+        UserSelfmadeBadge.objects.create(user=self.user, badge=self.badge)
+        UserSelfmadeBadge.objects.create(user=self.other_user, badge=self.badge)
+        self.client.force_login(self.user)
+
+        self.client.post(
+            reverse("remove_selfmade_badge", args=[self.badge.pk]),
+            {"user": self.other_user.pk},
+        )
+
+        self.assertFalse(
+            UserSelfmadeBadge.objects.filter(user=self.user, badge=self.badge).exists()
+        )
+        self.assertTrue(
+            UserSelfmadeBadge.objects.filter(user=self.other_user, badge=self.badge).exists()
+        )
+
     def test_inactive_badge_cannot_be_selected(self):
         self.badge.active = False
         self.badge.save(update_fields=["active"])
@@ -132,6 +160,23 @@ class SelfmadeBadgeTests(TestCase):
             response,
             "märken som symboliserar bra och mindre bra saker som hänt dig under din tid som akvarist",
         )
+        self.assertContains(response, "Tryck på ett märke för att läsa mer om det.")
+
+    def test_catalog_shows_badge_name_below_badge(self):
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("selfmade_badges"))
+
+        self.assertContains(response, '<p class="mb-1 mt-2 fw-semibold">Glömde doppvärmaren</p>', html=True)
+
+    def test_catalog_shows_remove_action_for_selected_badge(self):
+        UserSelfmadeBadge.objects.create(user=self.user, badge=self.badge)
+        self.client.force_login(self.user)
+
+        response = self.client.get(reverse("selfmade_badges"))
+
+        self.assertContains(response, "Ta bort utmärkelsen")
+        self.assertContains(response, reverse("remove_selfmade_badge", args=[self.badge.pk]))
 
     def test_selected_badge_is_visible_among_achievements(self):
         UserSelfmadeBadge.objects.create(user=self.user, badge=self.badge)
@@ -166,6 +211,12 @@ class SelfmadeBadgeTests(TestCase):
 
     def test_anonymous_user_must_log_in_before_selecting(self):
         response = self.client.post(reverse("award_selfmade_badge", args=[self.badge.pk]))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertIn(reverse("login"), response.url)
+
+    def test_anonymous_user_must_log_in_before_removing(self):
+        response = self.client.post(reverse("remove_selfmade_badge", args=[self.badge.pk]))
 
         self.assertEqual(response.status_code, 302)
         self.assertIn(reverse("login"), response.url)
