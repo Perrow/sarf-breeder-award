@@ -1,4 +1,5 @@
 from django.contrib import admin
+from django.core.exceptions import FieldDoesNotExist
 from django.test import SimpleTestCase, TestCase
 
 from .models import Association
@@ -37,7 +38,7 @@ class AssociationAdminFormTests(SimpleTestCase):
             "kontaktperson",
         )
         self.assertEqual(Association._meta.get_field("note").verbose_name, "anteckning")
-        with self.assertRaises(Exception):
+        with self.assertRaises(FieldDoesNotExist):
             Association._meta.get_field("description")
 
 
