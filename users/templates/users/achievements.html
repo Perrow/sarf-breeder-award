@@ -1,9 +1,22 @@
 {% extends "base.html" %}
+{% load manual_awards %}
 
 {% block title %}Alla utmärkelser | Odlingskampanjen{% endblock %}
 
 {% block content %}
+{% manual_awards_for request.user as manual_awards %}
 <h1>Alla utmärkelser</h1>
+
+<h2 class="h4 mt-4">Manuellt utdelade utmärkelser</h2>
+{% if manual_awards %}
+<div class="d-flex flex-wrap gap-3 mb-4">
+    {% for grant in manual_awards %}
+        {% include "progression/includes/manual_award_card.html" with grant=grant %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen manuellt utdelad utmärkelse.</p>
+{% endif %}
 
 <h2 class="h4 mt-4">Karriärsutmärkelser</h2>
 {% if career_achievements %}
