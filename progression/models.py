@@ -4,6 +4,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import RegexValidator
 from django.db import models
+from django.utils import timezone
 
 from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
 from taxonomy.models import Genus, SpeciesGroup
@@ -341,3 +342,58 @@ class UserAchievement(models.Model):
     def __str__(self):
         suffix = f" ({self.calendar_year})" if self.calendar_year else ""
         return f"{self.user}: {self.achievement_name} – {self.level_name}{suffix}"
+
+
+class ManualAward(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
+    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
+    image = models.ImageField(
+        upload_to="achievements/manual/",
+        blank=True,
+        validators=[validate_achievement_overlay],
+        verbose_name="utmärkelsebild",
+    )
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "manuell utmärkelse"
+        verbose_name_plural = "manuella utmärkelser"
+
+    def __str__(self):
+        return self.name
+
+
+class UserManualAward(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="manual_awards",
+        verbose_name="användare",
+    )
+    award = models.ForeignKey(
+        ManualAward,
+        on_delete=models.PROTECT,
+        related_name="grants",
+        verbose_name="utmärkelse",
+    )
+    awarded_on = models.DateField(default=timezone.localdate, verbose_name="utdelningsdatum")
+    note = models.TextField(blank=True, verbose_name="anteckning")
+
+    class Meta:
+        ordering = ("-awarded_on", "award__name", "pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("user", "award", "awarded_on"),
+                name="unique_manual_award_grant_per_day",
+            ),
+        ]
+        verbose_name = "manuell utdelning"
+        verbose_name_plural = "manuella utdelningar"
+
+    def __str__(self):
+        return f"{self.user}: {self.award} ({self.awarded_on})"
