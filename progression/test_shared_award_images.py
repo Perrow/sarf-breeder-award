@@ -3,7 +3,11 @@ from types import SimpleNamespace
 from django.template.loader import render_to_string
 from django.test import TestCase
 
-from progression.forms import ManualAwardAdminForm, SelfmadeBadgeAdminForm
+from progression.forms import (
+    AchievementAdminForm,
+    ManualAwardAdminForm,
+    SelfmadeBadgeAdminForm,
+)
 from progression.models import Achievement, ManualAward, SelfmadeBadge
 
 
@@ -30,9 +34,7 @@ class SharedAwardImageTests(TestCase):
         )
         self.selfmade_badge.refresh_from_db()
 
-    def test_manual_award_can_reuse_images_from_all_award_types(self):
-        form = ManualAwardAdminForm()
-
+    def _assert_all_images_are_reusable(self, form):
         overlay_values = {value for value, _label in form.fields["existing_image"].choices}
         background_values = {
             value for value, _label in form.fields["existing_background_image"].choices
@@ -44,21 +46,15 @@ class SharedAwardImageTests(TestCase):
         self.assertIn(self.achievement.background_image.name, background_values)
         self.assertIn(self.manual_award.background_image.name, background_values)
         self.assertIn(self.selfmade_badge.background_image.name, background_values)
+
+    def test_achievement_can_reuse_images_from_all_award_types(self):
+        self._assert_all_images_are_reusable(AchievementAdminForm())
+
+    def test_manual_award_can_reuse_images_from_all_award_types(self):
+        self._assert_all_images_are_reusable(ManualAwardAdminForm())
 
     def test_selfmade_award_can_reuse_images_from_all_award_types(self):
-        form = SelfmadeBadgeAdminForm()
-
-        overlay_values = {value for value, _label in form.fields["existing_image"].choices}
-        background_values = {
-            value for value, _label in form.fields["existing_background_image"].choices
-        }
-
-        self.assertIn(self.achievement.image.name, overlay_values)
-        self.assertIn(self.manual_award.image.name, overlay_values)
-        self.assertIn(self.selfmade_badge.image.name, overlay_values)
-        self.assertIn(self.achievement.background_image.name, background_values)
-        self.assertIn(self.manual_award.background_image.name, background_values)
-        self.assertIn(self.selfmade_badge.background_image.name, background_values)
+        self._assert_all_images_are_reusable(SelfmadeBadgeAdminForm())
 
     def test_manual_award_card_prefers_custom_background(self):
         grant = SimpleNamespace(pk=1, award=self.manual_award, awarded_on="2026-09-13")
