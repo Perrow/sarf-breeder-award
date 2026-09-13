@@ -10,7 +10,11 @@
 <div class="d-flex flex-wrap gap-3 mb-4">
     {% for badge in badges %}
     <div class="text-center">
-        {% include "progression/includes/simple_award_card.html" with modal_prefix="selfmade-catalog" object_pk=badge.pk name=badge.name subtitle="Egenvald utmärkelse" description=badge.description image=badge.image background_image=award_background.image %}
+        {% if badge.background_image %}
+            {% include "progression/includes/simple_award_card.html" with modal_prefix="selfmade-catalog" object_pk=badge.pk name=badge.name subtitle="Egenvald utmärkelse" description=badge.description image=badge.image background_image=badge.background_image %}
+        {% else %}
+            {% include "progression/includes/simple_award_card.html" with modal_prefix="selfmade-catalog" object_pk=badge.pk name=badge.name subtitle="Egenvald utmärkelse" description=badge.description image=badge.image background_image=award_background.image %}
+        {% endif %}
         <p class="mb-1 mt-2 fw-semibold">{{ badge.name }}</p>
         {% if badge.id in awarded_badge_ids %}
             <form method="post" action="{% url 'remove_selfmade_badge' badge.pk %}" class="mt-2">
