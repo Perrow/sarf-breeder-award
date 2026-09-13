@@ -40,6 +40,7 @@
 
                     <p class="mb-2"><strong>Typ:</strong> {{ presentation.earned.level.achievement.get_achievement_type_display }}</p>
                     {% if show_year and presentation.earned.calendar_year %}<p class="mb-2"><strong>År:</strong> {{ presentation.earned.calendar_year }}</p>{% endif %}
+                    {% if presentation.earned.level.achievement.description %}<p>{{ presentation.earned.level.achievement.description }}</p>{% endif %}
                     {% if presentation.earned.level_description %}<p>{{ presentation.earned.level_description }}</p>{% endif %}
 
                     {% if presentation.requirements %}
