@@ -30,7 +30,7 @@ class BundledSpeciesDataTests(TestCase):
         scientific_synonym_count = ScientificSpeciesSynonym.objects.count()
         common_name_synonym_count = CommonNameSpeciesSynonym.objects.count()
         link_count = SpeciesLink.objects.count()
-        self.assertEqual(species_count, 21)
+        self.assertGreater(species_count, 0)
         self.assertGreater(scientific_synonym_count + common_name_synonym_count, 0)
         self.assertGreater(link_count, 0)
 

@@ -9,20 +9,17 @@ class AssociationModelTests(TestCase):
     def test_association_can_store_required_profile_information(self):
         association = Association.objects.create(
             name="Test Association",
-            organization_number="123456-7890",
             email="contact@example.com",
-            phone="018-123456",
-            address="Testgatan 1",
-            postal_code="123 45",
-            city="Uppsala",
-            description="A test association.",
+            website_url="https://example.com",
+            contact_person="Test Kontaktperson",
+            note="A test association.",
         )
 
         self.assertEqual(str(association), "Test Association")
-        self.assertEqual(association.organization_number, "123456-7890")
         self.assertEqual(association.email, "contact@example.com")
-        self.assertEqual(association.city, "Uppsala")
-        self.assertEqual(association.description, "A test association.")
+        self.assertEqual(association.website_url, "https://example.com")
+        self.assertEqual(association.contact_person, "Test Kontaktperson")
+        self.assertEqual(association.note, "A test association.")
 
 
 class MembershipModelTests(TestCase):
