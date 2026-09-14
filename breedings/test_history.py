@@ -109,7 +109,7 @@ class BreedingHistoryTests(TestCase):
             awarded_points=2,
         )
 
-        self.assertEqual(competition_points(self.user, 2024), 2)
+        self.assertEqual(competition_points(self.user, 2024), 3)
         self.assertEqual(competition_points(self.user, 2026), 0)
 
     def test_inactive_taxonomy_does_not_hide_historical_registration(self):

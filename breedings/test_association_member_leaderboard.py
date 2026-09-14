@@ -73,8 +73,8 @@ class AssociationMemberLeaderboardTests(TestCase):
         )
 
         self.assertEqual(contribution.status_code, 200)
-        self.assertEqual(contribution.context["leaderboard"][0]["contribution_points"], 3)
-        self.assertEqual(individual.context["leaderboard"][0]["individual_points"], 4)
+        self.assertEqual(contribution.context["leaderboard"][0]["contribution_points"], 7)
+        self.assertEqual(individual.context["leaderboard"][0]["individual_points"], 8)
         self.assertContains(contribution, "Medlem")
         self.assertNotContains(contribution, "member@example.com")
 
@@ -98,5 +98,5 @@ class AssociationMemberLeaderboardTests(TestCase):
             {"year": year, "view": "individual"},
         )
 
-        self.assertEqual(response.context["leaderboard"][0]["individual_points"], 3)
+        self.assertEqual(response.context["leaderboard"][0]["individual_points"], 7)
         self.assertEqual(response.context["leaderboard"][0]["contribution_points"], 0)

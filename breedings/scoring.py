@@ -15,8 +15,8 @@ from .models import (
 
 BREEDING_CLASS_POINTS = {
     Species.BreedingClass.BRONZE: 1,
-    Species.BreedingClass.SILVER: 2,
-    Species.BreedingClass.GOLD: 3,
+    Species.BreedingClass.SILVER: 3,
+    Species.BreedingClass.GOLD: 7,
 }
 
 

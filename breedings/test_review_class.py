@@ -56,7 +56,7 @@ class BreedingReviewClassTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.SILVER)
-        self.assertEqual(self.registration.awarded_points, 2)
+        self.assertEqual(self.registration.awarded_points, 3)
 
     def test_direct_post_cannot_override_species_class_or_points(self):
         response = self.client.post(
@@ -72,4 +72,4 @@ class BreedingReviewClassTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.SILVER)
-        self.assertEqual(self.registration.awarded_points, 2)
+        self.assertEqual(self.registration.awarded_points, 3)

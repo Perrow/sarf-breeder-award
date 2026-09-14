@@ -155,10 +155,10 @@ class SpeciesReclassificationTests(TestCase):
             reason="Motivering",
         )
 
-        self.assertEqual(competition_points(self.user, current_year), 2)
-        self.assertEqual(competition_points(other_grower, current_year), 2)
-        self.assertEqual(association_year_scores(association, current_year)[self.user.pk], 2)
-        self.assertEqual(association_year_scores(association, current_year)[other_grower.pk], 2)
+        self.assertEqual(competition_points(self.user, current_year), 3)
+        self.assertEqual(competition_points(other_grower, current_year), 3)
+        self.assertEqual(association_year_scores(association, current_year)[self.user.pk], 3)
+        self.assertEqual(association_year_scores(association, current_year)[other_grower.pk], 3)
 
         self.client.force_login(self.manager)
         response = self.client.post(
@@ -181,10 +181,10 @@ class SpeciesReclassificationTests(TestCase):
         self.assertIsNotNone(request.decided_at)
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.GOLD)
 
-        self.assertEqual(competition_points(self.user, current_year), 3)
-        self.assertEqual(competition_points(other_grower, current_year), 3)
-        self.assertEqual(association_year_scores(association, current_year)[self.user.pk], 3)
-        self.assertEqual(association_year_scores(association, current_year)[other_grower.pk], 3)
+        self.assertEqual(competition_points(self.user, current_year), 7)
+        self.assertEqual(competition_points(other_grower, current_year), 7)
+        self.assertEqual(association_year_scores(association, current_year)[self.user.pk], 7)
+        self.assertEqual(association_year_scores(association, current_year)[other_grower.pk], 7)
 
         self.assertEqual(current_registration.awarded_breeding_class, Species.BreedingClass.SILVER)
         self.assertEqual(current_registration.awarded_points, 2)
@@ -192,7 +192,7 @@ class SpeciesReclassificationTests(TestCase):
         self.assertEqual(other_current_registration.awarded_points, 2)
         self.assertEqual(historical_registration.awarded_breeding_class, Species.BreedingClass.SILVER)
         self.assertEqual(historical_registration.awarded_points, 2)
-        self.assertEqual(competition_points(self.user, previous_year), 2)
+        self.assertEqual(competition_points(self.user, previous_year), 3)
 
     def test_breeding_manager_can_reject(self):
         request = SpeciesReclassificationRequest.objects.create(
