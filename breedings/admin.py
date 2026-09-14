@@ -17,16 +17,10 @@ from .models import (
     BreedingRegistration,
     current_competition_year,
 )
+from .scoring import BREEDING_CLASS_POINTS
 
 
 BREEDING_MANAGER_GROUP = "Odlingsansvarig"
-
-
-BREEDING_CLASS_POINTS = {
-    Species.BreedingClass.BRONZE: 1,
-    Species.BreedingClass.SILVER: 2,
-    Species.BreedingClass.GOLD: 3,
-}
 
 
 def is_breeding_manager(user):

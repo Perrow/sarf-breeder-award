@@ -103,8 +103,8 @@ class CompetitionYearRulesTests(TestCase):
             awarded_breeding_class=Species.BreedingClass.GOLD,
         )
 
-        self.assertEqual(competition_points(self.user, year), 3)
-        self.assertEqual(association_competition_points(self.association, year), 3)
+        self.assertEqual(competition_points(self.user, year), 7)
+        self.assertEqual(association_competition_points(self.association, year), 7)
 
     def test_same_species_can_score_again_in_another_year(self):
         current_year = timezone.localdate().year
@@ -127,8 +127,8 @@ class CompetitionYearRulesTests(TestCase):
         self.create_registration(self.species_a, date(year, 2, 1))
         self.create_registration(self.species_b, date(year, 2, 2))
 
-        self.assertEqual(competition_points(self.user, year), 3)
-        self.assertEqual(association_competition_points(self.association, year), 3)
+        self.assertEqual(competition_points(self.user, year), 4)
+        self.assertEqual(association_competition_points(self.association, year), 4)
 
     def test_species_deduplication_happens_before_historical_association_genus_limit(self):
         year = timezone.localdate().year - 1
@@ -153,4 +153,4 @@ class CompetitionYearRulesTests(TestCase):
             awarded_breeding_class=Species.BreedingClass.SILVER,
         )
 
-        self.assertEqual(association_competition_points(self.association, year), 5)
+        self.assertEqual(association_competition_points(self.association, year), 10)

@@ -314,8 +314,8 @@ På granskningssidan väljer administratören:
 Vid godkännande hämtas artens aktuella odlingsklass och sparas på registreringen. Poängen blir:
 
 - Brons = 1 poäng
-- Silver = 2 poäng
-- Guld = 3 poäng
+- Silver = 3 poäng
+- Guld = 7 poäng
 
 Den tilldelade klassen och poängen lagras på registreringen så att historiska resultat inte ändras bara för att artens klassificering senare ändras.
 

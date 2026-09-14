@@ -32,12 +32,12 @@ class CareerScoringTests(TestCase):
     def test_same_species_counts_once(self):
         self.add_registration(self.species_a, Species.BreedingClass.SILVER)
         self.add_registration(self.species_a, Species.BreedingClass.SILVER)
-        self.assertEqual(career_points(self.user), 2)
+        self.assertEqual(career_points(self.user), 3)
 
     def test_different_species_are_summed(self):
         self.add_registration(self.species_a, Species.BreedingClass.SILVER)
         self.add_registration(self.species_b, Species.BreedingClass.GOLD)
-        self.assertEqual(career_points(self.user), 5)
+        self.assertEqual(career_points(self.user), 10)
 
     def test_only_approved_registrations_count(self):
         self.add_registration(self.species_a, Species.BreedingClass.SILVER, BreedingRegistration.Status.SUBMITTED)
@@ -46,4 +46,4 @@ class CareerScoringTests(TestCase):
     def test_highest_awarded_class_for_same_species_is_used(self):
         self.add_registration(self.species_a, Species.BreedingClass.BRONZE)
         self.add_registration(self.species_a, Species.BreedingClass.SILVER)
-        self.assertEqual(career_points(self.user), 2)
+        self.assertEqual(career_points(self.user), 3)

@@ -32,12 +32,12 @@ class CompetitionScoringTests(TestCase):
     def test_same_species_counts_only_once_in_year(self):
         self.add_registration(2026)
         self.add_registration(2026)
-        self.assertEqual(competition_points(self.user, 2026), 2)
+        self.assertEqual(competition_points(self.user, 2026), 3)
 
     def test_other_year_does_not_count(self):
         self.add_registration(2025)
         self.add_registration(2026)
-        self.assertEqual(competition_points(self.user, 2026), 2)
+        self.assertEqual(competition_points(self.user, 2026), 3)
 
     def test_unapproved_registration_does_not_count(self):
         self.add_registration(2026, BreedingRegistration.Status.SUBMITTED)

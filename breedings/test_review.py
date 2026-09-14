@@ -63,7 +63,7 @@ class BreedingReviewTests(TestCase):
         self.assertEqual(self.registration.reviewer, self.reviewer)
         self.assertIsNotNone(self.registration.approved_at)
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.SILVER)
-        self.assertEqual(self.registration.awarded_points, 2)
+        self.assertEqual(self.registration.awarded_points, 3)
         self.assertEqual(self.registration.review_comment, "Godkänd odling.")
 
     def test_association_admin_can_reject_registration(self):

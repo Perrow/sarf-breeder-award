@@ -34,7 +34,7 @@ class AssociationYearScoringTests(TestCase):
     def test_user_year_points_returns_selected_year(self):
         self.add_registration(self.user_a, self.association, 2026, Species.BreedingClass.SILVER)
         self.add_registration(self.user_a, self.association, 2025, Species.BreedingClass.GOLD)
-        self.assertEqual(user_year_points(self.user_a, 2026), 2)
+        self.assertEqual(user_year_points(self.user_a, 2026), 3)
 
     def test_association_year_scores_sum_per_user(self):
         self.add_registration(self.user_a, self.association, 2026, Species.BreedingClass.SILVER)
@@ -43,8 +43,8 @@ class AssociationYearScoringTests(TestCase):
 
         scores = association_year_scores(self.association, 2026)
 
-        self.assertEqual(scores[self.user_a.pk], 2)
-        self.assertEqual(scores[self.user_b.pk], 2)
+        self.assertEqual(scores[self.user_a.pk], 3)
+        self.assertEqual(scores[self.user_b.pk], 3)
 
     def test_other_association_and_unapproved_registrations_are_excluded(self):
         self.add_registration(self.user_a, self.other_association, 2026, Species.BreedingClass.GOLD)

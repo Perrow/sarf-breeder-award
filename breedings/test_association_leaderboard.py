@@ -155,7 +155,7 @@ class AssociationLeaderboardTests(TestCase):
             self.user_b, self.association_a, self.gold_a, date(year, 1, 3)
         )
 
-        self.assertEqual(association_competition_points(self.association_a, year), 6)
+        self.assertEqual(association_competition_points(self.association_a, year), 14)
 
     def test_species_group_limit_applies_across_its_genera(self):
         year = timezone.localdate().year
@@ -172,7 +172,7 @@ class AssociationLeaderboardTests(TestCase):
             self.user_a, self.association_a, self.silver_b, date(year, 1, 2)
         )
 
-        self.assertEqual(association_competition_points(self.association_a, year), 3)
+        self.assertEqual(association_competition_points(self.association_a, year), 7)
 
     def test_same_global_limit_applies_to_all_associations(self):
         year = timezone.localdate().year
@@ -187,8 +187,8 @@ class AssociationLeaderboardTests(TestCase):
             self.create_registration(user, association, self.bronze_a, date(year, 1, 1))
             self.create_registration(user, association, self.gold_a, date(year, 1, 2))
 
-        self.assertEqual(association_competition_points(self.association_a, year), 3)
-        self.assertEqual(association_competition_points(self.association_b, year), 3)
+        self.assertEqual(association_competition_points(self.association_a, year), 7)
+        self.assertEqual(association_competition_points(self.association_b, year), 7)
 
     def test_more_breedings_after_limit_do_not_keep_increasing_score(self):
         year = timezone.localdate().year
@@ -206,7 +206,7 @@ class AssociationLeaderboardTests(TestCase):
             self.user_a, self.association_a, self.gold_a, date(year, 1, 3)
         )
 
-        self.assertEqual(association_competition_points(self.association_a, year), 3)
+        self.assertEqual(association_competition_points(self.association_a, year), 7)
 
     def test_default_genus_limit_applies_without_specific_rule(self):
         year = timezone.localdate().year
@@ -221,7 +221,7 @@ class AssociationLeaderboardTests(TestCase):
             self.user_a, self.association_a, self.gold_a, date(year, 1, 2)
         )
 
-        self.assertEqual(association_competition_points(self.association_a, year), 3)
+        self.assertEqual(association_competition_points(self.association_a, year), 7)
 
     def test_specific_rule_replaces_default_genus_limit(self):
         year = timezone.localdate().year
@@ -241,7 +241,7 @@ class AssociationLeaderboardTests(TestCase):
             self.user_a, self.association_a, self.gold_a, date(year, 1, 2)
         )
 
-        self.assertEqual(association_competition_points(self.association_a, year), 4)
+        self.assertEqual(association_competition_points(self.association_a, year), 8)
 
     def test_newer_rule_version_does_not_change_previous_year(self):
         current_year = timezone.localdate().year
@@ -282,10 +282,10 @@ class AssociationLeaderboardTests(TestCase):
         )
 
         self.assertEqual(
-            association_competition_points(self.association_a, previous_year), 3
+            association_competition_points(self.association_a, previous_year), 7
         )
         self.assertEqual(
-            association_competition_points(self.association_a, current_year), 4
+            association_competition_points(self.association_a, current_year), 8
         )
 
     def test_invalid_year_falls_back_to_current_year(self):

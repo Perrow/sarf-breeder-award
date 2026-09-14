@@ -35,16 +35,24 @@ class BreedingClassScoringTests(TestCase):
 
     def test_breeding_classes_have_expected_points(self):
         self.assertEqual(points_for_breeding_class(Species.BreedingClass.BRONZE), 1)
-        self.assertEqual(points_for_breeding_class(Species.BreedingClass.SILVER), 2)
-        self.assertEqual(points_for_breeding_class(Species.BreedingClass.GOLD), 3)
+        self.assertEqual(points_for_breeding_class(Species.BreedingClass.SILVER), 3)
+        self.assertEqual(points_for_breeding_class(Species.BreedingClass.GOLD), 7)
 
     def test_invalid_breeding_class_is_rejected(self):
         with self.assertRaises(ValueError):
             points_for_breeding_class("platinum")
 
     def test_approved_registration_gets_points(self):
-        registration = self.registration(BreedingRegistration.Status.APPROVED, Species.BreedingClass.GOLD)
-        self.assertEqual(points_for_registration(registration), 3)
+        for breeding_class, expected in (
+            (Species.BreedingClass.BRONZE, 1),
+            (Species.BreedingClass.SILVER, 3),
+            (Species.BreedingClass.GOLD, 7),
+        ):
+            with self.subTest(breeding_class=breeding_class):
+                registration = self.registration(
+                    BreedingRegistration.Status.APPROVED, breeding_class
+                )
+                self.assertEqual(points_for_registration(registration), expected)
 
     def test_unapproved_registration_gets_no_points(self):
         registration = self.registration(BreedingRegistration.Status.SUBMITTED, Species.BreedingClass.GOLD)

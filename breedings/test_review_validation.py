@@ -103,8 +103,8 @@ class BreedingReviewValidationTests(TestCase):
     def test_each_species_class_gets_consistent_points(self):
         expected = {
             Species.BreedingClass.BRONZE: 1,
-            Species.BreedingClass.SILVER: 2,
-            Species.BreedingClass.GOLD: 3,
+            Species.BreedingClass.SILVER: 3,
+            Species.BreedingClass.GOLD: 7,
         }
         for breeding_class, points in expected.items():
             with self.subTest(breeding_class=breeding_class):
