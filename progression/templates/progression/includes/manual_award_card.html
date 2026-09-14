@@ -1,5 +1,5 @@
-{% if grant.award.background_image %}
-    {% include "progression/includes/simple_award_card.html" with modal_prefix="manual-award" object_pk=grant.pk name=grant.award.name subtitle="Manuellt utdelad" description=grant.award.description image=grant.award.image background_image=grant.award.background_image meta=grant.awarded_on %}
+{% if grant.level.achievement.background_image %}
+    {% include "progression/includes/simple_award_card.html" with modal_prefix="manual-award" object_pk=grant.pk name=grant.achievement_name subtitle=grant.level_name description=grant.level_description image=grant.level.achievement.image background_image=grant.level.achievement.background_image meta=grant.achieved_at|date:"Y-m-d" %}
 {% else %}
-    {% include "progression/includes/simple_award_card.html" with modal_prefix="manual-award" object_pk=grant.pk name=grant.award.name subtitle="Manuellt utdelad" description=grant.award.description image=grant.award.image background_image=award_background.image meta=grant.awarded_on %}
+    {% include "progression/includes/simple_award_card.html" with modal_prefix="manual-award" object_pk=grant.pk name=grant.achievement_name subtitle=grant.level_name description=grant.level_description image=grant.level.achievement.image background_image=award_background.image meta=grant.achieved_at|date:"Y-m-d" %}
 {% endif %}

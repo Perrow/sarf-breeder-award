@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 
@@ -47,6 +48,8 @@ def _matching_registrations(requirement, registrations):
 
 
 def _requirement_current_value(requirement, registrations):
+    if requirement.kind not in AchievementRequirement.AUTOMATIC_KINDS:
+        raise ValueError("Explicita utmärkelsekrav utvärderas inte mot odlingsdata.")
     matching = _matching_registrations(requirement, registrations)
     if requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
         return len(matching)
@@ -77,13 +80,20 @@ def _level_is_met(level, registrations):
             "species_groups__species",
         )
     )
-    return bool(requirements) and all(
-        _requirement_is_met(requirement, registrations)
+    if not requirements or any(
+        requirement.kind not in AchievementRequirement.AUTOMATIC_KINDS
         for requirement in requirements
-    )
+    ):
+        return False
+    return all(_requirement_is_met(requirement, registrations) for requirement in requirements)
 
 
 def _expected_achievement_keys(achievement, registrations):
+    if achievement.achievement_type not in {
+        Achievement.Type.CAREER,
+        Achievement.Type.YEARLY,
+    }:
+        return set(), {}
     years = sorted({registration.breeding_date.year for registration in registrations})
     evaluation_years = years if achievement.calendar_year_based else [None]
     expected = set()
@@ -97,11 +107,7 @@ def _expected_achievement_keys(achievement, registrations):
     )
     for year in evaluation_years:
         period_registrations = (
-            [
-                registration
-                for registration in registrations
-                if registration.breeding_date.year == year
-            ]
+            [registration for registration in registrations if registration.breeding_date.year == year]
             if year is not None
             else registrations
         )
@@ -112,7 +118,10 @@ def _expected_achievement_keys(achievement, registrations):
 
 
 def sync_achievements(user):
-    achievements = Achievement.objects.prefetch_related(
+    achievements = Achievement.objects.filter(
+        active=True,
+        achievement_type__in=(Achievement.Type.CAREER, Achievement.Type.YEARLY),
+    ).prefetch_related(
         "levels__requirements__genera",
         "levels__requirements__species_groups__genera",
         "levels__requirements__species_groups__species",
@@ -124,11 +133,7 @@ def sync_achievements(user):
         evaluation_years = years if achievement.calendar_year_based else [None]
         for year in evaluation_years:
             registrations = (
-                [
-                    registration
-                    for registration in all_registrations
-                    if registration.breeding_date.year == year
-                ]
+                [registration for registration in all_registrations if registration.breeding_date.year == year]
                 if year is not None
                 else all_registrations
             )
@@ -147,8 +152,82 @@ def sync_achievements(user):
                 )
 
 
+def _validate_explicit_level(level, achievement_type, requirement_kind):
+    achievement = level.achievement
+    if achievement.achievement_type != achievement_type:
+        raise ValidationError("Nivån tillhör inte rätt utmärkelsetyp.")
+    if not achievement.active:
+        raise ValidationError("Utmärkelsen är inte aktiv.")
+    kinds = set(level.requirements.values_list("kind", flat=True))
+    if kinds != {requirement_kind}:
+        raise ValidationError("Nivån har inte rätt kravtyp.")
+
+
+@transaction.atomic
+def assign_manual_level(user, level):
+    _validate_explicit_level(
+        level,
+        Achievement.Type.MANUAL,
+        AchievementRequirement.Kind.MANUAL_ASSIGNMENT,
+    )
+    UserAchievement.objects.filter(
+        user=user,
+        level__achievement=level.achievement,
+    ).exclude(level=level).delete()
+    return UserAchievement.objects.get_or_create(
+        user=user,
+        level=level,
+        calendar_year=None,
+        defaults={
+            "achievement_name": level.achievement.name,
+            "level_name": level.name,
+            "level_description": level.description,
+        },
+    )
+
+
+@transaction.atomic
+def select_selfmade_level(user, level):
+    _validate_explicit_level(
+        level,
+        Achievement.Type.SELFMADE,
+        AchievementRequirement.Kind.SELF_SELECTED,
+    )
+    UserAchievement.objects.filter(
+        user=user,
+        level__achievement=level.achievement,
+    ).exclude(level=level).delete()
+    return UserAchievement.objects.get_or_create(
+        user=user,
+        level=level,
+        calendar_year=None,
+        defaults={
+            "achievement_name": level.achievement.name,
+            "level_name": level.name,
+            "level_description": level.description,
+        },
+    )
+
+
+@transaction.atomic
+def remove_selfmade_level(user, level):
+    _validate_explicit_level(
+        level,
+        Achievement.Type.SELFMADE,
+        AchievementRequirement.Kind.SELF_SELECTED,
+    )
+    deleted, _ = UserAchievement.objects.filter(user=user, level=level).delete()
+    return deleted
+
+
 @transaction.atomic
 def revalidate_achievement(achievement):
+    if achievement.achievement_type not in {
+        Achievement.Type.CAREER,
+        Achievement.Type.YEARLY,
+    }:
+        return {"removed": 0, "created": 0}
+
     existing_queryset = UserAchievement.objects.filter(level__achievement=achievement)
     user_ids = set(existing_queryset.values_list("user_id", flat=True))
     user_ids.update(
@@ -174,11 +253,7 @@ def revalidate_achievement(achievement):
             for earned in existing_queryset.filter(user_id=user_id)
         }
 
-        invalid_ids = [
-            earned.pk
-            for key, earned in existing.items()
-            if key not in expected
-        ]
+        invalid_ids = [earned.pk for key, earned in existing.items() if key not in expected]
         if invalid_ids:
             deleted, _ = UserAchievement.objects.filter(pk__in=invalid_ids).delete()
             removed += deleted
@@ -212,8 +287,6 @@ def achievements_for_user(user):
 def _requirement_scope(requirement):
     names = [str(genus) for genus in requirement.genera.all()]
     names.extend(group.name for group in requirement.species_groups.all())
-    if not names:
-        return ""
     return ", ".join(names)
 
 
@@ -236,32 +309,24 @@ def _requirement_progress(requirement, registrations):
     missing = max(requirement.value - current, 0)
     scope = _requirement_scope(requirement)
     singular, plural, one_text = _unit_forms(requirement.kind)
-    target_unit = singular if requirement.value == 1 else plural
-    missing_unit = singular if missing == 1 else plural
     context = {
         "current": current,
         "target": requirement.value,
         "missing": missing,
         "unit": singular,
-        "target_unit": target_unit,
-        "missing_unit": missing_unit,
+        "target_unit": singular if requirement.value == 1 else plural,
+        "missing_unit": singular if missing == 1 else plural,
         "target_text": _quantity_text(requirement.value, singular, plural, one_text),
         "missing_text": _quantity_text(missing, singular, plural, one_text),
         "scope": scope,
         "scope_suffix": f" inom {scope}" if scope else "",
     }
-    achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
-        requirement.kind
-    )
+    achieved_template, next_template = RequirementTextTemplate.templates_for_kind(requirement.kind)
     return {
         **context,
         "kind": requirement.kind,
         "achieved_text": achieved_template.format(**context),
-        "remaining_text": (
-            "Kravet är redan uppfyllt."
-            if missing <= 0
-            else next_template.format(**context)
-        ),
+        "remaining_text": "Kravet är redan uppfyllt." if missing <= 0 else next_template.format(**context),
     }
 
 
@@ -275,47 +340,30 @@ def _presentation_for(earned, all_registrations=None):
     custom_background = achievement.background_image if achievement.background_image else None
     all_registrations = all_registrations if all_registrations is not None else _registrations_for(earned.user)
     registrations = (
-        [
-            registration
-            for registration in all_registrations
-            if registration.breeding_date.year == earned.calendar_year
-        ]
+        [registration for registration in all_registrations if registration.breeding_date.year == earned.calendar_year]
         if earned.calendar_year is not None
         else all_registrations
     )
-    requirements = list(
-        earned.level.requirements.prefetch_related("genera", "species_groups").all()
-    )
-    next_level = (
-        achievement.levels.filter(order__gt=earned.level.order)
-        .order_by("order")
-        .prefetch_related("requirements__genera", "requirements__species_groups")
-        .first()
-    )
-    current_progress = [
-        _requirement_progress(requirement, registrations)
-        for requirement in requirements
+    requirements = [
+        requirement
+        for requirement in earned.level.requirements.prefetch_related("genera", "species_groups").all()
+        if requirement.kind in AchievementRequirement.AUTOMATIC_KINDS
     ]
+    next_level = achievement.levels.filter(order__gt=earned.level.order).order_by("order").first()
+    current_progress = [_requirement_progress(requirement, registrations) for requirement in requirements]
     next_progress = []
     if next_level:
         next_progress = [
             _requirement_progress(requirement, registrations)
             for requirement in next_level.requirements.all()
+            if requirement.kind in AchievementRequirement.AUTOMATIC_KINDS
         ]
 
     return {
         "earned": earned,
         "background": fallback_background,
-        "background_image": (
-            custom_background
-            if custom_background
-            else fallback_background.image if fallback_background else None
-        ),
-        "background_tint": (
-            fallback_background.tint_color
-            if earned.calendar_year is not None and fallback_background
-            else ""
-        ),
+        "background_image": custom_background if custom_background else fallback_background.image if fallback_background else None,
+        "background_tint": fallback_background.tint_color if earned.calendar_year is not None and fallback_background else "",
         "overlay": achievement.image if achievement.image else None,
         "level_overlay": earned.level.image if earned.level.image else None,
         "requirements": current_progress,
@@ -345,10 +393,14 @@ def latest_achievement_presentations_for_user(user, limit=6):
     earned = achievements_for_user(user)
     registrations = _registrations_for(user)
     yearly = _highest_level_per_achievement(
-        item for item in earned if item.calendar_year == current_year
+        item for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.YEARLY
+        and item.calendar_year == current_year
     )
     career = _highest_level_per_achievement(
-        item for item in earned if item.calendar_year is None
+        item for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.CAREER
+        and item.calendar_year is None
     )
     yearly.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
     career.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
@@ -364,10 +416,14 @@ def all_achievement_presentations_for_user(user):
     registrations = _registrations_for(user)
     earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
 
-    career = [_presentation_for(item, registrations) for item in earned if item.calendar_year is None]
+    career = [
+        _presentation_for(item, registrations)
+        for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.CAREER
+    ]
     yearly_by_year = {}
     for item in earned:
-        if item.calendar_year is None:
+        if item.level.achievement.achievement_type != Achievement.Type.YEARLY:
             continue
         yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item, registrations))
 

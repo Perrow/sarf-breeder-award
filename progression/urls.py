@@ -5,12 +5,12 @@ from .views import award_selfmade_badge, remove_selfmade_badge, selfmade_badges
 urlpatterns = [
     path("utmarkelser/selfmade/", selfmade_badges, name="selfmade_badges"),
     path(
-        "utmarkelser/selfmade/<int:badge_id>/tilldela/",
+        "utmarkelser/selfmade/<int:level_id>/tilldela/",
         award_selfmade_badge,
         name="award_selfmade_badge",
     ),
     path(
-        "utmarkelser/selfmade/<int:badge_id>/ta-bort/",
+        "utmarkelser/selfmade/<int:level_id>/ta-bort/",
         remove_selfmade_badge,
         name="remove_selfmade_badge",
     ),
