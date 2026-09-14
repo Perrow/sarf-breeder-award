@@ -10,6 +10,7 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path("", include("users.urls")),
     path("", include("breedings.urls")),
+    path("", include("progression.urls")),
 ]
 
 if settings.DEBUG:

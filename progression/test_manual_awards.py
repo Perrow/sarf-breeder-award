@@ -65,7 +65,7 @@ class ManualAwardTests(TestCase):
                 self.assertTrue(model_admin.has_change_permission(superuser_request))
                 self.assertTrue(model_admin.has_delete_permission(superuser_request))
 
-    def test_manual_award_is_visible_on_my_page(self):
+    def test_manual_award_is_visible_in_shared_list_on_my_page(self):
         UserManualAward.objects.create(
             user=self.user,
             award=self.award,
@@ -76,7 +76,8 @@ class ManualAwardTests(TestCase):
 
         response = self.client.get(reverse("breeding_list"))
 
-        self.assertContains(response, "Manuellt utdelade utmärkelser")
+        self.assertContains(response, '<h2 class="h4">Utmärkelser</h2>', html=True)
+        self.assertNotContains(response, "Manuellt utdelade utmärkelser")
         self.assertContains(response, "Föreningens hederspris")
         self.assertContains(response, "För en särskild insats för hobbyn.")
         self.assertNotContains(response, "Intern anteckning som inte ska visas.")

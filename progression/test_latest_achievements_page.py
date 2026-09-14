@@ -73,8 +73,9 @@ class LatestAchievementsPageTests(TestCase):
             all(item["earned"].calendar_year == current_year for item in yearly)
         )
         self.assertNotContains(response, "Äldre årsmerit")
-        self.assertContains(response, "Årsutmärkelser för innevarande år")
-        self.assertContains(response, "Senaste karriärsutmärkelser")
+        self.assertContains(response, '<h2 class="h4">Utmärkelser</h2>', html=True)
+        self.assertNotContains(response, "Årsutmärkelser för innevarande år")
+        self.assertNotContains(response, "Senaste karriärsutmärkelser")
         self.assertContains(response, reverse("achievements"))
 
     def test_fewer_than_six_achievements_are_shown_in_one_section(self):
@@ -93,7 +94,7 @@ class LatestAchievementsPageTests(TestCase):
         self.assertNotContains(response, "Årsutmärkelser för innevarande år")
         self.assertNotContains(response, "Senaste karriärsutmärkelser")
 
-    def test_six_achievements_keep_yearly_and_career_sections(self):
+    def test_six_achievements_are_shown_in_one_section(self):
         now = timezone.now()
         current_year = timezone.localdate().year
         for index in range(3):
@@ -102,9 +103,9 @@ class LatestAchievementsPageTests(TestCase):
 
         response = self.client.get(reverse("breeding_list"))
 
-        self.assertContains(response, "Årsutmärkelser för innevarande år")
-        self.assertContains(response, "Senaste karriärsutmärkelser")
-        self.assertNotContains(response, '<h2 class="h4">Utmärkelser</h2>', html=True)
+        self.assertContains(response, '<h2 class="h4">Utmärkelser</h2>', html=True)
+        self.assertNotContains(response, "Årsutmärkelser för innevarande år")
+        self.assertNotContains(response, "Senaste karriärsutmärkelser")
 
     def test_all_achievements_page_shows_career_first_and_years_newest_first(self):
         now = timezone.now()

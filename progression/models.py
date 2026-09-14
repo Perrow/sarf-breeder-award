@@ -358,6 +358,12 @@ class ManualAward(models.Model):
         validators=[validate_achievement_overlay],
         verbose_name="utmärkelsebild",
     )
+    background_image = models.ImageField(
+        upload_to="achievements/custom_backgrounds/",
+        blank=True,
+        validators=[validate_award_image_dimensions],
+        verbose_name="egen bakgrundsbild",
+    )
 
     class Meta:
         ordering = ("name",)
@@ -397,3 +403,64 @@ class UserManualAward(models.Model):
 
     def __str__(self):
         return f"{self.user}: {self.award} ({self.awarded_on})"
+
+
+class SelfmadeBadge(models.Model):
+    name = models.CharField(
+        max_length=100,
+        unique=True,
+        db_collation=CASE_INSENSITIVE_COLLATION,
+        verbose_name="namn",
+    )
+    description = models.CharField(max_length=300, blank=True, verbose_name="beskrivning")
+    image = models.ImageField(
+        upload_to="achievements/selfmade/",
+        blank=True,
+        validators=[validate_achievement_overlay],
+        verbose_name="märkesbild",
+    )
+    background_image = models.ImageField(
+        upload_to="achievements/custom_backgrounds/",
+        blank=True,
+        validators=[validate_award_image_dimensions],
+        verbose_name="egen bakgrundsbild",
+    )
+    active = models.BooleanField(default=True, verbose_name="aktiv")
+
+    class Meta:
+        ordering = ("name",)
+        verbose_name = "egenvald utmärkelse"
+        verbose_name_plural = "egenvalda utmärkelser"
+
+    def __str__(self):
+        return self.name
+
+
+class UserSelfmadeBadge(models.Model):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="selfmade_badges",
+        verbose_name="användare",
+    )
+    badge = models.ForeignKey(
+        SelfmadeBadge,
+        on_delete=models.PROTECT,
+        related_name="grants",
+        verbose_name="egenvald utmärkelse",
+    )
+    awarded_at = models.DateTimeField(auto_now_add=True, verbose_name="egenvald")
+
+    class Meta:
+        ordering = ("-awarded_at", "badge__name", "pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("user", "badge"),
+                name="unique_user_selfmade_badge",
+            ),
+        ]
+        verbose_name = "egenvald utmärkelse"
+        verbose_name_plural = "egenvalda utmärkelser"
+
+    def __str__(self):
+        return f"{self.user}: {self.badge}"
