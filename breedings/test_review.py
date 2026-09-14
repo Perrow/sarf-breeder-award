@@ -46,12 +46,29 @@ class BreedingReviewTests(TestCase):
     def review_url(self):
         return reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
 
+    def test_review_page_uses_action_buttons_and_wider_comment_field(self):
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(self.review_url())
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, 'name="decision"')
+        self.assertContains(response, 'name="action" value="approve"')
+        self.assertContains(response, ">Godkänn</button>")
+        self.assertContains(response, 'name="action" value="reject"')
+        self.assertContains(response, ">Avslå</button>")
+        self.assertContains(response, 'name="action" value="save"')
+        self.assertContains(response, ">Spara utan beslut</button>")
+        self.assertContains(response, 'name="review_comment"')
+        self.assertContains(response, 'cols="80"')
+        self.assertContains(response, 'rows="6"')
+
     def test_association_admin_can_approve_registration(self):
         self.client.force_login(self.reviewer)
         response = self.client.post(
             self.review_url(),
             {
-                "decision": "approve",
+                "action": "approve",
                 "awarded_breeding_class": Species.BreedingClass.SILVER,
                 "review_comment": "Godkänd odling.",
             },
@@ -70,7 +87,7 @@ class BreedingReviewTests(TestCase):
         self.client.force_login(self.reviewer)
         response = self.client.post(
             self.review_url(),
-            {"decision": "reject", "awarded_breeding_class": "", "review_comment": "Behöver kompletteras."},
+            {"action": "reject", "awarded_breeding_class": "", "review_comment": "Behöver kompletteras."},
         )
 
         self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
@@ -80,6 +97,31 @@ class BreedingReviewTests(TestCase):
         self.assertEqual(self.registration.review_comment, "Behöver kompletteras.")
         self.assertIsNone(self.registration.approved_at)
         self.assertIsNone(self.registration.awarded_points)
+
+    def test_association_admin_can_save_without_decision(self):
+        self.client.force_login(self.reviewer)
+        response = self.client.post(
+            self.review_url(),
+            {"action": "save", "review_comment": "Anteckning inför senare beslut."},
+        )
+
+        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
+        self.assertEqual(self.registration.reviewer, self.reviewer)
+        self.assertEqual(self.registration.review_comment, "Anteckning inför senare beslut.")
+        self.assertIsNone(self.registration.approved_at)
+        self.assertEqual(self.registration.awarded_breeding_class, "")
+        self.assertIsNone(self.registration.awarded_points)
+
+    def test_saved_comment_is_shown_when_review_is_opened_again(self):
+        self.registration.review_comment = "Tidigare granskningsanteckning."
+        self.registration.save(update_fields=("review_comment",))
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(self.review_url())
+
+        self.assertContains(response, "Tidigare granskningsanteckning.")
 
     def test_reviewer_cannot_review_other_association(self):
         self.client.force_login(self.other_reviewer)

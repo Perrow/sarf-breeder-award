@@ -28,15 +28,11 @@ def is_breeding_manager(user):
 
 
 class ReviewDecisionForm(forms.Form):
-    decision = forms.ChoiceField(
-        label="Beslut",
-        choices=(("approve", "Godkänn"), ("reject", "Avslå")),
-    )
     review_comment = forms.CharField(
         label="Granskningskommentar",
         required=False,
         max_length=2000,
-        widget=forms.Textarea(attrs={"rows": 5}),
+        widget=forms.Textarea(attrs={"rows": 6, "cols": 80}),
     )
 
 
@@ -232,44 +228,52 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
 
         if request.method == "POST":
             form = ReviewDecisionForm(request.POST)
+            action = request.POST.get("action")
+            if action not in {"approve", "reject", "save"}:
+                form.add_error(None, "Välj Godkänn, Avslå eller Spara utan beslut.")
             if form.is_valid():
-                decision = form.cleaned_data["decision"]
                 registration.reviewer = request.user
                 registration.review_comment = form.cleaned_data["review_comment"]
-                if decision == "approve":
+                if action == "approve":
                     breeding_class = registration.species.breeding_class
                     registration.status = BreedingRegistration.Status.APPROVED
                     registration.approved_at = timezone.now()
                     registration.awarded_breeding_class = breeding_class
                     registration.awarded_points = BREEDING_CLASS_POINTS[breeding_class]
+                    registration.save(
+                        update_fields=(
+                            "reviewer",
+                            "review_comment",
+                            "status",
+                            "approved_at",
+                            "awarded_breeding_class",
+                            "awarded_points",
+                        )
+                    )
                     message = "Odlingsregistreringen har godkänts."
-                else:
+                elif action == "reject":
                     registration.status = BreedingRegistration.Status.REJECTED
                     registration.approved_at = None
                     registration.awarded_breeding_class = ""
                     registration.awarded_points = None
-                    message = "Odlingsregistreringen har avslagits."
-                registration.save(
-                    update_fields=(
-                        "reviewer",
-                        "review_comment",
-                        "status",
-                        "approved_at",
-                        "awarded_breeding_class",
-                        "awarded_points",
-                    )
-                )
-                messages.success(request, message)
-                if request.POST.get("save_and_next"):
-                    next_registration = self._next_reviewable_registration(request, registration)
-                    if next_registration is not None:
-                        return redirect(
-                            "admin:breedings_breedingregistration_review",
-                            object_id=next_registration.pk,
+                    registration.save(
+                        update_fields=(
+                            "reviewer",
+                            "review_comment",
+                            "status",
+                            "approved_at",
+                            "awarded_breeding_class",
+                            "awarded_points",
                         )
+                    )
+                    message = "Odlingsregistreringen har avslagits."
+                else:
+                    registration.save(update_fields=("reviewer", "review_comment"))
+                    message = "Granskningsuppgifterna har sparats utan beslut."
+                messages.success(request, message)
                 return redirect("admin:breedings_breedingregistration_changelist")
         else:
-            form = ReviewDecisionForm()
+            form = ReviewDecisionForm(initial={"review_comment": registration.review_comment})
 
         context = {
             **self.admin_site.each_context(request),
@@ -277,7 +281,6 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
             "title": "Granska odlingsregistrering",
             "registration": registration,
             "form": form,
-            "next_registration": self._next_reviewable_registration(request, registration),
         }
         return render(request, "admin/breedings/breedingregistration/review.html", context)
 

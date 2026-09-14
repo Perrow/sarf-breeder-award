@@ -75,10 +75,11 @@
                 {% if field.help_text %}<p class="help">{{ field.help_text }}</p>{% endif %}
             </div>
         {% endfor %}
-        <input type="submit" value="Spara beslut">
-        {% if next_registration %}
-            <input type="submit" name="save_and_next" value="Spara och visa nästa">
-        {% endif %}
+        <div class="submit-row" style="display: flex; gap: .75rem; justify-content: flex-start;">
+            <button type="submit" name="action" value="approve" class="default">Godkänn</button>
+            <button type="submit" name="action" value="reject">Avslå</button>
+            <button type="submit" name="action" value="save">Spara utan beslut</button>
+        </div>
     </form>
 </div>
 
