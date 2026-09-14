@@ -2,6 +2,7 @@ from pathlib import PurePosixPath
 
 from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
+from django.contrib.auth import get_user_model
 
 from taxonomy.models import Genus, SpeciesGroup
 
@@ -88,7 +89,7 @@ class AchievementAdminForm(_ExistingImageMixin, forms.ModelForm):
 
     class Meta:
         model = Achievement
-        fields = "__all__"
+        exclude = ("calendar_year_based",)
 
 
 class AchievementBackgroundAdminForm(_ExistingImageMixin, forms.ModelForm):
@@ -123,6 +124,23 @@ class AchievementLevelAdminForm(_ExistingImageMixin, forms.ModelForm):
     class Meta:
         model = AchievementLevel
         fields = "__all__"
+
+
+class ManualAssignmentAdminForm(forms.Form):
+    user = forms.ModelChoiceField(
+        queryset=get_user_model().objects.none(),
+        label="Användare",
+    )
+    level = forms.ModelChoiceField(
+        queryset=AchievementLevel.objects.none(),
+        label="Nivå",
+    )
+
+    def __init__(self, *args, achievement, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.achievement = achievement
+        self.fields["user"].queryset = get_user_model().objects.order_by("username", "pk")
+        self.fields["level"].queryset = achievement.levels.order_by("order", "name")
 
 
 class BulkAchievementRequirementsForm(forms.Form):

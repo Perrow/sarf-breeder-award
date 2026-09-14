@@ -6,14 +6,13 @@
 {% block content %}
 {% manual_awards_for request.user as manual_awards %}
 {% selfmade_badges_for request.user as selfmade_badges %}
-{% lifetime_award_background as award_background %}
 <h1>Alla utmärkelser</h1>
 
 <h2 class="h4 mt-4">Manuellt utdelade utmärkelser</h2>
 {% if manual_awards %}
 <div class="d-flex flex-wrap gap-3 mb-4">
-    {% for grant in manual_awards %}
-        {% include "progression/includes/manual_award_card.html" with grant=grant award_background=award_background %}
+    {% for presentation in manual_awards %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
     {% endfor %}
 </div>
 {% else %}
@@ -23,8 +22,8 @@
 <h2 class="h4 mt-4">Egenvalda utmärkelser</h2>
 {% if selfmade_badges %}
 <div class="d-flex flex-wrap gap-3 mb-3">
-    {% for grant in selfmade_badges %}
-        {% include "progression/includes/selfmade_badge_card.html" with grant=grant award_background=award_background %}
+    {% for presentation in selfmade_badges %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
     {% endfor %}
 </div>
 {% else %}

@@ -8,16 +8,22 @@ from .models import Achievement, AchievementBackground, AchievementLevel, Achiev
 from .services import remove_selfmade_level, select_selfmade_level
 
 
+def _ensure_self_selected_requirement(level):
+    if not level.requirements.exists():
+        AchievementRequirement.objects.create(
+            level=level,
+            kind=AchievementRequirement.Kind.SELF_SELECTED,
+        )
+
+
 @login_required
 def selfmade_badges(request):
     levels = (
         AchievementLevel.objects.filter(
             achievement__achievement_type=Achievement.Type.SELFMADE,
             achievement__active=True,
-            requirements__kind=AchievementRequirement.Kind.SELF_SELECTED,
         )
         .select_related("achievement")
-        .distinct()
         .order_by("achievement__name", "order", "name")
     )
     selected_level_ids = set(
@@ -45,6 +51,7 @@ def award_selfmade_badge(request, level_id):
         achievement__achievement_type=Achievement.Type.SELFMADE,
         achievement__active=True,
     )
+    _ensure_self_selected_requirement(level)
     try:
         _, created = select_selfmade_level(request.user, level)
     except ValidationError:
@@ -64,6 +71,7 @@ def remove_selfmade_badge(request, level_id):
         pk=level_id,
         achievement__achievement_type=Achievement.Type.SELFMADE,
     )
+    _ensure_self_selected_requirement(level)
     try:
         deleted = remove_selfmade_level(request.user, level)
     except ValidationError:

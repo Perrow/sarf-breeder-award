@@ -8,7 +8,6 @@
 {% selfmade_badges_for request.user as selfmade_badges %}
 <h2 class="h4">Utmärkelser</h2>
 {% if manual_awards or selfmade_badges or yearly_achievements or career_achievements %}
-{% if manual_awards or selfmade_badges %}{% lifetime_award_background as award_background %}{% endif %}
 <div class="d-flex flex-nowrap gap-3 overflow-x-auto mb-4 pb-2">
     {% for presentation in yearly_achievements %}
         {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
@@ -16,11 +15,11 @@
     {% for presentation in career_achievements %}
         {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
     {% endfor %}
-    {% for grant in manual_awards %}
-        {% include "progression/includes/manual_award_card.html" with grant=grant award_background=award_background %}
+    {% for presentation in manual_awards %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
     {% endfor %}
-    {% for grant in selfmade_badges %}
-        {% include "progression/includes/selfmade_badge_card.html" with grant=grant award_background=award_background %}
+    {% for presentation in selfmade_badges %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
     {% endfor %}
 </div>
 {% else %}

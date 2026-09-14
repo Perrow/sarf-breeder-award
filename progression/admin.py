@@ -1,5 +1,5 @@
 from django.contrib import admin, messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db import transaction
 from django.http import HttpResponseNotAllowed
 from django.shortcuts import redirect
@@ -13,6 +13,7 @@ from .forms import (
     AchievementBackgroundAdminForm,
     AchievementLevelAdminForm,
     BulkAchievementRequirementsForm,
+    ManualAssignmentAdminForm,
 )
 from .models import (
     Achievement,
@@ -22,7 +23,7 @@ from .models import (
     RequirementTextTemplate,
     UserAchievement,
 )
-from .services import revalidate_achievement
+from .services import assign_manual_level, revalidate_achievement
 
 
 def _image_preview(background=None, overlay=None, custom_background=None):
@@ -72,6 +73,26 @@ def _uses_special_save_action(request):
     return any(action in request.POST for action in ("_continue", "_addanother", "_saveasnew"))
 
 
+def _sync_explicit_requirements(achievement):
+    explicit_kind = {
+        Achievement.Type.MANUAL: AchievementRequirement.Kind.MANUAL_ASSIGNMENT,
+        Achievement.Type.SELFMADE: AchievementRequirement.Kind.SELF_SELECTED,
+    }.get(achievement.achievement_type)
+
+    for level in achievement.levels.all():
+        if explicit_kind:
+            level.requirements.exclude(kind=explicit_kind).delete()
+            AchievementRequirement.objects.get_or_create(
+                level=level,
+                kind=explicit_kind,
+                defaults={"value": None},
+            )
+        else:
+            level.requirements.filter(
+                kind__in=AchievementRequirement.EXPLICIT_KINDS
+            ).delete()
+
+
 class AchievementLevelInline(admin.TabularInline):
     model = AchievementLevel
     extra = 1
@@ -82,6 +103,11 @@ class AchievementLevelInline(admin.TabularInline):
     def requirement_count(self, obj):
         if not obj or not obj.pk:
             return 0
+        if obj.achievement.achievement_type in {
+            Achievement.Type.MANUAL,
+            Achievement.Type.SELFMADE,
+        }:
+            return "Automatiskt"
         return obj.requirements.count()
 
     @admin.display(description="Redigera")
@@ -97,10 +123,38 @@ class AchievementLevelInline(admin.TabularInline):
 @admin.register(Achievement)
 class AchievementAdmin(admin.ModelAdmin):
     form = AchievementAdminForm
-    list_display = ("name", "calendar_year_based", "has_image", "has_background")
+    list_display = (
+        "name",
+        "achievement_type",
+        "active",
+        "has_image",
+        "has_background",
+    )
+    list_filter = ("achievement_type", "active")
     inlines = (AchievementLevelInline,)
     readonly_fields = ("preview",)
+    fields = (
+        "name",
+        "description",
+        "achievement_type",
+        "active",
+        "image",
+        "existing_image",
+        "background_image",
+        "existing_background_image",
+        "preview",
+    )
     change_form_template = "admin/progression/achievement/change_form.html"
+
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        if change:
+            _sync_explicit_requirements(obj)
+
+    def save_formset(self, request, form, formset, change):
+        super().save_formset(request, form, formset, change)
+        if formset.model is AchievementLevel:
+            _sync_explicit_requirements(form.instance)
 
     def get_urls(self):
         custom_urls = [
@@ -114,6 +168,11 @@ class AchievementAdmin(admin.ModelAdmin):
                 self.admin_site.admin_view(self.revalidate_view),
                 name="progression_achievement_revalidate",
             ),
+            path(
+                "<path:object_id>/assign/",
+                self.admin_site.admin_view(self.assign_manual_view),
+                name="progression_achievement_assign_manual",
+            ),
         ]
         return custom_urls + super().get_urls()
 
@@ -121,6 +180,14 @@ class AchievementAdmin(admin.ModelAdmin):
         achievement = self.get_object(request, object_id)
         if achievement is None:
             return redirect("admin:progression_achievement_changelist")
+        if achievement.achievement_type not in {
+            Achievement.Type.CAREER,
+            Achievement.Type.YEARLY,
+        }:
+            messages.error(request, "Den här utmärkelsetypen använder inte prestationskrav.")
+            return redirect(
+                reverse("admin:progression_achievement_change", args=[achievement.pk])
+            )
 
         requirement_admin = self.admin_site._registry[AchievementRequirement]
         if (
@@ -130,8 +197,8 @@ class AchievementAdmin(admin.ModelAdmin):
         ):
             raise PermissionDenied
 
-        available_kinds = {value for value, _label in AchievementRequirement.Kind.choices}
-        default_kind = AchievementRequirement.Kind.choices[0][0]
+        available_kinds = set(AchievementRequirement.AUTOMATIC_KINDS)
+        default_kind = AchievementRequirement.Kind.POINTS
         if request.method == "POST":
             selected_kind = request.POST.get("kind", default_kind)
         else:
@@ -209,9 +276,7 @@ class AchievementAdmin(admin.ModelAdmin):
             "title": f"Krav för alla nivåer – {achievement}",
             "values_form": values_form,
             "value_rows": values_form.rows(),
-            "has_different_existing_scopes": (
-                values_form.has_different_existing_scopes
-            ),
+            "has_different_existing_scopes": values_form.has_different_existing_scopes,
             "selected_kind": selected_kind,
             "change_url": reverse(
                 "admin:progression_achievement_change", args=[achievement.pk]
@@ -231,6 +296,14 @@ class AchievementAdmin(admin.ModelAdmin):
             return redirect("admin:progression_achievement_changelist")
         if not self.has_change_permission(request, achievement):
             raise PermissionDenied
+        if achievement.achievement_type not in {
+            Achievement.Type.CAREER,
+            Achievement.Type.YEARLY,
+        }:
+            messages.error(request, "Den här utmärkelsetypen kan inte omgranskas automatiskt.")
+            return redirect(
+                reverse("admin:progression_achievement_change", args=[achievement.pk])
+            )
 
         result = revalidate_achievement(achievement)
         messages.success(
@@ -243,6 +316,57 @@ class AchievementAdmin(admin.ModelAdmin):
         )
         return redirect(
             reverse("admin:progression_achievement_change", args=[achievement.pk])
+        )
+
+    def assign_manual_view(self, request, object_id):
+        achievement = self.get_object(request, object_id)
+        if achievement is None:
+            return redirect("admin:progression_achievement_changelist")
+        if not self.has_change_permission(request, achievement):
+            raise PermissionDenied
+        if achievement.achievement_type != Achievement.Type.MANUAL:
+            messages.error(request, "Endast manuellt utdelade utmärkelser kan tilldelas här.")
+            return redirect(
+                reverse("admin:progression_achievement_change", args=[achievement.pk])
+            )
+
+        form = ManualAssignmentAdminForm(
+            request.POST or None,
+            achievement=achievement,
+        )
+        if request.method == "POST" and form.is_valid():
+            try:
+                _, created = assign_manual_level(
+                    form.cleaned_data["user"],
+                    form.cleaned_data["level"],
+                )
+            except ValidationError as error:
+                form.add_error(None, error)
+            else:
+                action = "tilldelades" if created else "hade redan"
+                messages.success(
+                    request,
+                    f"{form.cleaned_data['user']} {action} nivån {form.cleaned_data['level'].name}.",
+                )
+                return redirect(
+                    reverse("admin:progression_achievement_change", args=[achievement.pk])
+                )
+
+        context = {
+            **self.admin_site.each_context(request),
+            "opts": self.model._meta,
+            "original": achievement,
+            "achievement": achievement,
+            "title": f"Tilldela nivå – {achievement}",
+            "form": form,
+            "change_url": reverse(
+                "admin:progression_achievement_change", args=[achievement.pk]
+            ),
+        }
+        return TemplateResponse(
+            request,
+            "admin/progression/achievement/assign_manual.html",
+            context,
         )
 
     @admin.display(boolean=True, description="Bild")
@@ -259,7 +383,7 @@ class AchievementAdmin(admin.ModelAdmin):
             return "Spara utmärkelsen för att visa förhandsvisningen."
         background = (
             AchievementBackground.for_year(timezone.localdate().year)
-            if obj.calendar_year_based
+            if obj.achievement_type == Achievement.Type.YEARLY
             else AchievementBackground.lifetime()
         )
         return _image_preview(
@@ -303,6 +427,10 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         "requirements_summary",
     )
 
+    def save_model(self, request, obj, form, change):
+        super().save_model(request, obj, form, change)
+        _sync_explicit_requirements(obj.achievement)
+
     def response_change(self, request, obj):
         if _uses_special_save_action(request):
             return super().response_change(request, obj)
@@ -321,6 +449,11 @@ class AchievementLevelAdmin(admin.ModelAdmin):
     def requirements_summary(self, obj):
         if not obj or not obj.pk:
             return "Spara nivån innan krav kan läggas till."
+
+        if obj.achievement.achievement_type == Achievement.Type.MANUAL:
+            return "Nivån tilldelas manuellt av en behörig administratör."
+        if obj.achievement.achievement_type == Achievement.Type.SELFMADE:
+            return "Nivån kan väljas av användaren själv."
 
         requirements = obj.requirements.prefetch_related("genera", "species_groups").all()
         rows = []
@@ -413,6 +546,7 @@ class UserAchievementAdmin(admin.ModelAdmin):
         "user",
         "achievement_name",
         "level_name",
+        "achievement_type",
         "calendar_year",
         "achieved_at",
     )
@@ -425,6 +559,10 @@ class UserAchievementAdmin(admin.ModelAdmin):
         "calendar_year",
         "achieved_at",
     )
+
+    @admin.display(description="Typ")
+    def achievement_type(self, obj):
+        return obj.level.achievement.get_achievement_type_display()
 
     def has_add_permission(self, request):
         return False
