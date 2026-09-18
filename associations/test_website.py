@@ -10,7 +10,7 @@ class AssociationWebsiteTests(TestCase):
     def test_association_can_store_description_and_website_url(self):
         association = Association.objects.create(
             name="Testföreningen",
-            description="En förening för akvarister i Uppsala.",
+            description="En förening för akvarister\ni Uppsala.",
             website_url="https://example.org/foreningen",
         )
 
@@ -18,7 +18,7 @@ class AssociationWebsiteTests(TestCase):
 
         self.assertEqual(
             association.description,
-            "En förening för akvarister i Uppsala.",
+            "En förening för akvarister\ni Uppsala.",
         )
         self.assertEqual(association.website_url, "https://example.org/foreningen")
 
@@ -56,7 +56,7 @@ class AssociationWebsiteTests(TestCase):
         response = self.client.get(reverse("association_member_leaderboard", args=[association.pk]))
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "En förening för akvarister i Uppsala.")
+        self.assertContains(response, "En förening för akvarister<br>i Uppsala.", html=True)
         self.assertContains(response, 'href="https://example.org/foreningen"')
         self.assertContains(response, "Besök föreningens hemsida")
         self.assertContains(response, "<h2>Medlemstopplista</h2>", html=True)
