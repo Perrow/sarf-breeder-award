@@ -78,7 +78,9 @@ class BreedingReviewUiTests(TestCase):
             "Ägg lades på rutorna och ynglen frisimmande efter några dagar.",
         )
         self.assertContains(response, "Bedöm odlingen")
-        self.assertContains(response, "Spara beslut")
+        self.assertContains(response, "Godkänn")
+        self.assertContains(response, "Avslå")
+        self.assertContains(response, "Spara utan beslut")
 
     def test_review_page_shows_species_external_links(self):
         response = self.client.get(self.review_url())
