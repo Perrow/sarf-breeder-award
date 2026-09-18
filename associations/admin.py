@@ -75,6 +75,16 @@ class AssociationAdmin(admin.ModelAdmin):
         }
     }
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == "description":
+            kwargs["widget"] = forms.Textarea(
+                attrs={
+                    "rows": 5,
+                    "style": "width:min(100%, 50rem);",
+                }
+            )
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
     def get_queryset(self, request):
         return super().get_queryset(request).filter(pk__in=_permission_associations(request.user))
 
