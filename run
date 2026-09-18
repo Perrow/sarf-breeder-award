@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-PID_FILE=".runserver.pid"
+PID_FILE="${TMPDIR:-/tmp}/sarf-breeder-award-runserver.pid"
 LOG_FILE="run.log"
 
 if [[ ! -f .venv/bin/activate ]]; then
@@ -35,7 +35,7 @@ case "${1:-}" in
         ;;
     --stop)
         if [[ ! -f "$PID_FILE" ]]; then
-            echo "Ingen bakgrundskörd server hittades."
+            echo "Ingen server som startats i bakgrunden hittades."
             exit 0
         fi
 
@@ -50,7 +50,7 @@ case "${1:-}" in
         ;;
     "")
         echo "Tips: använd './run --background' för att köra servern i bakgrunden."
-        echo "      använd './run --stop' för att stoppa en bakgrundskörd server."
+        echo "      använd './run --stop' för att stoppa en server som körs i bakgrunden."
         python manage.py runserver
         ;;
     *)
