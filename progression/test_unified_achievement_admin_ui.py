@@ -39,11 +39,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         self.assertEqual(
             [model["object_name"] for model in progression_app["models"]],
-            ["Achievement", "ManualAwardAssignment"],
+            ["Achievement", "AchievementBackground", "ManualAwardAssignment"],
         )
         self.assertEqual(
             [model["name"] for model in progression_app["models"]],
-            ["Utmärkelser", "Tilldela utmärkelser"],
+            ["Utmärkelser", "Bakgrunder", "Tilldela utmärkelser"],
         )
 
     def test_achievement_form_uses_type_dropdown_and_common_fields(self):
