@@ -50,7 +50,7 @@ class BreedingReviewClassTests(TestCase):
     def test_approval_uses_species_class_and_points(self):
         response = self.client.post(
             self.review_url(),
-            {"decision": "approve", "review_comment": "Godkänd."},
+            {"approve": "Godkänn", "review_comment": "Godkänd."},
         )
 
         self.assertEqual(response.status_code, 302)
@@ -62,7 +62,7 @@ class BreedingReviewClassTests(TestCase):
         response = self.client.post(
             self.review_url(),
             {
-                "decision": "approve",
+                "approve": "Godkänn",
                 "review_comment": "Godkänd.",
                 "awarded_breeding_class": Species.BreedingClass.GOLD,
                 "awarded_points": 99,
