@@ -32,6 +32,9 @@ class AssociationAdminFormTests(SimpleTestCase):
             ("name", "email", "contact_person", "website_url"),
         )
 
+    def test_admin_list_is_sorted_by_name_by_default(self):
+        self.assertEqual(self.model_admin.ordering, ("name",))
+
     def test_description_uses_textarea(self):
         form_class = self.model_admin.get_form(request=None)
         form = form_class()
