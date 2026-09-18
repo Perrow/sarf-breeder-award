@@ -228,8 +228,14 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
 
         if request.method == "POST":
             form = ReviewDecisionForm(request.POST)
-            action = request.POST.get("action")
-            if action not in {"approve", "reject", "save"}:
+            if "approve" in request.POST:
+                action = "approve"
+            elif "reject" in request.POST:
+                action = "reject"
+            elif "save_without_decision" in request.POST:
+                action = "save"
+            else:
+                action = None
                 form.add_error(None, "Välj Godkänn, Avslå eller Spara utan beslut.")
             if form.is_valid():
                 registration.reviewer = request.user
