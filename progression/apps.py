@@ -22,12 +22,15 @@ class ProgressionConfig(AppConfig):
                         model
                         for model in app["models"]
                         if model["object_name"]
-                        in {"Achievement", "ManualAwardAssignment"}
+                        in {"Achievement", "AchievementBackground", "ManualAwardAssignment"}
                     ]
+                    menu_order = {
+                        "Achievement": 0,
+                        "AchievementBackground": 1,
+                        "ManualAwardAssignment": 2,
+                    }
                     app["models"].sort(
-                        key=lambda model: 0
-                        if model["object_name"] == "Achievement"
-                        else 1
+                        key=lambda model: menu_order[model["object_name"]]
                     )
             return app_list
 
