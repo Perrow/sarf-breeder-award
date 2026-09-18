@@ -82,6 +82,17 @@ class BreedingReviewUiTests(TestCase):
         self.assertContains(response, "Avslå")
         self.assertContains(response, "Spara utan beslut")
 
+    def test_review_page_links_species_and_places_breeding_class_in_decision_section(self):
+        response = self.client.get(self.review_url())
+        content = response.content.decode()
+
+        species_url = reverse("species_information", args=[self.species.pk])
+        self.assertContains(response, f'href="{species_url}"')
+
+        decision_index = content.index("Bedöm odlingen")
+        self.assertNotIn("Silver", content[:decision_index])
+        self.assertIn("Silver", content[decision_index:])
+
     def test_review_page_shows_species_external_links(self):
         response = self.client.get(self.review_url())
 
