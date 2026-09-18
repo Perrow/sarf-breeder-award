@@ -6,5 +6,14 @@ if [[ ! -f .venv/bin/activate ]]; then
     exit 1
 fi
 
+if [[ ! -f .env ]]; then
+    echo "Hittar inte .env. Skapa den enligt docs/mariadb.md." >&2
+    exit 1
+fi
+
 source .venv/bin/activate
+set -a
+source .env
+set +a
+
 python manage.py runserver
