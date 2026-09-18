@@ -44,6 +44,7 @@ def _permission_associations(user):
 class AssociationAdmin(admin.ModelAdmin):
     list_display = ("name", "email", "contact_person", "website_url")
     search_fields = ("name", "email", "contact_person", "note")
+    ordering = ("name",)
     fieldsets = (
         (
             "Förening",
