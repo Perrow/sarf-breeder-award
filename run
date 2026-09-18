@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+PID_FILE=".runserver.pid"
+LOG_FILE="run.log"
+
 if [[ ! -f .venv/bin/activate ]]; then
     echo "Hittar inte .venv/bin/activate. Skapa miljön med: python -m venv .venv" >&2
     exit 1
@@ -16,4 +19,43 @@ set -a
 source .env
 set +a
 
-python manage.py runserver
+case "${1:-}" in
+    --background)
+        if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
+            echo "Servern kör redan i bakgrunden med PID $(cat "$PID_FILE")."
+            exit 0
+        fi
+
+        rm -f "$PID_FILE"
+        nohup python manage.py runserver > "$LOG_FILE" 2>&1 &
+        echo $! > "$PID_FILE"
+        echo "Servern startades i bakgrunden med PID $(cat "$PID_FILE")."
+        echo "Logg: $LOG_FILE"
+        echo "Stoppa servern med: ./run --stop"
+        ;;
+    --stop)
+        if [[ ! -f "$PID_FILE" ]]; then
+            echo "Ingen bakgrundskörd server hittades."
+            exit 0
+        fi
+
+        PID="$(cat "$PID_FILE")"
+        if kill -0 "$PID" 2>/dev/null; then
+            kill "$PID"
+            echo "Servern med PID $PID stoppades."
+        else
+            echo "Serverprocessen med PID $PID körs inte längre."
+        fi
+        rm -f "$PID_FILE"
+        ;;
+    "")
+        echo "Tips: använd './run --background' för att köra servern i bakgrunden."
+        echo "      använd './run --stop' för att stoppa en bakgrundskörd server."
+        python manage.py runserver
+        ;;
+    *)
+        echo "Okänt alternativ: $1" >&2
+        echo "Använd: ./run [--background|--stop]" >&2
+        exit 1
+        ;;
+esac
