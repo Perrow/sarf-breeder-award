@@ -1,0 +1,426 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "aenea",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Metallpansarmal",
+        "Bronspansarmal"
+      ],
+      "english_names": [
+        "Bronze cory",
+        "Bronze corydoras"
+      ],
+      "scientific_synonyms": [
+        "Corydoras aeneus",
+        "Hoplosoma aeneum"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/osteogaster_aenea",
+          "source_name": "PlanetCatfish",
+          "title": "Osteogaster aenea"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sterbai",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Sterbai pansarmal"
+      ],
+      "english_names": [
+        "Sterba's cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras sterbai"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_sterbai",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma sterbai"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "paleatum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Fläckig pansarmal"
+      ],
+      "english_names": [
+        "Peppered cory",
+        "Peppered corydoras"
+      ],
+      "scientific_synonyms": [
+        "Corydoras paleatus",
+        "Callichthys paleatus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_paleatum",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma paleatum"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "panda",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pandapansarmal"
+      ],
+      "english_names": [
+        "Panda cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras panda"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_panda",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma panda"
+        }
+      ]
+    },
+    {
+      "genus": "Gastrodermus",
+      "scientific_name": "pygmaeus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pygmepansarmal"
+      ],
+      "english_names": [
+        "Pygmy cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras pygmaeus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/gastrodermus_pygmaeus",
+          "source_name": "PlanetCatfish",
+          "title": "Gastrodermus pygmaeus"
+        }
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "schultzei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Schultzeis pansarmal"
+      ],
+      "scientific_synonyms": [
+        "Corydoras schultzei"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/osteogaster_schultzei",
+          "source_name": "PlanetCatfish",
+          "title": "Osteogaster schultzei"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "duplicareum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Bredrandig pansarmal"
+      ],
+      "english_names": [
+        "Broad stripe cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras duplicareus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_duplicareum",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma duplicareum"
+        }
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp.",
+      "cl_number": "CW010",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Orangebandad pansarmal"
+      ],
+      "english_names": [
+        "Gold Laser Cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras sp. CW010"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/osteogaster_sp(cw010)",
+          "source_name": "PlanetCatfish",
+          "title": "Osteogaster sp. CW010"
+        }
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "venezuelanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Venezuelansk pansarmal"
+      ],
+      "scientific_synonyms": [
+        "Corydoras venezuelanus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/osteogaster_venezuelanus",
+          "source_name": "PlanetCatfish",
+          "title": "Osteogaster venezuelanus"
+        }
+      ]
+    },
+    {
+      "genus": "Scleromystax",
+      "scientific_name": "barbatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Skäggpansarmal"
+      ],
+      "english_names": [
+        "Banded corydoras",
+        "Bearded catfish"
+      ],
+      "scientific_synonyms": [
+        "Corydoras barbatus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/scleromystax_barbatus",
+          "source_name": "PlanetCatfish",
+          "title": "Scleromystax barbatus"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "habrosum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Salt- och pepparpansarmal"
+      ],
+      "english_names": [
+        "Salt and pepper catfish"
+      ],
+      "scientific_synonyms": [
+        "Corydoras habrosus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_habrosum",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma habrosum"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "trilineatum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Trelinjepansarmal"
+      ],
+      "english_names": [
+        "Three stripe cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras trilineatus"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_trilineatum",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma trilineatum"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "weitzmani",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Weitzmans pansarmal"
+      ],
+      "scientific_synonyms": [
+        "Corydoras weitzmani"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_weitzmani",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma weitzmani"
+        }
+      ]
+    },
+    {
+      "genus": "Aspidoras",
+      "scientific_name": "raimundi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Raimundis pansarmal"
+      ],
+      "english_names": [
+        "Ceara bulldog cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras raimundi"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/aspidoras_raimundi",
+          "source_name": "PlanetCatfish",
+          "title": "Aspidoras raimundi"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "adolfoi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Adolfos pansarmal"
+      ],
+      "english_names": [
+        "Adolfo's cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras adolfoi"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_adolfoi",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma adolfoi"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "simile",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fläckpansarmal"
+      ],
+      "english_names": [
+        "Smudge spot cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras similis"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_simile",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma simile"
+        }
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp.",
+      "cl_number": "CW009",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Grön laserpansarmal"
+      ],
+      "english_names": [
+        "Green Laser Cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras sp. CW009"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/osteogaster_sp(cw009)",
+          "source_name": "PlanetCatfish",
+          "title": "Osteogaster sp. CW009"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "metae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Maskerad pansarmal"
+      ],
+      "english_names": [
+        "Masked corydoras"
+      ],
+      "scientific_synonyms": [
+        "Corydoras metae"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_metae",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma metae"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "concolor",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Enfärgad pansarmal"
+      ],
+      "english_names": [
+        "Slate cory"
+      ],
+      "scientific_synonyms": [
+        "Corydoras concolor"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/hoplisoma_concolor",
+          "source_name": "PlanetCatfish",
+          "title": "Hoplisoma concolor"
+        }
+      ]
+    },
+    {
+      "genus": "Brochis",
+      "scientific_name": "splendens",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Grön pansarmal"
+      ],
+      "english_names": [
+        "Emerald catfish",
+        "Emerald brochis"
+      ],
+      "scientific_synonyms": [
+        "Corydoras splendens",
+        "Callichthys splendens"
+      ],
+      "links": [
+        {
+          "url": "https://www.planetcatfish.com/brochis_splendens",
+          "source_name": "PlanetCatfish",
+          "title": "Brochis splendens"
+        }
+      ]
+    }
+  ]
+}
