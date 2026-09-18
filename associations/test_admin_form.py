@@ -1,3 +1,4 @@
+from django import forms
 from django.contrib import admin
 from django.test import SimpleTestCase, TestCase
 
@@ -30,6 +31,13 @@ class AssociationAdminFormTests(SimpleTestCase):
             self.model_admin.list_display,
             ("name", "email", "contact_person", "website_url"),
         )
+
+    def test_description_uses_textarea(self):
+        form_class = self.model_admin.get_form(request=None)
+        form = form_class()
+
+        self.assertIsInstance(form.fields["description"].widget, forms.Textarea)
+        self.assertEqual(form.fields["description"].widget.attrs["rows"], 5)
 
     def test_note_and_contact_person_have_swedish_labels(self):
         self.assertEqual(
