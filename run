@@ -1,4 +1,61 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-python manage.py runserver
+PID_FILE="${TMPDIR:-/tmp}/sarf-breeder-award-runserver.pid"
+LOG_FILE="run.log"
+
+if [[ ! -f .venv/bin/activate ]]; then
+    echo "Hittar inte .venv/bin/activate. Skapa miljön med: python -m venv .venv" >&2
+    exit 1
+fi
+
+if [[ ! -f .env ]]; then
+    echo "Hittar inte .env. Skapa den enligt docs/mariadb.md." >&2
+    exit 1
+fi
+
+source .venv/bin/activate
+set -a
+source .env
+set +a
+
+case "${1:-}" in
+    --background)
+        if [[ -f "$PID_FILE" ]] && kill -0 "$(cat "$PID_FILE")" 2>/dev/null; then
+            echo "Servern kör redan i bakgrunden med PID $(cat "$PID_FILE")."
+            exit 0
+        fi
+
+        rm -f "$PID_FILE"
+        nohup python manage.py runserver > "$LOG_FILE" 2>&1 &
+        echo $! > "$PID_FILE"
+        echo "Servern startades i bakgrunden med PID $(cat "$PID_FILE")."
+        echo "Logg: $LOG_FILE"
+        echo "Stoppa servern med: ./run --stop"
+        ;;
+    --stop)
+        if [[ ! -f "$PID_FILE" ]]; then
+            echo "Ingen server som startats i bakgrunden hittades."
+            exit 0
+        fi
+
+        PID="$(cat "$PID_FILE")"
+        if kill -0 "$PID" 2>/dev/null; then
+            kill "$PID"
+            echo "Servern med PID $PID stoppades."
+        else
+            echo "Serverprocessen med PID $PID körs inte längre."
+        fi
+        rm -f "$PID_FILE"
+        ;;
+    "")
+        echo "Tips: använd './run --background' för att köra servern i bakgrunden."
+        echo "      använd './run --stop' för att stoppa en server som körs i bakgrunden."
+        python manage.py runserver
+        ;;
+    *)
+        echo "Okänt alternativ: $1" >&2
+        echo "Använd: ./run [--background|--stop]" >&2
+        exit 1
+        ;;
+esac
