@@ -81,7 +81,7 @@ class TaxonomyReviewReturnTests(TestCase):
         response = self.client.post(
             self._review_url(),
             {
-                "decision": "approve",
+                "approve": "Godkänn",
                 "review_comment": "Taxonomin är löst.",
             },
         )
