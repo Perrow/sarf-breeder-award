@@ -1,5 +1,5 @@
+from django import forms
 from django.contrib import admin
-from django.core.exceptions import FieldDoesNotExist
 from django.test import SimpleTestCase, TestCase
 
 from .models import Association
@@ -18,7 +18,7 @@ class AssociationAdminFormTests(SimpleTestCase):
 
         self.assertEqual(
             fields,
-            ("name", "website_url", "email", "contact_person", "note"),
+            ("name", "description", "website_url", "email", "contact_person", "note"),
         )
         self.assertNotIn("organization_number", fields)
         self.assertNotIn("phone", fields)
@@ -32,14 +32,26 @@ class AssociationAdminFormTests(SimpleTestCase):
             ("name", "email", "contact_person", "website_url"),
         )
 
+    def test_admin_list_is_sorted_by_name_by_default(self):
+        self.assertEqual(self.model_admin.ordering, ("name",))
+
+    def test_description_uses_textarea(self):
+        form_class = self.model_admin.get_form(request=None)
+        form = form_class()
+
+        self.assertIsInstance(form.fields["description"].widget, forms.Textarea)
+        self.assertEqual(form.fields["description"].widget.attrs["rows"], 5)
+
     def test_note_and_contact_person_have_swedish_labels(self):
         self.assertEqual(
             Association._meta.get_field("contact_person").verbose_name,
             "kontaktperson",
         )
         self.assertEqual(Association._meta.get_field("note").verbose_name, "anteckning")
-        with self.assertRaises(FieldDoesNotExist):
-            Association._meta.get_field("description")
+        self.assertEqual(
+            Association._meta.get_field("description").verbose_name,
+            "beskrivning",
+        )
 
 
 class AssociationContactDetailsTests(TestCase):
