@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.core.exceptions import FieldDoesNotExist
 from django.test import SimpleTestCase, TestCase
 
 from .models import Association
@@ -18,7 +17,7 @@ class AssociationAdminFormTests(SimpleTestCase):
 
         self.assertEqual(
             fields,
-            ("name", "website_url", "email", "contact_person", "note"),
+            ("name", "description", "website_url", "email", "contact_person", "note"),
         )
         self.assertNotIn("organization_number", fields)
         self.assertNotIn("phone", fields)
@@ -38,8 +37,10 @@ class AssociationAdminFormTests(SimpleTestCase):
             "kontaktperson",
         )
         self.assertEqual(Association._meta.get_field("note").verbose_name, "anteckning")
-        with self.assertRaises(FieldDoesNotExist):
-            Association._meta.get_field("description")
+        self.assertEqual(
+            Association._meta.get_field("description").verbose_name,
+            "beskrivning",
+        )
 
 
 class AssociationContactDetailsTests(TestCase):

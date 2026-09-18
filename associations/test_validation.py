@@ -32,6 +32,14 @@ class AssociationValidationTests(TestCase):
 
         self.assertIn("name", error.exception.message_dict)
 
+    def test_description_longer_than_500_characters_is_rejected(self):
+        association = Association(name="Testförening", description="A" * 501)
+
+        with self.assertRaises(ValidationError) as error:
+            association.full_clean()
+
+        self.assertIn("description", error.exception.message_dict)
+
     def test_valid_association_passes_validation(self):
         Association(
             name="Testförening",

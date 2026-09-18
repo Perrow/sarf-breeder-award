@@ -7,14 +7,19 @@ from .models import Association
 
 
 class AssociationWebsiteTests(TestCase):
-    def test_association_can_store_website_url(self):
+    def test_association_can_store_description_and_website_url(self):
         association = Association.objects.create(
             name="Testföreningen",
+            description="En förening för akvarister i Uppsala.",
             website_url="https://example.org/foreningen",
         )
 
         association.refresh_from_db()
 
+        self.assertEqual(
+            association.description,
+            "En förening för akvarister i Uppsala.",
+        )
         self.assertEqual(association.website_url, "https://example.org/foreningen")
 
     def test_invalid_website_url_fails_model_validation(self):
@@ -41,17 +46,20 @@ class AssociationWebsiteTests(TestCase):
         self.assertContains(response, 'name="website_url"')
         self.assertContains(response, "https://example.org")
 
-    def test_public_member_leaderboard_shows_named_website_link(self):
+    def test_public_member_leaderboard_shows_description_website_and_subheading(self):
         association = Association.objects.create(
             name="Testföreningen",
+            description="En förening för akvarister i Uppsala.",
             website_url="https://example.org/foreningen",
         )
 
         response = self.client.get(reverse("association_member_leaderboard", args=[association.pk]))
 
         self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "En förening för akvarister i Uppsala.")
         self.assertContains(response, 'href="https://example.org/foreningen"')
         self.assertContains(response, "Besök föreningens hemsida")
+        self.assertContains(response, "<h2>Medlemstopplista</h2>", html=True)
 
     def test_public_member_leaderboard_has_no_website_link_without_url(self):
         association = Association.objects.create(name="Testföreningen")

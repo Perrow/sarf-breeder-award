@@ -8,6 +8,7 @@ class Association(models.Model):
     organization_number = models.CharField(max_length=50, blank=True, verbose_name="organisationsnummer")
     email = models.EmailField(blank=True, verbose_name="e-post")
     phone = models.CharField(max_length=50, blank=True, verbose_name="telefon")
+    description = models.CharField(max_length=500, blank=True, verbose_name="beskrivning")
     website_url = models.URLField(max_length=500, blank=True, verbose_name="hemsida")
     address = models.CharField(max_length=255, blank=True, verbose_name="adress")
     postal_code = models.CharField(max_length=20, blank=True, verbose_name="postnummer")
