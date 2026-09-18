@@ -1,9 +1,10 @@
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from taxonomy.models import Species
+from taxonomy.models import Genus, Species, SpeciesGroup
 
 from .models import BreedingRegistration, SpeciesReclassificationRequest
 
@@ -47,10 +48,30 @@ def _species_catalogue_results(query):
 
 
 def _render_species_catalogue(request, query):
+    species_groups = []
+    genera = []
+    if query:
+        species_groups = list(
+            SpeciesGroup.objects.filter(
+                is_visible=True,
+                name__icontains=query,
+            ).order_by("name")
+        )
+        genera = list(
+            Genus.objects.filter(
+                is_active=True,
+                scientific_name__icontains=query,
+            ).order_by("scientific_name")
+        )
     return render(
         request,
         "breedings/species_catalogue.html",
-        {"query": query, "results": _species_catalogue_results(query)},
+        {
+            "query": query,
+            "results": _species_catalogue_results(query),
+            "species_groups": species_groups,
+            "genera": genera,
+        },
     )
 
 
@@ -150,3 +171,42 @@ def species_information(request, pk):
         "pending_reclassification": pending_reclassification,
     }
     return render(request, "breedings/species_information.html", context)
+
+
+@login_required
+def species_group_species(request, pk):
+    group = get_object_or_404(SpeciesGroup, pk=pk, is_visible=True)
+    species = (
+        Species.objects.filter(
+            Q(direct_species_groups=group) | Q(genus__species_groups=group)
+        )
+        .select_related("genus")
+        .distinct()
+        .order_by("genus__scientific_name", "scientific_name")
+    )
+    return render(
+        request,
+        "breedings/species_group_species.html",
+        {
+            "group": group,
+            "species_list": species,
+        },
+    )
+
+
+@login_required
+def genus_species(request, pk):
+    genus = get_object_or_404(Genus, pk=pk, is_active=True)
+    species = (
+        Species.objects.filter(genus=genus)
+        .select_related("genus")
+        .order_by("scientific_name")
+    )
+    return render(
+        request,
+        "breedings/genus_species.html",
+        {
+            "genus": genus,
+            "species_list": species,
+        },
+    )

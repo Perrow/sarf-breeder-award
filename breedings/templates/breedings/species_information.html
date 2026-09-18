@@ -51,9 +51,9 @@
             <div class="card-body">
                 <h2 class="h5 card-title">Klassificering och utbredning</h2>
                 <dl class="mb-0">
-                    <dt>Släkte</dt><dd><em>{{ species.genus }}</em></dd>
+                    <dt>Släkte</dt><dd><a href="{% url 'genus_species' species.genus_id %}"><em>{{ species.genus }}</em></a></dd>
                     <dt>Artgrupper</dt>
-                    <dd>{% for group in species_groups %}{% if not forloop.first %}, {% endif %}{{ group.name }}{% empty %}–{% endfor %}</dd>
+                    <dd>{% for group in species_groups %}{% if not forloop.first %}, {% endif %}<a href="{% url 'species_group_species' group.pk %}">{{ group.name }}</a>{% empty %}–{% endfor %}</dd>
                     <dt>Geografi</dt>
                     <dd>{% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}{{ geography.name }}{% empty %}–{% endfor %}</dd>
                 </dl>

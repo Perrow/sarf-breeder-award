@@ -38,8 +38,8 @@ class SpeciesInformationTests(TestCase):
         )
         geography = Geography.objects.create(name="Sydamerika")
         self.species.geographies.add(geography)
-        group = SpeciesGroup.objects.create(name="Pansarmalar")
-        group.species.add(self.species)
+        self.group = SpeciesGroup.objects.create(name="Pansarmalar")
+        self.group.species.add(self.species)
         ScientificSpeciesSynonym.objects.create(
             species=self.species, scientific_name="Hoplisoma panda"
         )
@@ -94,6 +94,72 @@ class SpeciesInformationTests(TestCase):
                     response, reverse("species_information", args=[self.species.pk])
                 )
 
+    def test_catalogue_search_lists_matching_species_group_and_genus(self):
+        response = self.client.get(
+            reverse("species_catalogue_search", args=["pansarmal"])
+        )
+
+        self.assertContains(response, "Pansarmalar")
+        self.assertContains(
+            response,
+            reverse("species_group_species", args=[self.group.pk]),
+        )
+
+        response = self.client.get(
+            reverse("species_catalogue_search", args=["cory"])
+        )
+
+        self.assertContains(response, "Corydoras")
+        self.assertContains(
+            response,
+            reverse("genus_species", args=[self.species.genus_id]),
+        )
+
+    def test_genus_listing_contains_species_and_links_to_species_page(self):
+        other_species = Species.objects.create(
+            genus=self.species.genus,
+            scientific_name="aeneus",
+            common_name="Metallpansarmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+
+        response = self.client.get(
+            reverse("genus_species", args=[self.species.genus_id])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Corydoras panda")
+        self.assertContains(response, "Corydoras aeneus")
+        self.assertContains(
+            response,
+            reverse("species_information", args=[self.species.pk]),
+        )
+        self.assertContains(
+            response,
+            reverse("species_information", args=[other_species.pk]),
+        )
+
+    def test_hidden_group_and_inactive_genus_are_not_search_results(self):
+        hidden_group = SpeciesGroup.objects.create(
+            name="Hemliga pansarmalar",
+            is_visible=False,
+        )
+        hidden_group.species.add(self.species)
+        inactive_genus = Genus.objects.create(
+            scientific_name="Coryhidden",
+            is_active=False,
+        )
+
+        group_response = self.client.get(
+            reverse("species_catalogue_search", args=["hemliga"])
+        )
+        genus_response = self.client.get(
+            reverse("species_catalogue_search", args=["coryhidden"])
+        )
+
+        self.assertNotContains(group_response, hidden_group.name)
+        self.assertNotContains(genus_response, inactive_genus.scientific_name)
+
     def test_species_page_shows_registered_species_information(self):
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
@@ -113,6 +179,74 @@ class SpeciesInformationTests(TestCase):
         ):
             self.assertContains(response, value)
 
+    def test_species_group_on_species_page_links_to_group_listing(self):
+        response = self.client.get(
+            reverse("species_information", args=[self.species.pk])
+        )
+
+        self.assertContains(
+            response,
+            f'href="{reverse("species_group_species", args=[self.group.pk])}"',
+        )
+
+    def test_species_page_links_genus_to_genus_listing(self):
+        response = self.client.get(
+            reverse("species_information", args=[self.species.pk])
+        )
+
+        self.assertContains(
+            response,
+            f'href="{reverse("genus_species", args=[self.species.genus_id])}"',
+        )
+
+    def test_species_group_listing_contains_direct_and_genus_species_once(self):
+        direct_genus = Genus.objects.create(scientific_name="Ancistrus")
+        direct_species = Species.objects.create(
+            genus=direct_genus,
+            scientific_name="cirrhosus",
+            common_name="Skäggmunsmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        genus_species = Species.objects.create(
+            genus=self.species.genus,
+            scientific_name="aeneus",
+            common_name="Metallpansarmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        self.group.species.add(direct_species)
+        self.group.genera.add(self.species.genus)
+
+        response = self.client.get(
+            reverse("species_group_species", args=[self.group.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Pansarmalar")
+        self.assertContains(response, "Ancistrus cirrhosus")
+        self.assertContains(response, "Corydoras aeneus")
+        self.assertContains(response, "Corydoras panda", count=1)
+        self.assertContains(
+            response,
+            reverse("species_information", args=[direct_species.pk]),
+        )
+        self.assertContains(
+            response,
+            reverse("species_information", args=[genus_species.pk]),
+        )
+
+    def test_hidden_species_group_listing_returns_404(self):
+        hidden_group = SpeciesGroup.objects.create(
+            name="Dold grupp",
+            is_visible=False,
+        )
+        hidden_group.species.add(self.species)
+
+        response = self.client.get(
+            reverse("species_group_species", args=[hidden_group.pk])
+        )
+
+        self.assertEqual(response.status_code, 404)
+
     def test_species_page_lists_only_approved_breedings_without_report_text(self):
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
@@ -130,6 +264,8 @@ class SpeciesInformationTests(TestCase):
             reverse("species_catalogue"),
             reverse("species_catalogue_search", args=["corydoras"]),
             reverse("species_information", args=[self.species.pk]),
+            reverse("species_group_species", args=[self.group.pk]),
+            reverse("genus_species", args=[self.species.genus_id]),
         ):
             with self.subTest(url=url):
                 response = self.client.get(url)
