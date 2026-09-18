@@ -52,7 +52,7 @@ class BreedingReviewValidationTests(TestCase):
     def test_too_long_review_comment_is_rejected(self):
         response = self.client.post(
             self.review_url(),
-            {"decision": "reject", "review_comment": "x" * 2001},
+            {"reject": "Avslå", "review_comment": "x" * 2001},
         )
 
         self.assertEqual(response.status_code, 200)
@@ -70,7 +70,7 @@ class BreedingReviewValidationTests(TestCase):
 
         response = self.client.post(
             self.review_url(),
-            {"decision": "reject", "review_comment": "Försök"},
+            {"reject": "Avslå", "review_comment": "Försök"},
         )
 
         self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
@@ -82,7 +82,7 @@ class BreedingReviewValidationTests(TestCase):
         response = self.client.post(
             self.review_url(),
             {
-                "decision": "approve",
+                "approve": "Godkänn",
                 "awarded_breeding_class": Species.BreedingClass.GOLD,
                 "review_comment": "Godkänd",
                 "reviewer": self.attacker.pk,
@@ -121,7 +121,7 @@ class BreedingReviewValidationTests(TestCase):
                 )
                 response = self.client.post(
                     reverse("admin:breedings_breedingregistration_review", args=[registration.pk]),
-                    {"decision": "approve", "review_comment": ""},
+                    {"approve": "Godkänn", "review_comment": ""},
                 )
                 self.assertEqual(response.status_code, 302)
                 registration.refresh_from_db()

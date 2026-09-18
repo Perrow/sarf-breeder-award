@@ -60,7 +60,7 @@ class BreedingManagerRoleTests(TestCase):
                 "admin:breedings_breedingregistration_review",
                 args=[self.registration_a.pk],
             ),
-            {"decision": "approve", "review_comment": "Godkänd."},
+            {"approve": "Godkänn", "review_comment": "Godkänd."},
         )
         self.assertRedirects(
             response,

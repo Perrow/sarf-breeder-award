@@ -17,7 +17,10 @@ class ReviewSaveNextTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.owner = User.objects.create_user(username="owner-next@example.com")
-        self.reviewer = User.objects.create_user(username="reviewer-next@example.com", is_staff=True)
+        self.reviewer = User.objects.create_user(
+            username="reviewer-next@example.com",
+            is_staff=True,
+        )
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Testförening")
         Membership.objects.create(user=self.reviewer, association=self.association)
@@ -30,10 +33,10 @@ class ReviewSaveNextTests(TestCase):
         )
         self.client.force_login(self.reviewer)
 
-    def _registration(self, association=None, day=1):
+    def _registration(self, day):
         return BreedingRegistration.objects.create(
             owner=self.owner,
-            association=association or self.association,
+            association=self.association,
             species=self.species,
             breeding_date=date(2026, 8, day),
             description="Test",
@@ -41,52 +44,22 @@ class ReviewSaveNextTests(TestCase):
             submitted_at=timezone.now(),
         )
 
-    def test_save_and_next_is_shown_and_redirects_to_next_review(self):
+    def test_removed_save_and_next_action_is_not_shown(self):
         current = self._registration(day=2)
-        next_registration = self._registration(day=1)
+        self._registration(day=1)
 
         response = self.client.get(
-            reverse("admin:breedings_breedingregistration_review", args=[current.pk])
+            reverse(
+                "admin:breedings_breedingregistration_review",
+                args=[current.pk],
+            )
         )
-        self.assertContains(response, '<input type="submit" value="Spara beslut">', html=True)
+
+        self.assertNotContains(response, "Spara beslut")
+        self.assertNotContains(response, "Spara och visa nästa")
+        self.assertContains(response, 'name="approve" value="Godkänn"')
+        self.assertContains(response, 'name="reject" value="Avslå"')
         self.assertContains(
             response,
-            '<input type="submit" name="save_and_next" value="Spara och visa nästa">',
-            html=True,
+            'name="save_without_decision" value="Spara utan beslut"',
         )
-
-        response = self.client.post(
-            reverse("admin:breedings_breedingregistration_review", args=[current.pk]),
-            {
-                "decision": "approve",
-                "review_comment": "Godkänd",
-                "save_and_next": "Spara och visa nästa",
-            },
-        )
-
-        self.assertRedirects(
-            response,
-            reverse("admin:breedings_breedingregistration_review", args=[next_registration.pk]),
-        )
-        current.refresh_from_db()
-        self.assertEqual(current.status, BreedingRegistration.Status.APPROVED)
-
-    def test_button_is_hidden_when_no_other_reviewable_registration_exists(self):
-        current = self._registration()
-
-        response = self.client.get(
-            reverse("admin:breedings_breedingregistration_review", args=[current.pk])
-        )
-
-        self.assertNotContains(response, "Spara och visa nästa")
-
-    def test_registration_outside_reviewers_associations_is_not_offered_as_next(self):
-        current = self._registration()
-        other_association = Association.objects.create(name="Annan förening")
-        self._registration(association=other_association, day=2)
-
-        response = self.client.get(
-            reverse("admin:breedings_breedingregistration_review", args=[current.pk])
-        )
-
-        self.assertNotContains(response, "Spara och visa nästa")
