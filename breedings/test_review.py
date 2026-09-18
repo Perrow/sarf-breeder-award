@@ -53,13 +53,10 @@ class BreedingReviewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, 'name="decision"')
-        self.assertContains(response, 'name="action" value="approve"')
-        self.assertContains(response, ">Godkänn</button>")
-        self.assertContains(response, 'name="action" value="reject"')
-        self.assertContains(response, ">Avslå</button>")
-        self.assertContains(response, 'name="action" value="save"')
-        self.assertContains(response, ">Spara utan beslut</button>")
-        self.assertContains(response, 'name="review_comment"')
+        self.assertContains(response, 'name="approve" value="Godkänn"')
+                self.assertContains(response, 'name="reject" value="Avslå"')
+                self.assertContains(response, 'name="save_without_decision" value="Spara utan beslut"')
+                self.assertContains(response, 'name="review_comment"')
         self.assertContains(response, 'cols="80"')
         self.assertContains(response, 'rows="6"')
 
@@ -68,7 +65,7 @@ class BreedingReviewTests(TestCase):
         response = self.client.post(
             self.review_url(),
             {
-                "action": "approve",
+                "approve": "Godkänn",
                 "awarded_breeding_class": Species.BreedingClass.SILVER,
                 "review_comment": "Godkänd odling.",
             },
@@ -87,7 +84,7 @@ class BreedingReviewTests(TestCase):
         self.client.force_login(self.reviewer)
         response = self.client.post(
             self.review_url(),
-            {"action": "reject", "awarded_breeding_class": "", "review_comment": "Behöver kompletteras."},
+            {"reject": "Avslå", "awarded_breeding_class": "", "review_comment": "Behöver kompletteras."},
         )
 
         self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
@@ -102,7 +99,7 @@ class BreedingReviewTests(TestCase):
         self.client.force_login(self.reviewer)
         response = self.client.post(
             self.review_url(),
-            {"action": "save", "review_comment": "Anteckning inför senare beslut."},
+            {"save_without_decision": "Spara utan beslut", "review_comment": "Anteckning inför senare beslut."},
         )
 
         self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
