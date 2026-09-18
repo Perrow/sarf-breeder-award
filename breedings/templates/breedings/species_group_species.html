@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}{{ group.name }} | Artgrupper | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'species_catalogue' %}">← Till artsökningen</a></p>
+
+<h1>{{ group.name }}</h1>
+<p>Arter som ingår i artgruppen.</p>
+
+{% if species_list %}
+<div class="list-group">
+    {% for species in species_list %}
+        <a class="list-group-item list-group-item-action" href="{% url 'species_information' species.pk %}">
+            <strong><em>{{ species }}</em></strong>
+            <div>{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</div>
+        </a>
+    {% endfor %}
+</div>
+{% else %}
+<p>Det finns inga arter i artgruppen.</p>
+{% endif %}
+{% endblock %}

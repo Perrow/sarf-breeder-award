@@ -4,14 +4,14 @@
 
 {% block content %}
 <h1>Arter</h1>
-<p>Sök efter en art för att se namn, klassificering, geografi, synonymer, länkar och godkända odlingar.</p>
+<p>Sök efter en art, artgrupp eller ett släkte för att hitta rätt information.</p>
 
 <form method="get"
       action="{% url 'species_catalogue' %}"
       class="mb-4"
       role="search"
       data-search-url-template="{% url 'species_catalogue_search' '__query__' %}">
-    <label class="form-label" for="species-query">Sök art</label>
+    <label class="form-label" for="species-query">Sök art, artgrupp eller släkte</label>
     <div class="input-group">
         <input class="form-control" id="species-query" name="q" value="{{ query }}" autocomplete="off">
         <button class="btn btn-primary" type="submit">Sök</button>
@@ -19,7 +19,32 @@
 </form>
 
 {% if query %}
+    {% if species_groups %}
+        <h2 class="h4">Artgrupper</h2>
+        <div class="list-group mb-4">
+        {% for group in species_groups %}
+            <a class="list-group-item list-group-item-action" href="{% url 'species_group_species' group.pk %}">
+                <strong>{{ group.name }}</strong>
+                <div class="small text-body-secondary">Artgrupp</div>
+            </a>
+        {% endfor %}
+        </div>
+    {% endif %}
+
+    {% if genera %}
+        <h2 class="h4">Släkten</h2>
+        <div class="list-group mb-4">
+        {% for genus in genera %}
+            <a class="list-group-item list-group-item-action" href="{% url 'genus_species' genus.pk %}">
+                <strong><em>{{ genus.scientific_name }}</em></strong>
+                <div class="small text-body-secondary">Släkte</div>
+            </a>
+        {% endfor %}
+        </div>
+    {% endif %}
+
     {% if results %}
+        <h2 class="h4">Arter</h2>
         <div class="list-group">
         {% for species in results %}
             <a class="list-group-item list-group-item-action" href="{% url 'species_information' species.pk %}">
@@ -33,8 +58,10 @@
             </a>
         {% endfor %}
         </div>
-    {% else %}
-        <p>Inga arter matchade sökningen.</p>
+    {% endif %}
+
+    {% if not species_groups and not genera and not results %}
+        <p>Inga arter, artgrupper eller släkten matchade sökningen.</p>
     {% endif %}
 {% endif %}
 
