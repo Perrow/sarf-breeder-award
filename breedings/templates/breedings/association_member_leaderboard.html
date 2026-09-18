@@ -5,7 +5,7 @@
 {% block content %}
 <h1>{{ association.name }}</h1>
 {% if association.description %}
-<p>{{ association.description }}</p>
+<p>{{ association.description|linebreaksbr }}</p>
 {% endif %}
 {% if association.website_url %}
 <p><a href="{{ association.website_url }}" target="_blank" rel="noopener">Besök föreningens hemsida</a></p>
