@@ -9,8 +9,7 @@ class UserProfileTests(TestCase):
             username="profile@example.com",
             email="profile@example.com",
             password="test-password-123",
-            first_name="Test",
-            last_name="Person",
+            name="Test Person",
             public_username="ProfileUser",
         )
         self.client.force_login(self.user)
@@ -36,8 +35,7 @@ class UserProfileTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "first_name": "Test",
-                "last_name": "Person",
+                "name": "Test Person",
                 "public_username": "PellePublic",
                 "location": "Uppsala",
                 "avatar_url": "https://example.com/pelle.jpg",
@@ -57,9 +55,8 @@ class UserProfileTests(TestCase):
 
     def test_public_display_name_never_falls_back_to_private_name(self):
         self.user.public_username = None
-        self.user.first_name = "Hemligt"
-        self.user.last_name = "Namn"
-        self.user.save(update_fields=("public_username", "first_name", "last_name"))
+        self.user.name = "Hemligt Namn"
+        self.user.save(update_fields=("public_username", "name"))
 
         self.assertEqual(self.user.public_display_name(), "Användare")
         self.assertEqual(self.user.public_display_name(profile_information_is_public=True), "Användare")
