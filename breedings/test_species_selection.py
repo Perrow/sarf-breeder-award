@@ -75,7 +75,7 @@ class SpeciesSelectionTests(TestCase):
         self.assertEqual(result["english_name"], "Bronze corydoras")
         self.assertEqual(
             result["matched_via"],
-            {"type": "synonym", "value": "Callichthys aeneus"},
+            {"type": "scientific_synonym", "value": "Callichthys aeneus"},
         )
 
     def test_search_by_common_name_synonym_explains_match(self):
@@ -84,7 +84,7 @@ class SpeciesSelectionTests(TestCase):
         result = response.json()["results"][0]
         self.assertEqual(
             result["matched_via"],
-            {"type": "synonym", "value": "Brunpansarmal"},
+            {"type": "common_name_synonym", "value": "Brunpansarmal"},
         )
 
     def test_direct_match_takes_priority_over_matching_synonym(self):
@@ -129,6 +129,13 @@ class SpeciesSelectionTests(TestCase):
         results = response.json()["results"]
         self.assertEqual(len(results), 10)
         self.assertNotIn(inactive.pk, [result["id"] for result in results])
+
+    def test_species_selection_ui_labels_synonym_match_types(self):
+        response = self.client.get(reverse("species_select"))
+
+        self.assertContains(response, "Träff via vetenskaplig synonym:")
+        self.assertContains(response, "Träff via populärnamnssynonym:")
+        self.assertContains(response, "Träff via geografi:")
 
     def test_selected_species_is_shown_as_fixed_value_on_registration_form(self):
         response = self.client.get(
