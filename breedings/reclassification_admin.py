@@ -7,7 +7,7 @@ from associations.admin import is_system_admin
 from .models import SpeciesReclassificationRequest
 
 
-BREEDING_MANAGER_GROUP = "Odlingsansvarig"
+BREEDING_MANAGER_GROUP = "Odlingsgranskare"
 
 
 def _can_review_reclassification(user):
