@@ -333,12 +333,15 @@ class AchievementAdmin(admin.ModelAdmin):
         form = ManualAssignmentAdminForm(
             request.POST or None,
             achievement=achievement,
+            request_user=request.user,
         )
         if request.method == "POST" and form.is_valid():
             try:
                 _, created = assign_manual_level(
                     form.cleaned_data["user"],
                     form.cleaned_data["level"],
+                    association=form.cleaned_data["association"],
+                    awarded_by=request.user,
                 )
             except ValidationError as error:
                 form.add_error(None, error)
