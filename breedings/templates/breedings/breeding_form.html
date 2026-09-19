@@ -57,6 +57,23 @@
     <div class="form-field">
         {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
         {% if form.description.help_text %}<div class="form-text" id="{{ form.description.auto_id }}_helptext">{{ form.description.help_text }}</div>{% endif %}
+
+        <div class="form-text mt-2">
+            Begränsad formatering stöds:
+            <code># Rubrik</code>,
+            <code>**fet text**</code>,
+            <code>*kursiv text*</code> och
+            <code>- punkt</code> för punktlistor.
+        </div>
+        <button
+            class="btn btn-sm btn-outline-secondary mt-2"
+            type="button"
+            id="preview-description"
+            data-preview-url="{% url 'breeding_description_preview' %}"
+            data-bs-toggle="modal"
+            data-bs-target="#description-preview-modal">
+            Förhandsgranska
+        </button>
     </div>
 
     <div class="form-actions">
@@ -70,6 +87,56 @@
 </form>
 <p class="mt-3"><a href="{% url 'breeding_list' %}">Till mina odlingar</a></p>
 </div>
+
+<div class="modal fade" id="description-preview-modal" tabindex="-1" aria-labelledby="description-preview-title" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title fs-5" id="description-preview-title">Förhandsgranskning av odlingsrapport</h2>
+                <button class="btn-close" type="button" data-bs-dismiss="modal" aria-label="Stäng"></button>
+            </div>
+            <div class="modal-body">
+                <div id="description-preview-content" aria-live="polite"></div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" type="button" data-bs-dismiss="modal">Stäng</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+(function () {
+    const button = document.getElementById("preview-description");
+    const description = document.getElementById("id_description");
+    const content = document.getElementById("description-preview-content");
+    const csrfToken = document.querySelector('input[name="csrfmiddlewaretoken"]').value;
+
+    button.addEventListener("click", async function () {
+        content.textContent = "Laddar förhandsgranskning…";
+
+        const body = new URLSearchParams();
+        body.append("description", description.value);
+
+        const response = await fetch(button.dataset.previewUrl, {
+            method: "POST",
+            headers: {
+                "X-CSRFToken": csrfToken,
+                "X-Requested-With": "XMLHttpRequest"
+            },
+            body: body
+        });
+
+        if (!response.ok) {
+            content.textContent = "Förhandsgranskningen kunde inte visas.";
+            return;
+        }
+
+        const data = await response.json();
+        content.innerHTML = data.html || '<p class="text-body-secondary">Ingen beskrivning angiven.</p>';
+    });
+})();
+</script>
 
 {% if not selected_species %}
 <script>
