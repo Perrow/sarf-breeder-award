@@ -1,6 +1,7 @@
 from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponseNotAllowed, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -11,6 +12,7 @@ from taxonomy.models import Species
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
 from .review import can_review_breedings
+from .templatetags.breeding_markdown import render_limited_markdown
 from .scoring import (
     association_competition_rules,
     association_leaderboard_scores,
@@ -380,4 +382,18 @@ def _edit_breeding(
             "selected_species": selected_species,
             "approval_will_reset": reset_approval_on_save,
         },
+    )
+
+
+@login_required
+def breeding_description_preview(request):
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    return JsonResponse(
+        {
+            "html": str(
+                render_limited_markdown(request.POST.get("description", ""))
+            )
+        }
     )

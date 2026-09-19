@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load breeding_markdown %}
 
 {% block title %}Granska odlingsrapport | Odlingskampanjen{% endblock %}
 
@@ -38,7 +39,7 @@
         <div class="card mb-4">
             <div class="card-body">
                 <h2 class="h5">Odlarens beskrivning</h2>
-                <div>{{ registration.description|default:"Ingen beskrivning angiven."|linebreaksbr }}</div>
+                <div>{{ registration.description|default:"Ingen beskrivning angiven."|limited_markdown }}</div>
             </div>
         </div>
 

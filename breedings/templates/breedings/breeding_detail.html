@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load breeding_markdown %}
 
 {% block title %}Odlingsrapport | Odlingskampanjen{% endblock %}
 
@@ -53,7 +54,7 @@
 
 <dl class="row">
     <dt class="col-sm-4">Förening</dt><dd class="col-sm-8">{{ registration.association }}</dd>
-    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|default:"–"|linebreaksbr }}</dd>
+    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|default:"–"|limited_markdown }}</dd>
     <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ registration.get_status_display }}</dd>
     <dt class="col-sm-4">Inskickad</dt><dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
     <dt class="col-sm-4">Godkänd</dt><dd class="col-sm-8">{{ registration.approved_at|default:"–" }}</dd>
