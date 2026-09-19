@@ -117,8 +117,8 @@ class AssociationAdmin(admin.ModelAdmin):
 class MembershipAdmin(admin.ModelAdmin):
     list_display = ("user_name", "user_email", "phone", "member_number", "association")
     search_fields = (
-        "user__first_name",
-        "user__last_name",
+        "user__name",
+        "user__public_username",
         "user__email",
         "phone",
         "member_number",
