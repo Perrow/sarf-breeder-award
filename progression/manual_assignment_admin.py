@@ -7,11 +7,7 @@ from django.template.response import TemplateResponse
 from django.urls import reverse
 
 from associations.models import Association, Membership
-from associations.permissions import (
-    is_association_admin,
-    is_system_admin,
-    managed_associations,
-)
+from associations.permissions import is_system_admin, managed_associations
 
 from .models import Achievement, AchievementLevel, UserAchievement
 from .services import assign_manual_level
@@ -114,21 +110,13 @@ class ManualAwardAssignmentAdmin(admin.ModelAdmin):
         )
 
     def has_module_permission(self, request):
-        return is_system_admin(request.user) or is_association_admin(request.user)
+        return is_system_admin(request.user)
 
     def has_view_permission(self, request, obj=None):
-        if is_system_admin(request.user):
-            return True
-        if not is_association_admin(request.user):
-            return False
-        if obj is None:
-            return True
-        return managed_associations(request.user).filter(
-            pk=obj.awarded_association_id
-        ).exists()
+        return is_system_admin(request.user)
 
     def has_add_permission(self, request):
-        return is_system_admin(request.user) or is_association_admin(request.user)
+        return is_system_admin(request.user)
 
     def has_change_permission(self, request, obj=None):
         return False
