@@ -24,10 +24,10 @@ def _match_details(species, query):
 
     for synonym in species.scientific_synonyms.all():
         if _contains(synonym.scientific_name, query):
-            return {"type": "synonym", "value": synonym.scientific_name}
+            return {"type": "scientific_synonym", "value": synonym.scientific_name}
     for synonym in species.common_name_synonyms.all():
         if _contains(synonym.common_name, query):
-            return {"type": "synonym", "value": synonym.common_name}
+            return {"type": "common_name_synonym", "value": synonym.common_name}
 
     for geography in species.geographies.all():
         if _contains(geography.name, query):
