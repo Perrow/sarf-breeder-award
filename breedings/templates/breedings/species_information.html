@@ -100,7 +100,7 @@
         {% for report in published_reports %}
         <article class="card">
             <div class="card-body">
-                <h3 class="h5">Odlingsrapport: {{ report.species_page_display_name }}</h3>
+                <h3 class="h5">Odlingsrapport: {{ report.owner.public_display_name }}</h3>
                 <div>{{ report.description|limited_markdown }}</div>
             </div>
         </article>
