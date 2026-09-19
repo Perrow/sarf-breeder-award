@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}Lös taxonomi | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a class="text-decoration-none" href="{% url 'breeding_review_list' %}">← Till granskningskön</a></p>
+<h1>Lös taxonomi</h1>
+
+<div class="card mb-4">
+    <div class="card-body">
+        <dl class="row mb-0">
+            <dt class="col-sm-4">Ursprungligt släkte</dt><dd class="col-sm-8">{{ registration.proposed_genus_name|default:"–" }}</dd>
+            <dt class="col-sm-4">Ursprungligt artnamn</dt><dd class="col-sm-8">{{ registration.proposed_species_name|default:"–" }}</dd>
+            <dt class="col-sm-4">Ursprungligt populärnamn</dt><dd class="col-sm-8">{{ registration.proposed_common_name|default:"–" }}</dd>
+        </dl>
+    </div>
+</div>
+
+<div class="card shadow-sm">
+    <div class="card-body">
+        <label class="form-label" for="species-search">Sök art</label>
+        <input class="form-control mb-2" id="species-search" type="search" autocomplete="off" autofocus>
+        <div class="form-text mb-3">Sök på vetenskapligt namn, populärnamn eller synonym.</div>
+
+        <div id="species-search-results" class="d-grid gap-2" aria-live="polite"></div>
+        <p id="species-search-empty" class="text-body-secondary" hidden>Inga arter hittades.</p>
+        <p id="species-search-selected" class="alert alert-info py-2" hidden></p>
+
+        <form method="post" id="taxonomy-resolution-form" class="mt-3">
+            {% csrf_token %}
+            <div hidden>{{ form.species }}</div>
+            {% if form.species.errors %}{{ form.species.errors }}{% endif %}
+            <button id="taxonomy-submit" class="btn btn-primary" type="submit" disabled>Koppla art</button>
+        </form>
+
+        {% if species_add_url %}
+        <p class="mt-3 mb-0"><a href="{{ species_add_url }}">Skapa ny art i artregistret</a></p>
+        {% endif %}
+    </div>
+</div>
+
+<script>
+(function () {
+    const input = document.getElementById("species-search");
+    const results = document.getElementById("species-search-results");
+    const empty = document.getElementById("species-search-empty");
+    const selected = document.getElementById("species-search-selected");
+    const speciesField = document.getElementById("id_species");
+    const submit = document.getElementById("taxonomy-submit");
+    const searchUrl = "{% url 'species_search_results' %}";
+    let requestNumber = 0;
+    let timer = null;
+
+    function render(items) {
+        results.replaceChildren();
+        empty.hidden = items.length !== 0 || input.value.trim() === "";
+        items.forEach(function (item) {
+            const button = document.createElement("button");
+            button.type = "button";
+            button.className = "btn btn-outline-secondary text-start";
+            button.textContent = item.scientific_name + (item.common_name ? " – " + item.common_name : "");
+            button.addEventListener("click", function () {
+                speciesField.value = item.id;
+                selected.textContent = "Vald art: " + item.scientific_name;
+                selected.hidden = false;
+                submit.disabled = false;
+            });
+            results.appendChild(button);
+        });
+    }
+
+    async function search() {
+        const query = input.value.trim();
+        const currentRequest = ++requestNumber;
+        speciesField.value = "";
+        selected.hidden = true;
+        submit.disabled = true;
+        if (!query) { render([]); return; }
+        const response = await fetch(searchUrl + "?q=" + encodeURIComponent(query), {
+            headers: {"X-Requested-With": "XMLHttpRequest"}
+        });
+        if (!response.ok || currentRequest !== requestNumber) return;
+        const data = await response.json();
+        if (currentRequest === requestNumber) render(data.results);
+    }
+
+    input.addEventListener("input", function () {
+        clearTimeout(timer);
+        timer = setTimeout(search, 150);
+    });
+})();
+</script>
+{% endblock %}
