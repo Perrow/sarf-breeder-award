@@ -21,7 +21,11 @@ class TaxonomyPrefillTests(TestCase):
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.reviewer.user_permissions.add(Permission.objects.get(codename="add_species"))
         self.association = Association.objects.create(name="Förifyllnadsförening")
-        Membership.objects.create(\n            user=self.reviewer,\n            association=self.association,\n            is_association_admin=True,\n        )
+        Membership.objects.create(
+            user=self.reviewer,
+            association=self.association,
+            is_association_admin=True,
+        )
         self.client.force_login(self.reviewer)
 
     def _registration(self, genus_name):
