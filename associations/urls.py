@@ -11,6 +11,11 @@ urlpatterns = [
         name="association_admins",
     ),
     path(
+        "foreningsadministration/<int:pk>/utmarkelser/",
+        views.association_awards,
+        name="association_awards",
+    ),
+    path(
         "systemadministration/foreningsadministratorer/",
         views.system_association_admins,
         name="system_association_admins",
