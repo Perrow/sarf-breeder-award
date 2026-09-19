@@ -4,7 +4,7 @@ from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 
-from taxonomy.models import Genus, Species, SpeciesGroup
+from taxonomy.models import Geography, Genus, Species, SpeciesGroup
 
 from .models import BreedingRegistration, SpeciesReclassificationRequest
 
@@ -207,6 +207,24 @@ def genus_species(request, pk):
         "breedings/genus_species.html",
         {
             "genus": genus,
+            "species_list": species,
+        },
+    )
+
+
+@login_required
+def geography_species(request, pk):
+    geography = get_object_or_404(Geography, pk=pk)
+    species = (
+        Species.objects.filter(geographies=geography)
+        .select_related("genus")
+        .order_by("genus__scientific_name", "scientific_name")
+    )
+    return render(
+        request,
+        "breedings/geography_species.html",
+        {
+            "geography": geography,
             "species_list": species,
         },
     )
