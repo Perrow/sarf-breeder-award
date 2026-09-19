@@ -2,6 +2,7 @@ from django.core.exceptions import ValidationError
 from django.db import transaction
 from django.utils import timezone
 
+from associations.models import Membership
 from breedings.models import BreedingRegistration
 from breedings.scoring import points_for_registration
 
@@ -164,17 +165,23 @@ def _validate_explicit_level(level, achievement_type, requirement_kind):
 
 
 @transaction.atomic
-def assign_manual_level(user, level):
+def assign_manual_level(user, level, association=None, awarded_by=None):
     _validate_explicit_level(
         level,
         Achievement.Type.MANUAL,
         AchievementRequirement.Kind.MANUAL_ASSIGNMENT,
     )
+    if association is not None and not Membership.objects.filter(
+        user=user,
+        association=association,
+    ).exists():
+        raise ValidationError("Användaren är inte medlem i den valda föreningen.")
+
     UserAchievement.objects.filter(
         user=user,
         level__achievement=level.achievement,
     ).exclude(level=level).delete()
-    return UserAchievement.objects.get_or_create(
+    grant, created = UserAchievement.objects.get_or_create(
         user=user,
         level=level,
         calendar_year=None,
@@ -182,8 +189,19 @@ def assign_manual_level(user, level):
             "achievement_name": level.achievement.name,
             "level_name": level.name,
             "level_description": level.description,
+            "awarded_association": association,
+            "awarded_by": awarded_by,
         },
     )
+    if (
+        not created
+        and association is not None
+        and grant.awarded_association_id is None
+    ):
+        grant.awarded_association = association
+        grant.awarded_by = awarded_by
+        grant.save(update_fields=("awarded_association", "awarded_by"))
+    return grant, created
 
 
 @transaction.atomic

@@ -4,6 +4,9 @@ from django import forms
 from django.contrib.admin.widgets import FilteredSelectMultiple
 from django.contrib.auth import get_user_model
 
+from associations.models import Association, Membership
+from associations.permissions import managed_associations
+
 from taxonomy.models import Genus, SpeciesGroup
 
 from .models import (
@@ -127,6 +130,10 @@ class AchievementLevelAdminForm(_ExistingImageMixin, forms.ModelForm):
 
 
 class ManualAssignmentAdminForm(forms.Form):
+    association = forms.ModelChoiceField(
+        queryset=Association.objects.none(),
+        label="Förening",
+    )
     user = forms.ModelChoiceField(
         queryset=get_user_model().objects.none(),
         label="Användare",
@@ -136,11 +143,41 @@ class ManualAssignmentAdminForm(forms.Form):
         label="Nivå",
     )
 
-    def __init__(self, *args, achievement, **kwargs):
+    def __init__(self, *args, achievement, request_user, **kwargs):
         super().__init__(*args, **kwargs)
         self.achievement = achievement
-        self.fields["user"].queryset = get_user_model().objects.order_by("username", "pk")
+        self.request_user = request_user
+        associations = managed_associations(request_user).order_by("name", "pk")
+        self.fields["association"].queryset = associations
+        self.fields["user"].queryset = (
+            get_user_model()
+            .objects.filter(memberships__association__in=associations)
+            .distinct()
+            .order_by("username", "pk")
+        )
         self.fields["level"].queryset = achievement.levels.order_by("order", "name")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        association = cleaned_data.get("association")
+        user = cleaned_data.get("user")
+        if association is not None and not managed_associations(
+            self.request_user
+        ).filter(pk=association.pk).exists():
+            self.add_error("association", "Du får inte administrera den föreningen.")
+        if (
+            association is not None
+            and user is not None
+            and not Membership.objects.filter(
+                association=association,
+                user=user,
+            ).exists()
+        ):
+            self.add_error(
+                "user",
+                "Användaren är inte medlem i den valda föreningen.",
+            )
+        return cleaned_data
 
 
 class BulkAchievementRequirementsForm(forms.Form):

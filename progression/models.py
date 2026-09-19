@@ -333,6 +333,22 @@ class UserAchievement(models.Model):
         db_persist=False,
         editable=False,
     )
+    awarded_association = models.ForeignKey(
+        "associations.Association",
+        on_delete=models.PROTECT,
+        null=True,
+        blank=True,
+        related_name="awarded_user_achievements",
+        verbose_name="utdelande förening",
+    )
+    awarded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="awarded_user_achievements",
+        verbose_name="utdelad av",
+    )
     achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
 
     class Meta:

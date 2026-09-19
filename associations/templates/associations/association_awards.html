@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block title %}Utmärkelser – {{ association.name }} | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a class="text-decoration-none" href="{% url 'association_management' %}">← Föreningsadministration</a></p>
+
+<div class="d-flex justify-content-between align-items-start gap-3 mb-4 flex-wrap">
+    <div>
+        <h1 class="mb-1">Utmärkelser – {{ association.name }}</h1>
+        <p class="text-body-secondary mb-0">Tilldela manuella utmärkelser till föreningens medlemmar.</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h4">Tilldela utmärkelse</h2>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.user.id_for_label }}">{{ form.user.label }}</label>
+                        {{ form.user }}
+                        {{ form.user.errors }}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.level.id_for_label }}">{{ form.level.label }}</label>
+                        {{ form.level }}
+                        {{ form.level.errors }}
+                    </div>
+                    <button class="btn btn-primary" type="submit">Tilldela</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <h2 class="h4">Tidigare utdelningar</h2>
+        {% if awards %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">Medlem</th>
+                        <th scope="col">Utmärkelse</th>
+                        <th scope="col">Nivå</th>
+                        <th scope="col">Utdelad av</th>
+                        <th scope="col">Datum</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for award in awards %}
+                    <tr>
+                        <td>{{ award.user.public_display_name }}</td>
+                        <td>{{ award.achievement_name }}</td>
+                        <td>{{ award.level_name }}</td>
+                        <td>{{ award.awarded_by.public_display_name|default:"–" }}</td>
+                        <td>{{ award.achieved_at|date:"Y-m-d" }}</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p>Inga manuella utmärkelser har delats ut från föreningen ännu.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -26,6 +26,11 @@
                         <li class="nav-item">
                             <a class="nav-link{% if current_url == 'account' or current_url == 'account_edit' or current_url == 'achievements' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'account' %}"{% if current_url == 'account' or current_url == 'account_edit' or current_url == 'achievements' %} aria-current="page"{% endif %}>Konto</a>
                         </li>
+                        {% if can_manage_associations %}
+                        <li class="nav-item">
+                            <a class="nav-link{% if current_url == 'association_management' or current_url == 'association_edit' or current_url == 'association_admins' or current_url == 'association_awards' %} fw-semibold text-decoration-underline{% endif %}" href="{% url 'association_management' %}"{% if current_url == 'association_management' or current_url == 'association_edit' or current_url == 'association_admins' or current_url == 'association_awards' %} aria-current="page"{% endif %}>Föreningsadministration</a>
+                        </li>
+                        {% endif %}
                         {% if user.is_staff %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'admin:index' %}">Admin</a>

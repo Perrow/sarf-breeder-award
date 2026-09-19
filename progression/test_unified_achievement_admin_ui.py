@@ -3,6 +3,8 @@ from django.contrib.auth import get_user_model
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
+from associations.models import Association, Membership
+
 from progression.forms import AchievementAdminForm
 from progression.models import (
     Achievement,
@@ -24,6 +26,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
             username="award-ui-user",
             email="award-ui-user@example.com",
             password="Test-password-123",
+        )
+        self.association = Association.objects.create(name="Utmärkelseföreningen")
+        Membership.objects.create(
+            user=self.user,
+            association=self.association,
         )
         self.client.force_login(self.admin)
 
@@ -194,7 +201,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         response = self.client.post(
             reverse("admin:progression_achievement_assign_manual", args=[achievement.pk]),
-            {"user": self.user.pk, "level": level.pk},
+            {
+                "association": self.association.pk,
+                "user": self.user.pk,
+                "level": level.pk,
+            },
         )
 
         self.assertRedirects(
@@ -222,7 +233,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         response = self.client.post(
             reverse("admin:progression_manualawardassignment_add"),
-            {"user": self.user.pk, "level": level.pk},
+            {
+                "association": self.association.pk,
+                "user": self.user.pk,
+                "level": level.pk,
+            },
         )
 
         self.assertRedirects(
