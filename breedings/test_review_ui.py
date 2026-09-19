@@ -29,7 +29,11 @@ class BreedingReviewUiTests(TestCase):
         )
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Granskningsförening")
-        Membership.objects.create(\n            user=self.reviewer,\n            association=self.association,\n            is_association_admin=True,\n        )
+        Membership.objects.create(
+            user=self.reviewer,
+            association=self.association,
+            is_association_admin=True,
+        )
 
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(
