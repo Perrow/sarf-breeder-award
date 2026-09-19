@@ -5,6 +5,7 @@ from django.contrib.auth.views import LoginView, LogoutView
 from django.shortcuts import redirect, render
 from django.urls import reverse_lazy
 
+from associations.permissions import is_system_admin, managed_associations
 from progression.services import all_achievement_presentations_for_user
 
 from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
@@ -42,7 +43,15 @@ class AccountLogoutView(LogoutView):
 @login_required
 def account(request):
     memberships = request.user.memberships.select_related("association").order_by("association__name")
-    return render(request, "users/account.html", {"memberships": memberships})
+    return render(
+        request,
+        "users/account.html",
+        {
+            "memberships": memberships,
+            "managed_associations": managed_associations(request.user).order_by("name"),
+            "is_system_admin": is_system_admin(request.user),
+        },
+    )
 
 
 @login_required
