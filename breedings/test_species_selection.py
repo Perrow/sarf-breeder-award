@@ -141,19 +141,19 @@ class SpeciesSelectionTests(TestCase):
     def test_species_selection_ui_labels_synonym_match_types(self):
         response = self.client.get(reverse("species_select"))
 
-        self.assertContains(response, "Träff via vetenskapligt namn:")
-        self.assertContains(response, "Träff via populärnamn:")
-        self.assertContains(response, "Träff via vetenskaplig synonym:")
-        self.assertContains(response, "Träff via populärnamnssynonym:")
-        self.assertContains(response, "Träff via geografi:")
+        self.assertContains(response, "Vetenskapligt namn:")
+        self.assertContains(response, "Populärnamn:")
+        self.assertContains(response, "Vetenskaplig synonym:")
+        self.assertContains(response, "Populärnamnssynonym:")
+        self.assertContains(response, "Geografi:")
 
     def test_catalogue_search_explains_matching_field(self):
         cases = (
-            ("Corydoras aeneus", "Träff via vetenskapligt namn:", "Corydoras aeneus"),
-            ("Metallpansarmal", "Träff via populärnamn:", "Metallpansarmal"),
-            ("Callichthys aeneus", "Träff via vetenskaplig synonym:", "Callichthys aeneus"),
-            ("Brunpansarmal", "Träff via populärnamnssynonym:", "Brunpansarmal"),
-            ("Malawi", "Träff via geografi:", "Malawi"),
+            ("Corydoras aeneus", "Vetenskapligt namn:", "Corydoras aeneus"),
+            ("Metallpansarmal", "Populärnamn:", "Metallpansarmal"),
+            ("Callichthys aeneus", "Vetenskaplig synonym:", "Callichthys aeneus"),
+            ("Brunpansarmal", "Populärnamnssynonym:", "Brunpansarmal"),
+            ("Malawi", "Geografi:", "Malawi"),
         )
         for query, label, value in cases:
             with self.subTest(query=query):
