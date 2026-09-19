@@ -86,7 +86,11 @@ class AssociationAdmin(admin.ModelAdmin):
         )
 
     def get_fieldsets(self, request, obj=None):
-        if is_association_admin(request.user) and not is_system_admin(request.user):
+        if (
+            request is not None
+            and is_association_admin(request.user)
+            and not is_system_admin(request.user)
+        ):
             return (self.fieldsets[0],)
         return super().get_fieldsets(request, obj)
 
