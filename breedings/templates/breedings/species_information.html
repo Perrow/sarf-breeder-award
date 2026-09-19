@@ -56,7 +56,7 @@
                     <dt>Artgrupper</dt>
                     <dd>{% for group in species_groups %}{% if not forloop.first %}, {% endif %}<a href="{% url 'species_group_species' group.pk %}">{{ group.name }}</a>{% empty %}–{% endfor %}</dd>
                     <dt>Geografi</dt>
-                    <dd>{% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}{{ geography.name }}{% empty %}–{% endfor %}</dd>
+                    <dd>{% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}<a href="{% url 'geography_species' geography.pk %}">{{ geography.name }}</a>{% empty %}–{% endfor %}</dd>
                 </dl>
             </div>
         </div>
