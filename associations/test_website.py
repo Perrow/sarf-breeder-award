@@ -49,7 +49,7 @@ class AssociationWebsiteTests(TestCase):
     def test_public_member_leaderboard_shows_description_website_and_subheading(self):
         association = Association.objects.create(
             name="Testföreningen",
-            description="En förening för akvarister i Uppsala.",
+            description="En förening för akvarister\ni Uppsala.",
             website_url="https://example.org/foreningen",
         )
 
