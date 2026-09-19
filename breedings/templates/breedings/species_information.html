@@ -12,7 +12,8 @@
     </div>
     <div class="text-end">
         <span class="badge text-bg-secondary fs-6">{{ species.get_breeding_class_display }}</span>
-        <div class="mt-2">
+        <div class="mt-2 d-flex gap-2 justify-content-end flex-wrap">
+            <a class="btn btn-sm btn-primary" href="{% url 'breeding_create' %}?species={{ species.pk }}">Registrera odling</a>
             {% if pending_reclassification %}
                 <span class="text-body-secondary">Omklassning väntar på beslut</span>
             {% else %}
