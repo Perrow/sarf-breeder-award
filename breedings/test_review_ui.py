@@ -89,7 +89,7 @@ class BreedingReviewUiTests(TestCase):
         species_url = reverse("species_information", args=[self.species.pk])
         self.assertContains(
             response,
-            f'href="{species_url}" style="color: var(--link-fg);"',
+            f'href="{species_url}" style="color: #fff; text-decoration: underline;"',
         )
 
         decision_index = content.index("Bedöm odlingen")
