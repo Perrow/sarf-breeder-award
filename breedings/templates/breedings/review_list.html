@@ -78,7 +78,7 @@
                     <td>{{ registration.association }}</td>
                     <td>
                         {% if registration.show_on_species_page %}
-                            Ja{% if registration.species_page_display_name %}: {{ registration.species_page_display_name }}{% endif %}
+                            Ja: {{ registration.owner.public_display_name }}
                         {% else %}
                             Nej
                         {% endif %}
