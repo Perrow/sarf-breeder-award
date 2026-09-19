@@ -1,4 +1,7 @@
 from django import forms
+from django.contrib.auth import get_user_model
+
+from progression.models import Achievement, AchievementLevel
 
 from .models import Association, Membership
 
@@ -32,3 +35,45 @@ class SystemAssociationAdminForm(forms.Form):
         )
         self.fields["membership"].widget.attrs["class"] = "form-select"
         self.fields["is_association_admin"].widget.attrs["class"] = "form-check-input"
+
+
+class AssociationManualAwardForm(forms.Form):
+    user = forms.ModelChoiceField(
+        queryset=get_user_model().objects.none(),
+        label="Medlem",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+    level = forms.ModelChoiceField(
+        queryset=AchievementLevel.objects.none(),
+        label="Utmärkelse och nivå",
+        widget=forms.Select(attrs={"class": "form-select"}),
+    )
+
+    def __init__(self, *args, association, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.association = association
+        self.fields["user"].queryset = (
+            get_user_model()
+            .objects.filter(memberships__association=association)
+            .distinct()
+            .order_by("last_name", "first_name", "email", "pk")
+        )
+        self.fields["level"].queryset = (
+            AchievementLevel.objects.filter(
+                achievement__achievement_type=Achievement.Type.MANUAL,
+                achievement__active=True,
+            )
+            .select_related("achievement")
+            .order_by("achievement__name", "order", "name")
+        )
+
+    def clean_user(self):
+        user = self.cleaned_data["user"]
+        if not Membership.objects.filter(
+            association=self.association,
+            user=user,
+        ).exists():
+            raise forms.ValidationError(
+                "Användaren är inte medlem i den här föreningen."
+            )
+        return user
