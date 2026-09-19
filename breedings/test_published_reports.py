@@ -71,13 +71,22 @@ class PublishedBreedingReportTests(TestCase):
         )
         self.assertTrue(self.registration.show_on_species_page)
 
-    def test_review_page_shows_owner_display_name_read_only(self):
+    def test_review_page_hides_submitter_identity(self):
         response = self.client.get(
             reverse("breeding_review", args=[self.registration.pk])
         )
 
-        self.assertContains(response, "Publicerad odlare")
+        self.assertNotContains(response, "Publicerad odlare")
+        self.assertNotContains(response, self.owner.email)
+        self.assertNotContains(response, self.association.name)
         self.assertNotContains(response, 'name="species_page_display_name"')
+
+    def test_review_list_hides_submitter_identity(self):
+        response = self.client.get(reverse("breeding_review_list"))
+
+        self.assertNotContains(response, "Publicerad odlare")
+        self.assertNotContains(response, self.owner.email)
+        self.assertNotContains(response, self.association.name)
 
     def test_report_without_registered_species_cannot_be_published(self):
         self.registration.species = None
