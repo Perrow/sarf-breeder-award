@@ -17,8 +17,6 @@
     <thead>
         <tr>
             <th scope="col">Art</th>
-            <th scope="col">Odlare</th>
-            <th scope="col">Förening</th>
             <th scope="col">Datum</th>
             <th scope="col">Åtgärd</th>
         </tr>
@@ -35,8 +33,6 @@
                     <div class="small text-warning-emphasis">Taxonomin behöver lösas</div>
                 {% endif %}
             </td>
-            <td>{{ registration.owner }}</td>
-            <td>{{ registration.association }}</td>
             <td>{{ registration.breeding_date }}</td>
             <td>
                 {% if registration.taxonomy_needs_resolution %}
@@ -64,8 +60,6 @@
             <thead>
                 <tr>
                     <th scope="col">Art</th>
-                    <th scope="col">Odlare</th>
-                    <th scope="col">Förening</th>
                     <th scope="col">Publicerad</th>
                     <th scope="col">Åtgärd</th>
                 </tr>
@@ -74,11 +68,9 @@
             {% for registration in approved_registrations %}
                 <tr>
                     <td><strong>{{ registration.species }}</strong></td>
-                    <td>{{ registration.owner }}</td>
-                    <td>{{ registration.association }}</td>
                     <td>
                         {% if registration.show_on_species_page %}
-                            Ja: {{ registration.owner.public_display_name }}
+                            Ja
                         {% else %}
                             Nej
                         {% endif %}
