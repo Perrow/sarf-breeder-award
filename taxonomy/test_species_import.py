@@ -127,6 +127,29 @@ class SpeciesImportTests(TestCase):
         self.assertEqual(first_stats["links_created"], 1)
         self.assertEqual(second_stats["links_reused"], 1)
 
+    def test_explicit_breeding_class_updates_existing_species(self):
+        genus = Genus.objects.create(scientific_name="Poecilia")
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name="reticulata",
+            common_name="Guppy",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        path = self._write_file(
+            [
+                {
+                    "genus": "Poecilia",
+                    "scientific_name": "reticulata",
+                    "breeding_class": "silver",
+                }
+            ]
+        )
+
+        import_species_file(path)
+        species.refresh_from_db()
+
+        self.assertEqual(species.breeding_class, Species.BreedingClass.SILVER)
+
     def test_import_matches_current_scientific_name_case_insensitively(self):
         genus = Genus.objects.create(scientific_name="Poecilia")
         species = Species.objects.create(

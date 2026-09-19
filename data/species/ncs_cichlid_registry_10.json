@@ -1,0 +1,185 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "nanolutea",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gul zebraciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=375",
+          "source_name": "NCS Artregister",
+          "title": "Amatitlania nanolutea"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "borellii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gul dvärgciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=255",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma borellii"
+        }
+      ]
+    },
+    {
+      "genus": "Cleithracara",
+      "scientific_name": "maronii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Nyckelhålsciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=339",
+          "source_name": "NCS Artregister",
+          "title": "Cleithracara maronii"
+        }
+      ]
+    },
+    {
+      "genus": "Geophagus",
+      "scientific_name": "brasiliensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Brasiliansk jordätare"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=386",
+          "source_name": "NCS Artregister",
+          "title": "Geophagus brasiliensis"
+        }
+      ]
+    },
+    {
+      "genus": "Ivanacara",
+      "scientific_name": "bimaculata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Praktacara"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=449",
+          "source_name": "NCS Artregister",
+          "title": "Ivanacara bimaculata"
+        }
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "ornatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gul julle"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=836",
+          "source_name": "NCS Artregister",
+          "title": "Julidochromis ornatus"
+        }
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "caeruleus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Golden"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=160",
+          "source_name": "NCS Artregister",
+          "title": "Labidochromis caeruleus"
+        }
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brichardi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Prinsessan av burundi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=208",
+          "source_name": "NCS Artregister",
+          "title": "Neolamprologus brichardi"
+        }
+      ]
+    },
+    {
+      "genus": "Pterophyllum",
+      "scientific_name": "altum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Altum orrinoco"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=491",
+          "source_name": "NCS Artregister",
+          "title": "Pterophyllum altum"
+        }
+      ]
+    },
+    {
+      "genus": "Trichromis",
+      "scientific_name": "salvini",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Salvini ciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=200",
+          "source_name": "NCS Artregister",
+          "title": "Trichromis salvini"
+        }
+      ]
+    }
+  ]
+}
