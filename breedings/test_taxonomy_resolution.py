@@ -56,12 +56,12 @@ class TaxonomyResolutionTests(TestCase):
         )
 
     def resolve_url(self):
-        return reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[self.registration.pk])
+        return reverse("breeding_review_taxonomy", args=[self.registration.pk])
 
     def test_reviewer_can_link_existing_species_and_preserve_original_text(self):
         self.client.force_login(self.reviewer)
         response = self.client.post(self.resolve_url(), {"species": self.species.pk})
-        review_url = reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
+        review_url = reverse("breeding_review", args=[self.registration.pk])
 
         self.assertRedirects(response, review_url)
         self.registration.refresh_from_db()
@@ -122,7 +122,7 @@ class TaxonomyResolutionTests(TestCase):
 
     def test_unresolved_taxonomy_must_be_resolved_before_review(self):
         self.client.force_login(self.reviewer)
-        review_url = reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
+        review_url = reverse("breeding_review", args=[self.registration.pk])
 
         response = self.client.get(review_url)
 
