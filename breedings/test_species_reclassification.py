@@ -22,7 +22,7 @@ class SpeciesReclassificationTests(TestCase):
             password="x",
             is_staff=True,
         )
-        self.manager.groups.add(Group.objects.get(name="Odlingsansvarig"))
+        self.manager.groups.add(Group.objects.get(name="Odlingsgranskare"))
         self.other_staff = User.objects.create_user(
             username="other-staff@example.com",
             password="x",
