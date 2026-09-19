@@ -4,10 +4,14 @@ SYSTEM_ADMIN_GROUP = "Systemadministratör"
 
 
 def is_system_admin(user):
+    if not getattr(user, "is_authenticated", False):
+        return False
     return user.is_superuser or user.groups.filter(name=SYSTEM_ADMIN_GROUP).exists()
 
 
 def is_association_admin(user, association=None):
+    if not getattr(user, "is_authenticated", False):
+        return False
     memberships = Membership.objects.filter(
         user=user,
         is_association_admin=True,
@@ -22,6 +26,8 @@ def can_manage_association(user, association):
 
 
 def managed_associations(user):
+    if not getattr(user, "is_authenticated", False):
+        return Association.objects.none()
     if is_system_admin(user):
         return Association.objects.all()
     return Association.objects.filter(
