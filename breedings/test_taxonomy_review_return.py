@@ -46,13 +46,13 @@ class TaxonomyReviewReturnTests(TestCase):
 
     def _resolve_url(self):
         return reverse(
-            "admin:breedings_breedingregistration_resolve_taxonomy",
+            "breeding_review_taxonomy",
             args=[self.registration.pk],
         )
 
     def _review_url(self):
         return reverse(
-            "admin:breedings_breedingregistration_review",
+            "breeding_review",
             args=[self.registration.pk],
         )
 
@@ -90,7 +90,7 @@ class TaxonomyReviewReturnTests(TestCase):
             },
         )
 
-        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.APPROVED)
         self.assertEqual(self.registration.species, self.species)
