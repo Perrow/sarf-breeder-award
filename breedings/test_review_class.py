@@ -18,7 +18,7 @@ class BreedingReviewClassTests(TestCase):
         self.reviewer = User.objects.create_user(username="class-reviewer@example.com", email="class-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Klassförening")
-        Membership.objects.create(user=self.reviewer, association=self.association)
+        Membership.objects.create(\n            user=self.reviewer,\n            association=self.association,\n            is_association_admin=True,\n        )
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(
             genus=genus,
