@@ -75,8 +75,9 @@ class BreedingReviewUiTests(TestCase):
         self.assertContains(response, "Corydoras panda")
         self.assertContains(response, "Silver")
         self.assertContains(response, "Odlingsdatum")
-        self.assertContains(response, "owner-ui@example.com")
-        self.assertContains(response, "Granskningsförening")
+        self.assertNotContains(response, "owner-ui@example.com")
+        self.assertNotContains(response, "odlaren")
+        self.assertNotContains(response, "Granskningsförening")
         self.assertContains(
             response,
             "Ägg lades på rutorna och ynglen frisimmande efter några dagar.",
