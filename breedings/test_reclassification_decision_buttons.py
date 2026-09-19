@@ -20,7 +20,7 @@ class ReclassificationDecisionButtonTests(TestCase):
             password="x",
             is_staff=True,
         )
-        self.manager.groups.add(Group.objects.get(name="Odlingsansvarig"))
+        self.manager.groups.add(Group.objects.get(name="Odlingsgranskare"))
         genus = Genus.objects.create(scientific_name="Buttonus")
         self.species = Species.objects.create(
             genus=genus,
