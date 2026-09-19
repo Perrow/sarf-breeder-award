@@ -36,8 +36,8 @@ class SpeciesInformationTests(TestCase):
             english_name="Panda cory",
             breeding_class=Species.BreedingClass.SILVER,
         )
-        geography = Geography.objects.create(name="Sydamerika")
-        self.species.geographies.add(geography)
+        self.geography = Geography.objects.create(name="Sydamerika")
+        self.species.geographies.add(self.geography)
         self.group = SpeciesGroup.objects.create(name="Pansarmalar")
         self.group.species.add(self.species)
         ScientificSpeciesSynonym.objects.create(
@@ -113,6 +113,7 @@ class SpeciesInformationTests(TestCase):
         self.assertContains(
             response,
             reverse("genus_species", args=[self.species.genus_id]),
+            reverse("geography_species", args=[self.geography.pk]),
         )
 
     def test_genus_listing_contains_species_and_links_to_species_page(self):
@@ -178,6 +179,43 @@ class SpeciesInformationTests(TestCase):
             "Artfakta",
         ):
             self.assertContains(response, value)
+
+    def test_species_page_links_geography_to_geography_listing(self):
+        response = self.client.get(
+            reverse("species_information", args=[self.species.pk])
+        )
+
+        self.assertContains(
+            response,
+            f'href="{reverse("geography_species", args=[self.geography.pk])}"',
+        )
+
+    def test_geography_listing_contains_species_and_links_to_species_page(self):
+        other_genus = Genus.objects.create(scientific_name="Ancistrus")
+        other_species = Species.objects.create(
+            genus=other_genus,
+            scientific_name="cirrhosus",
+            common_name="Skäggmunsmal",
+            breeding_class=Species.BreedingClass.BRONZE,
+        )
+        other_species.geographies.add(self.geography)
+
+        response = self.client.get(
+            reverse("geography_species", args=[self.geography.pk])
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Sydamerika")
+        self.assertContains(response, "Corydoras panda")
+        self.assertContains(response, "Ancistrus cirrhosus")
+        self.assertContains(
+            response,
+            reverse("species_information", args=[self.species.pk]),
+        )
+        self.assertContains(
+            response,
+            reverse("species_information", args=[other_species.pk]),
+        )
 
     def test_species_group_on_species_page_links_to_group_listing(self):
         response = self.client.get(
