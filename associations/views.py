@@ -64,6 +64,12 @@ def association_admins(request, pk):
         membership.is_association_admin = action == "grant"
         membership.save(update_fields=["is_association_admin"])
         messages.success(request, "Administratörsbehörigheten har uppdaterats.")
+        if (
+            action == "revoke"
+            and membership.user_id == request.user.id
+            and not is_system_admin(request.user)
+        ):
+            return redirect("association_management")
         return redirect("association_admins", pk=association.pk)
 
     memberships = (
