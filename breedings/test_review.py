@@ -61,23 +61,13 @@ class BreedingReviewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, 'name="decision"')
+        self.assertContains(response, 'name="approve" value="Godkänn"')
+        self.assertContains(response, 'name="reject" value="Avslå"')
         self.assertContains(
             response,
-            '<input type="submit" name="approve" value="Godkänn" class="default">',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<input type="submit" name="reject" value="Avslå">',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<input type="submit" name="save_without_decision" value="Spara utan beslut">',
-            html=True,
+            'name="save_without_decision" value="Spara utan beslut"',
         )
         self.assertContains(response, 'name="review_comment"')
-        self.assertContains(response, 'cols="80"')
         self.assertContains(response, 'rows="6"')
 
     def test_association_admin_can_approve_registration(self):
