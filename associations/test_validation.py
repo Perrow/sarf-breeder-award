@@ -124,7 +124,11 @@ class MembershipAdminPostValidationTests(TestCase):
         self.admin_user.groups.add(
             self.admin_user.groups.model.objects.get(name=ASSOCIATION_ADMIN_GROUP)
         )
-        Membership.objects.create(user=self.admin_user, association=self.association)
+        Membership.objects.create(
+            user=self.admin_user,
+            association=self.association,
+            is_association_admin=True,
+        )
         self.client.force_login(self.admin_user)
 
     def test_direct_post_with_invalid_user_reference_is_rejected(self):
