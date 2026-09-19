@@ -29,6 +29,7 @@ urlpatterns = [
     ),
     path("arter/artgrupper/<int:pk>/", species_search.species_group_species, name="species_group_species"),
     path("arter/slakten/<int:pk>/", species_search.genus_species, name="genus_species"),
+    path("arter/geografier/<int:pk>/", species_search.geography_species, name="geography_species"),
     path("arter/<int:pk>/", species_search.species_information, name="species_information"),
     path(
         "arter/<int:pk>/omklassificera/",
