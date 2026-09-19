@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block title %}{{ association.name }} | Föreningsadministration{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'association_management' %}">← Till föreningsadministrationen</a></p>
+<h1>{{ association.name }}</h1>
+<h2 class="h4">Redigera förening</h2>
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    {% include "includes/form_error_summary.html" with form=form %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Spara</button>
+</form>
+
+<p class="mt-4"><a href="{% url 'association_admins' association.pk %}">Hantera föreningsadministratörer</a></p>
+{% endblock %}
