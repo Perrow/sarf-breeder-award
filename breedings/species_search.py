@@ -163,15 +163,6 @@ def species_information(request, pk):
         species=species,
         status=SpeciesReclassificationRequest.Status.PENDING,
     ).exists()
-    published_reports = (
-        BreedingRegistration.objects.filter(
-            species=species,
-            status=BreedingRegistration.Status.APPROVED,
-            show_on_species_page=True,
-        )
-        .select_related("owner", "association")
-        .order_by("-breeding_date", "-pk")
-    )
     context = {
         "species": species,
         "species_groups": species.get_species_groups(),
@@ -180,7 +171,6 @@ def species_information(request, pk):
         "approved_breedings": approved_breedings,
         "reclassification_requests": reclassification_requests,
         "pending_reclassification": pending_reclassification,
-        "published_reports": published_reports,
     }
     return render(request, "breedings/species_information.html", context)
 
