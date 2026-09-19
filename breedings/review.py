@@ -63,13 +63,6 @@ class ReviewDecisionForm(forms.Form):
         required=False,
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
-    species_page_display_name = forms.CharField(
-        label="Visningsnamn",
-        required=False,
-        max_length=200,
-        widget=forms.TextInput(attrs={"class": "form-control"}),
-    )
-
     def __init__(self, *args, registration=None, publication_only=False, **kwargs):
         self.registration = registration
         self.publication_only = publication_only
@@ -79,7 +72,6 @@ class ReviewDecisionForm(forms.Form):
                 {
                     "review_comment": registration.review_comment,
                     "show_on_species_page": registration.show_on_species_page,
-                    "species_page_display_name": registration.species_page_display_name,
                 }
             )
         if publication_only:
@@ -92,11 +84,6 @@ class ReviewDecisionForm(forms.Form):
                 self.add_error(
                     "show_on_species_page",
                     "Rapporten måste vara kopplad till en registrerad art för att kunna visas på artsidan.",
-                )
-            if not (cleaned_data.get("species_page_display_name") or "").strip():
-                self.add_error(
-                    "species_page_display_name",
-                    "Ange ett visningsnamn när rapporten ska visas på artsidan.",
                 )
         return cleaned_data
 
@@ -121,12 +108,7 @@ def _require_review_access(user, registration=None):
 
 def _save_publication(registration, form):
     registration.show_on_species_page = form.cleaned_data["show_on_species_page"]
-    registration.species_page_display_name = (
-        form.cleaned_data["species_page_display_name"].strip()
-    )
-    registration.save(
-        update_fields=("show_on_species_page", "species_page_display_name")
-    )
+    registration.save(update_fields=("show_on_species_page",))
 
 
 @login_required
@@ -232,9 +214,6 @@ def review_registration(request, pk):
                 registration.show_on_species_page = form.cleaned_data[
                     "show_on_species_page"
                 ]
-                registration.species_page_display_name = (
-                    form.cleaned_data["species_page_display_name"].strip()
-                )
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -244,7 +223,6 @@ def review_registration(request, pk):
                         "awarded_breeding_class",
                         "awarded_points",
                         "show_on_species_page",
-                        "species_page_display_name",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har godkänts.")
