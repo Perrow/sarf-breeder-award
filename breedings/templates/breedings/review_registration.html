@@ -79,15 +79,38 @@
                 <form method="post" novalidate>
                     {% csrf_token %}
                     {% include "includes/form_error_summary.html" with form=form %}
+                    {% if not publication_only %}
                     <div class="mb-3">
                         <label class="form-label" for="{{ form.review_comment.id_for_label }}">{{ form.review_comment.label }}</label>
                         {{ form.review_comment }}
                         {% for error in form.review_comment.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
                     </div>
+                    {% endif %}
+
+                    <hr>
+                    <h3 class="h5">Visning på artsidan</h3>
+                    <div class="form-check mb-3">
+                        {{ form.show_on_species_page }}
+                        <label class="form-check-label" for="{{ form.show_on_species_page.id_for_label }}">
+                            {{ form.show_on_species_page.label }}
+                        </label>
+                        {% for error in form.show_on_species_page.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.species_page_display_name.id_for_label }}">{{ form.species_page_display_name.label }}</label>
+                        {{ form.species_page_display_name }}
+                        <div class="form-text">Visas i rubriken som “Odlingsrapport: Visningsnamn”.</div>
+                        {% for error in form.species_page_display_name.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+
                     <div class="d-grid gap-2">
+                        {% if publication_only %}
+                        <button class="btn btn-primary" type="submit" name="save_publication" value="Spara">Spara publicering</button>
+                        {% else %}
                         <button class="btn btn-success" type="submit" name="approve" value="Godkänn">Godkänn</button>
                         <button class="btn btn-outline-danger" type="submit" name="reject" value="Avslå">Avslå</button>
                         <button class="btn btn-outline-secondary" type="submit" name="save_without_decision" value="Spara utan beslut">Spara utan beslut</button>
+                        {% endif %}
                     </div>
                 </form>
             </div>
