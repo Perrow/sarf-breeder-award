@@ -12,6 +12,12 @@ class UserManager(BaseUserManager):
         # Accept the old create_user(username=<email>) shape temporarily so
         # older internal callers do not break during the model transition.
         legacy_username = extra_fields.pop("username", None)
+        first_name = extra_fields.pop("first_name", "")
+        last_name = extra_fields.pop("last_name", "")
+        if "name" not in extra_fields and (first_name or last_name):
+            extra_fields["name"] = " ".join(
+                part.strip() for part in (first_name, last_name) if part and part.strip()
+            )
         email = email or legacy_username
         if not email:
             raise ValueError("E-post måste anges.")
