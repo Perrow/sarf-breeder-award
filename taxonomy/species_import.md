@@ -32,7 +32,7 @@ Importfilen är JSON med formatversion 1:
 
 `genus` och `scientific_name` är alltid obligatoriska och identifierar arten. Matchningen mot befintligt genus, aktuellt vetenskapligt namn och vetenskapliga synonymer är skiftlägesokänslig. Importen ändrar däremot inte stavningen/casing på en befintlig post.
 
-`breeding_class` är `bronze`, `silver` eller `gold`. Fältet krävs när en ny art skapas men kan utelämnas när en befintlig art bara kompletteras.
+`breeding_class` är `bronze`, `silver` eller `gold`. Fältet krävs när en ny art skapas men kan utelämnas när en befintlig art bara kompletteras. Om fältet anges för en befintlig art uppdateras artens odlingsklass till det angivna värdet.
 
 `cl_number` är valfritt och används för L-, C- och CW-nummer, till exempel `L046`, `C123` eller `CW009`. Whitespace tas bort och värdet normaliseras till versaler, så exempelvis `l 046` sparas som `L046` och `cw 009` som `CW009`. För en befintlig art kompletteras fältet bara om arten ännu saknar C/L-nummer.
 
@@ -86,7 +86,7 @@ När arten redan finns räcker `genus` + `scientific_name` tillsammans med de f�
 }
 ```
 
-Kompletteringsimporten är additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, geografier, länkar, `breeding_class` eller `cl_number`. Ett angivet `cl_number` fyller ett tomt fält men ersätter inte ett redan registrerat nummer. Angivna geografier läggs till; andra befintliga geografier ligger kvar. Samma fil kan importeras flera gånger utan att skapa dubbletter.
+Kompletteringsimporten är i huvudsak additiv. Fält som saknas i importfilen tar inte bort eller nollställer befintliga namn, synonymer, geografier, länkar, `breeding_class` eller `cl_number`. Ett uttryckligen angivet `breeding_class` uppdaterar däremot odlingsklassen även för en befintlig art. Ett angivet `cl_number` fyller ett tomt fält men ersätter inte ett redan registrerat nummer. Angivna geografier läggs till; andra befintliga geografier ligger kvar. Samma fil kan importeras flera gånger utan att skapa dubbletter.
 
 ## Import via gammalt vetenskapligt namn
 
