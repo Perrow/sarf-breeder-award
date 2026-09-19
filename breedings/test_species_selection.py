@@ -56,13 +56,18 @@ class SpeciesSelectionTests(TestCase):
         self.assertNotContains(response, 'registeredAs.textContent = "Registreras som: "')
 
     def test_search_matches_current_scientific_swedish_and_english_names(self):
-        for query in ("Corydoras aeneus", "Metallpansarmal", "Bronze corydoras"):
+        expected_matches = (
+            ("Corydoras aeneus", {"type": "scientific_name", "value": "Corydoras aeneus"}),
+            ("Metallpansarmal", {"type": "common_name", "value": "Metallpansarmal"}),
+            ("Bronze corydoras", {"type": "common_name", "value": "Bronze corydoras"}),
+        )
+        for query, expected_match in expected_matches:
             with self.subTest(query=query):
                 response = self.search(query)
                 self.assertEqual(response.status_code, 200)
                 result = response.json()["results"][0]
                 self.assertEqual(result["id"], self.species.pk)
-                self.assertIsNone(result["matched_via"])
+                self.assertEqual(result["matched_via"], expected_match)
 
     def test_search_by_scientific_synonym_explains_match(self):
         response = self.search("Callichthys aeneus")
@@ -75,7 +80,7 @@ class SpeciesSelectionTests(TestCase):
         self.assertEqual(result["english_name"], "Bronze corydoras")
         self.assertEqual(
             result["matched_via"],
-            {"type": "synonym", "value": "Callichthys aeneus"},
+            {"type": "scientific_synonym", "value": "Callichthys aeneus"},
         )
 
     def test_search_by_common_name_synonym_explains_match(self):
@@ -84,7 +89,7 @@ class SpeciesSelectionTests(TestCase):
         result = response.json()["results"][0]
         self.assertEqual(
             result["matched_via"],
-            {"type": "synonym", "value": "Brunpansarmal"},
+            {"type": "common_name_synonym", "value": "Brunpansarmal"},
         )
 
     def test_direct_match_takes_priority_over_matching_synonym(self):
@@ -94,7 +99,10 @@ class SpeciesSelectionTests(TestCase):
 
         response = self.search("Metallpansarmal")
 
-        self.assertIsNone(response.json()["results"][0]["matched_via"])
+        self.assertEqual(
+            response.json()["results"][0]["matched_via"],
+            {"type": "common_name", "value": "Metallpansarmal"},
+        )
 
     def test_search_by_geography_returns_geographies_and_explains_match(self):
         response = self.search("malawi")
@@ -129,6 +137,31 @@ class SpeciesSelectionTests(TestCase):
         results = response.json()["results"]
         self.assertEqual(len(results), 10)
         self.assertNotIn(inactive.pk, [result["id"] for result in results])
+
+    def test_species_selection_ui_labels_synonym_match_types(self):
+        response = self.client.get(reverse("species_select"))
+
+        self.assertContains(response, "Vetenskapligt namn:")
+        self.assertContains(response, "Populärnamn:")
+        self.assertContains(response, "Vetenskaplig synonym:")
+        self.assertContains(response, "Populärnamnssynonym:")
+        self.assertContains(response, "Geografi:")
+
+    def test_catalogue_search_explains_matching_field(self):
+        cases = (
+            ("Corydoras aeneus", "Vetenskapligt namn:", "Corydoras aeneus"),
+            ("Metallpansarmal", "Populärnamn:", "Metallpansarmal"),
+            ("Callichthys aeneus", "Vetenskaplig synonym:", "Callichthys aeneus"),
+            ("Brunpansarmal", "Populärnamnssynonym:", "Brunpansarmal"),
+            ("Malawi", "Geografi:", "Malawi"),
+        )
+        for query, label, value in cases:
+            with self.subTest(query=query):
+                response = self.client.get(
+                    reverse("species_catalogue_search", args=[query])
+                )
+                self.assertContains(response, label)
+                self.assertContains(response, value)
 
     def test_selected_species_is_shown_as_fixed_value_on_registration_form(self):
         response = self.client.get(

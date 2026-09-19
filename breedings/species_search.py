@@ -14,20 +14,19 @@ def _contains(text, query):
 
 
 def _match_details(species, query):
-    current_names = (
-        str(species),
-        species.common_name,
-        species.english_name,
-    )
-    if any(_contains(name, query) for name in current_names):
-        return None
+    if _contains(str(species), query):
+        return {"type": "scientific_name", "value": str(species)}
+    if _contains(species.common_name, query):
+        return {"type": "common_name", "value": species.common_name}
+    if _contains(species.english_name, query):
+        return {"type": "common_name", "value": species.english_name}
 
     for synonym in species.scientific_synonyms.all():
         if _contains(synonym.scientific_name, query):
-            return {"type": "synonym", "value": synonym.scientific_name}
+            return {"type": "scientific_synonym", "value": synonym.scientific_name}
     for synonym in species.common_name_synonyms.all():
         if _contains(synonym.common_name, query):
-            return {"type": "synonym", "value": synonym.common_name}
+            return {"type": "common_name_synonym", "value": synonym.common_name}
 
     for geography in species.geographies.all():
         if _contains(geography.name, query):
@@ -39,12 +38,15 @@ def _match_details(species, query):
 def _species_catalogue_results(query):
     if not query:
         return []
-    return list(
+    species = list(
         Species.objects.search(query)
         .select_related("genus")
-        .prefetch_related("geographies")
+        .prefetch_related("scientific_synonyms", "common_name_synonyms", "geographies")
         .order_by("genus__scientific_name", "scientific_name")[:50]
     )
+    for item in species:
+        item.search_match = _match_details(item, query)
+    return species
 
 
 def _render_species_catalogue(request, query):

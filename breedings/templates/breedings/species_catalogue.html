@@ -50,6 +50,16 @@
             <a class="list-group-item list-group-item-action" href="{% url 'species_information' species.pk %}">
                 <strong><em>{{ species }}</em></strong>
                 <div>{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</div>
+                {% if species.search_match %}
+                    <div class="small text-body-secondary">
+                        {% if species.search_match.type == "scientific_name" %}Vetenskapligt namn:
+                        {% elif species.search_match.type == "common_name" %}Populärnamn:
+                        {% elif species.search_match.type == "scientific_synonym" %}Vetenskaplig synonym:
+                        {% elif species.search_match.type == "common_name_synonym" %}Populärnamnssynonym:
+                        {% elif species.search_match.type == "geography" %}Geografi:
+                        {% endif %} {{ species.search_match.value }}
+                    </div>
+                {% endif %}
                 {% if species.geographies.all %}
                     <div class="small text-body-secondary">
                         {% for geography in species.geographies.all %}{% if not forloop.first %}, {% endif %}{{ geography.name }}{% endfor %}
