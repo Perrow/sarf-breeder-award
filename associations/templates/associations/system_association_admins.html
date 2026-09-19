@@ -3,24 +3,80 @@
 {% block title %}Föreningsadministratörer | Systemadministration{% endblock %}
 
 {% block content %}
-<h1>Föreningsadministratörer</h1>
-<p>Tilldela eller återkalla föreningsadministratörskap för ett befintligt medlemskap.</p>
+<div class="mb-4">
+    <h1 class="mb-1">Föreningsadministratörer</h1>
+    <p class="text-body-secondary mb-0">Tilldela eller återkalla föreningsadministratörskap för befintliga medlemskap.</p>
+</div>
 
-<form method="post" class="mb-4" novalidate>
-    {% csrf_token %}
-    {% include "includes/form_error_summary.html" with form=form %}
-    {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">Spara</button>
-</form>
+<div class="row g-4 align-items-start">
+    <div class="col-lg-5">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-3">Ändra behörighet</h2>
 
-<h2 class="h4">Nuvarande föreningsadministratörer</h2>
-{% if administrators %}
-<ul>
-    {% for membership in administrators %}
-    <li>{{ membership.association.name }} – {{ membership.user.get_full_name|default:membership.user }} ({{ membership.user.email }})</li>
-    {% endfor %}
-</ul>
-{% else %}
-<p>Inga föreningsadministratörer är tilldelade.</p>
-{% endif %}
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include "includes/form_error_summary.html" with form=form %}
+
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.membership.id_for_label }}">{{ form.membership.label }}</label>
+                        {{ form.membership }}
+                        <div class="form-text">Välj den användare och förening som behörigheten ska gälla för.</div>
+                        {% for error in form.membership.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="form-check mb-4">
+                        {{ form.is_association_admin }}
+                        <label class="form-check-label" for="{{ form.is_association_admin.id_for_label }}">
+                            {{ form.is_association_admin.label }}
+                        </label>
+                        <div class="form-text">Avmarkera för att återkalla behörigheten.</div>
+                    </div>
+
+                    <button class="btn btn-primary" type="submit">Spara behörighet</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-7">
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="p-4 pb-3">
+                    <h2 class="h4 mb-1">Nuvarande föreningsadministratörer</h2>
+                    <p class="text-body-secondary mb-0">Aktiva föreningsspecifika administratörsbehörigheter.</p>
+                </div>
+
+                {% if administrators %}
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th scope="col">Förening</th>
+                                <th scope="col">Användare</th>
+                                <th scope="col">E-post</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for membership in administrators %}
+                            <tr>
+                                <td class="fw-semibold">{{ membership.association.name }}</td>
+                                <td>{{ membership.user.get_full_name|default:membership.user }}</td>
+                                <td>{{ membership.user.email }}</td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="p-4 pt-0">
+                    <div class="alert alert-light border mb-0">Inga föreningsadministratörer är tilldelade.</div>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
