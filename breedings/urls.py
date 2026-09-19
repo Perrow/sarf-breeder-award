@@ -39,6 +39,7 @@ urlpatterns = [
     path("odlingar/", views.breeding_list, name="breeding_list"),
     path("granskning/", review.review_list, name="breeding_review_list"),
     path("granskning/<int:pk>/", review.review_registration, name="breeding_review"),
+    path("granskning/godkanda/<int:pk>/", review.approved_registration_detail, name="breeding_approved_detail"),
     path(
         "granskning/<int:pk>/taxonomi/",
         review.resolve_taxonomy,

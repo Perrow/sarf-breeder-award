@@ -81,16 +81,22 @@ def _require_review_access(user, registration=None):
 @login_required
 def review_list(request):
     _require_review_access(request.user)
-    registrations = (
-        reviewable_registrations(request.user)
-        .filter(status=BreedingRegistration.Status.SUBMITTED)
-        .select_related("owner", "association", "species__genus")
-        .order_by("breeding_date", "pk")
+    available = reviewable_registrations(request.user).select_related(
+        "owner", "association", "species__genus"
     )
+    registrations = available.filter(
+        status=BreedingRegistration.Status.SUBMITTED
+    ).order_by("breeding_date", "pk")
+    approved_registrations = available.filter(
+        status=BreedingRegistration.Status.APPROVED
+    ).order_by("-breeding_date", "-pk")
     return render(
         request,
         "breedings/review_list.html",
-        {"registrations": registrations},
+        {
+            "registrations": registrations,
+            "approved_registrations": approved_registrations,
+        },
     )
 
 
@@ -239,4 +245,30 @@ def resolve_taxonomy(request, pk):
             "form": form,
             "species_add_url": species_add_url,
         },
+    )
+
+
+@login_required
+def approved_registration_detail(request, pk):
+    registration = get_object_or_404(
+        BreedingRegistration.objects.select_related(
+            "owner", "association", "species__genus"
+        ),
+        pk=pk,
+        status=BreedingRegistration.Status.APPROVED,
+    )
+    _require_review_access(request.user, registration)
+
+    if request.method == "POST":
+        registration.show_on_species_page = (
+            request.POST.get("show_on_species_page") == "on"
+        )
+        registration.save(update_fields=("show_on_species_page",))
+        messages.success(request, "Visningen på artsidan har uppdaterats.")
+        return redirect("breeding_approved_detail", pk=registration.pk)
+
+    return render(
+        request,
+        "breedings/approved_registration_detail.html",
+        {"registration": registration},
     )

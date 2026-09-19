@@ -46,11 +46,20 @@ class BreedingManagerRoleTests(TestCase):
     def test_role_group_exists(self):
         self.assertTrue(Group.objects.filter(name="Odlingsgranskare").exists())
 
-    def test_manager_sees_registrations_from_all_associations(self):
+    def test_manager_sees_registrations_from_all_associations_anonymously(self):
         response = self.client.get(reverse("breeding_review_list"))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Förening A")
-        self.assertContains(response, "Förening B")
+        self.assertContains(
+            response,
+            reverse("breeding_review", args=[self.registration_a.pk]),
+        )
+        self.assertContains(
+            response,
+            reverse("breeding_review", args=[self.registration_b.pk]),
+        )
+        self.assertNotContains(response, "Förening A")
+        self.assertNotContains(response, "Förening B")
+        self.assertNotContains(response, "owner@example.com")
 
     def test_manager_can_review_registration(self):
         response = self.client.post(
