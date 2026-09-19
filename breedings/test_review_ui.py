@@ -87,7 +87,10 @@ class BreedingReviewUiTests(TestCase):
         content = response.content.decode()
 
         species_url = reverse("species_information", args=[self.species.pk])
-        self.assertContains(response, f'href="{species_url}"')
+        self.assertContains(
+            response,
+            f'href="{species_url}" style="color: var(--link-fg);"',
+        )
 
         decision_index = content.index("Bedöm odlingen")
         self.assertNotIn("Silver", content[:decision_index])
