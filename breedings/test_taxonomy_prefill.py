@@ -46,7 +46,7 @@ class TaxonomyPrefillTests(TestCase):
         registration = self._registration("Apistogramma")
 
         response = self.client.get(
-            reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[registration.pk])
+            reverse("breeding_review_taxonomy", args=[registration.pk])
         )
         query = parse_qs(urlparse(response.context["species_add_url"]).query)
 
@@ -58,7 +58,7 @@ class TaxonomyPrefillTests(TestCase):
     def test_unmatched_genus_is_shown_as_reference_in_species_add_form(self):
         registration = self._registration("Okäntsläkte")
         resolve_response = self.client.get(
-            reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[registration.pk])
+            reverse("breeding_review_taxonomy", args=[registration.pk])
         )
 
         add_response = self.client.get(resolve_response.context["species_add_url"])

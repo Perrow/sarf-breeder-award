@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Granska odlingar | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-start gap-3 mb-4">
+    <div>
+        <h1 class="mb-1">Granska odlingar</h1>
+        <p class="text-body-secondary mb-0">Inskickade odlingsrapporter som väntar på behandling.</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'breeding_list' %}">Min sida</a>
+</div>
+
+{% if registrations %}
+<div class="table-responsive">
+<table class="table table-hover align-middle">
+    <thead>
+        <tr>
+            <th scope="col">Art</th>
+            <th scope="col">Odlare</th>
+            <th scope="col">Förening</th>
+            <th scope="col">Datum</th>
+            <th scope="col">Åtgärd</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for registration in registrations %}
+        <tr>
+            <td>
+                {% if registration.species %}
+                    <strong>{{ registration.species }}</strong>
+                    {% if registration.species.common_name %}<div class="small text-body-secondary">{{ registration.species.common_name }}</div>{% endif %}
+                {% else %}
+                    <strong>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</strong>
+                    <div class="small text-warning-emphasis">Taxonomin behöver lösas</div>
+                {% endif %}
+            </td>
+            <td>{{ registration.owner }}</td>
+            <td>{{ registration.association }}</td>
+            <td>{{ registration.breeding_date }}</td>
+            <td>
+                {% if registration.taxonomy_needs_resolution %}
+                    <a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_review_taxonomy' registration.pk %}">Lös taxonomi</a>
+                {% else %}
+                    <a class="btn btn-sm btn-primary" href="{% url 'breeding_review' registration.pk %}">Granska</a>
+                {% endif %}
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<div class="alert alert-light border">Det finns inga inskickade odlingsrapporter att granska.</div>
+{% endif %}
+{% endblock %}

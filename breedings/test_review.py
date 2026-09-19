@@ -52,7 +52,7 @@ class BreedingReviewTests(TestCase):
         )
 
     def review_url(self):
-        return reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
+        return reverse("breeding_review", args=[self.registration.pk])
 
     def test_review_page_uses_action_buttons_and_wider_comment_field(self):
         self.client.force_login(self.reviewer)
@@ -61,23 +61,13 @@ class BreedingReviewTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, 'name="decision"')
+        self.assertContains(response, 'name="approve" value="Godkänn"')
+        self.assertContains(response, 'name="reject" value="Avslå"')
         self.assertContains(
             response,
-            '<input type="submit" name="approve" value="Godkänn" class="default">',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<input type="submit" name="reject" value="Avslå">',
-            html=True,
-        )
-        self.assertContains(
-            response,
-            '<input type="submit" name="save_without_decision" value="Spara utan beslut">',
-            html=True,
+            'name="save_without_decision" value="Spara utan beslut"',
         )
         self.assertContains(response, 'name="review_comment"')
-        self.assertContains(response, 'cols="80"')
         self.assertContains(response, 'rows="6"')
 
     def test_association_admin_can_approve_registration(self):
@@ -91,7 +81,7 @@ class BreedingReviewTests(TestCase):
             },
         )
 
-        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.APPROVED)
         self.assertEqual(self.registration.reviewer, self.reviewer)
@@ -107,7 +97,7 @@ class BreedingReviewTests(TestCase):
             {"reject": "Avslå", "awarded_breeding_class": "", "review_comment": "Behöver kompletteras."},
         )
 
-        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.REJECTED)
         self.assertEqual(self.registration.reviewer, self.reviewer)
@@ -122,7 +112,7 @@ class BreedingReviewTests(TestCase):
             {"save_without_decision": "Spara utan beslut", "review_comment": "Anteckning inför senare beslut."},
         )
 
-        self.assertRedirects(response, reverse("admin:breedings_breedingregistration_changelist"))
+        self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
         self.assertEqual(self.registration.reviewer, self.reviewer)

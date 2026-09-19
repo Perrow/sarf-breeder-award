@@ -42,7 +42,7 @@ class BreedingReviewClassTests(TestCase):
         self.client.force_login(self.reviewer)
 
     def review_url(self):
-        return reverse("admin:breedings_breedingregistration_review", args=[self.registration.pk])
+        return reverse("breeding_review", args=[self.registration.pk])
 
     def test_review_page_shows_species_class_without_editable_class_field(self):
         response = self.client.get(self.review_url())

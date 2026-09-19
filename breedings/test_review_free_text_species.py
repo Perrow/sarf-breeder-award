@@ -45,7 +45,7 @@ class ReviewFreeTextSpeciesTests(TestCase):
         self.client.force_login(reviewer)
 
         response = self.client.get(
-            reverse("admin:breedings_breedingregistration_review", args=[registration.pk])
+            reverse("breeding_review", args=[registration.pk])
         )
 
         self.assertContains(response, "Art angiven i fritext")

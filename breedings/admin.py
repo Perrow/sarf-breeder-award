@@ -20,7 +20,7 @@ from .models import (
 from .scoring import BREEDING_CLASS_POINTS
 
 
-BREEDING_MANAGER_GROUP = "Odlingsansvarig"
+BREEDING_MANAGER_GROUP = "Odlingsgranskare"
 
 
 def is_breeding_manager(user):
@@ -197,9 +197,9 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         if obj.status != BreedingRegistration.Status.SUBMITTED:
             return "–"
         if obj.taxonomy_needs_resolution:
-            url = reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[obj.pk])
+            url = reverse("breeding_review_taxonomy", args=[obj.pk])
             return format_html('<a href="{}">Lös taxonomi</a>', url)
-        url = reverse("admin:breedings_breedingregistration_review", args=[obj.pk])
+        url = reverse("breeding_review", args=[obj.pk])
         return format_html('<a href="{}">Granska</a>', url)
 
     def _next_reviewable_registration(self, request, registration):
@@ -219,118 +219,10 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
         if not self.has_view_permission(request, registration):
             raise PermissionDenied
-        if registration.status != BreedingRegistration.Status.SUBMITTED:
-            messages.error(request, "Endast inskickade odlingsregistreringar kan granskas.")
-            return redirect("admin:breedings_breedingregistration_changelist")
-        if registration.taxonomy_needs_resolution or registration.species is None:
-            messages.error(request, "Taxonomin måste lösas innan odlingsregistreringen kan behandlas.")
-            return redirect("admin:breedings_breedingregistration_resolve_taxonomy", object_id=registration.pk)
-
-        if request.method == "POST":
-            form = ReviewDecisionForm(request.POST)
-            if "approve" in request.POST:
-                action = "approve"
-            elif "reject" in request.POST:
-                action = "reject"
-            elif "save_without_decision" in request.POST:
-                action = "save"
-            else:
-                action = None
-                form.add_error(None, "Välj Godkänn, Avslå eller Spara utan beslut.")
-            if form.is_valid():
-                registration.reviewer = request.user
-                registration.review_comment = form.cleaned_data["review_comment"]
-                if action == "approve":
-                    breeding_class = registration.species.breeding_class
-                    registration.status = BreedingRegistration.Status.APPROVED
-                    registration.approved_at = timezone.now()
-                    registration.awarded_breeding_class = breeding_class
-                    registration.awarded_points = BREEDING_CLASS_POINTS[breeding_class]
-                    registration.save(
-                        update_fields=(
-                            "reviewer",
-                            "review_comment",
-                            "status",
-                            "approved_at",
-                            "awarded_breeding_class",
-                            "awarded_points",
-                        )
-                    )
-                    message = "Odlingsregistreringen har godkänts."
-                elif action == "reject":
-                    registration.status = BreedingRegistration.Status.REJECTED
-                    registration.approved_at = None
-                    registration.awarded_breeding_class = ""
-                    registration.awarded_points = None
-                    registration.save(
-                        update_fields=(
-                            "reviewer",
-                            "review_comment",
-                            "status",
-                            "approved_at",
-                            "awarded_breeding_class",
-                            "awarded_points",
-                        )
-                    )
-                    message = "Odlingsregistreringen har avslagits."
-                else:
-                    registration.save(update_fields=("reviewer", "review_comment"))
-                    message = "Granskningsuppgifterna har sparats utan beslut."
-                messages.success(request, message)
-                return redirect("admin:breedings_breedingregistration_changelist")
-        else:
-            form = ReviewDecisionForm(initial={"review_comment": registration.review_comment})
-
-        context = {
-            **self.admin_site.each_context(request),
-            "opts": self.model._meta,
-            "title": "Granska odlingsregistrering",
-            "registration": registration,
-            "form": form,
-        }
-        return render(request, "admin/breedings/breedingregistration/review.html", context)
+        return redirect("breeding_review", pk=registration.pk)
 
     def resolve_taxonomy_view(self, request, object_id):
         registration = get_object_or_404(BreedingRegistration, pk=object_id)
         if not self.has_view_permission(request, registration):
             raise PermissionDenied
-        if registration.status != BreedingRegistration.Status.SUBMITTED:
-            messages.error(request, "Endast inskickade odlingsregistreringar kan få taxonomin löst.")
-            return redirect("admin:breedings_breedingregistration_changelist")
-        if not registration.taxonomy_needs_resolution:
-            messages.info(request, "Odlingsregistreringen har redan löst taxonomi.")
-            return redirect(
-                "admin:breedings_breedingregistration_review",
-                object_id=registration.pk,
-            )
-
-        if request.method == "POST":
-            form = TaxonomyResolutionForm(request.POST)
-            if form.is_valid():
-                registration.species = form.cleaned_data["species"]
-                registration.save(update_fields=("species", "taxonomy_needs_resolution"))
-                messages.success(request, "Taxonomin har kopplats till en registrerad art.")
-                return redirect("admin:breedings_breedingregistration_review", object_id=registration.pk)
-        else:
-            form = TaxonomyResolutionForm()
-
-        species_add_params = {
-            "scientific_name": registration.proposed_species_name,
-            "common_name": registration.proposed_common_name,
-            "source_genus": registration.proposed_genus_name,
-        }
-        matching_genus = Genus.objects.filter(
-            scientific_name=registration.proposed_genus_name
-        ).first()
-        if matching_genus:
-            species_add_params["genus"] = matching_genus.pk
-
-        context = {
-            **self.admin_site.each_context(request),
-            "opts": self.model._meta,
-            "title": "Lös taxonomi",
-            "registration": registration,
-            "form": form,
-            "species_add_url": f'{reverse("admin:taxonomy_species_add")}?{urlencode(species_add_params)}',
-        }
-        return render(request, "admin/breedings/breedingregistration/resolve_taxonomy.html", context)
+        return redirect("breeding_review_taxonomy", pk=registration.pk)

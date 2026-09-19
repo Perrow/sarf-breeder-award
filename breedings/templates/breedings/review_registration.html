@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+
+{% block title %}Granska odlingsrapport | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<p><a class="text-decoration-none" href="{% url 'breeding_review_list' %}">← Till granskningskön</a></p>
+
+<div class="row g-4">
+    <div class="col-lg-7">
+        <div class="card shadow-sm mb-4">
+            <div class="card-body">
+                <h1 class="h3 mb-3">
+                    <a class="link-body-emphasis" href="{% url 'species_information' registration.species.pk %}">
+                        {% if registration.species.common_name %}{{ registration.species.common_name }} – {% endif %}
+                        <em>{{ registration.species }}</em>
+                    </a>
+                </h1>
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Odlingsdatum</dt><dd class="col-sm-8">{{ registration.breeding_date }}</dd>
+                    <dt class="col-sm-4">Odlare</dt><dd class="col-sm-8">{{ registration.owner }}</dd>
+                    <dt class="col-sm-4">Förening</dt><dd class="col-sm-8">{{ registration.association }}</dd>
+                </dl>
+            </div>
+        </div>
+
+        {% if registration.proposed_genus_name or registration.proposed_species_name or registration.proposed_common_name %}
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5">Art angiven i fritext</h2>
+                <p class="mb-0">
+                    {% if registration.proposed_common_name %}{{ registration.proposed_common_name }} – {% endif %}
+                    <em>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</em>
+                </p>
+            </div>
+        </div>
+        {% endif %}
+
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5">Odlarens beskrivning</h2>
+                <div>{{ registration.description|default:"Ingen beskrivning angiven."|linebreaksbr }}</div>
+            </div>
+        </div>
+
+        <details class="card mb-4">
+            <summary class="card-header fw-semibold">Mer information</summary>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Inskickad</dt>
+                    <dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
+                </dl>
+            </div>
+        </details>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5">Externa länkar om arten</h2>
+                {% with links=registration.species.external_links.all %}
+                    {% if links %}
+                    <ul class="mb-0">
+                        {% for link in links %}
+                        <li><strong>{{ link.source_name }}</strong>: <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer">{{ link.title|default:link.url }}</a></li>
+                        {% endfor %}
+                    </ul>
+                    {% else %}
+                    <p class="mb-0 text-body-secondary">Det finns inga externa länkar registrerade för arten.</p>
+                    {% endif %}
+                {% endwith %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-5">
+        <div class="card shadow-sm sticky-lg-top" style="top: 6rem;">
+            <div class="card-body">
+                <h2 class="h4">Bedöm odlingen</h2>
+                <p class="fs-5 fw-semibold">{{ registration.species.get_breeding_class_display }}</p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include "includes/form_error_summary.html" with form=form %}
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.review_comment.id_for_label }}">{{ form.review_comment.label }}</label>
+                        {{ form.review_comment }}
+                        {% for error in form.review_comment.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                    </div>
+                    <div class="d-grid gap-2">
+                        <button class="btn btn-success" type="submit" name="approve" value="Godkänn">Godkänn</button>
+                        <button class="btn btn-outline-danger" type="submit" name="reject" value="Avslå">Avslå</button>
+                        <button class="btn btn-outline-secondary" type="submit" name="save_without_decision" value="Spara utan beslut">Spara utan beslut</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
