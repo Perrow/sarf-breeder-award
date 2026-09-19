@@ -5,7 +5,7 @@
     <div style="display: flex; justify-content: space-between; gap: 1.5rem; align-items: flex-start; flex-wrap: wrap;">
         <div>
             <h2 style="font-size: 2rem; line-height: 1.2; margin: 0 0 .5rem;">
-                <a href="{% url 'species_information' registration.species.pk %}" style="color: var(--link-fg);">
+                <a href="{% url 'species_information' registration.species.pk %}" style="color: #fff; text-decoration: underline;">
                     {% if registration.species.common_name %}{{ registration.species.common_name }} – {% endif %}<em>{{ registration.species }}</em>
                 </a>
             </h2>
