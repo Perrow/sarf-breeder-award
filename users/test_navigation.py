@@ -36,6 +36,24 @@ class NavigationTests(TestCase):
         positions = [navigation.index(label) for label in labels]
         self.assertEqual(positions, sorted(positions))
 
+    def test_admin_link_is_only_shown_for_staff_users(self):
+        user = self._create_authenticated_user("normal-navigation@example.com")
+
+        navigation = self._navigation_html(self.client.get(reverse("home")))
+
+        self.assertNotIn(f'href="{reverse("admin:index")}"', navigation)
+        self.assertNotIn(">Admin</a>", navigation)
+
+        user.is_staff = True
+        user.save(update_fields=("is_staff",))
+
+        navigation = self._navigation_html(self.client.get(reverse("home")))
+
+        self.assertIn(
+            f'<a class="nav-link" href="{reverse("admin:index")}">Admin</a>',
+            navigation,
+        )
+
     def test_authenticated_main_sections_mark_current_navigation_link(self):
         self._create_authenticated_user("current-navigation@example.com")
 
