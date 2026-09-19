@@ -35,6 +35,15 @@ class BreedingRegistration(models.Model):
     awarded_points = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="tilldelade poäng")
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="reviewed_breeding_registrations", verbose_name="granskare")
     review_comment = models.TextField(blank=True, verbose_name="granskningskommentar")
+    show_on_species_page = models.BooleanField(
+        default=False,
+        verbose_name="visa på artsidan",
+    )
+    species_page_display_name = models.CharField(
+        max_length=200,
+        blank=True,
+        verbose_name="visningsnamn på artsidan",
+    )
 
     class Meta:
         ordering = ["-breeding_date", "-pk"]
