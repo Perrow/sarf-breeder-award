@@ -164,6 +164,40 @@ class AssociationManualAwardTests(TestCase):
         self.assertContains(response, "Medlem A")
         self.assertNotContains(response, "Medlem B")
 
+
+    def test_existing_award_keeps_original_association_and_awarder(self):
+        UserAchievement.objects.create(
+            user=self.member_a,
+            level=self.level,
+            achievement_name=self.achievement.name,
+            level_name=self.level.name,
+            awarded_association=self.association_a,
+            awarded_by=self.admin_a,
+        )
+        Membership.objects.create(
+            user=self.member_a,
+            association=self.association_b,
+        )
+        system_admin = get_user_model().objects.create_superuser(
+            username="other-system@example.com",
+            email="other-system@example.com",
+            password="test-password",
+        )
+
+        from progression.services import assign_manual_level
+
+        grant, created = assign_manual_level(
+            self.member_a,
+            self.level,
+            association=self.association_b,
+            awarded_by=system_admin,
+        )
+
+        self.assertFalse(created)
+        grant.refresh_from_db()
+        self.assertEqual(grant.awarded_association, self.association_a)
+        self.assertEqual(grant.awarded_by, self.admin_a)
+
     def test_system_admin_can_use_regular_association_award_page(self):
         system_admin = get_user_model().objects.create_superuser(
             username="sysadmin@example.com",
