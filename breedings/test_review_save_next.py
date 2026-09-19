@@ -54,7 +54,7 @@ class ReviewSaveNextTests(TestCase):
 
         response = self.client.get(
             reverse(
-                "admin:breedings_breedingregistration_review",
+                "breeding_review",
                 args=[current.pk],
             )
         )
