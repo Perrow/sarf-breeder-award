@@ -31,7 +31,7 @@ class SystemAssociationAdminForm(forms.Form):
         super().__init__(*args, **kwargs)
         self.fields["membership"].queryset = (
             Membership.objects.select_related("user", "association")
-            .order_by("association__name", "user__last_name", "user__first_name", "user__email")
+            .order_by("association__name", "user__name", "user__email")
         )
         self.fields["membership"].widget.attrs["class"] = "form-select"
         self.fields["is_association_admin"].widget.attrs["class"] = "form-check-input"
@@ -56,7 +56,7 @@ class AssociationManualAwardForm(forms.Form):
             get_user_model()
             .objects.filter(memberships__association=association)
             .distinct()
-            .order_by("last_name", "first_name", "email", "pk")
+            .order_by("name", "email", "pk")
         )
         self.fields["level"].queryset = (
             AchievementLevel.objects.filter(
