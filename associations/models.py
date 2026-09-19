@@ -59,3 +59,10 @@ class Membership(models.Model):
 
     def __str__(self):
         return f"{self.user} – {self.association}"
+
+
+class AssociationAdministratorManagement(Membership):
+    class Meta:
+        proxy = True
+        verbose_name = "föreningsadministratör"
+        verbose_name_plural = "Föreningsadministratörer"
