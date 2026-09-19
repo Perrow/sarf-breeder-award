@@ -139,3 +139,72 @@ class BreedingMarkdownPresentationTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self._assert_formatted_description(response)
+
+
+class BreedingMarkdownPreviewTests(TestCase):
+    def setUp(self):
+        User = get_user_model()
+        self.user = User.objects.create_user(
+            username="markdown-preview@example.com",
+            email="markdown-preview@example.com",
+            password="test-password",
+        )
+        self.association = Association.objects.create(name="Previewföreningen")
+        self.association.memberships.create(user=self.user)
+        genus = Genus.objects.create(scientific_name="Previewus")
+        self.species = Species.objects.create(
+            genus=genus,
+            scientific_name="testus",
+            breeding_class=Species.BreedingClass.SILVER,
+        )
+        self.client.force_login(self.user)
+
+    def test_breeding_form_explains_supported_markdown_and_has_preview(self):
+        response = self.client.get(
+            reverse("breeding_create"),
+            {"species": self.species.pk},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "# Rubrik")
+        self.assertContains(response, "**fet text**")
+        self.assertContains(response, "*kursiv text*")
+        self.assertContains(response, "- punkt")
+        self.assertContains(response, "Förhandsgranska")
+        self.assertContains(response, 'id="description-preview-modal"')
+        self.assertContains(response, reverse("breeding_description_preview"))
+
+    def test_preview_uses_same_safe_markdown_renderer(self):
+        response = self.client.post(
+            reverse("breeding_description_preview"),
+            {
+                "description": (
+                    "# Förhandsvisning\n"
+                    "**Fet** och *kursiv*.\n"
+                    "- Punkt\n"
+                    "<script>alert('x')</script>"
+                )
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        html = response.json()["html"]
+        self.assertIn(
+            '<h3 class="h5 mt-3 mb-2">Förhandsvisning</h3>',
+            html,
+        )
+        self.assertIn("<strong>Fet</strong>", html)
+        self.assertIn("<em>kursiv</em>", html)
+        self.assertIn("<li>Punkt</li>", html)
+        self.assertNotIn("<script>", html)
+        self.assertIn("&lt;script&gt;", html)
+
+    def test_preview_requires_login(self):
+        self.client.logout()
+
+        response = self.client.post(
+            reverse("breeding_description_preview"),
+            {"description": "# Rubrik"},
+        )
+
+        self.assertEqual(response.status_code, 302)
