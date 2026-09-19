@@ -233,7 +233,11 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         response = self.client.post(
             reverse("admin:progression_manualawardassignment_add"),
-            {"user": self.user.pk, "level": level.pk},
+            {
+                "association": self.association.pk,
+                "user": self.user.pk,
+                "level": level.pk,
+            },
         )
 
         self.assertRedirects(
