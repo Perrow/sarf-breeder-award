@@ -97,10 +97,9 @@
                         {% for error in form.show_on_species_page.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="{{ form.species_page_display_name.id_for_label }}">{{ form.species_page_display_name.label }}</label>
-                        {{ form.species_page_display_name }}
-                        <div class="form-text">Visas i rubriken som “Odlingsrapport: Visningsnamn”.</div>
-                        {% for error in form.species_page_display_name.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+                        <div class="form-label">Visningsnamn</div>
+                        <div>{{ registration.owner.public_display_name }}</div>
+                        <div class="form-text">Användarens publika användarnamn används i rubriken på artsidan.</div>
                     </div>
 
                     <div class="d-grid gap-2">
