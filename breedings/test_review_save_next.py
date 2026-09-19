@@ -23,7 +23,7 @@ class ReviewSaveNextTests(TestCase):
         )
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Testförening")
-        Membership.objects.create(user=self.reviewer, association=self.association)
+        Membership.objects.create(\n            user=self.reviewer,\n            association=self.association,\n            is_association_admin=True,\n        )
         genus = Genus.objects.create(scientific_name="Nextus")
         self.species = Species.objects.create(
             genus=genus,
