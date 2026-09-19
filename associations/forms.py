@@ -8,7 +8,9 @@ class AssociationManagementForm(forms.ModelForm):
         model = Association
         fields = ("name", "website_url", "description")
         widgets = {
-            "description": forms.Textarea(attrs={"rows": 5}),
+            "name": forms.TextInput(attrs={"class": "form-control"}),
+            "website_url": forms.URLInput(attrs={"class": "form-control"}),
+            "description": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
         }
 
 
@@ -28,3 +30,5 @@ class SystemAssociationAdminForm(forms.Form):
             Membership.objects.select_related("user", "association")
             .order_by("association__name", "user__last_name", "user__first_name", "user__email")
         )
+        self.fields["membership"].widget.attrs["class"] = "form-select"
+        self.fields["is_association_admin"].widget.attrs["class"] = "form-check-input"
