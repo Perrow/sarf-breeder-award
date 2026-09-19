@@ -18,7 +18,11 @@ class TaxonomyReviewReturnTests(TestCase):
         self.reviewer = User.objects.create_user(username="return-reviewer@example.com", email="return-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Återgångsförening")
-        Membership.objects.create(user=self.reviewer, association=self.association)
+        Membership.objects.create(
+            user=self.reviewer,
+            association=self.association,
+            is_association_admin=True,
+        )
         genus = Genus.objects.create(scientific_name="Apistogramma")
         self.species = Species.objects.create(
             genus=genus,
