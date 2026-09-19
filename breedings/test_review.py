@@ -23,8 +23,16 @@ class BreedingReviewTests(TestCase):
 
         self.association = Association.objects.create(name="Granskningsförening")
         self.other_association = Association.objects.create(name="Annan förening")
-        Membership.objects.create(\n            user=self.reviewer,\n            association=self.association,\n            is_association_admin=True,\n        )
-        Membership.objects.create(\n            user=self.other_reviewer,\n            association=self.other_association,\n            is_association_admin=True,\n        )
+        Membership.objects.create(
+            user=self.reviewer,
+            association=self.association,
+            is_association_admin=True,
+        )
+        Membership.objects.create(
+            user=self.other_reviewer,
+            association=self.other_association,
+            is_association_admin=True,
+        )
 
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(
