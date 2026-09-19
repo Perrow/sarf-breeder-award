@@ -150,6 +150,18 @@ class AssociationSpecificAdministrationTests(TestCase):
         self.other_second_membership.refresh_from_db()
         self.assertFalse(self.other_second_membership.is_association_admin)
 
+    def test_association_admin_can_remove_own_last_admin_role(self):
+        self.client.force_login(self.association_admin)
+
+        response = self.client.post(
+            reverse("association_admins", args=[self.first.pk]),
+            {"membership_id": self.admin_membership.pk, "action": "revoke"},
+        )
+
+        self.assertRedirects(response, reverse("association_management"))
+        self.admin_membership.refresh_from_db()
+        self.assertFalse(self.admin_membership.is_association_admin)
+
     def test_last_association_admin_can_be_removed(self):
         self.client.force_login(self.system_admin)
 
