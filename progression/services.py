@@ -193,16 +193,14 @@ def assign_manual_level(user, level, association=None, awarded_by=None):
             "awarded_by": awarded_by,
         },
     )
-    if not created and association is not None:
-        update_fields = []
-        if grant.awarded_association_id != association.pk:
-            grant.awarded_association = association
-            update_fields.append("awarded_association")
-        if awarded_by is not None and grant.awarded_by_id != awarded_by.pk:
-            grant.awarded_by = awarded_by
-            update_fields.append("awarded_by")
-        if update_fields:
-            grant.save(update_fields=update_fields)
+    if (
+        not created
+        and association is not None
+        and grant.awarded_association_id is None
+    ):
+        grant.awarded_association = association
+        grant.awarded_by = awarded_by
+        grant.save(update_fields=("awarded_association", "awarded_by"))
     return grant, created
 
 
