@@ -7,14 +7,14 @@ from django.utils.safestring import mark_safe
 
 register = template.Library()
 
-_STRONG_RE = re.compile(r"\\*\\*([^*\\n]+)\\*\\*")
-_EMPHASIS_RE = re.compile(r"(?<!\\*)\\*([^*\\n]+)\\*(?!\\*)")
+_STRONG_RE = re.compile(r"\*\*([^*\n]+)\*\*")
+_EMPHASIS_RE = re.compile(r"(?<!\*)\*([^*\n]+)\*(?!\*)")
 
 
 def _render_inline(value):
     escaped = escape(value)
-    escaped = _STRONG_RE.sub(r"<strong>\\1</strong>", escaped)
-    escaped = _EMPHASIS_RE.sub(r"<em>\\1</em>", escaped)
+    escaped = _STRONG_RE.sub(r"<strong>\1</strong>", escaped)
+    escaped = _EMPHASIS_RE.sub(r"<em>\1</em>", escaped)
     return escaped
 
 
@@ -66,7 +66,7 @@ def render_limited_markdown(value):
 
     flush_paragraph()
     flush_list()
-    return mark_safe("\\n".join(output))
+    return mark_safe("\n".join(output))
 
 
 @register.filter(name="limited_markdown")
