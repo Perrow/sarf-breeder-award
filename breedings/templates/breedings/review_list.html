@@ -1,6 +1,40 @@
 {% extends "base.html" %}
 
-{% block title %}Granska odlingar | Odlingskampanjen{% endblock %}
+{% block title %}Granska odlingar | Odlingskampanjen
+<section class="mt-5">
+    <h2 class="h4">Godkända odlingsrapporter</h2>
+    <p class="text-body-secondary">Öppna en rapport för att ändra om den ska visas på artsidan.</p>
+
+    {% if approved_registrations %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Art</th>
+                    <th scope="col">Odlare</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Visas på artsidan</th>
+                    <th scope="col">Åtgärd</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for registration in approved_registrations %}
+                <tr>
+                    <td><strong>{{ registration.species }}</strong></td>
+                    <td>{{ registration.owner.public_display_name }}</td>
+                    <td>{{ registration.breeding_date }}</td>
+                    <td>{% if registration.show_on_species_page %}Ja{% else %}Nej{% endif %}</td>
+                    <td><a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_approved_detail' registration.pk %}">Visa rapport</a></td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Det finns inga godkända odlingsrapporter.</p>
+    {% endif %}
+</section>
+{% endblock %}
 
 {% block content %}
 <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
