@@ -76,8 +76,8 @@ class MariaDbCollationTests(TestCase):
                 Geography(name="MALAWI"),
             ),
             (
-                User(username="one@example.com", public_username="Akvarist"),
-                User(username="two@example.com", public_username="AKVARIST"),
+                User(email="one@example.com", public_username="Akvarist"),
+                User(email="two@example.com", public_username="AKVARIST"),
             ),
         )
 
