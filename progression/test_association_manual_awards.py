@@ -91,7 +91,7 @@ class AssociationManualAwardTests(TestCase):
         response = self.client.post(
             self.awards_url,
             {
-                "user": self.member_a.pk,
+                "users": [self.member_a.pk],
                 "level": self.level.pk,
             },
         )
@@ -103,6 +103,52 @@ class AssociationManualAwardTests(TestCase):
         )
         self.assertEqual(grant.awarded_association, self.association_a)
         self.assertEqual(grant.awarded_by, self.admin_a)
+
+    def test_assignment_page_has_search_and_visual_award_catalogue(self):
+        self.client.force_login(self.admin_a)
+
+        response = self.client.get(self.awards_url)
+
+        self.assertContains(response, 'id="member-search"')
+        self.assertContains(response, self.achievement.name)
+        self.assertContains(response, self.level.name)
+        self.assertContains(response, "3. Tilldela")
+        self.assertContains(response, "manual-level-choice")
+
+    def test_association_admin_can_assign_same_level_to_multiple_members(self):
+        second_member = get_user_model().objects.create_user(
+            username="member-a2@example.com",
+            email="member-a2@example.com",
+            password="test-password",
+            public_username="Medlem A2",
+        )
+        Membership.objects.create(
+            user=second_member,
+            association=self.association_a,
+        )
+        self.client.force_login(self.admin_a)
+
+        response = self.client.post(
+            self.awards_url,
+            {
+                "users": [self.member_a.pk, second_member.pk],
+                "level": self.level.pk,
+            },
+        )
+
+        self.assertRedirects(response, self.awards_url)
+        self.assertTrue(
+            UserAchievement.objects.filter(
+                user=self.member_a,
+                level=self.level,
+            ).exists()
+        )
+        self.assertTrue(
+            UserAchievement.objects.filter(
+                user=second_member,
+                level=self.level,
+            ).exists()
+        )
 
     def test_association_admin_cannot_open_other_association_award_page(self):
         self.client.force_login(self.admin_a)
@@ -119,7 +165,7 @@ class AssociationManualAwardTests(TestCase):
         response = self.client.post(
             self.awards_url,
             {
-                "user": self.member_b.pk,
+                "users": [self.member_b.pk],
                 "level": self.level.pk,
             },
         )
@@ -210,7 +256,7 @@ class AssociationManualAwardTests(TestCase):
         response = self.client.post(
             other_url,
             {
-                "user": self.member_b.pk,
+                "users": [self.member_b.pk],
                 "level": self.level.pk,
             },
         )

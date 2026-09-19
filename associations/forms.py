@@ -38,21 +38,21 @@ class SystemAssociationAdminForm(forms.Form):
 
 
 class AssociationManualAwardForm(forms.Form):
-    user = forms.ModelChoiceField(
+    users = forms.ModelMultipleChoiceField(
         queryset=get_user_model().objects.none(),
-        label="Medlem",
-        widget=forms.Select(attrs={"class": "form-select"}),
+        label="Medlemmar",
+        widget=forms.CheckboxSelectMultiple(),
     )
     level = forms.ModelChoiceField(
         queryset=AchievementLevel.objects.none(),
         label="Utmärkelse och nivå",
-        widget=forms.Select(attrs={"class": "form-select"}),
+        widget=forms.HiddenInput(),
     )
 
     def __init__(self, *args, association, **kwargs):
         super().__init__(*args, **kwargs)
         self.association = association
-        self.fields["user"].queryset = (
+        self.fields["users"].queryset = (
             get_user_model()
             .objects.filter(memberships__association=association)
             .distinct()
@@ -67,13 +67,17 @@ class AssociationManualAwardForm(forms.Form):
             .order_by("achievement__name", "order", "name")
         )
 
-    def clean_user(self):
-        user = self.cleaned_data["user"]
-        if not Membership.objects.filter(
-            association=self.association,
-            user=user,
-        ).exists():
+    def clean_users(self):
+        users = self.cleaned_data["users"]
+        member_ids = set(
+            Membership.objects.filter(
+                association=self.association,
+                user__in=users,
+            ).values_list("user_id", flat=True)
+        )
+        if member_ids != set(users.values_list("pk", flat=True)):
             raise forms.ValidationError(
-                "Användaren är inte medlem i den här föreningen."
+                "Alla valda användare måste vara medlemmar i den här föreningen."
             )
-        return user
+        return users
+
