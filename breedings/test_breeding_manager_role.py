@@ -44,27 +44,22 @@ class BreedingManagerRoleTests(TestCase):
         )
 
     def test_role_group_exists(self):
-        self.assertTrue(Group.objects.filter(name="Odlingsansvarig").exists())
+        self.assertTrue(Group.objects.filter(name="Odlingsgranskare").exists())
 
     def test_manager_sees_registrations_from_all_associations(self):
-        response = self.client.get(
-            reverse("admin:breedings_breedingregistration_changelist")
-        )
+        response = self.client.get(reverse("breeding_review_list"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Förening A")
         self.assertContains(response, "Förening B")
 
     def test_manager_can_review_registration(self):
         response = self.client.post(
-            reverse(
-                "admin:breedings_breedingregistration_review",
-                args=[self.registration_a.pk],
-            ),
+            reverse("breeding_review", args=[self.registration_a.pk]),
             {"approve": "Godkänn", "review_comment": "Godkänd."},
         )
         self.assertRedirects(
             response,
-            reverse("admin:breedings_breedingregistration_changelist"),
+            reverse("breeding_review_list"),
         )
         self.registration_a.refresh_from_db()
         self.assertEqual(self.registration_a.status, BreedingRegistration.Status.APPROVED)
