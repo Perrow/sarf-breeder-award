@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+
+{% block title %}Administratörer – {{ association.name }}{% endblock %}
+
+{% block content %}
+<p><a href="{% url 'association_management' %}">← Till föreningsadministrationen</a></p>
+<h1>Föreningsadministratörer</h1>
+<p class="lead">{{ association.name }}</p>
+
+{% if memberships %}
+<div class="table-responsive">
+<table class="table align-middle">
+    <thead>
+        <tr><th scope="col">Medlem</th><th scope="col">E-post</th><th scope="col">Status</th><th scope="col">Åtgärd</th></tr>
+    </thead>
+    <tbody>
+    {% for membership in memberships %}
+        <tr>
+            <th scope="row">{{ membership.user.get_full_name|default:membership.user }}</th>
+            <td>{{ membership.user.email }}</td>
+            <td>{% if membership.is_association_admin %}Administratör{% else %}Medlem{% endif %}</td>
+            <td>
+                <form method="post">
+                    {% csrf_token %}
+                    <input type="hidden" name="membership_id" value="{{ membership.pk }}">
+                    {% if membership.is_association_admin %}
+                        <input type="hidden" name="action" value="revoke">
+                        <button class="btn btn-sm btn-outline-danger" type="submit">Ta bort administratör</button>
+                    {% else %}
+                        <input type="hidden" name="action" value="grant">
+                        <button class="btn btn-sm btn-outline-primary" type="submit">Gör till administratör</button>
+                    {% endif %}
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>
+{% else %}
+<p>Föreningen har inga medlemskap.</p>
+{% endif %}
+{% endblock %}

@@ -1,28 +1,15 @@
 from django import forms
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.db import models
 
-from .models import Association, Membership
+from .models import Association, AssociationAdministratorManagement, Membership
+
+from .permissions import is_association_admin, is_system_admin, managed_associations
 
 SYSTEM_ADMIN_GROUP = "Systemadministratör"
 ASSOCIATION_ADMIN_GROUP = "Föreningsadministratör"
 MEMBER_GROUP = "Medlem"
-
-
-def is_system_admin(user):
-    return user.is_superuser or user.groups.filter(name=SYSTEM_ADMIN_GROUP).exists()
-
-
-def is_association_admin(user):
-    return user.groups.filter(name=ASSOCIATION_ADMIN_GROUP).exists()
-
-
-def managed_associations(user):
-    if is_system_admin(user):
-        return Association.objects.all()
-    if is_association_admin(user):
-        return Association.objects.filter(memberships__user=user).distinct()
-    return Association.objects.none()
 
 
 def _has_any_permission(user, model_name):
@@ -33,7 +20,9 @@ def _has_any_permission(user, model_name):
 
 
 def _permission_associations(user):
-    if is_system_admin(user) or is_association_admin(user):
+    if is_system_admin(user):
+        return Association.objects.all()
+    if is_association_admin(user):
         return managed_associations(user)
     if _has_any_permission(user, "association") or _has_any_permission(user, "membership"):
         return Association.objects.all()
@@ -95,6 +84,15 @@ class AssociationAdmin(admin.ModelAdmin):
             or is_association_admin(request.user)
             or _has_any_permission(request.user, "association")
         )
+
+    def get_fieldsets(self, request, obj=None):
+        if (
+            request is not None
+            and is_association_admin(request.user)
+            and not is_system_admin(request.user)
+        ):
+            return (self.fieldsets[0],)
+        return super().get_fieldsets(request, obj)
 
     def has_view_permission(self, request, obj=None):
         if is_system_admin(request.user) or is_association_admin(request.user):
@@ -170,3 +168,26 @@ class MembershipAdmin(admin.ModelAdmin):
         if db_field.name == "association":
             kwargs["queryset"] = _permission_associations(request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(AssociationAdministratorManagement)
+class AssociationAdministratorManagementAdmin(admin.ModelAdmin):
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        if not is_system_admin(request.user):
+            return super().changelist_view(request, extra_context)
+        return redirect("system_association_admins")

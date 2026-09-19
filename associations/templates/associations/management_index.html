@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Föreningsadministration | Odlingskampanjen{% endblock %}
+
+{% block content %}
+<h1>Föreningsadministration</h1>
+
+{% if is_system_admin %}
+<p><a class="btn btn-outline-primary" href="{% url 'system_association_admins' %}">Hantera föreningsadministratörer</a></p>
+{% endif %}
+
+{% if associations %}
+<div class="list-group">
+    {% for association in associations %}
+    <div class="list-group-item">
+        <div class="d-flex justify-content-between align-items-center gap-3 flex-wrap">
+            <strong>{{ association.name }}</strong>
+            <div class="d-flex gap-2">
+                <a class="btn btn-sm btn-outline-primary" href="{% url 'association_edit' association.pk %}">Redigera förening</a>
+                <a class="btn btn-sm btn-outline-secondary" href="{% url 'association_admins' association.pk %}">Administratörer</a>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>Du administrerar inga föreningar.</p>
+{% endif %}
+{% endblock %}

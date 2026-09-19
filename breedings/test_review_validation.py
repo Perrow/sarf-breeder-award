@@ -25,8 +25,16 @@ class BreedingReviewValidationTests(TestCase):
 
         self.association = Association.objects.create(name="Valideringsförening")
         self.other_association = Association.objects.create(name="Främmande förening")
-        Membership.objects.create(user=self.reviewer, association=self.association)
-        Membership.objects.create(user=self.attacker, association=self.other_association)
+        Membership.objects.create(
+            user=self.reviewer,
+            association=self.association,
+            is_association_admin=True,
+        )
+        Membership.objects.create(
+            user=self.attacker,
+            association=self.other_association,
+            is_association_admin=True,
+        )
 
         genus = Genus.objects.create(scientific_name="Nannostomus")
         self.species = Species.objects.create(
