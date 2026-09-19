@@ -18,7 +18,7 @@ class ReviewFreeTextSpeciesTests(TestCase):
         reviewer = User.objects.create_user(username="reviewer-free-text@example.com", is_staff=True)
         reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         association = Association.objects.create(name="Testförening")
-        Membership.objects.create(user=reviewer, association=association)
+        Membership.objects.create(\n            user=reviewer,\n            association=association,\n            is_association_admin=True,\n        )
         genus = Genus.objects.create(scientific_name="Selectedus")
         species = Species.objects.create(
             genus=genus,
