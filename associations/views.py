@@ -3,7 +3,14 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from .forms import AssociationManagementForm, SystemAssociationAdminForm
+from progression.models import Achievement, UserAchievement
+from progression.services import assign_manual_level
+
+from .forms import (
+    AssociationManagementForm,
+    AssociationManualAwardForm,
+    SystemAssociationAdminForm,
+)
 from .models import Association, Membership
 from .permissions import can_manage_association, is_system_admin, managed_associations
 
@@ -80,6 +87,48 @@ def association_admins(request, pk):
         request,
         "associations/association_admins.html",
         {"association": association, "memberships": memberships},
+    )
+
+
+@login_required
+def association_awards(request, pk):
+    association = get_object_or_404(Association, pk=pk)
+    _require_association_access(request.user, association)
+
+    form = AssociationManualAwardForm(
+        request.POST or None,
+        association=association,
+    )
+    if request.method == "POST" and form.is_valid():
+        _, created = assign_manual_level(
+            form.cleaned_data["user"],
+            form.cleaned_data["level"],
+            association=association,
+            awarded_by=request.user,
+        )
+        if created:
+            messages.success(request, "Utmärkelsen har tilldelats.")
+        else:
+            messages.info(request, "Medlemmen hade redan den valda nivån.")
+        return redirect("association_awards", pk=association.pk)
+
+    awards = (
+        UserAchievement.objects.filter(
+            awarded_association=association,
+            level__achievement__achievement_type=Achievement.Type.MANUAL,
+        )
+        .select_related("user", "level__achievement", "awarded_by")
+        .order_by("-achieved_at", "-pk")
+    )
+
+    return render(
+        request,
+        "associations/association_awards.html",
+        {
+            "association": association,
+            "form": form,
+            "awards": awards,
+        },
     )
 
 
