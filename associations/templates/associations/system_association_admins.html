@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}Föreningsadministratörer | Systemadministration{% endblock %}
+
+{% block content %}
+<h1>Föreningsadministratörer</h1>
+<p>Tilldela eller återkalla föreningsadministratörskap för ett befintligt medlemskap.</p>
+
+<form method="post" class="mb-4" novalidate>
+    {% csrf_token %}
+    {% include "includes/form_error_summary.html" with form=form %}
+    {{ form.as_p }}
+    <button class="btn btn-primary" type="submit">Spara</button>
+</form>
+
+<h2 class="h4">Nuvarande föreningsadministratörer</h2>
+{% if administrators %}
+<ul>
+    {% for membership in administrators %}
+    <li>{{ membership.association.name }} – {{ membership.user.get_full_name|default:membership.user }} ({{ membership.user.email }})</li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Inga föreningsadministratörer är tilldelade.</p>
+{% endif %}
+{% endblock %}
