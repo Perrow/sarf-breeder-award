@@ -10,8 +10,10 @@
         <div class="card shadow-sm mb-4">
             <div class="card-body">
                 <h1 class="h3 mb-3">
-                    {% if registration.species.common_name %}{{ registration.species.common_name }} – {% endif %}
-                    <em>{{ registration.species }}</em>
+                    <a class="link-body-emphasis" href="{% url 'species_information' registration.species.pk %}">
+                        {% if registration.species.common_name %}{{ registration.species.common_name }} – {% endif %}
+                        <em>{{ registration.species }}</em>
+                    </a>
                 </h1>
                 <dl class="row mb-0">
                     <dt class="col-sm-4">Odlingsdatum</dt><dd class="col-sm-8">{{ registration.breeding_date }}</dd>
@@ -40,6 +42,16 @@
                 <div>{{ registration.description|default:"Ingen beskrivning angiven."|linebreaksbr }}</div>
             </div>
         </div>
+
+        <details class="card mb-4">
+            <summary class="card-header fw-semibold">Mer information</summary>
+            <div class="card-body">
+                <dl class="row mb-0">
+                    <dt class="col-sm-4">Inskickad</dt>
+                    <dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
+                </dl>
+            </div>
+        </details>
 
         <div class="card">
             <div class="card-body">
