@@ -8,7 +8,7 @@
 
     <form method="post" class="site-form">
         {% csrf_token %}
-        <p class="text-body-secondary">För- och efternamn är frivilliga och visas bara för administratörer. Föreningarnas administratörer kan ta bort ditt medlemskap om de inte kan avgöra vem du är.</p>
+        <p class="text-body-secondary">Namn används för att föreningar och administratörer ska kunna veta vem du är. Endast användarnamnet visas publikt på webbplatsen.</p>
         {% include "includes/form_error_summary.html" %}
         {{ form.as_p }}
         <div class="form-actions">
