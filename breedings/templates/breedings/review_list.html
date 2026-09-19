@@ -53,4 +53,46 @@
 {% else %}
 <div class="alert alert-light border">Det finns inga inskickade odlingsrapporter att granska.</div>
 {% endif %}
+
+<section class="mt-5">
+    <h2 class="h4">Godkända odlingsrapporter</h2>
+    <p class="text-body-secondary">Hantera vilka godkända rapporter som ska visas på artsidan.</p>
+
+    {% if approved_registrations %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Art</th>
+                    <th scope="col">Odlare</th>
+                    <th scope="col">Förening</th>
+                    <th scope="col">Publicerad</th>
+                    <th scope="col">Åtgärd</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for registration in approved_registrations %}
+                <tr>
+                    <td><strong>{{ registration.species }}</strong></td>
+                    <td>{{ registration.owner }}</td>
+                    <td>{{ registration.association }}</td>
+                    <td>
+                        {% if registration.show_on_species_page %}
+                            Ja{% if registration.species_page_display_name %}: {{ registration.species_page_display_name }}{% endif %}
+                        {% else %}
+                            Nej
+                        {% endif %}
+                    </td>
+                    <td>
+                        <a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_review' registration.pk %}">Hantera publicering</a>
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p>Det finns inga godkända odlingsrapporter.</p>
+    {% endif %}
+</section>
 {% endblock %}
