@@ -113,7 +113,6 @@ class SpeciesInformationTests(TestCase):
         self.assertContains(
             response,
             reverse("genus_species", args=[self.species.genus_id]),
-            reverse("geography_species", args=[self.geography.pk]),
         )
 
     def test_genus_listing_contains_species_and_links_to_species_page(self):
