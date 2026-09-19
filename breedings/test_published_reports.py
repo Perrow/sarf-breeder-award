@@ -191,6 +191,8 @@ class PublishedBreedingReportTests(TestCase):
 
     def test_reviewer_can_unpublish_already_approved_report(self):
         self.registration.status = BreedingRegistration.Status.APPROVED
+        self.registration.awarded_breeding_class = Species.BreedingClass.SILVER
+        self.registration.awarded_points = 3
         self.registration.show_on_species_page = True
         self.registration.species_page_display_name = "Publicerad rapport"
         self.registration.save()
@@ -206,6 +208,15 @@ class PublishedBreedingReportTests(TestCase):
         self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertFalse(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.status,
+            BreedingRegistration.Status.APPROVED,
+        )
+        self.assertEqual(
+            self.registration.awarded_breeding_class,
+            Species.BreedingClass.SILVER,
+        )
+        self.assertEqual(self.registration.awarded_points, 3)
 
         species_response = self.client.get(
             reverse("species_information", args=[self.species.pk])
