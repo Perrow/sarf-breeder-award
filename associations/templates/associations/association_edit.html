@@ -3,16 +3,71 @@
 {% block title %}{{ association.name }} | Föreningsadministration{% endblock %}
 
 {% block content %}
-<p><a href="{% url 'association_management' %}">← Till föreningsadministrationen</a></p>
-<h1>{{ association.name }}</h1>
-<h2 class="h4">Redigera förening</h2>
+<div class="d-flex flex-wrap justify-content-between align-items-start gap-3 mb-4">
+    <div>
+        <p class="mb-2"><a class="text-decoration-none" href="{% url 'association_management' %}">← Till föreningsadministrationen</a></p>
+        <h1 class="mb-1">{{ association.name }}</h1>
+        <p class="text-body-secondary mb-0">Redigera föreningens publika uppgifter.</p>
+    </div>
+    <a class="btn btn-outline-secondary" href="{% url 'association_admins' association.pk %}">
+        Hantera föreningsadministratörer
+    </a>
+</div>
 
-<form method="post" novalidate>
-    {% csrf_token %}
-    {% include "includes/form_error_summary.html" with form=form %}
-    {{ form.as_p }}
-    <button class="btn btn-primary" type="submit">Spara</button>
-</form>
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card shadow-sm">
+            <div class="card-body p-4">
+                <h2 class="h4 mb-4">Föreningsuppgifter</h2>
 
-<p class="mt-4"><a href="{% url 'association_admins' association.pk %}">Hantera föreningsadministratörer</a></p>
+                <form method="post" novalidate>
+                    {% csrf_token %}
+                    {% include "includes/form_error_summary.html" with form=form %}
+
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.name.id_for_label }}">{{ form.name.label }}</label>
+                        {{ form.name }}
+                        {% for error in form.name.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.website_url.id_for_label }}">{{ form.website_url.label }}</label>
+                        {{ form.website_url }}
+                        {% for error in form.website_url.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
+                        {{ form.description }}
+                        <div class="form-text">Beskrivningen visas på föreningens publika sidor.</div>
+                        {% for error in form.description.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button class="btn btn-primary" type="submit">Spara ändringar</button>
+                        <a class="btn btn-outline-secondary" href="{% url 'association_management' %}">Avbryt</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card bg-body-tertiary border-0">
+            <div class="card-body">
+                <h2 class="h5">Administration</h2>
+                <p class="text-body-secondary">Här hanterar du vilka medlemmar som är administratörer för {{ association.name }}.</p>
+                <a class="btn btn-outline-primary w-100" href="{% url 'association_admins' association.pk %}">
+                    Hantera administratörer
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}
