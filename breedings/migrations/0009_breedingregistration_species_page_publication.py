@@ -15,13 +15,4 @@ class Migration(migrations.Migration):
                 verbose_name="visa på artsidan",
             ),
         ),
-        migrations.AddField(
-            model_name="breedingregistration",
-            name="species_page_display_name",
-            field=models.CharField(
-                blank=True,
-                max_length=200,
-                verbose_name="visningsnamn på artsidan",
-            ),
-        ),
     ]
