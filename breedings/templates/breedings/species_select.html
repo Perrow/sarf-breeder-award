@@ -43,12 +43,16 @@
             if (item.matched_via) {
                 const matchReason = document.createElement("div");
                 matchReason.className = "small text-body-secondary";
-                if (item.matched_via.type === "geography") {
-                    matchReason.textContent = "Träff via geografi: " + item.matched_via.value;
+                if (item.matched_via.type === "scientific_name") {
+                    matchReason.textContent = "Träff via vetenskapligt namn: " + item.matched_via.value;
+                } else if (item.matched_via.type === "common_name") {
+                    matchReason.textContent = "Träff via populärnamn: " + item.matched_via.value;
                 } else if (item.matched_via.type === "scientific_synonym") {
                     matchReason.textContent = "Träff via vetenskaplig synonym: " + item.matched_via.value;
-                } else {
+                } else if (item.matched_via.type === "common_name_synonym") {
                     matchReason.textContent = "Träff via populärnamnssynonym: " + item.matched_via.value;
+                } else {
+                    matchReason.textContent = "Träff via geografi: " + item.matched_via.value;
                 }
                 link.appendChild(matchReason);
             }
