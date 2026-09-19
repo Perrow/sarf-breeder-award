@@ -45,6 +45,7 @@ class Membership(models.Model):
     member_number = models.CharField(max_length=100, blank=True, verbose_name="medlemsnummer")
     phone = models.CharField(max_length=50, blank=True, verbose_name="telefon")
     association_data = models.TextField(blank=True, verbose_name="föreningsuppgifter")
+    is_association_admin = models.BooleanField(default=False, verbose_name="föreningsadministratör")
 
     class Meta:
         verbose_name = "medlemskap"
