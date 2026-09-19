@@ -52,11 +52,11 @@
                 <div>{{ species.common_name }}{% if species.english_name %} · {{ species.english_name }}{% endif %}</div>
                 {% if species.search_match %}
                     <div class="small text-body-secondary">
-                        {% if species.search_match.type == "scientific_name" %}Träff via vetenskapligt namn:
-                        {% elif species.search_match.type == "common_name" %}Träff via populärnamn:
-                        {% elif species.search_match.type == "scientific_synonym" %}Träff via vetenskaplig synonym:
-                        {% elif species.search_match.type == "common_name_synonym" %}Träff via populärnamnssynonym:
-                        {% elif species.search_match.type == "geography" %}Träff via geografi:
+                        {% if species.search_match.type == "scientific_name" %}Vetenskapligt namn:
+                        {% elif species.search_match.type == "common_name" %}Populärnamn:
+                        {% elif species.search_match.type == "scientific_synonym" %}Vetenskaplig synonym:
+                        {% elif species.search_match.type == "common_name_synonym" %}Populärnamnssynonym:
+                        {% elif species.search_match.type == "geography" %}Geografi:
                         {% endif %} {{ species.search_match.value }}
                     </div>
                 {% endif %}
