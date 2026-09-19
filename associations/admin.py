@@ -1,8 +1,9 @@
 from django import forms
 from django.contrib import admin
+from django.shortcuts import redirect
 from django.db import models
 
-from .models import Association, Membership
+from .models import Association, AssociationAdministratorManagement, Membership
 
 from .permissions import is_association_admin, is_system_admin, managed_associations
 
@@ -163,3 +164,26 @@ class MembershipAdmin(admin.ModelAdmin):
         if db_field.name == "association":
             kwargs["queryset"] = _permission_associations(request.user)
         return super().formfield_for_foreignkey(db_field, request, **kwargs)
+
+
+@admin.register(AssociationAdministratorManagement)
+class AssociationAdministratorManagementAdmin(admin.ModelAdmin):
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def changelist_view(self, request, extra_context=None):
+        if not is_system_admin(request.user):
+            return super().changelist_view(request, extra_context)
+        return redirect("system_association_admins")
