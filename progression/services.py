@@ -205,6 +205,24 @@ def assign_manual_level(user, level, association=None, awarded_by=None):
 
 
 @transaction.atomic
+def assign_manual_level_to_users(users, level, association=None, awarded_by=None):
+    created = 0
+    existing = 0
+    for user in users:
+        _, was_created = assign_manual_level(
+            user,
+            level,
+            association=association,
+            awarded_by=awarded_by,
+        )
+        if was_created:
+            created += 1
+        else:
+            existing += 1
+    return {"created": created, "existing": existing}
+
+
+@transaction.atomic
 def select_selfmade_level(user, level):
     _validate_explicit_level(
         level,
