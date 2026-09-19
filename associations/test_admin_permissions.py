@@ -9,7 +9,7 @@ from .admin import (
     MEMBER_GROUP,
     SYSTEM_ADMIN_GROUP,
 )
-from .models import Association, Membership
+from .models import Association, AssociationAdministratorManagement, Membership
 
 
 class AssociationAdministrationTests(TestCase):
@@ -233,3 +233,28 @@ class AssociationAdministrationTests(TestCase):
 
         self.assertEqual(response.status_code, 302)
         self.assertFalse(Membership.objects.filter(pk=membership.pk).exists())
+
+
+    def test_system_admin_sees_association_admin_management_option(self):
+        self.client.force_login(self.system_admin)
+
+        response = self.client.get(reverse("admin:index"))
+        management_url = reverse(
+            "admin:associations_associationadministratormanagement_changelist"
+        )
+
+        self.assertContains(response, "Föreningsadministratörer")
+        self.assertContains(response, management_url)
+
+        redirect_response = self.client.get(management_url)
+        self.assertRedirects(redirect_response, reverse("system_association_admins"))
+
+    def test_association_admin_does_not_see_system_admin_management_option(self):
+        self.client.force_login(self.association_admin)
+
+        response = self.client.get(reverse("admin:index"))
+
+        self.assertNotContains(
+            response,
+            reverse("admin:associations_associationadministratormanagement_changelist"),
+        )
