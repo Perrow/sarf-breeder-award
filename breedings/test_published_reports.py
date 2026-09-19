@@ -18,6 +18,7 @@ class PublishedBreedingReportTests(TestCase):
             username="published-owner@example.com",
             email="published-owner@example.com",
             password="test-password",
+            public_username="Publicerad odlare",
         )
         self.reviewer = User.objects.create_user(
             username="published-reviewer@example.com",
@@ -59,7 +60,6 @@ class PublishedBreedingReportTests(TestCase):
                 "approve": "Godkänn",
                 "review_comment": "",
                 "show_on_species_page": "on",
-                "species_page_display_name": "Lek i mjukt vatten",
             },
         )
 
@@ -70,33 +70,14 @@ class PublishedBreedingReportTests(TestCase):
             BreedingRegistration.Status.APPROVED,
         )
         self.assertTrue(self.registration.show_on_species_page)
-        self.assertEqual(
-            self.registration.species_page_display_name,
-            "Lek i mjukt vatten",
+
+    def test_review_page_shows_owner_display_name_read_only(self):
+        response = self.client.get(
+            reverse("breeding_review", args=[self.registration.pk])
         )
 
-    def test_display_name_is_required_for_publication(self):
-        response = self.client.post(
-            reverse("breeding_review", args=[self.registration.pk]),
-            {
-                "approve": "Godkänn",
-                "review_comment": "",
-                "show_on_species_page": "on",
-                "species_page_display_name": "",
-            },
-        )
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            "Ange ett visningsnamn när rapporten ska visas på artsidan.",
-        )
-        self.registration.refresh_from_db()
-        self.assertEqual(
-            self.registration.status,
-            BreedingRegistration.Status.SUBMITTED,
-        )
-        self.assertFalse(self.registration.show_on_species_page)
+        self.assertContains(response, "Publicerad odlare")
+        self.assertNotContains(response, 'name="species_page_display_name"')
 
     def test_report_without_registered_species_cannot_be_published(self):
         self.registration.species = None
@@ -116,7 +97,6 @@ class PublishedBreedingReportTests(TestCase):
         form = ReviewDecisionForm(
             {
                 "show_on_species_page": "on",
-                "species_page_display_name": "Saknar art",
                 "review_comment": "",
             },
             registration=self.registration,
@@ -128,10 +108,9 @@ class PublishedBreedingReportTests(TestCase):
     def test_species_page_shows_only_published_reports_for_that_species(self):
         self.registration.status = BreedingRegistration.Status.APPROVED
         self.registration.show_on_species_page = True
-        self.registration.species_page_display_name = "Första rapporten"
         self.registration.save()
 
-        hidden = BreedingRegistration.objects.create(
+        BreedingRegistration.objects.create(
             owner=self.owner,
             association=self.association,
             species=self.species,
@@ -139,9 +118,8 @@ class PublishedBreedingReportTests(TestCase):
             description="Ska inte synas",
             status=BreedingRegistration.Status.APPROVED,
             show_on_species_page=False,
-            species_page_display_name="Dold rapport",
         )
-        other_species_report = BreedingRegistration.objects.create(
+        BreedingRegistration.objects.create(
             owner=self.owner,
             association=self.association,
             species=self.other_species,
@@ -149,26 +127,21 @@ class PublishedBreedingReportTests(TestCase):
             description="Fel art",
             status=BreedingRegistration.Status.APPROVED,
             show_on_species_page=True,
-            species_page_display_name="Andra artens rapport",
         )
 
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
         )
 
-        self.assertContains(response, "Odlingsrapport: Första rapporten")
+        self.assertContains(response, "Odlingsrapport: Publicerad odlare")
         self.assertContains(response, "<strong>Ägg</strong>", html=False)
         self.assertContains(response, "<em>yngel</em>", html=False)
-        self.assertNotContains(response, hidden.species_page_display_name)
-        self.assertNotContains(
-            response,
-            other_species_report.species_page_display_name,
-        )
+        self.assertNotContains(response, "Ska inte synas")
+        self.assertNotContains(response, "Fel art")
 
     def test_multiple_published_reports_are_shown(self):
         self.registration.status = BreedingRegistration.Status.APPROVED
         self.registration.show_on_species_page = True
-        self.registration.species_page_display_name = "Rapport ett"
         self.registration.save()
 
         BreedingRegistration.objects.create(
@@ -179,29 +152,30 @@ class PublishedBreedingReportTests(TestCase):
             description="Andra rapporten",
             status=BreedingRegistration.Status.APPROVED,
             show_on_species_page=True,
-            species_page_display_name="Rapport två",
         )
 
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
         )
 
-        self.assertContains(response, "Odlingsrapport: Rapport ett")
-        self.assertContains(response, "Odlingsrapport: Rapport två")
+        self.assertContains(
+            response,
+            "Odlingsrapport: Publicerad odlare",
+            count=2,
+        )
+        self.assertContains(response, "Andra rapporten")
 
     def test_reviewer_can_unpublish_already_approved_report(self):
         self.registration.status = BreedingRegistration.Status.APPROVED
         self.registration.awarded_breeding_class = Species.BreedingClass.SILVER
         self.registration.awarded_points = 3
         self.registration.show_on_species_page = True
-        self.registration.species_page_display_name = "Publicerad rapport"
         self.registration.save()
 
         response = self.client.post(
             reverse("breeding_review", args=[self.registration.pk]),
             {
                 "save_publication": "Spara",
-                "species_page_display_name": "Publicerad rapport",
             },
         )
 
@@ -221,7 +195,10 @@ class PublishedBreedingReportTests(TestCase):
         species_response = self.client.get(
             reverse("species_information", args=[self.species.pk])
         )
-        self.assertNotContains(species_response, "Publicerad rapport")
+        self.assertNotContains(
+            species_response,
+            "Odlingsrapport: Publicerad odlare",
+        )
 
     def test_approved_reports_are_available_for_publication_management(self):
         self.registration.status = BreedingRegistration.Status.APPROVED
@@ -241,7 +218,6 @@ class PublishedBreedingReportTests(TestCase):
         self.registration.awarded_breeding_class = Species.BreedingClass.SILVER
         self.registration.awarded_points = 3
         self.registration.show_on_species_page = True
-        self.registration.species_page_display_name = "Publicerad rapport"
         self.registration.save()
 
         self.client.force_login(self.owner)
