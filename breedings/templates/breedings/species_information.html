@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load breeding_markdown %}
 
 {% block title %}{{ species }} | Arter | Odlingskampanjen{% endblock %}
 
@@ -89,6 +90,22 @@
             <li><a href="{{ link.url }}" target="_blank" rel="noopener">{{ link.title|default:link.url }}</a>{% if link.source_name %} – {{ link.source_name }}{% endif %}</li>
         {% endfor %}
     </ul>
+</section>
+{% endif %}
+
+{% if published_reports %}
+<section class="mb-4">
+    <h2 class="h4">Odlingsrapporter</h2>
+    <div class="d-grid gap-3">
+        {% for report in published_reports %}
+        <article class="card">
+            <div class="card-body">
+                <h3 class="h5">Odlingsrapport: {{ report.owner.public_display_name }}</h3>
+                <div>{{ report.description|limited_markdown }}</div>
+            </div>
+        </article>
+        {% endfor %}
+    </div>
 </section>
 {% endif %}
 
