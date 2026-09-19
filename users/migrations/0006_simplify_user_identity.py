@@ -1,5 +1,6 @@
 from django.db import migrations, models
 
+import users.models
 from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
 
 
@@ -81,5 +82,11 @@ class Migration(migrations.Migration):
         migrations.RemoveField(
             model_name="user",
             name="last_name",
+        ),
+        migrations.AlterModelManagers(
+            name="user",
+            managers=[
+                ("objects", users.models.UserManager()),
+            ],
         ),
     ]
