@@ -20,13 +20,13 @@ class ReviewActionColumnTests(SimpleTestCase):
         html = str(self.model_admin.action_link(self._registration(BreedingRegistration.Status.SUBMITTED, True)))
         self.assertIn("Lös taxonomi", html)
         self.assertNotIn("Granska", html)
-        self.assertIn(reverse("admin:breedings_breedingregistration_resolve_taxonomy", args=[123]), html)
+        self.assertIn(reverse("breeding_review_taxonomy", args=[123]), html)
 
     def test_resolved_submitted_registration_shows_review_link(self):
         html = str(self.model_admin.action_link(self._registration(BreedingRegistration.Status.SUBMITTED, False)))
         self.assertIn("Granska", html)
         self.assertNotIn("Lös taxonomi", html)
-        self.assertIn(reverse("admin:breedings_breedingregistration_review", args=[123]), html)
+        self.assertIn(reverse("breeding_review", args=[123]), html)
 
     def test_processed_registration_has_no_action(self):
         self.assertEqual(
