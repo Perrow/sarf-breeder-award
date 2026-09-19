@@ -64,7 +64,7 @@ class BreedingReviewUiTests(TestCase):
 
     def review_url(self):
         return reverse(
-            "admin:breedings_breedingregistration_review",
+            "breeding_review",
             args=[self.registration.pk],
         )
 
