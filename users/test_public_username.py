@@ -54,7 +54,7 @@ class PublicUsernameTests(TestCase):
 
         response = self.client.get(reverse("account"))
 
-        self.assertContains(response, "Användarnamnet visas publikt")
+        self.assertContains(response, "Detta är namnet som visas publikt på webbplatsen")
         self.assertContains(response, "PublicName")
 
     def test_profile_can_update_public_username(self):
