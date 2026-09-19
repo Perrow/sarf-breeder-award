@@ -355,6 +355,10 @@ def _import_species_row(row, stats):
         stats["genera_reused"] += 1
         stats["species_reused"] += 1
 
+        if breeding_class is not None and species.breeding_class != breeding_class:
+            species.breeding_class = breeding_class
+            species.save(update_fields=["breeding_class"])
+
         if cl_number is not None and not species.cl_number:
             species.cl_number = cl_number
             species.save(update_fields=["cl_number"])
