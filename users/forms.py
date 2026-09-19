@@ -7,7 +7,11 @@ from associations.models import Association, Membership
 from .models import User
 
 
-PUBLIC_USERNAME_HELP = "Detta namn visas offentligt, bland annat i topplistor."
+PUBLIC_USERNAME_HELP = "Detta användarnamn visas publikt på webbplatsen."
+PRIVATE_NAME_HELP = (
+    "Ditt namn används för att föreningar och administratörer ska kunna veta vem du är. "
+    "Det visas inte publikt på webbplatsen."
+)
 
 
 def _association_field():
@@ -36,9 +40,13 @@ def _sync_memberships(user, associations):
 
 
 class RegistrationForm(UserCreationForm):
-    name = forms.CharField(label="Namn", max_length=300)
+    name = forms.CharField(
+        label="Namn",
+        max_length=300,
+        help_text=PRIVATE_NAME_HELP,
+    )
     public_username = forms.CharField(
-        label="Publikt användarnamn",
+        label="Användarnamn",
         max_length=50,
         help_text=PUBLIC_USERNAME_HELP,
     )
@@ -58,30 +66,24 @@ class RegistrationForm(UserCreationForm):
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
-        if (
-            User.objects.filter(username__iexact=email).exists()
-            or User.objects.filter(email__iexact=email).exists()
-        ):
+        if User.objects.filter(email__iexact=email).exists():
             raise forms.ValidationError("Det finns redan ett konto med den e-postadressen.")
         return email
 
     def clean_public_username(self):
         public_username = self.cleaned_data["public_username"].strip()
         if User.objects.filter(public_username__iexact=public_username).exists():
-            raise forms.ValidationError("Det publika användarnamnet används redan.")
+            raise forms.ValidationError("Användarnamnet används redan.")
         return public_username
+
+    def clean_name(self):
+        return self.cleaned_data["name"].strip()
 
     def save(self, commit=True):
         user = super().save(commit=False)
-        name = self.cleaned_data["name"].strip()
-        email = self.cleaned_data["email"]
-        first_name, separator, last_name = name.partition(" ")
-
-        user.username = email
-        user.email = email
+        user.email = self.cleaned_data["email"]
+        user.name = self.cleaned_data["name"]
         user.public_username = self.cleaned_data["public_username"]
-        user.first_name = first_name
-        user.last_name = last_name if separator else ""
 
         if commit:
             user.save()
@@ -115,18 +117,14 @@ class EmailAuthenticationForm(AuthenticationForm):
 
 
 class ProfileForm(forms.ModelForm):
-    first_name = forms.CharField(
-        label="Förnamn",
-        max_length=150,
+    name = forms.CharField(
+        label="Namn",
+        max_length=300,
         required=False,
-    )
-    last_name = forms.CharField(
-        label="Efternamn",
-        max_length=150,
-        required=False,
+        help_text=PRIVATE_NAME_HELP,
     )
     public_username = forms.CharField(
-        label="Publikt användarnamn",
+        label="Användarnamn",
         max_length=50,
         help_text=PUBLIC_USERNAME_HELP,
     )
@@ -135,8 +133,7 @@ class ProfileForm(forms.ModelForm):
     class Meta:
         model = User
         fields = (
-            "first_name",
-            "last_name",
+            "name",
             "public_username",
             "location",
             "avatar_url",
@@ -162,14 +159,11 @@ class ProfileForm(forms.ModelForm):
             .exclude(pk=self.instance.pk)
             .exists()
         ):
-            raise forms.ValidationError("Det publika användarnamnet används redan.")
+            raise forms.ValidationError("Användarnamnet används redan.")
         return public_username
 
-    def clean_first_name(self):
-        return self.cleaned_data["first_name"].strip()
-
-    def clean_last_name(self):
-        return self.cleaned_data["last_name"].strip()
+    def clean_name(self):
+        return self.cleaned_data["name"].strip()
 
     def clean_location(self):
         return self.cleaned_data["location"].strip()
