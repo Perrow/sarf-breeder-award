@@ -247,6 +247,19 @@ class SpeciesInformationTests(TestCase):
 
         self.assertEqual(response.status_code, 404)
 
+    def test_species_page_links_to_new_breeding_with_species_selected(self):
+        response = self.client.get(
+            reverse("species_information", args=[self.species.pk])
+        )
+
+        expected_url = f'{reverse("breeding_create")}?species={self.species.pk}'
+        self.assertContains(response, "Registrera odling")
+        self.assertContains(response, f'href="{expected_url}"')
+
+        create_response = self.client.get(expected_url)
+        self.assertEqual(create_response.status_code, 200)
+        self.assertEqual(create_response.context["selected_species"], self.species)
+
     def test_species_page_lists_only_approved_breedings_without_report_text(self):
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
