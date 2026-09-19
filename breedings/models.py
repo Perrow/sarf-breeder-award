@@ -39,11 +39,6 @@ class BreedingRegistration(models.Model):
         default=False,
         verbose_name="visa på artsidan",
     )
-    species_page_display_name = models.CharField(
-        max_length=200,
-        blank=True,
-        verbose_name="visningsnamn på artsidan",
-    )
 
     class Meta:
         ordering = ["-breeding_date", "-pk"]
