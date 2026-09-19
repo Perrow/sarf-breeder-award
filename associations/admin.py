@@ -4,25 +4,11 @@ from django.db import models
 
 from .models import Association, Membership
 
+from .permissions import is_system_admin
+
 SYSTEM_ADMIN_GROUP = "Systemadministratör"
 ASSOCIATION_ADMIN_GROUP = "Föreningsadministratör"
 MEMBER_GROUP = "Medlem"
-
-
-def is_system_admin(user):
-    return user.is_superuser or user.groups.filter(name=SYSTEM_ADMIN_GROUP).exists()
-
-
-def is_association_admin(user):
-    return user.groups.filter(name=ASSOCIATION_ADMIN_GROUP).exists()
-
-
-def managed_associations(user):
-    if is_system_admin(user):
-        return Association.objects.all()
-    if is_association_admin(user):
-        return Association.objects.filter(memberships__user=user).distinct()
-    return Association.objects.none()
 
 
 def _has_any_permission(user, model_name):
@@ -33,8 +19,8 @@ def _has_any_permission(user, model_name):
 
 
 def _permission_associations(user):
-    if is_system_admin(user) or is_association_admin(user):
-        return managed_associations(user)
+    if is_system_admin(user):
+        return Association.objects.all()
     if _has_any_permission(user, "association") or _has_any_permission(user, "membership"):
         return Association.objects.all()
     return Association.objects.none()
@@ -90,22 +76,16 @@ class AssociationAdmin(admin.ModelAdmin):
         return super().get_queryset(request).filter(pk__in=_permission_associations(request.user))
 
     def has_module_permission(self, request):
-        return (
-            is_system_admin(request.user)
-            or is_association_admin(request.user)
-            or _has_any_permission(request.user, "association")
-        )
+        return is_system_admin(request.user) or _has_any_permission(request.user, "association")
 
     def has_view_permission(self, request, obj=None):
-        if is_system_admin(request.user) or is_association_admin(request.user):
-            if obj is None:
-                return True
-            return managed_associations(request.user).filter(pk=obj.pk).exists()
+        if is_system_admin(request.user):
+            return True
         return request.user.has_perm("associations.view_association")
 
     def has_change_permission(self, request, obj=None):
-        if is_system_admin(request.user) or is_association_admin(request.user):
-            return self.has_view_permission(request, obj)
+        if is_system_admin(request.user):
+            return True
         return request.user.has_perm("associations.change_association")
 
     def has_add_permission(self, request):
@@ -141,18 +121,12 @@ class MembershipAdmin(admin.ModelAdmin):
         )
 
     def has_module_permission(self, request):
-        return (
-            is_system_admin(request.user)
-            or is_association_admin(request.user)
-            or _has_any_permission(request.user, "membership")
-        )
+        return is_system_admin(request.user) or _has_any_permission(request.user, "membership")
 
     def _can_manage(self, request, obj=None):
-        if not (is_system_admin(request.user) or is_association_admin(request.user)):
+        if not is_system_admin(request.user):
             return False
-        if obj is None:
-            return managed_associations(request.user).exists()
-        return managed_associations(request.user).filter(pk=obj.association_id).exists()
+        return True
 
     def has_view_permission(self, request, obj=None):
         return self._can_manage(request, obj) or request.user.has_perm("associations.view_membership")
