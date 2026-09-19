@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
 from django.shortcuts import get_object_or_404, redirect, render
 
-from progression.models import Achievement, UserAchievement
-from progression.services import assign_manual_level
+from progression.models import Achievement, AchievementBackground, UserAchievement
+from progression.services import assign_manual_level_to_users
 
 from .forms import (
     AssociationManagementForm,
@@ -100,17 +100,33 @@ def association_awards(request, pk):
         association=association,
     )
     if request.method == "POST" and form.is_valid():
-        _, created = assign_manual_level(
-            form.cleaned_data["user"],
+        result = assign_manual_level_to_users(
+            form.cleaned_data["users"],
             form.cleaned_data["level"],
             association=association,
             awarded_by=request.user,
         )
-        if created:
-            messages.success(request, "Utmärkelsen har tilldelats.")
-        else:
-            messages.info(request, "Medlemmen hade redan den valda nivån.")
+        if result["created"]:
+            messages.success(
+                request,
+                f"Utmärkelsen tilldelades {result['created']} medlem(mar).",
+            )
+        if result["existing"]:
+            messages.info(
+                request,
+                f"{result['existing']} medlem(mar) hade redan den valda nivån.",
+            )
         return redirect("association_awards", pk=association.pk)
+
+    achievements = (
+        Achievement.objects.filter(
+            achievement_type=Achievement.Type.MANUAL,
+            active=True,
+        )
+        .prefetch_related("levels")
+        .order_by("name")
+    )
+    award_background = AchievementBackground.lifetime()
 
     awards = (
         UserAchievement.objects.filter(
@@ -127,6 +143,8 @@ def association_awards(request, pk):
         {
             "association": association,
             "form": form,
+            "achievements": achievements,
+            "award_background": award_background,
             "awards": awards,
         },
     )
