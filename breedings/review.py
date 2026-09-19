@@ -58,6 +58,47 @@ class ReviewDecisionForm(forms.Form):
             }
         ),
     )
+    show_on_species_page = forms.BooleanField(
+        label="Visa odlingsrapporten på artsidan",
+        required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
+    )
+    species_page_display_name = forms.CharField(
+        label="Visningsnamn",
+        required=False,
+        max_length=200,
+        widget=forms.TextInput(attrs={"class": "form-control"}),
+    )
+
+    def __init__(self, *args, registration=None, publication_only=False, **kwargs):
+        self.registration = registration
+        self.publication_only = publication_only
+        super().__init__(*args, **kwargs)
+        if registration is not None and not self.is_bound:
+            self.initial.update(
+                {
+                    "review_comment": registration.review_comment,
+                    "show_on_species_page": registration.show_on_species_page,
+                    "species_page_display_name": registration.species_page_display_name,
+                }
+            )
+        if publication_only:
+            self.fields.pop("review_comment")
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if cleaned_data.get("show_on_species_page"):
+            if self.registration is None or self.registration.species_id is None:
+                self.add_error(
+                    "show_on_species_page",
+                    "Rapporten måste vara kopplad till en registrerad art för att kunna visas på artsidan.",
+                )
+            if not (cleaned_data.get("species_page_display_name") or "").strip():
+                self.add_error(
+                    "species_page_display_name",
+                    "Ange ett visningsnamn när rapporten ska visas på artsidan.",
+                )
+        return cleaned_data
 
 
 class TaxonomyResolutionForm(forms.Form):
@@ -78,19 +119,35 @@ def _require_review_access(user, registration=None):
         raise PermissionDenied
 
 
+def _save_publication(registration, form):
+    registration.show_on_species_page = form.cleaned_data["show_on_species_page"]
+    registration.species_page_display_name = (
+        form.cleaned_data["species_page_display_name"].strip()
+    )
+    registration.save(
+        update_fields=("show_on_species_page", "species_page_display_name")
+    )
+
+
 @login_required
 def review_list(request):
     _require_review_access(request.user)
-    registrations = (
-        reviewable_registrations(request.user)
-        .filter(status=BreedingRegistration.Status.SUBMITTED)
-        .select_related("owner", "association", "species__genus")
-        .order_by("breeding_date", "pk")
+    available = reviewable_registrations(request.user).select_related(
+        "owner", "association", "species__genus"
     )
+    registrations = available.filter(
+        status=BreedingRegistration.Status.SUBMITTED
+    ).order_by("breeding_date", "pk")
+    approved_registrations = available.filter(
+        status=BreedingRegistration.Status.APPROVED
+    ).order_by("-breeding_date", "-pk")
     return render(
         request,
         "breedings/review_list.html",
-        {"registrations": registrations},
+        {
+            "registrations": registrations,
+            "approved_registrations": approved_registrations,
+        },
     )
 
 
@@ -104,20 +161,40 @@ def review_registration(request, pk):
     )
     _require_review_access(request.user, registration)
 
-    if registration.status != BreedingRegistration.Status.SUBMITTED:
-        messages.error(request, "Endast inskickade odlingsregistreringar kan granskas.")
+    if registration.status not in {
+        BreedingRegistration.Status.SUBMITTED,
+        BreedingRegistration.Status.APPROVED,
+    }:
+        messages.error(
+            request,
+            "Endast inskickade eller godkända odlingsregistreringar kan hanteras här.",
+        )
         return redirect("breeding_review_list")
 
-    if registration.taxonomy_needs_resolution or registration.species is None:
+    if (
+        registration.status == BreedingRegistration.Status.SUBMITTED
+        and (registration.taxonomy_needs_resolution or registration.species is None)
+    ):
         messages.error(
             request,
             "Taxonomin måste lösas innan odlingsregistreringen kan behandlas.",
         )
         return redirect("breeding_review_taxonomy", pk=registration.pk)
 
+    publication_only = registration.status == BreedingRegistration.Status.APPROVED
+
     if request.method == "POST":
-        form = ReviewDecisionForm(request.POST)
-        if "approve" in request.POST:
+        form = ReviewDecisionForm(
+            request.POST,
+            registration=registration,
+            publication_only=publication_only,
+        )
+
+        if publication_only:
+            action = "publication" if "save_publication" in request.POST else None
+            if action is None:
+                form.add_error(None, "Spara publiceringsinställningarna med knappen Spara.")
+        elif "approve" in request.POST:
             action = "approve"
         elif "reject" in request.POST:
             action = "reject"
@@ -127,7 +204,22 @@ def review_registration(request, pk):
             action = None
             form.add_error(None, "Välj Godkänn, Avslå eller Spara utan beslut.")
 
+        if (
+            not publication_only
+            and action != "approve"
+            and form.data.get("show_on_species_page")
+        ):
+            form.add_error(
+                "show_on_species_page",
+                "Rapporten kan publiceras på artsidan när den godkänns.",
+            )
+
         if form.is_valid():
+            if publication_only:
+                _save_publication(registration, form)
+                messages.success(request, "Publiceringsinställningarna har sparats.")
+                return redirect("breeding_review_list")
+
             registration.reviewer = request.user
             registration.review_comment = form.cleaned_data["review_comment"]
 
@@ -137,6 +229,12 @@ def review_registration(request, pk):
                 registration.approved_at = timezone.now()
                 registration.awarded_breeding_class = breeding_class
                 registration.awarded_points = BREEDING_CLASS_POINTS[breeding_class]
+                registration.show_on_species_page = form.cleaned_data[
+                    "show_on_species_page"
+                ]
+                registration.species_page_display_name = (
+                    form.cleaned_data["species_page_display_name"].strip()
+                )
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -145,6 +243,8 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
+                        "show_on_species_page",
+                        "species_page_display_name",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har godkänts.")
@@ -153,6 +253,7 @@ def review_registration(request, pk):
                 registration.approved_at = None
                 registration.awarded_breeding_class = ""
                 registration.awarded_points = None
+                registration.show_on_species_page = False
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -161,6 +262,7 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
+                        "show_on_species_page",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har avslagits.")
@@ -173,7 +275,8 @@ def review_registration(request, pk):
             return redirect("breeding_review_list")
     else:
         form = ReviewDecisionForm(
-            initial={"review_comment": registration.review_comment}
+            registration=registration,
+            publication_only=publication_only,
         )
 
     return render(
@@ -182,6 +285,7 @@ def review_registration(request, pk):
         {
             "registration": registration,
             "form": form,
+            "publication_only": publication_only,
         },
     )
 
