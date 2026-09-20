@@ -135,11 +135,9 @@ class ProfileForm(forms.ModelForm):
         fields = (
             "name",
             "public_username",
-            "location",
             "avatar_url",
         )
         labels = {
-            "location": "Ort",
             "avatar_url": "Profilbild (URL)",
         }
 
@@ -164,9 +162,6 @@ class ProfileForm(forms.ModelForm):
 
     def clean_name(self):
         return self.cleaned_data["name"].strip()
-
-    def clean_location(self):
-        return self.cleaned_data["location"].strip()
 
     def save(self, commit=True):
         user = super().save(commit=commit)
