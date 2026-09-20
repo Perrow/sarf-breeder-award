@@ -83,6 +83,10 @@ class Migration(migrations.Migration):
             model_name="user",
             name="last_name",
         ),
+        migrations.RemoveField(
+            model_name="user",
+            name="location",
+        ),
         migrations.AlterModelManagers(
             name="user",
             managers=[
