@@ -15,14 +15,12 @@ class UserProfileTests(TestCase):
         self.client.force_login(self.user)
 
     def test_account_page_is_read_only_and_links_to_edit(self):
-        self.user.location = "Uppsala"
         self.user.avatar_url = "https://example.com/avatar.jpg"
         self.user.save()
 
         response = self.client.get(reverse("account"))
 
         self.assertContains(response, "ProfileUser")
-        self.assertContains(response, "Uppsala")
         self.assertContains(response, "https://example.com/avatar.jpg")
         self.assertContains(response, reverse("account_edit"))
         self.assertNotContains(response, "Visningsnamn")
@@ -37,7 +35,6 @@ class UserProfileTests(TestCase):
             {
                 "name": "Test Person",
                 "public_username": "PellePublic",
-                "location": "Uppsala",
                 "avatar_url": "https://example.com/pelle.jpg",
             },
         )
@@ -45,12 +42,10 @@ class UserProfileTests(TestCase):
         self.assertRedirects(response, reverse("account"))
         self.user.refresh_from_db()
         self.assertEqual(self.user.public_username, "PellePublic")
-        self.assertEqual(self.user.location, "Uppsala")
         self.assertEqual(self.user.avatar_url, "https://example.com/original.jpg")
 
         account_response = self.client.get(reverse("account"))
         self.assertContains(account_response, "PellePublic")
-        self.assertContains(account_response, "Uppsala")
         self.assertNotContains(account_response, "Visningsnamn")
 
     def test_public_display_name_never_falls_back_to_private_name(self):
