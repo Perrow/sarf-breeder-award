@@ -67,7 +67,6 @@ class User(AbstractUser):
         db_collation=CASE_INSENSITIVE_COLLATION,
         verbose_name="användarnamn",
     )
-    location = models.CharField(max_length=150, blank=True, verbose_name="ort")
     avatar_url = models.URLField(blank=True, verbose_name="profilbild")
 
     USERNAME_FIELD = "email"
