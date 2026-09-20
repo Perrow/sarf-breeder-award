@@ -30,7 +30,7 @@ class AppUserAdmin(UserAdmin):
 
     fieldsets = (
         (None, {"fields": ("email", "password")}),
-        ("Personuppgifter", {"fields": ("name", "public_username", "location", "avatar_url")}),
+        ("Personuppgifter", {"fields": ("name", "public_username", "avatar_url")}),
         (
             "Behörigheter",
             {
