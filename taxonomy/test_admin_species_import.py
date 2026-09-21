@@ -13,7 +13,6 @@ class SpeciesAdminImportTests(TestCase):
         self.url = reverse("admin:taxonomy_species_import")
         self.help_url = reverse("admin:taxonomy_species_import_help")
         self.admin_user = get_user_model().objects.create_superuser(
-            username="import-admin@example.com",
             email="import-admin@example.com",
             password="test-password",
         )
@@ -106,7 +105,6 @@ class SpeciesAdminImportTests(TestCase):
 
     def test_staff_without_species_change_permission_is_forbidden(self):
         staff_user = get_user_model().objects.create_user(
-            username="staff@example.com",
             email="staff@example.com",
             password="test-password",
             is_staff=True,
@@ -119,7 +117,6 @@ class SpeciesAdminImportTests(TestCase):
 
     def test_staff_without_species_change_permission_cannot_view_import_documentation(self):
         staff_user = get_user_model().objects.create_user(
-            username="help-staff@example.com",
             email="help-staff@example.com",
             password="test-password",
             is_staff=True,

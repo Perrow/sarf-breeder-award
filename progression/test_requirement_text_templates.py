@@ -42,12 +42,10 @@ class RequirementTextTemplateAdminTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.superuser = User.objects.create_superuser(
-            username="template-admin@example.com",
             email="template-admin@example.com",
             password="test-password",
         )
         self.staff_user = User.objects.create_user(
-            username="template-staff@example.com",
             email="template-staff@example.com",
             password="test-password",
             is_staff=True,

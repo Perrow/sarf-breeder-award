@@ -19,7 +19,6 @@ from progression.services import (
 class UnifiedAchievementTypeTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="unified-awards",
             email="unified-awards@example.com",
             password="Test-password-123",
         )

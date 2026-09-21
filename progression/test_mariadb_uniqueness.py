@@ -8,7 +8,7 @@ from .models import Achievement, AchievementLevel, UserAchievement
 class MariaDbCompatibleAchievementUniquenessTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="achievement-constraints@example.com",
+            email="achievement-constraints@example.com",
             password="test-password",
         )
         achievement = Achievement.objects.create(name="Databastest")
