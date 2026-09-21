@@ -25,7 +25,6 @@ class AssociationModelTests(TestCase):
 class MembershipModelTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="test-password",
         )
