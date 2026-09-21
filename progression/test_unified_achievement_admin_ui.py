@@ -160,9 +160,9 @@ class UnifiedAchievementAdminUiTests(TestCase):
             [AchievementRequirement.Kind.SELF_SELECTED],
         )
 
-    def test_selfmade_level_without_requirement_is_visible_and_can_be_selected(self):
+    def test_selfmade_level_without_requirement_is_visible_but_cannot_be_selected(self):
         achievement = Achievement.objects.create(
-            name="Egenvald äldre nivå",
+            name="Egenvald nivå utan krav",
             achievement_type=Achievement.Type.SELFMADE,
         )
         level = AchievementLevel.objects.create(
@@ -173,16 +173,13 @@ class UnifiedAchievementAdminUiTests(TestCase):
         self.client.force_login(self.user)
 
         response = self.client.get(reverse("selfmade_badges"))
-        self.assertContains(response, "Egenvald äldre nivå")
+        self.assertContains(response, "Egenvald nivå utan krav")
         self.assertContains(response, "Silver")
 
         response = self.client.post(reverse("award_selfmade_badge", args=[level.pk]))
         self.assertRedirects(response, reverse("selfmade_badges"))
-        self.assertTrue(UserAchievement.objects.filter(user=self.user, level=level).exists())
-        self.assertEqual(
-            list(level.requirements.values_list("kind", flat=True)),
-            [AchievementRequirement.Kind.SELF_SELECTED],
-        )
+        self.assertFalse(UserAchievement.objects.filter(user=self.user, level=level).exists())
+        self.assertFalse(level.requirements.exists())
 
     def test_manual_assignment_page_assigns_selected_level(self):
         achievement = Achievement.objects.create(
