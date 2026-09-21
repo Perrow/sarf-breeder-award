@@ -6,14 +6,12 @@ from django.urls import reverse
 class UserProfileValidationTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="profile-validation@example.com",
             email="profile-validation@example.com",
             password="test-password-123",
             public_username="ProfileValidation",
             avatar_url="https://example.com/avatar.png",
         )
         self.other_user = get_user_model().objects.create_user(
-            username="other@example.com",
             email="other@example.com",
             password="test-password-123",
             public_username="OtherUser",

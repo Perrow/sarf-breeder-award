@@ -12,7 +12,7 @@ class NavigationTests(TestCase):
 
     def _create_authenticated_user(self, username="navigation@example.com"):
         user = get_user_model().objects.create_user(
-            username=username,
+            email=username,
             password="test-password",
         )
         self.client.force_login(user)
