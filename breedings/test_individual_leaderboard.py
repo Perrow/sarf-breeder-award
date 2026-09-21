@@ -28,7 +28,6 @@ class IndividualLeaderboardTests(TestCase):
             breeding_class=Species.BreedingClass.SILVER,
         )
         self.user_a = get_user_model().objects.create_user(
-            username="private-a@example.com",
             email="private-a@example.com",
             password="test-password-123",
             first_name="Privat",
@@ -36,7 +35,6 @@ class IndividualLeaderboardTests(TestCase):
             public_username="AkvaristA",
         )
         self.user_b = get_user_model().objects.create_user(
-            username="private-b@example.com",
             email="private-b@example.com",
             password="test-password-123",
             first_name="Privat",

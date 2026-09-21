@@ -12,7 +12,6 @@ from .models import BreedingRegistration
 class ConditionalDescriptionTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="description@example.com",
             email="description@example.com",
             password="test-password",
         )

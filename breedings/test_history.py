@@ -16,7 +16,6 @@ class BreedingHistoryTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="history@example.com",
             email="history@example.com",
             password="test-password",
         )

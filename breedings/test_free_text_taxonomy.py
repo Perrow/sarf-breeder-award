@@ -11,7 +11,7 @@ from .models import BreedingRegistration
 class FreeTextTaxonomyTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="member@example.com", email="member@example.com", password="test-password-123")
+        self.user = User.objects.create_user( email="member@example.com", password="test-password-123")
         self.association = Association.objects.create(name="Testförening")
         Membership.objects.create(user=self.user, association=self.association)
         genus = Genus.objects.create(scientific_name="Corydoras")
