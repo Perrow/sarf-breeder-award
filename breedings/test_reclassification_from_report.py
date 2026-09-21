@@ -13,7 +13,7 @@ from .models import BreedingRegistration
 class ReclassificationFromReportTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="grower@example.com",
+            email="grower@example.com",
             password="x",
         )
         self.association = Association.objects.create(name="Testförening")

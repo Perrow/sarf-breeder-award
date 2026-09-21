@@ -14,8 +14,8 @@ from .models import BreedingRegistration
 class BreedingReviewClassTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="class-owner@example.com", email="class-owner@example.com", password="test-password")
-        self.reviewer = User.objects.create_user(username="class-reviewer@example.com", email="class-reviewer@example.com", password="test-password", is_staff=True)
+        self.owner = User.objects.create_user( email="class-owner@example.com", password="test-password")
+        self.reviewer = User.objects.create_user( email="class-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Klassförening")
         Membership.objects.create(
