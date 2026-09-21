@@ -26,7 +26,6 @@ def image_file(name="level.png", size=(200, 250), transparent=True, image_format
 class AchievementLevelImageTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="level-image@example.com",
             email="level-image@example.com",
             password="test-password",
         )
@@ -101,7 +100,6 @@ class AchievementLevelImageTests(TestCase):
 
     def test_level_admin_contains_image_field(self):
         admin_user = get_user_model().objects.create_superuser(
-            username="level-admin@example.com",
             email="level-admin@example.com",
             password="test-password",
         )

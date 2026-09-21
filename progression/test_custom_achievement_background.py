@@ -26,7 +26,6 @@ def image_file(name, size=(200, 250), transparent=False):
 class CustomAchievementBackgroundTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="custom-background@example.com",
             email="custom-background@example.com",
             password="test-password",
         )

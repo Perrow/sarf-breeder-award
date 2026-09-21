@@ -11,7 +11,6 @@ from .models import Achievement, AchievementLevel, AchievementRequirement
 class BulkAchievementRequirementsAdminTests(TestCase):
     def setUp(self):
         self.admin_user = get_user_model().objects.create_superuser(
-            username="bulk-admin@example.com",
             email="bulk-admin@example.com",
             password="test-password",
         )
@@ -206,7 +205,7 @@ class BulkAchievementRequirementsAdminTests(TestCase):
 
     def test_staff_user_without_requirement_permissions_gets_forbidden(self):
         staff_user = get_user_model().objects.create_user(
-            username="limited-admin@example.com",
+            email="limited-admin@example.com",
             password="test-password",
             is_staff=True,
         )

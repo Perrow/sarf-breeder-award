@@ -22,7 +22,6 @@ def image_file(name, mode="RGBA", transparent=True):
 class AchievementDisplayTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="awards@example.com",
             email="awards@example.com",
             password="test-password",
         )

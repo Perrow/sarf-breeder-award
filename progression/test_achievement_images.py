@@ -112,7 +112,6 @@ class AchievementImageTests(TestCase):
 
     def test_admin_preview_uses_tint_overlay(self):
         admin_user = get_user_model().objects.create_superuser(
-            username="image-admin@example.com",
             email="image-admin@example.com",
             password="test-password",
         )
