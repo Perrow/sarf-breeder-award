@@ -12,7 +12,6 @@ class BronzeAutoApprovalTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="bronze-member@example.com",
             email="bronze-member@example.com",
             password="test-password-123",
         )

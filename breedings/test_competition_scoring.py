@@ -13,7 +13,7 @@ from .scoring import competition_points
 class CompetitionScoringTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="competition@example.com", email="competition@example.com", password="test-password")
+        self.user = User.objects.create_user( email="competition@example.com", password="test-password")
         self.association = Association.objects.create(name="Tävlingsförening")
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(genus=genus, scientific_name="panda", common_name="Panda", breeding_class=Species.BreedingClass.SILVER)
