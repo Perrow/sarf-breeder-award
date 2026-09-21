@@ -30,15 +30,13 @@ class IndividualLeaderboardTests(TestCase):
         self.user_a = get_user_model().objects.create_user(
             email="private-a@example.com",
             password="test-password-123",
-            first_name="Privat",
-            last_name="Person A",
+            name="Privat Person A",
             public_username="AkvaristA",
         )
         self.user_b = get_user_model().objects.create_user(
             email="private-b@example.com",
             password="test-password-123",
-            first_name="Privat",
-            last_name="Person B",
+            name="Privat Person B",
             public_username="AkvaristB",
         )
 
