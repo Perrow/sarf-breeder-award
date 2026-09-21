@@ -212,10 +212,10 @@ class AssociationSpecificAdministrationTests(TestCase):
         self.assertContains(response, reverse("association_management"))
         self.assertNotContains(response, reverse("system_association_admins"))
 
-    def test_account_links_to_system_assignment_page_for_system_admin(self):
+    def test_account_navigation_links_to_association_management_for_system_admin(self):
         self.client.force_login(self.system_admin)
 
         response = self.client.get(reverse("account"))
 
         self.assertContains(response, reverse("association_management"))
-        self.assertContains(response, reverse("system_association_admins"))
+        self.assertNotContains(response, reverse("system_association_admins"))

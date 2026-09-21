@@ -9,21 +9,18 @@ class UserProfileTests(TestCase):
             username="profile@example.com",
             email="profile@example.com",
             password="test-password-123",
-            first_name="Test",
-            last_name="Person",
+            name="Test Person",
             public_username="ProfileUser",
         )
         self.client.force_login(self.user)
 
     def test_account_page_is_read_only_and_links_to_edit(self):
-        self.user.location = "Uppsala"
         self.user.avatar_url = "https://example.com/avatar.jpg"
         self.user.save()
 
         response = self.client.get(reverse("account"))
 
         self.assertContains(response, "ProfileUser")
-        self.assertContains(response, "Uppsala")
         self.assertContains(response, "https://example.com/avatar.jpg")
         self.assertContains(response, reverse("account_edit"))
         self.assertNotContains(response, "Visningsnamn")
@@ -36,10 +33,8 @@ class UserProfileTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "first_name": "Test",
-                "last_name": "Person",
+                "name": "Test Person",
                 "public_username": "PellePublic",
-                "location": "Uppsala",
                 "avatar_url": "https://example.com/pelle.jpg",
             },
         )
@@ -47,19 +42,16 @@ class UserProfileTests(TestCase):
         self.assertRedirects(response, reverse("account"))
         self.user.refresh_from_db()
         self.assertEqual(self.user.public_username, "PellePublic")
-        self.assertEqual(self.user.location, "Uppsala")
         self.assertEqual(self.user.avatar_url, "https://example.com/original.jpg")
 
         account_response = self.client.get(reverse("account"))
         self.assertContains(account_response, "PellePublic")
-        self.assertContains(account_response, "Uppsala")
         self.assertNotContains(account_response, "Visningsnamn")
 
     def test_public_display_name_never_falls_back_to_private_name(self):
         self.user.public_username = None
-        self.user.first_name = "Hemligt"
-        self.user.last_name = "Namn"
-        self.user.save(update_fields=("public_username", "first_name", "last_name"))
+        self.user.name = "Hemligt Namn"
+        self.user.save(update_fields=("public_username", "name"))
 
         self.assertEqual(self.user.public_display_name(), "Användare")
         self.assertEqual(self.user.public_display_name(profile_information_is_public=True), "Användare")

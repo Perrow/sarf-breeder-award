@@ -81,7 +81,7 @@ def association_admins(request, pk):
 
     memberships = (
         association.memberships.select_related("user")
-        .order_by("user__last_name", "user__first_name", "user__email")
+        .order_by("user__name", "user__email")
     )
     return render(
         request,
@@ -169,7 +169,7 @@ def system_association_admins(request):
     administrators = (
         Membership.objects.filter(is_association_admin=True)
         .select_related("user", "association")
-        .order_by("association__name", "user__last_name", "user__first_name", "user__email")
+        .order_by("association__name", "user__name", "user__email")
     )
     return render(
         request,

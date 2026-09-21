@@ -18,7 +18,7 @@ class UserAccountTests(TestCase):
         )
 
         self.assertRedirects(response, reverse("account"))
-        user = User.objects.get(username="test@example.com")
+        user = User.objects.get(email="test@example.com")
         self.assertEqual(user.email, "test@example.com")
         self.assertEqual(user.public_username, "TestUser")
         self.assertEqual(user.get_full_name(), "Test User")
@@ -26,7 +26,6 @@ class UserAccountTests(TestCase):
 
     def test_registered_user_can_log_in_with_email(self):
         User.objects.create_user(
-            username="test@example.com",
             email="test@example.com",
             password="correct-password",
         )
@@ -41,7 +40,6 @@ class UserAccountTests(TestCase):
 
     def test_invalid_credentials_are_denied(self):
         User.objects.create_user(
-            username="test@example.com",
             email="test@example.com",
             password="correct-password",
         )
@@ -65,7 +63,6 @@ class UserAccountTests(TestCase):
 
     def test_logged_in_user_can_log_out(self):
         user = User.objects.create_user(
-            username="test@example.com",
             email="test@example.com",
             password="correct-password",
         )

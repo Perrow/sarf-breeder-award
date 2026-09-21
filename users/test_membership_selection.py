@@ -24,7 +24,7 @@ class UserMembershipSelectionTests(TestCase):
         )
 
         self.assertRedirects(response, reverse("account"))
-        user = User.objects.get(username="member@example.com")
+        user = User.objects.get(email="member@example.com")
         self.assertEqual(
             set(user.memberships.values_list("association_id", flat=True)),
             {self.association_a.pk, self.association_b.pk},
@@ -103,6 +103,7 @@ class UserMembershipSelectionTests(TestCase):
 
     def _profile_data(self, associations):
         return {
+            "name": "",
             "public_username": "MemberUser",
             "location": "Uppsala",
             "avatar_url": "",

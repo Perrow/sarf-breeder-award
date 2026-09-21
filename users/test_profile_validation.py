@@ -24,8 +24,8 @@ class UserProfileValidationTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
+                "name": "",
                 "public_username": "   ",
-                "location": "Uppsala",
                 "avatar_url": "",
             },
         )
@@ -44,8 +44,8 @@ class UserProfileValidationTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
+                "name": "",
                 "public_username": "ProfileValidation",
-                "location": "Uppsala",
                 "avatar_url": "https://example.com/changed.png",
             },
         )
@@ -58,8 +58,8 @@ class UserProfileValidationTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
+                "name": "",
                 "public_username": "ProfileValidationChanged",
-                "location": "Uppsala",
                 "avatar_url": "",
                 "user_id": self.other_user.pk,
             },

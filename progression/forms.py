@@ -153,7 +153,7 @@ class ManualAssignmentAdminForm(forms.Form):
             get_user_model()
             .objects.filter(memberships__association__in=associations)
             .distinct()
-            .order_by("username", "pk")
+            .order_by("name", "email", "pk")
         )
         self.fields["level"].queryset = achievement.levels.order_by("order", "name")
 
