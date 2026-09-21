@@ -113,6 +113,22 @@ class UnifiedAchievementTypeTests(TestCase):
         self.assertEqual(grants.count(), 1)
         self.assertEqual(grants.get().level, second)
 
+    def test_selfmade_level_without_explicit_requirement_is_rejected(self):
+        achievement = Achievement.objects.create(
+            name="Egenvald utan krav",
+            achievement_type=Achievement.Type.SELFMADE,
+        )
+        level = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Nivå",
+            order=1,
+        )
+
+        with self.assertRaises(ValidationError):
+            select_selfmade_level(self.user, level)
+
+        self.assertFalse(level.requirements.exists())
+
     def test_selfmade_selection_can_be_changed_and_removed(self):
         achievement = Achievement.objects.create(
             name="Egenvald flernivå",

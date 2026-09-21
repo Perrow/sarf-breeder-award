@@ -211,6 +211,29 @@ class AssociationManualAwardTests(TestCase):
         self.assertNotContains(response, "Medlem B")
 
 
+    def test_existing_award_without_provenance_is_not_backfilled_on_reassignment(self):
+        grant = UserAchievement.objects.create(
+            user=self.member_a,
+            level=self.level,
+            achievement_name=self.achievement.name,
+            level_name=self.level.name,
+        )
+
+        from progression.services import assign_manual_level
+
+        returned, created = assign_manual_level(
+            self.member_a,
+            self.level,
+            association=self.association_a,
+            awarded_by=self.admin_a,
+        )
+
+        self.assertFalse(created)
+        self.assertEqual(returned.pk, grant.pk)
+        returned.refresh_from_db()
+        self.assertIsNone(returned.awarded_association)
+        self.assertIsNone(returned.awarded_by)
+
     def test_existing_award_keeps_original_association_and_awarder(self):
         UserAchievement.objects.create(
             user=self.member_a,
