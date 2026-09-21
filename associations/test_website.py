@@ -30,7 +30,6 @@ class AssociationWebsiteTests(TestCase):
 
     def test_admin_form_contains_website_field(self):
         admin_user = get_user_model().objects.create_superuser(
-            username="association-admin@example.com",
             email="association-admin@example.com",
             password="test-password",
         )
