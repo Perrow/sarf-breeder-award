@@ -16,9 +16,9 @@ from .models import BreedingRegistration
 class BreedingReviewValidationTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="validation-owner@example.com", email="validation-owner@example.com", password="test-password")
-        self.reviewer = User.objects.create_user(username="validation-reviewer@example.com", email="validation-reviewer@example.com", password="test-password", is_staff=True)
-        self.attacker = User.objects.create_user(username="validation-attacker@example.com", email="validation-attacker@example.com", password="test-password", is_staff=True)
+        self.owner = User.objects.create_user( email="validation-owner@example.com", password="test-password")
+        self.reviewer = User.objects.create_user( email="validation-reviewer@example.com", password="test-password", is_staff=True)
+        self.attacker = User.objects.create_user( email="validation-attacker@example.com", password="test-password", is_staff=True)
         group = Group.objects.get(name=ASSOCIATION_ADMIN_GROUP)
         self.reviewer.groups.add(group)
         self.attacker.groups.add(group)

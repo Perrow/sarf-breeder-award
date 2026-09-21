@@ -15,13 +15,11 @@ class BreedingReviewUiTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.owner = User.objects.create_user(
-            username="owner-ui@example.com",
             email="owner-ui@example.com",
             password="test-password",
             public_username="odlaren",
         )
         self.reviewer = User.objects.create_user(
-            username="reviewer-ui@example.com",
             email="reviewer-ui@example.com",
             password="test-password",
             public_username="granskaren",

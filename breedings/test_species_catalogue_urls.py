@@ -8,7 +8,7 @@ from django.urls import reverse
 class SpeciesCatalogueUrlTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="catalogue-url@example.com",
+            email="catalogue-url@example.com",
             password="test-password",
         )
         self.client.force_login(self.user)
