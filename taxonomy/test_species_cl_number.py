@@ -63,7 +63,6 @@ class SpeciesClNumberTests(TestCase):
 
     def test_admin_form_contains_cl_number_field(self):
         admin_user = get_user_model().objects.create_superuser(
-            username="species-admin@example.com",
             email="species-admin@example.com",
             password="test-password",
         )
