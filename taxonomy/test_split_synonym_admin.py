@@ -29,7 +29,6 @@ class SplitSynonymAdminTests(TestCase):
             common_name="Bronspansarmal",
         )
         admin_user = get_user_model().objects.create_superuser(
-            username="synonym-admin@example.com",
             email="synonym-admin@example.com",
             password="test-password",
         )

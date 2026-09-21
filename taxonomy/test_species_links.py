@@ -101,7 +101,6 @@ class SpeciesLinkTests(TestCase):
             source_name="FishBase",
         )
         user = get_user_model().objects.create_superuser(
-            username="admin@example.com",
             email="admin@example.com",
             password="test-password",
         )
