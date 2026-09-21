@@ -21,8 +21,8 @@ class AssociationGrowerCountTests(TestCase):
             common_name="Testart",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        self.user_a = get_user_model().objects.create_user(username="a@example.com", password="x", public_username="A")
-        self.user_b = get_user_model().objects.create_user(username="b@example.com", password="x", public_username="B")
+        self.user_a = get_user_model().objects.create_user(email="a@example.com", password="x", public_username="A")
+        self.user_b = get_user_model().objects.create_user(email="b@example.com", password="x", public_username="B")
         Membership.objects.create(user=self.user_a, association=self.association)
         Membership.objects.create(user=self.user_b, association=self.association)
 

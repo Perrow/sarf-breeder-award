@@ -15,12 +15,12 @@ class BreedingDetailSpeciesTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="owner@example.com",
+            email="owner@example.com",
             password="x",
             public_username="odlaren",
         )
         self.other = User.objects.create_user(
-            username="other@example.com",
+            email="other@example.com",
             password="x",
             public_username="annan",
         )
