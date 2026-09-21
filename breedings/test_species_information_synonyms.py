@@ -7,7 +7,7 @@ from taxonomy.models import Genus, ScientificSpeciesSynonym, Species
 
 class SpeciesInformationSynonymDisplayTests(TestCase):
     def setUp(self):
-        self.user = get_user_model().objects.create_user(username="synonym-viewer@example.com")
+        self.user = get_user_model().objects.create_user(email="synonym-viewer@example.com")
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(
             genus=genus,

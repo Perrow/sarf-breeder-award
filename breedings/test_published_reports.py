@@ -15,13 +15,11 @@ class PublishedBreedingReportTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.owner = User.objects.create_user(
-            username="owner@example.com",
             email="owner@example.com",
             password="test-password",
             public_username="Publik odlare",
         )
         self.reviewer = User.objects.create_user(
-            username="reviewer@example.com",
             email="reviewer@example.com",
             password="test-password",
         )

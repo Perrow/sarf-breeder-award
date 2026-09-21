@@ -12,7 +12,7 @@ from .scoring import career_points
 class CareerScoringTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="career@example.com", email="career@example.com", password="test-password")
+        self.user = User.objects.create_user( email="career@example.com", password="test-password")
         self.association = Association.objects.create(name="Karriärförening")
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species_a = Species.objects.create(genus=genus, scientific_name="panda", common_name="Panda", breeding_class=Species.BreedingClass.SILVER)

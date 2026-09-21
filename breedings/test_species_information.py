@@ -20,12 +20,12 @@ from .models import BreedingRegistration
 class SpeciesInformationTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.viewer = User.objects.create_user(username="viewer@example.com")
+        self.viewer = User.objects.create_user(email="viewer@example.com")
         self.approved_owner = User.objects.create_user(
-            username="approved@example.com", public_username="GodkandOdlare"
+            email="approved@example.com", public_username="GodkandOdlare"
         )
         self.hidden_owner = User.objects.create_user(
-            username="hidden@example.com", public_username="EjGodkandOdlare"
+            email="hidden@example.com", public_username="EjGodkandOdlare"
         )
         self.association = Association.objects.create(name="Akvarieföreningen")
         genus = Genus.objects.create(scientific_name="Corydoras")

@@ -41,7 +41,6 @@ class AccountValidationTests(TestCase):
 
     def test_duplicate_email_is_rejected_even_if_existing_username_differs(self):
         get_user_model().objects.create_user(
-            username="legacy-username",
             email="duplicate@example.com",
             password="Existing-password-123",
         )

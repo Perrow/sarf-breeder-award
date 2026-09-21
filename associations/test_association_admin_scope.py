@@ -12,24 +12,20 @@ class AssociationSpecificAdministrationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.system_admin = User.objects.create_user(
-            username="system-admin@example.com",
             email="system-admin@example.com",
             password="test-password",
         )
         self.system_admin.groups.add(Group.objects.get(name=SYSTEM_ADMIN_GROUP))
 
         self.association_admin = User.objects.create_user(
-            username="association-admin@example.com",
             email="association-admin@example.com",
             password="test-password",
         )
         self.other_member = User.objects.create_user(
-            username="other-member@example.com",
             email="other-member@example.com",
             password="test-password",
         )
         self.group_only_user = User.objects.create_user(
-            username="group-only@example.com",
             email="group-only@example.com",
             password="test-password",
         )

@@ -20,7 +20,6 @@ class SpeciesAdminTests(TestCase):
         )
         self.species_group.genera.add(self.genus)
         self.admin_user = get_user_model().objects.create_superuser(
-            username="species-admin@example.com",
             email="species-admin@example.com",
             password="test-password",
         )

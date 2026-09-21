@@ -10,7 +10,6 @@ from django.urls import reverse
 class PasswordResetTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="legacy-reset-user",
             email="reset@example.com",
             password="Old-password-123",
         )

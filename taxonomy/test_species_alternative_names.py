@@ -64,7 +64,6 @@ class SpeciesAlternativeNameAdminTests(TestCase):
             breeding_class=Species.BreedingClass.SILVER,
         )
         self.admin_user = get_user_model().objects.create_superuser(
-            username="alt-name-admin@example.com",
             email="alt-name-admin@example.com",
             password="test-password",
         )

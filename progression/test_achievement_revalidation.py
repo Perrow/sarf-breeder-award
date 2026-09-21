@@ -15,7 +15,6 @@ from .services import revalidate_achievement, sync_achievements
 class AchievementRevalidationTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="revalidate@example.com",
             email="revalidate@example.com",
             password="test-password",
         )
@@ -127,7 +126,6 @@ class AchievementRevalidationTests(TestCase):
 class AchievementRevalidationAdminTests(TestCase):
     def setUp(self):
         self.admin_user = get_user_model().objects.create_superuser(
-            username="reset-admin@example.com",
             email="reset-admin@example.com",
             password="test-password",
         )

@@ -15,19 +15,16 @@ class BreedingReviewerRoleTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.reviewer = User.objects.create_user(
-            username="breeding-reviewer@example.com",
             email="breeding-reviewer@example.com",
             password="test-password",
             is_staff=False,
         )
         self.reviewer.groups.add(Group.objects.get(name=BREEDING_REVIEWER_GROUP))
         self.member = User.objects.create_user(
-            username="ordinary-member@example.com",
             email="ordinary-member@example.com",
             password="test-password",
         )
         self.owner = User.objects.create_user(
-            username="breeding-owner@example.com",
             email="breeding-owner@example.com",
             password="test-password",
         )

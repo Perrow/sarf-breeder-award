@@ -12,7 +12,7 @@ from .scoring import points_for_breeding_class, points_for_registration
 class BreedingClassScoringTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="score@example.com", email="score@example.com", password="test-password")
+        self.user = User.objects.create_user( email="score@example.com", password="test-password")
         self.association = Association.objects.create(name="Poängförening")
         genus = Genus.objects.create(scientific_name="Corydoras")
         self.species = Species.objects.create(

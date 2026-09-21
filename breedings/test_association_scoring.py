@@ -13,8 +13,8 @@ from .scoring import association_year_scores, user_year_points
 class AssociationYearScoringTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user_a = User.objects.create_user(username="a@example.com", email="a@example.com", password="test-password")
-        self.user_b = User.objects.create_user(username="b@example.com", email="b@example.com", password="test-password")
+        self.user_a = User.objects.create_user( email="a@example.com", password="test-password")
+        self.user_b = User.objects.create_user( email="b@example.com", password="test-password")
         self.association = Association.objects.create(name="Årsförening")
         self.other_association = Association.objects.create(name="Annan årsförening")
         genus = Genus.objects.create(scientific_name="Corydoras")

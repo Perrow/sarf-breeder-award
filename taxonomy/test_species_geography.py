@@ -105,7 +105,6 @@ class SpeciesGeographyTests(TestCase):
 class SpeciesGeographyAdminImportTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_superuser(
-            username="geography-admin@example.com",
             email="geography-admin@example.com",
             password="test-password",
         )

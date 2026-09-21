@@ -14,7 +14,6 @@ from taxonomy.models import (
 class SpeciesSelectionTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="species-search@example.com",
             email="species-search@example.com",
             password="test-password",
         )

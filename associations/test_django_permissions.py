@@ -9,7 +9,6 @@ from .models import Association
 class DjangoPermissionAdminTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="permission-admin@example.com",
             email="permission-admin@example.com",
             password="test-password",
             is_staff=True,

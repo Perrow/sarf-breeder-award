@@ -35,11 +35,10 @@ class SiteBrandingTests(TestCase):
         model_admin = admin.site._registry[SiteBranding]
         user_model = get_user_model()
         staff_user = user_model.objects.create_user(
-            username="staff@example.com",
+            email="staff@example.com",
             is_staff=True,
         )
         superuser = user_model.objects.create_superuser(
-            username="super@example.com",
             email="super@example.com",
             password="test-password",
         )

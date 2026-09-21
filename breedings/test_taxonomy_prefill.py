@@ -16,8 +16,8 @@ from .models import BreedingRegistration
 class TaxonomyPrefillTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="prefill-owner@example.com", email="prefill-owner@example.com", password="test-password")
-        self.reviewer = User.objects.create_user(username="prefill-reviewer@example.com", email="prefill-reviewer@example.com", password="test-password", is_staff=True)
+        self.owner = User.objects.create_user( email="prefill-owner@example.com", password="test-password")
+        self.reviewer = User.objects.create_user( email="prefill-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.reviewer.user_permissions.add(Permission.objects.get(codename="add_species"))
         self.association = Association.objects.create(name="Förifyllnadsförening")

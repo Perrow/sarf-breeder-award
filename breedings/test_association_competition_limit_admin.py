@@ -13,7 +13,6 @@ from .models import AssociationCompetitionLimit, AssociationCompetitionSettings
 class AssociationCompetitionLimitAdminTests(TestCase):
     def setUp(self):
         self.system_admin = get_user_model().objects.create_user(
-            username="system@example.com",
             email="system@example.com",
             password="test-password-123",
             is_staff=True,
@@ -22,7 +21,6 @@ class AssociationCompetitionLimitAdminTests(TestCase):
         self.system_admin.groups.add(system_group)
 
         self.association_admin = get_user_model().objects.create_user(
-            username="association@example.com",
             email="association@example.com",
             password="test-password-123",
             is_staff=True,

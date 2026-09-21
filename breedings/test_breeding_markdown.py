@@ -70,12 +70,10 @@ class BreedingMarkdownPresentationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.owner = User.objects.create_user(
-            username="markdown-owner@example.com",
             email="markdown-owner@example.com",
             password="test-password",
         )
         self.reviewer = User.objects.create_user(
-            username="markdown-reviewer@example.com",
             email="markdown-reviewer@example.com",
             password="test-password",
         )
@@ -145,7 +143,6 @@ class BreedingMarkdownPreviewTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="markdown-preview@example.com",
             email="markdown-preview@example.com",
             password="test-password",
         )

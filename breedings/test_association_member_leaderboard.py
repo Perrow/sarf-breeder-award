@@ -29,13 +29,11 @@ class AssociationMemberLeaderboardTests(TestCase):
             breeding_class=Species.BreedingClass.GOLD,
         )
         self.member = get_user_model().objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="test-password-123",
             public_username="Medlem",
         )
         self.non_member = get_user_model().objects.create_user(
-            username="other@example.com",
             email="other@example.com",
             password="test-password-123",
             public_username="InteMedlem",

@@ -11,7 +11,6 @@ from .models import BreedingRegistration
 class BreedingListCompactTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="breeder-list@example.com",
             email="breeder-list@example.com",
             password="test-password",
         )

@@ -6,7 +6,6 @@ from django.urls import reverse
 class UserProfileTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="profile@example.com",
             email="profile@example.com",
             password="test-password-123",
             name="Test Person",

@@ -11,7 +11,6 @@ from .models import Achievement, AchievementLevel, UserAchievement
 class LatestAchievementsPageTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="latest@example.com",
             email="latest@example.com",
             password="test-password",
         )

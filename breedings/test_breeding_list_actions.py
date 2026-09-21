@@ -13,7 +13,7 @@ from .models import BreedingRegistration
 class BreedingListActionTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="member@example.com",
+            email="member@example.com",
             password="x",
             public_username="member",
         )

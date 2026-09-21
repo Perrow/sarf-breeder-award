@@ -70,7 +70,6 @@ class SpeciesGroupModelTests(TestCase):
 class SpeciesGroupAdminTests(TestCase):
     def setUp(self):
         self.admin_user = get_user_model().objects.create_superuser(
-            username="species-group-admin@example.com",
             email="species-group-admin@example.com",
             password="test-password",
         )

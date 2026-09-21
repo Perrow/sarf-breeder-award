@@ -14,8 +14,8 @@ from .models import BreedingRegistration
 class ReviewFreeTextSpeciesTests(TestCase):
     def test_review_shows_original_free_text_species_as_single_block(self):
         User = get_user_model()
-        owner = User.objects.create_user(username="owner-free-text@example.com")
-        reviewer = User.objects.create_user(username="reviewer-free-text@example.com", is_staff=True)
+        owner = User.objects.create_user(email="owner-free-text@example.com")
+        reviewer = User.objects.create_user(email="reviewer-free-text@example.com", is_staff=True)
         reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         association = Association.objects.create(name="Testförening")
         Membership.objects.create(

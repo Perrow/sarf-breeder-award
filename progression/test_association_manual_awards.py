@@ -14,7 +14,6 @@ class AssociationManualAwardTests(TestCase):
         self.association_b = Association.objects.create(name="Förening B")
 
         self.admin_a = User.objects.create_user(
-            username="admin-a@example.com",
             email="admin-a@example.com",
             password="test-password",
             is_staff=False,
@@ -27,7 +26,6 @@ class AssociationManualAwardTests(TestCase):
         )
 
         self.member_a = User.objects.create_user(
-            username="member-a@example.com",
             email="member-a@example.com",
             password="test-password",
             public_username="Medlem A",
@@ -38,7 +36,6 @@ class AssociationManualAwardTests(TestCase):
         )
 
         self.member_b = User.objects.create_user(
-            username="member-b@example.com",
             email="member-b@example.com",
             password="test-password",
             public_username="Medlem B",
@@ -117,7 +114,6 @@ class AssociationManualAwardTests(TestCase):
 
     def test_association_admin_can_assign_same_level_to_multiple_members(self):
         second_member = get_user_model().objects.create_user(
-            username="member-a2@example.com",
             email="member-a2@example.com",
             password="test-password",
             public_username="Medlem A2",
@@ -248,7 +244,6 @@ class AssociationManualAwardTests(TestCase):
             association=self.association_b,
         )
         system_admin = get_user_model().objects.create_superuser(
-            username="other-system@example.com",
             email="other-system@example.com",
             password="test-password",
         )
@@ -269,7 +264,6 @@ class AssociationManualAwardTests(TestCase):
 
     def test_system_admin_can_use_regular_association_award_page(self):
         system_admin = get_user_model().objects.create_superuser(
-            username="sysadmin@example.com",
             email="sysadmin@example.com",
             password="test-password",
         )

@@ -14,12 +14,10 @@ class ReturnToDraftTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="owner@example.com",
             email="owner@example.com",
             password="test-password-123",
         )
         self.other_user = User.objects.create_user(
-            username="other@example.com",
             email="other@example.com",
             password="test-password-123",
         )

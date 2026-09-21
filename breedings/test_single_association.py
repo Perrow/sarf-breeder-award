@@ -13,7 +13,6 @@ class SingleAssociationFormTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="single@example.com",
             email="single@example.com",
             password="test-password",
         )

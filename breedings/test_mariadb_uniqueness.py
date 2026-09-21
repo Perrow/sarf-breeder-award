@@ -10,7 +10,7 @@ from .models import AssociationCompetitionLimit, SpeciesReclassificationRequest
 class MariaDbCompatibleBreedingUniquenessTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="database-constraints@example.com",
+            email="database-constraints@example.com",
             password="test-password",
         )
         self.genus = Genus.objects.create(scientific_name="Corydoras")

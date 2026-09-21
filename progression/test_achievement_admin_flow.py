@@ -10,7 +10,6 @@ from .models import Achievement, AchievementLevel, AchievementRequirement
 class AchievementAdminFlowTests(TestCase):
     def setUp(self):
         self.admin_user = get_user_model().objects.create_superuser(
-            username="achievement-admin@example.com",
             email="achievement-admin@example.com",
             password="test-password",
         )

@@ -15,17 +15,17 @@ class EditAllRegistrationsTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="owner@example.com",
+            email="owner@example.com",
             password="x",
             public_username="owner",
         )
         self.other_user = User.objects.create_user(
-            username="other@example.com",
+            email="other@example.com",
             password="x",
             public_username="other",
         )
         self.reviewer = User.objects.create_user(
-            username="reviewer@example.com",
+            email="reviewer@example.com",
             password="x",
             public_username="reviewer",
         )

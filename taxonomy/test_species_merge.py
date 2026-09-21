@@ -38,7 +38,6 @@ class SpeciesMergeTests(TestCase):
             breeding_class=Species.BreedingClass.BRONZE,
         )
         self.user = get_user_model().objects.create_user(
-            username="breeder@example.com",
             email="breeder@example.com",
             password="test-password",
         )
@@ -172,7 +171,6 @@ class SpeciesMergeAdminTests(TestCase):
             breeding_class=Species.BreedingClass.BRONZE,
         )
         self.admin_user = get_user_model().objects.create_superuser(
-            username="merge-admin@example.com",
             email="merge-admin@example.com",
             password="test-password",
         )

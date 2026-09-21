@@ -14,7 +14,6 @@ from .services import sync_achievements
 class SpeciesCountRequirementTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="species@example.com",
             email="species@example.com",
             password="test-password",
         )

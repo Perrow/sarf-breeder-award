@@ -14,8 +14,8 @@ from .models import BreedingRegistration
 class TaxonomyReviewReturnTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="return-owner@example.com", email="return-owner@example.com", password="test-password")
-        self.reviewer = User.objects.create_user(username="return-reviewer@example.com", email="return-reviewer@example.com", password="test-password", is_staff=True)
+        self.owner = User.objects.create_user( email="return-owner@example.com", password="test-password")
+        self.reviewer = User.objects.create_user( email="return-reviewer@example.com", password="test-password", is_staff=True)
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))
         self.association = Association.objects.create(name="Återgångsförening")
         Membership.objects.create(

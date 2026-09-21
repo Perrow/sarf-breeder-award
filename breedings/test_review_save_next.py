@@ -16,9 +16,9 @@ from .models import BreedingRegistration
 class ReviewSaveNextTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="owner-next@example.com")
+        self.owner = User.objects.create_user(email="owner-next@example.com")
         self.reviewer = User.objects.create_user(
-            username="reviewer-next@example.com",
+            email="reviewer-next@example.com",
             is_staff=True,
         )
         self.reviewer.groups.add(Group.objects.get(name=ASSOCIATION_ADMIN_GROUP))

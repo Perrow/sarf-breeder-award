@@ -6,7 +6,6 @@ from django.urls import reverse
 class MinPageTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="min-sida-user",
             email="min-sida@example.com",
             password="Test-password-123",
         )

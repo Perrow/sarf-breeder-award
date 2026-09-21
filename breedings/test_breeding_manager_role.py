@@ -16,12 +16,12 @@ class BreedingManagerRoleTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.manager = User.objects.create_user(
-            username="manager@example.com",
+            email="manager@example.com",
             password="test-password-123",
             is_staff=True,
         )
         self.manager.groups.add(Group.objects.get(name=BREEDING_MANAGER_GROUP))
-        self.owner = User.objects.create_user(username="owner@example.com", password="x")
+        self.owner = User.objects.create_user(email="owner@example.com", password="x")
         self.association_a = Association.objects.create(name="Förening A")
         self.association_b = Association.objects.create(name="Förening B")
         genus = Genus.objects.create(scientific_name="Corydoras")

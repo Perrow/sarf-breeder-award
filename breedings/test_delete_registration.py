@@ -12,8 +12,8 @@ from .models import BreedingRegistration
 class DeleteBreedingRegistrationTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="owner@example.com", password="x")
-        self.other = User.objects.create_user(username="other@example.com", password="x")
+        self.owner = User.objects.create_user(email="owner@example.com", password="x")
+        self.other = User.objects.create_user(email="other@example.com", password="x")
         self.association = Association.objects.create(name="Testförening")
         self.registration = BreedingRegistration.objects.create(
             owner=self.owner,

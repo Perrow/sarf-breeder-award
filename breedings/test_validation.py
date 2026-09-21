@@ -14,8 +14,8 @@ from .models import BreedingRegistration
 class BreedingValidationTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="member@example.com", email="member@example.com", password="test-password-123")
-        self.other_user = User.objects.create_user(username="other@example.com", email="other@example.com", password="test-password-123")
+        self.user = User.objects.create_user( email="member@example.com", password="test-password-123")
+        self.other_user = User.objects.create_user( email="other@example.com", password="test-password-123")
         self.association = Association.objects.create(name="Testförening")
         self.other_association = Association.objects.create(name="Annan förening")
         Membership.objects.create(user=self.user, association=self.association)

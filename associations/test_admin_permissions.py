@@ -16,25 +16,21 @@ class AssociationAdministrationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.system_admin = User.objects.create_user(
-            username="system-admin@example.com",
             email="system-admin@example.com",
             password="test-password",
             is_staff=True,
         )
         self.association_admin = User.objects.create_user(
-            username="association-admin@example.com",
             email="association-admin@example.com",
             password="test-password",
             is_staff=True,
         )
         self.member = User.objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="test-password",
             is_staff=True,
         )
         self.new_member = User.objects.create_user(
-            username="new-member@example.com",
             email="new-member@example.com",
             password="test-password",
         )
@@ -72,7 +68,6 @@ class AssociationAdministrationTests(TestCase):
 
     def test_global_association_admin_group_without_membership_flag_has_no_admin_access(self):
         group_only = get_user_model().objects.create_user(
-            username="group-only@example.com",
             email="group-only@example.com",
             password="test-password",
             is_staff=True,

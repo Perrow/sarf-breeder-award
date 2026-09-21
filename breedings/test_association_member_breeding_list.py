@@ -18,12 +18,12 @@ class AssociationMemberBreedingListTests(TestCase):
         self.association = Association.objects.create(name="Listföreningen")
         self.other_association = Association.objects.create(name="Annan förening")
         self.member = get_user_model().objects.create_user(
-            username="member-list@example.com",
+            email="member-list@example.com",
             password="test-password-123",
             public_username="Listodlare",
         )
         self.non_member = get_user_model().objects.create_user(
-            username="outsider-list@example.com",
+            email="outsider-list@example.com",
             password="test-password-123",
             public_username="Utomstående",
         )

@@ -14,6 +14,16 @@ class SimplifiedIdentityTests(TestCase):
         self.assertNotIn("last_name", {field.name for field in User._meta.get_fields()})
         self.assertIn("name", {field.name for field in User._meta.get_fields()})
 
+    def test_user_manager_does_not_translate_legacy_username_argument(self):
+        User = get_user_model()
+
+        with self.assertRaises(TypeError):
+            User.objects.create_user(
+                email="identity@example.com",
+                username="legacy-username",
+                password="test-password-123",
+            )
+
     def test_create_user_accepts_email_without_username(self):
         user = get_user_model().objects.create_user(
             email="identity@example.com",

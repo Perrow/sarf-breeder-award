@@ -10,7 +10,6 @@ from django.urls import reverse
 class MvpSecurityTests(TestCase):
     def test_password_is_not_stored_in_cleartext(self):
         user = get_user_model().objects.create_user(
-            username="security@example.com",
             email="security@example.com",
             password="correct-horse-battery-staple",
         )
@@ -26,7 +25,6 @@ class MvpSecurityTests(TestCase):
 
     def test_profile_update_rejects_post_without_csrf_token(self):
         user = get_user_model().objects.create_user(
-            username="csrf@example.com",
             email="csrf@example.com",
             password="test-password",
         )

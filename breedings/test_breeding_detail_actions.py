@@ -12,7 +12,7 @@ from .models import BreedingRegistration
 class BreedingDetailActionTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="owner@example.com",
+            email="owner@example.com",
             password="x",
         )
         self.association = Association.objects.create(name="Testförening")

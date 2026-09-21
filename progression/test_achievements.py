@@ -15,7 +15,7 @@ from .services import achievements_for_user, sync_achievements
 class AchievementTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="achievement@example.com",
+            email="achievement@example.com",
             password="test-password",
         )
         self.association = Association.objects.create(name="Utmärkelseförening")

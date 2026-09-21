@@ -95,7 +95,6 @@ class UserMembershipSelectionTests(TestCase):
 
     def _create_user(self):
         return User.objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="correct-password",
             public_username="MemberUser",

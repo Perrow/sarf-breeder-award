@@ -18,12 +18,10 @@ class UnifiedAchievementAdminUiTests(TestCase):
     def setUp(self):
         user_model = get_user_model()
         self.admin = user_model.objects.create_superuser(
-            username="award-ui-admin",
             email="award-ui-admin@example.com",
             password="Test-password-123",
         )
         self.user = user_model.objects.create_user(
-            username="award-ui-user",
             email="award-ui-user@example.com",
             password="Test-password-123",
         )

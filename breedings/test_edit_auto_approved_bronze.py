@@ -13,8 +13,8 @@ from .models import BreedingRegistration
 class EditAutoApprovedBronzeTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="owner@example.com", password="x")
-        self.other = User.objects.create_user(username="other@example.com", password="x")
+        self.user = User.objects.create_user(email="owner@example.com", password="x")
+        self.other = User.objects.create_user(email="other@example.com", password="x")
         self.association = Association.objects.create(name="Testförening")
         Membership.objects.create(user=self.user, association=self.association)
         genus = Genus.objects.create(scientific_name="Ancistrus")

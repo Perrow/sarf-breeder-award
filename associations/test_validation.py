@@ -53,7 +53,6 @@ class MembershipValidationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.user = User.objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="test-password",
         )
@@ -110,13 +109,11 @@ class MembershipAdminPostValidationTests(TestCase):
     def setUp(self):
         User = get_user_model()
         self.admin_user = User.objects.create_user(
-            username="admin@example.com",
             email="admin@example.com",
             password="test-password",
             is_staff=True,
         )
         self.member_user = User.objects.create_user(
-            username="member@example.com",
             email="member@example.com",
             password="test-password",
         )

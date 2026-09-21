@@ -14,9 +14,9 @@ from .models import BreedingRegistration, SpeciesReclassificationRequest
 class ReclassificationDecisionButtonTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.requester = User.objects.create_user(username="requester-buttons@example.com")
+        self.requester = User.objects.create_user(email="requester-buttons@example.com")
         self.manager = User.objects.create_user(
-            username="manager-buttons@example.com",
+            email="manager-buttons@example.com",
             password="x",
             is_staff=True,
         )

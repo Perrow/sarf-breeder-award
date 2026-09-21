@@ -67,7 +67,6 @@ class SpeciesAdminValidationTests(TestCase):
     def setUp(self):
         self.genus = Genus.objects.create(scientific_name="Corydoras")
         self.admin_user = get_user_model().objects.create_superuser(
-            username="species-validation-admin@example.com",
             email="species-validation-admin@example.com",
             password="test-password",
         )

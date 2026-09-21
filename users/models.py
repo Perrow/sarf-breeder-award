@@ -9,16 +9,6 @@ class UserManager(BaseUserManager):
     use_in_migrations = True
 
     def create_user(self, email=None, password=None, **extra_fields):
-        # Accept the old create_user(username=<email>) shape temporarily so
-        # older internal callers do not break during the model transition.
-        legacy_username = extra_fields.pop("username", None)
-        first_name = extra_fields.pop("first_name", "")
-        last_name = extra_fields.pop("last_name", "")
-        if "name" not in extra_fields and (first_name or last_name):
-            extra_fields["name"] = " ".join(
-                part.strip() for part in (first_name, last_name) if part and part.strip()
-            )
-        email = email or legacy_username
         if not email:
             raise ValueError("E-post måste anges.")
         email = self.normalize_email(email).strip().lower()
@@ -28,8 +18,6 @@ class UserManager(BaseUserManager):
         return user
 
     def create_superuser(self, email=None, password=None, **extra_fields):
-        legacy_username = extra_fields.pop("username", None)
-        email = email or legacy_username
         extra_fields.setdefault("is_staff", True)
         extra_fields.setdefault("is_superuser", True)
         extra_fields.setdefault("is_active", True)
