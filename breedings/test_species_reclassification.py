@@ -16,15 +16,15 @@ from .scoring import association_year_scores, competition_points
 class SpeciesReclassificationTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.user = User.objects.create_user(username="grower@example.com", password="x")
+        self.user = User.objects.create_user(email="grower@example.com", password="x")
         self.manager = User.objects.create_user(
-            username="manager@example.com",
+            email="manager@example.com",
             password="x",
             is_staff=True,
         )
         self.manager.groups.add(Group.objects.get(name="Odlingsgranskare"))
         self.other_staff = User.objects.create_user(
-            username="other-staff@example.com",
+            email="other-staff@example.com",
             password="x",
             is_staff=True,
         )
@@ -112,7 +112,7 @@ class SpeciesReclassificationTests(TestCase):
 
     def test_approval_updates_current_year_points_for_all_growers_but_not_history(self):
         User = get_user_model()
-        other_grower = User.objects.create_user(username="other-grower@example.com", password="x")
+        other_grower = User.objects.create_user(email="other-grower@example.com", password="x")
         association = Association.objects.create(name="Testförening")
         current_year = timezone.localdate().year
         previous_year = current_year - 1

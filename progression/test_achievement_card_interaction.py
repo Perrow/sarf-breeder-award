@@ -19,7 +19,6 @@ from .models import (
 class AchievementCardInteractionTests(TestCase):
     def setUp(self):
         self.user = get_user_model().objects.create_user(
-            username="modal@example.com",
             email="modal@example.com",
             password="test-password",
         )

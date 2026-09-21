@@ -14,9 +14,9 @@ from .models import BreedingRegistration
 class TaxonomyResolutionTests(TestCase):
     def setUp(self):
         User = get_user_model()
-        self.owner = User.objects.create_user(username="owner2@example.com", email="owner2@example.com", password="test-password")
-        self.reviewer = User.objects.create_user(username="reviewer2@example.com", email="reviewer2@example.com", password="test-password", is_staff=True)
-        self.other_reviewer = User.objects.create_user(username="other2@example.com", email="other2@example.com", password="test-password", is_staff=True)
+        self.owner = User.objects.create_user( email="owner2@example.com", password="test-password")
+        self.reviewer = User.objects.create_user( email="reviewer2@example.com", password="test-password", is_staff=True)
+        self.other_reviewer = User.objects.create_user( email="other2@example.com", password="test-password", is_staff=True)
         group = Group.objects.get(name=ASSOCIATION_ADMIN_GROUP)
         self.reviewer.groups.add(group)
         self.other_reviewer.groups.add(group)
