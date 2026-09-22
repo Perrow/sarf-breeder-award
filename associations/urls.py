@@ -20,4 +20,9 @@ urlpatterns = [
         views.system_association_admins,
         name="system_association_admins",
     ),
+    path(
+        "systemadministration/databasbackup/",
+        views.system_database_backup,
+        name="system_database_backup",
+    ),
 ]
