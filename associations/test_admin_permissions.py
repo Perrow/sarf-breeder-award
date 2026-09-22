@@ -87,25 +87,26 @@ class AssociationAdministrationTests(TestCase):
                 self.assertFalse(association_admin.has_module_permission(request))
                 self.assertFalse(membership_admin.has_module_permission(request))
 
-    def test_system_admin_sees_all_associations(self):
+    def test_association_queryset_is_scoped_by_admin_role(self):
         model_admin = admin.site._registry[Association]
-
-        queryset = model_admin.get_queryset(self._request_for(self.system_admin))
-
-        self.assertSetEqual(
-            set(queryset.values_list("pk", flat=True)),
-            {self.own_association.pk, self.other_association.pk},
+        cases = (
+            (
+                self.system_admin,
+                {self.own_association.pk, self.other_association.pk},
+            ),
+            (
+                self.association_admin,
+                {self.own_association.pk},
+            ),
         )
 
-    def test_association_admin_only_sees_own_association(self):
-        model_admin = admin.site._registry[Association]
-
-        queryset = model_admin.get_queryset(self._request_for(self.association_admin))
-
-        self.assertSetEqual(
-            set(queryset.values_list("pk", flat=True)),
-            {self.own_association.pk},
-        )
+        for user, expected_ids in cases:
+            with self.subTest(user=user.email):
+                queryset = model_admin.get_queryset(self._request_for(user))
+                self.assertSetEqual(
+                    set(queryset.values_list("pk", flat=True)),
+                    expected_ids,
+                )
 
     def test_association_admin_is_denied_other_association(self):
         self.client.force_login(self.association_admin)
