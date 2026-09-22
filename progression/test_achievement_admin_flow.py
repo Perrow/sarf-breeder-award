@@ -78,9 +78,18 @@ class AchievementAdminFlowTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.context["adminform"].form["level"].value(), str(self.level.pk))
 
-    def test_saving_existing_level_returns_to_achievement(self):
+    def test_level_admin_save_navigation(self):
+        achievement_url = reverse(
+            "admin:progression_achievement_change",
+            args=[self.achievement.pk],
+        )
+        change_url = reverse(
+            "admin:progression_achievementlevel_change",
+            args=[self.level.pk],
+        )
+
         response = self.client.post(
-            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
+            change_url,
             {
                 "achievement": self.achievement.pk,
                 "name": "Silver",
@@ -89,36 +98,26 @@ class AchievementAdminFlowTests(TestCase):
                 "_save": "Spara",
             },
         )
+        self.assertRedirects(response, achievement_url)
 
-        self.assertRedirects(
-            response,
-            reverse("admin:progression_achievement_change", args=[self.achievement.pk]),
-        )
-
-    def test_adding_level_returns_to_achievement(self):
         response = self.client.post(
             reverse("admin:progression_achievementlevel_add"),
             {
                 "achievement": self.achievement.pk,
-                "name": "Silver",
+                "name": "Guld",
                 "description": "Andra nivån",
                 "order": 2,
                 "_save": "Spara",
             },
         )
-
-        self.assertRedirects(
-            response,
-            reverse("admin:progression_achievement_change", args=[self.achievement.pk]),
-        )
+        self.assertRedirects(response, achievement_url)
         self.assertTrue(
-            AchievementLevel.objects.filter(achievement=self.achievement, name="Silver").exists()
+            AchievementLevel.objects.filter(
+                achievement=self.achievement,
+                name="Guld",
+            ).exists()
         )
 
-    def test_save_and_continue_level_stays_on_level(self):
-        change_url = reverse(
-            "admin:progression_achievementlevel_change", args=[self.level.pk]
-        )
         response = self.client.post(
             change_url,
             {
@@ -129,15 +128,20 @@ class AchievementAdminFlowTests(TestCase):
                 "_continue": "Spara och fortsätt redigera",
             },
         )
-
         self.assertRedirects(response, change_url)
 
-    def test_saving_existing_requirement_returns_to_level(self):
+    def test_requirement_admin_save_navigation(self):
+        level_url = reverse(
+            "admin:progression_achievementlevel_change",
+            args=[self.level.pk],
+        )
+        change_url = reverse(
+            "admin:progression_achievementrequirement_change",
+            args=[self.requirement.pk],
+        )
+
         response = self.client.post(
-            reverse(
-                "admin:progression_achievementrequirement_change",
-                args=[self.requirement.pk],
-            ),
+            change_url,
             {
                 "level": self.level.pk,
                 "kind": AchievementRequirement.Kind.BREEDING_COUNT,
@@ -147,13 +151,8 @@ class AchievementAdminFlowTests(TestCase):
                 "_save": "Spara",
             },
         )
+        self.assertRedirects(response, level_url)
 
-        self.assertRedirects(
-            response,
-            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
-        )
-
-    def test_adding_requirement_returns_to_level(self):
         response = self.client.post(
             reverse("admin:progression_achievementrequirement_add"),
             {
@@ -165,11 +164,7 @@ class AchievementAdminFlowTests(TestCase):
                 "_save": "Spara",
             },
         )
-
-        self.assertRedirects(
-            response,
-            reverse("admin:progression_achievementlevel_change", args=[self.level.pk]),
-        )
+        self.assertRedirects(response, level_url)
         self.assertTrue(
             AchievementRequirement.objects.filter(
                 level=self.level,
@@ -178,11 +173,6 @@ class AchievementAdminFlowTests(TestCase):
             ).exists()
         )
 
-    def test_save_and_continue_requirement_stays_on_requirement(self):
-        change_url = reverse(
-            "admin:progression_achievementrequirement_change",
-            args=[self.requirement.pk],
-        )
         response = self.client.post(
             change_url,
             {
@@ -194,7 +184,6 @@ class AchievementAdminFlowTests(TestCase):
                 "_continue": "Spara och fortsätt redigera",
             },
         )
-
         self.assertRedirects(response, change_url)
 
     def test_requirement_can_be_deleted_from_its_edit_page(self):
