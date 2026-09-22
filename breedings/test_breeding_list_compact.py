@@ -28,20 +28,20 @@ class BreedingListCompactTests(TestCase):
             review_comment=review_comment,
         )
 
-    def test_my_page_hides_association_points_and_comment_text(self):
-        self._registration(review_comment="Bra dokumentation")
+    def test_my_page_is_compact_and_only_indicates_existing_review_comment(self):
+        registration = self._registration()
 
         response = self.client.get(reverse("breeding_list"))
 
         self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, "<th>Förening</th>", html=True)
         self.assertNotContains(response, "<th>Poäng</th>", html=True)
-        self.assertNotContains(response, "Bra dokumentation")
-        self.assertContains(response, "Granskningskommentar finns")
+        self.assertNotContains(response, "Granskningskommentar finns")
 
-    def test_my_page_only_shows_comment_indicator_when_comment_exists(self):
-        self._registration()
+        registration.review_comment = "Bra dokumentation"
+        registration.save(update_fields=("review_comment",))
 
         response = self.client.get(reverse("breeding_list"))
 
-        self.assertNotContains(response, "Granskningskommentar finns")
+        self.assertNotContains(response, "Bra dokumentation")
+        self.assertContains(response, "Granskningskommentar finns")
