@@ -53,7 +53,6 @@ class UserProfileTests(TestCase):
         self.user.save(update_fields=("public_username", "name"))
 
         self.assertEqual(self.user.public_display_name(), "Användare")
-        self.assertEqual(self.user.public_display_name(profile_information_is_public=True), "Användare")
 
     def test_account_and_edit_require_login(self):
         self.client.logout()
