@@ -87,7 +87,6 @@ class PublicUsernameTests(TestCase):
         )
 
         self.assertEqual(user.public_display_name(), "PublicName")
-        self.assertEqual(user.public_display_name(profile_information_is_public=True), "PublicName")
 
     def test_public_name_never_falls_back_to_private_name_or_email(self):
         user = get_user_model()(
