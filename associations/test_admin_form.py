@@ -26,13 +26,11 @@ class AssociationAdminFormTests(SimpleTestCase):
         self.assertNotIn("postal_code", fields)
         self.assertNotIn("city", fields)
 
-    def test_admin_list_uses_current_association_fields(self):
+    def test_admin_list_uses_current_fields_and_name_ordering(self):
         self.assertEqual(
             self.model_admin.list_display,
             ("name", "email", "contact_person", "website_url"),
         )
-
-    def test_admin_list_is_sorted_by_name_by_default(self):
         self.assertEqual(self.model_admin.ordering, ("name",))
 
     def test_description_uses_textarea(self):
