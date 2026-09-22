@@ -50,5 +50,10 @@ class UserProfileTests(TestCase):
 
     def test_account_and_edit_require_login(self):
         self.client.logout()
-        self.assertEqual(self.client.get(reverse("account")).status_code, 302)
-        self.assertEqual(self.client.get(reverse("account_edit")).status_code, 302)
+        for url_name in ("account", "account_edit"):
+            with self.subTest(url_name=url_name):
+                url = reverse(url_name)
+                self.assertRedirects(
+                    self.client.get(url),
+                    f'{reverse("login")}?next={url}',
+                )
