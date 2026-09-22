@@ -96,7 +96,7 @@ def _expected_achievement_keys(achievement, registrations):
     }:
         return set(), {}
     years = sorted({registration.breeding_date.year for registration in registrations})
-    evaluation_years = years if achievement.calendar_year_based else [None]
+    evaluation_years = years if achievement.achievement_type == Achievement.Type.YEARLY else [None]
     expected = set()
 
     levels = list(
@@ -131,7 +131,7 @@ def sync_achievements(user):
     years = sorted({registration.breeding_date.year for registration in all_registrations})
 
     for achievement in achievements:
-        evaluation_years = years if achievement.calendar_year_based else [None]
+        evaluation_years = years if achievement.achievement_type == Achievement.Type.YEARLY else [None]
         for year in evaluation_years:
             registrations = (
                 [registration for registration in all_registrations if registration.breeding_date.year == year]
