@@ -38,19 +38,14 @@ class SpeciesAdminImportTests(TestCase):
             ],
         }
 
-    def test_species_changelist_links_to_import(self):
+    def test_species_import_navigation_links_are_available(self):
         self.client.force_login(self.admin_user)
 
         response = self.client.get(reverse("admin:taxonomy_species_changelist"))
-
         self.assertContains(response, self.url)
         self.assertContains(response, "Importera arter")
 
-    def test_import_page_links_to_documentation(self):
-        self.client.force_login(self.admin_user)
-
         response = self.client.get(self.url)
-
         self.assertContains(response, self.help_url)
         self.assertContains(response, "Dokumentation för importformatet")
 
@@ -67,7 +62,7 @@ class SpeciesAdminImportTests(TestCase):
         self.assertContains(response, "skiftlägesokänslig")
         self.assertContains(response, "additiv")
 
-    def test_admin_can_import_species_file(self):
+    def test_admin_can_import_and_reimport_without_duplicates(self):
         self.client.force_login(self.admin_user)
 
         response = self.client.post(self.url, {"import_file": self._upload([self._row()])})
@@ -79,10 +74,6 @@ class SpeciesAdminImportTests(TestCase):
         self.assertEqual(ScientificSpeciesSynonym.objects.count(), 1)
         self.assertEqual(CommonNameSpeciesSynonym.objects.count(), 2)
         self.assertEqual(SpeciesLink.objects.count(), 1)
-
-    def test_reimport_does_not_create_duplicates(self):
-        self.client.force_login(self.admin_user)
-        self.client.post(self.url, {"import_file": self._upload([self._row()])})
 
         response = self.client.post(self.url, {"import_file": self._upload([self._row()])})
 
@@ -103,7 +94,7 @@ class SpeciesAdminImportTests(TestCase):
         self.assertContains(response, "Ogiltig breeding_class")
         self.assertFalse(Species.objects.exists())
 
-    def test_staff_without_species_change_permission_is_forbidden(self):
+    def test_staff_without_species_change_permission_cannot_access_import_pages(self):
         staff_user = get_user_model().objects.create_user(
             email="staff@example.com",
             password="test-password",
@@ -111,18 +102,7 @@ class SpeciesAdminImportTests(TestCase):
         )
         self.client.force_login(staff_user)
 
-        response = self.client.get(self.url)
-
-        self.assertEqual(response.status_code, 403)
-
-    def test_staff_without_species_change_permission_cannot_view_import_documentation(self):
-        staff_user = get_user_model().objects.create_user(
-            email="help-staff@example.com",
-            password="test-password",
-            is_staff=True,
-        )
-        self.client.force_login(staff_user)
-
-        response = self.client.get(self.help_url)
-
-        self.assertEqual(response.status_code, 403)
+        for url in (self.url, self.help_url):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 403)
