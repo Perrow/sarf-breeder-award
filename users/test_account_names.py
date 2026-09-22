@@ -32,6 +32,8 @@ class AccountNameTests(TestCase):
         self.assertContains(response, "Namn")
         self.assertContains(response, "Anna Andersson")
         self.assertContains(response, "Visas inte publikt.")
+        self.assertContains(response, "akvaristen")
+        self.assertContains(response, "Detta är namnet som visas publikt på webbplatsen")
 
     def test_account_edit_can_change_name(self):
         response = self.client.post(reverse("account_edit"), self._profile_data())
