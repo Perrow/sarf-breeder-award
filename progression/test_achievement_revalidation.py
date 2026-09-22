@@ -26,10 +26,15 @@ class AchievementRevalidationTests(TestCase):
             breeding_class=Species.BreedingClass.BRONZE,
         )
 
-    def _achievement(self, name, calendar_year_based=False, value=1):
+    def _achievement(
+        self,
+        name,
+        achievement_type=Achievement.Type.CAREER,
+        value=1,
+    ):
         achievement = Achievement.objects.create(
             name=name,
-            calendar_year_based=calendar_year_based,
+            achievement_type=achievement_type,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,
@@ -87,7 +92,7 @@ class AchievementRevalidationTests(TestCase):
     def test_revalidation_handles_calendar_years_separately(self):
         achievement, level, _ = self._achievement(
             "Årsreset",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
         )
         self._approve(2025)
         self._approve(2026)
