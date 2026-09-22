@@ -66,97 +66,86 @@ class UnifiedAchievementAdminUiTests(TestCase):
             list(Achievement.Type.choices),
         )
 
-    def test_automatic_achievement_shows_only_automatic_admin_actions(self):
-        achievement = Achievement.objects.create(
-            name="Automatisk admin",
-            achievement_type=Achievement.Type.CAREER,
+    def test_achievement_admin_actions_follow_achievement_type(self):
+        cases = (
+            (
+                Achievement.Type.CAREER,
+                ("Lägg till krav för alla nivåer", "Granska utdelade utmärkelser"),
+                ("Tilldela nivå",),
+            ),
+            (
+                Achievement.Type.MANUAL,
+                ("Tilldela nivå",),
+                ("Lägg till krav för alla nivåer", "Granska utdelade utmärkelser"),
+            ),
+            (
+                Achievement.Type.SELFMADE,
+                (),
+                (
+                    "Tilldela nivå",
+                    "Lägg till krav för alla nivåer",
+                    "Granska utdelade utmärkelser",
+                ),
+            ),
         )
 
-        response = self.client.get(
-            reverse("admin:progression_achievement_change", args=[achievement.pk])
+        for achievement_type, visible_actions, hidden_actions in cases:
+            with self.subTest(achievement_type=achievement_type):
+                achievement = Achievement.objects.create(
+                    name=f"Admin {achievement_type}",
+                    achievement_type=achievement_type,
+                )
+                response = self.client.get(
+                    reverse(
+                        "admin:progression_achievement_change",
+                        args=[achievement.pk],
+                    )
+                )
+                for action in visible_actions:
+                    self.assertContains(response, action)
+                for action in hidden_actions:
+                    self.assertNotContains(response, action)
+
+    def test_adding_special_level_in_admin_creates_expected_requirement(self):
+        cases = (
+            (
+                Achievement.Type.MANUAL,
+                "Manuell nivå",
+                "Guld",
+                AchievementRequirement.Kind.MANUAL_ASSIGNMENT,
+            ),
+            (
+                Achievement.Type.SELFMADE,
+                "Egenvald nivå",
+                "Klassiker",
+                AchievementRequirement.Kind.SELF_SELECTED,
+            ),
         )
 
-        self.assertContains(response, "Lägg till krav för alla nivåer")
-        self.assertContains(response, "Granska utdelade utmärkelser")
-        self.assertNotContains(response, "Tilldela nivå")
+        for achievement_type, achievement_name, level_name, requirement_kind in cases:
+            with self.subTest(achievement_type=achievement_type):
+                achievement = Achievement.objects.create(
+                    name=achievement_name,
+                    achievement_type=achievement_type,
+                )
+                response = self.client.post(
+                    reverse("admin:progression_achievementlevel_add"),
+                    {
+                        "achievement": achievement.pk,
+                        "name": level_name,
+                        "description": "",
+                        "existing_image": "",
+                        "order": 1,
+                        "_save": "Spara",
+                    },
+                )
 
-    def test_manual_achievement_shows_assignment_action_only(self):
-        achievement = Achievement.objects.create(
-            name="Manuell admin",
-            achievement_type=Achievement.Type.MANUAL,
-        )
-
-        response = self.client.get(
-            reverse("admin:progression_achievement_change", args=[achievement.pk])
-        )
-
-        self.assertContains(response, "Tilldela nivå")
-        self.assertNotContains(response, "Lägg till krav för alla nivåer")
-        self.assertNotContains(response, "Granska utdelade utmärkelser")
-
-    def test_selfmade_achievement_hides_automatic_and_manual_actions(self):
-        achievement = Achievement.objects.create(
-            name="Egenvald admin",
-            achievement_type=Achievement.Type.SELFMADE,
-        )
-
-        response = self.client.get(
-            reverse("admin:progression_achievement_change", args=[achievement.pk])
-        )
-
-        self.assertNotContains(response, "Tilldela nivå")
-        self.assertNotContains(response, "Lägg till krav för alla nivåer")
-        self.assertNotContains(response, "Granska utdelade utmärkelser")
-
-    def test_adding_manual_level_in_admin_creates_manual_requirement(self):
-        achievement = Achievement.objects.create(
-            name="Manuell nivå",
-            achievement_type=Achievement.Type.MANUAL,
-        )
-
-        response = self.client.post(
-            reverse("admin:progression_achievementlevel_add"),
-            {
-                "achievement": achievement.pk,
-                "name": "Guld",
-                "description": "",
-                "existing_image": "",
-                "order": 1,
-                "_save": "Spara",
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        level = achievement.levels.get(name="Guld")
-        self.assertEqual(
-            list(level.requirements.values_list("kind", flat=True)),
-            [AchievementRequirement.Kind.MANUAL_ASSIGNMENT],
-        )
-
-    def test_adding_selfmade_level_in_admin_creates_self_selected_requirement(self):
-        achievement = Achievement.objects.create(
-            name="Egenvald nivå",
-            achievement_type=Achievement.Type.SELFMADE,
-        )
-
-        response = self.client.post(
-            reverse("admin:progression_achievementlevel_add"),
-            {
-                "achievement": achievement.pk,
-                "name": "Klassiker",
-                "description": "",
-                "existing_image": "",
-                "order": 1,
-                "_save": "Spara",
-            },
-        )
-
-        self.assertEqual(response.status_code, 302)
-        level = achievement.levels.get(name="Klassiker")
-        self.assertEqual(
-            list(level.requirements.values_list("kind", flat=True)),
-            [AchievementRequirement.Kind.SELF_SELECTED],
-        )
+                self.assertEqual(response.status_code, 302)
+                level = achievement.levels.get(name=level_name)
+                self.assertEqual(
+                    list(level.requirements.values_list("kind", flat=True)),
+                    [requirement_kind],
+                )
 
     def test_selfmade_level_without_requirement_is_visible_but_cannot_be_selected(self):
         achievement = Achievement.objects.create(
