@@ -40,14 +40,13 @@ class UnifiedAchievementTypeTests(TestCase):
         )
         return level
 
-    def test_legacy_calendar_year_flag_maps_to_yearly_type(self):
+    def test_yearly_achievement_uses_explicit_type(self):
         achievement = Achievement.objects.create(
-            name="Årsutmärkelse via gammal flagga",
-            calendar_year_based=True,
+            name="Årsutmärkelse",
+            achievement_type=Achievement.Type.YEARLY,
         )
 
         self.assertEqual(achievement.achievement_type, Achievement.Type.YEARLY)
-        self.assertTrue(achievement.calendar_year_based)
 
     def test_manual_requirement_is_only_valid_for_manual_achievement(self):
         achievement = Achievement.objects.create(

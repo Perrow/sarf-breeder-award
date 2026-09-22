@@ -188,7 +188,7 @@ class AchievementTests(TestCase):
     def test_calendar_year_achievement_can_be_earned_more_than_once(self):
         achievement = Achievement.objects.create(
             name="Årsutmärkelse",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,

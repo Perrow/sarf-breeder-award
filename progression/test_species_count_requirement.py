@@ -50,7 +50,7 @@ class SpeciesCountRequirementTests(TestCase):
     def _achievement(self, value=2, yearly=False):
         achievement = Achievement.objects.create(
             name=f"Arter-{value}-{'år' if yearly else 'karriär'}",
-            calendar_year_based=yearly,
+            achievement_type=Achievement.Type.YEARLY if yearly else Achievement.Type.CAREER,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,

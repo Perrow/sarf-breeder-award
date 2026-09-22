@@ -30,7 +30,7 @@ class AchievementDisplayTests(TestCase):
     def create_earned(self, name="Lifetime", level_name="Brons", description="Första graden", year=None, image=None):
         achievement = Achievement.objects.create(
             name=name,
-            calendar_year_based=year is not None,
+            achievement_type=Achievement.Type.YEARLY if year is not None else Achievement.Type.CAREER,
             image=image or "",
         )
         level = AchievementLevel.objects.create(
@@ -79,7 +79,7 @@ class AchievementDisplayTests(TestCase):
         )
         achievement = Achievement.objects.create(
             name="Årsutmärkelse",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
             image=image_file("year-overlay.png"),
         )
         level = AchievementLevel.objects.create(
@@ -190,7 +190,7 @@ class AchievementDisplayTests(TestCase):
     def test_my_page_shows_only_highest_earned_level_for_current_year(self):
         achievement = Achievement.objects.create(
             name="Årsgrad",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
         )
         bronze = AchievementLevel.objects.create(
             achievement=achievement,

@@ -19,7 +19,7 @@ class LatestAchievementsPageTests(TestCase):
     def _earned(self, name, year, achieved_at):
         achievement = Achievement.objects.create(
             name=name,
-            calendar_year_based=year is not None,
+            achievement_type=Achievement.Type.YEARLY if year is not None else Achievement.Type.CAREER,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,
