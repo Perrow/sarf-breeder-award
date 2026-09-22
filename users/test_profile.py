@@ -32,7 +32,7 @@ class UserProfileTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "name": "Test Person",
+                "name": "Uppdaterat Namn",
                 "public_username": "PellePublic",
                 "avatar_url": "https://example.com/pelle.jpg",
             },
@@ -40,6 +40,7 @@ class UserProfileTests(TestCase):
 
         self.assertRedirects(response, reverse("account"))
         self.user.refresh_from_db()
+        self.assertEqual(self.user.name, "Uppdaterat Namn")
         self.assertEqual(self.user.public_username, "PellePublic")
         self.assertEqual(self.user.avatar_url, "https://example.com/original.jpg")
 
