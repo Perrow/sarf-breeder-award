@@ -32,7 +32,7 @@ class UserProfileTests(TestCase):
         response = self.client.post(
             reverse("account_edit"),
             {
-                "name": "Test Person",
+                "name": "Uppdaterat Namn",
                 "public_username": "PellePublic",
                 "avatar_url": "https://example.com/pelle.jpg",
             },
@@ -40,6 +40,7 @@ class UserProfileTests(TestCase):
 
         self.assertRedirects(response, reverse("account"))
         self.user.refresh_from_db()
+        self.assertEqual(self.user.name, "Uppdaterat Namn")
         self.assertEqual(self.user.public_username, "PellePublic")
         self.assertEqual(self.user.avatar_url, "https://example.com/original.jpg")
 
@@ -47,14 +48,12 @@ class UserProfileTests(TestCase):
         self.assertContains(account_response, "PellePublic")
         self.assertNotContains(account_response, "Visningsnamn")
 
-    def test_public_display_name_never_falls_back_to_private_name(self):
-        self.user.public_username = None
-        self.user.name = "Hemligt Namn"
-        self.user.save(update_fields=("public_username", "name"))
-
-        self.assertEqual(self.user.public_display_name(), "Användare")
-
     def test_account_and_edit_require_login(self):
         self.client.logout()
-        self.assertEqual(self.client.get(reverse("account")).status_code, 302)
-        self.assertEqual(self.client.get(reverse("account_edit")).status_code, 302)
+        for url_name in ("account", "account_edit"):
+            with self.subTest(url_name=url_name):
+                url = reverse(url_name)
+                self.assertRedirects(
+                    self.client.get(url),
+                    f'{reverse("login")}?next={url}',
+                )

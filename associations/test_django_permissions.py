@@ -16,26 +16,22 @@ class DjangoPermissionAdminTests(TestCase):
         self.association = Association.objects.create(name="Behörighetsföreningen")
         self.client.force_login(self.user)
 
-    def test_staff_user_without_permission_cannot_open_association_admin(self):
-        response = self.client.get(reverse("admin:associations_association_changelist"))
+    def test_django_permissions_control_association_admin_access(self):
+        changelist_url = reverse("admin:associations_association_changelist")
+
+        response = self.client.get(changelist_url)
         self.assertEqual(response.status_code, 403)
 
-    def test_view_permission_gives_read_access_to_association_admin(self):
         self.user.user_permissions.add(
             Permission.objects.get(codename="view_association")
         )
-
-        response = self.client.get(reverse("admin:associations_association_changelist"))
-
+        response = self.client.get(changelist_url)
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.association.name)
 
-    def test_change_permission_allows_editing_association(self):
         self.user.user_permissions.add(
-            Permission.objects.get(codename="view_association"),
-            Permission.objects.get(codename="change_association"),
+            Permission.objects.get(codename="change_association")
         )
-
         response = self.client.post(
             reverse("admin:associations_association_change", args=[self.association.pk]),
             {

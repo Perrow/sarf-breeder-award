@@ -66,7 +66,7 @@ class AssociationAdministrationTests(TestCase):
         self.assertTrue(Group.objects.filter(name=ASSOCIATION_ADMIN_GROUP).exists())
         self.assertTrue(Group.objects.filter(name=MEMBER_GROUP).exists())
 
-    def test_global_association_admin_group_without_membership_flag_has_no_admin_access(self):
+    def test_users_without_membership_admin_flag_have_no_association_admin_access(self):
         group_only = get_user_model().objects.create_user(
             email="group-only@example.com",
             password="test-password",
@@ -78,40 +78,35 @@ class AssociationAdministrationTests(TestCase):
             association=self.own_association,
             is_association_admin=False,
         )
+
         association_admin = admin.site._registry[Association]
         membership_admin = admin.site._registry[Membership]
-        request = self._request_for(group_only)
+        for user in (group_only, self.member):
+            with self.subTest(user=user.email):
+                request = self._request_for(user)
+                self.assertFalse(association_admin.has_module_permission(request))
+                self.assertFalse(membership_admin.has_module_permission(request))
 
-        self.assertFalse(association_admin.has_module_permission(request))
-        self.assertFalse(membership_admin.has_module_permission(request))
-
-    def test_member_has_no_association_admin_access(self):
-        association_admin = admin.site._registry[Association]
-        membership_admin = admin.site._registry[Membership]
-        request = self._request_for(self.member)
-
-        self.assertFalse(association_admin.has_module_permission(request))
-        self.assertFalse(membership_admin.has_module_permission(request))
-
-    def test_system_admin_sees_all_associations(self):
+    def test_association_queryset_is_scoped_by_admin_role(self):
         model_admin = admin.site._registry[Association]
-
-        queryset = model_admin.get_queryset(self._request_for(self.system_admin))
-
-        self.assertSetEqual(
-            set(queryset.values_list("pk", flat=True)),
-            {self.own_association.pk, self.other_association.pk},
+        cases = (
+            (
+                self.system_admin,
+                {self.own_association.pk, self.other_association.pk},
+            ),
+            (
+                self.association_admin,
+                {self.own_association.pk},
+            ),
         )
 
-    def test_association_admin_only_sees_own_association(self):
-        model_admin = admin.site._registry[Association]
-
-        queryset = model_admin.get_queryset(self._request_for(self.association_admin))
-
-        self.assertSetEqual(
-            set(queryset.values_list("pk", flat=True)),
-            {self.own_association.pk},
-        )
+        for user, expected_ids in cases:
+            with self.subTest(user=user.email):
+                queryset = model_admin.get_queryset(self._request_for(user))
+                self.assertSetEqual(
+                    set(queryset.values_list("pk", flat=True)),
+                    expected_ids,
+                )
 
     def test_association_admin_is_denied_other_association(self):
         self.client.force_login(self.association_admin)
@@ -230,26 +225,20 @@ class AssociationAdministrationTests(TestCase):
         self.assertFalse(Membership.objects.filter(pk=membership.pk).exists())
 
 
-    def test_system_admin_sees_association_admin_management_option(self):
-        self.client.force_login(self.system_admin)
-
-        response = self.client.get(reverse("admin:index"))
+    def test_system_admin_management_option_is_only_visible_to_system_admin(self):
         management_url = reverse(
             "admin:associations_associationadministratormanagement_changelist"
         )
 
+        self.client.force_login(self.system_admin)
+        response = self.client.get(reverse("admin:index"))
         self.assertContains(response, "Föreningsadministratörer")
         self.assertContains(response, management_url)
-
-        redirect_response = self.client.get(management_url)
-        self.assertRedirects(redirect_response, reverse("system_association_admins"))
-
-    def test_association_admin_does_not_see_system_admin_management_option(self):
-        self.client.force_login(self.association_admin)
-
-        response = self.client.get(reverse("admin:index"))
-
-        self.assertNotContains(
-            response,
-            reverse("admin:associations_associationadministratormanagement_changelist"),
+        self.assertRedirects(
+            self.client.get(management_url),
+            reverse("system_association_admins"),
         )
+
+        self.client.force_login(self.association_admin)
+        response = self.client.get(reverse("admin:index"))
+        self.assertNotContains(response, management_url)

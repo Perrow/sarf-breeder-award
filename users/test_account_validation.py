@@ -58,19 +58,3 @@ class AccountValidationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "Det finns redan ett konto med den e-postadressen.")
         self.assertEqual(get_user_model().objects.count(), 1)
-
-    def test_valid_registration_and_login_still_work(self):
-        response = self.client.post(
-            reverse("register"),
-            {
-                "name": "Test Person",
-                "email": "test@example.com",
-                "public_username": "testperson",
-                "password1": "Valid-password-123",
-                "password2": "Valid-password-123",
-            },
-        )
-
-        self.assertRedirects(response, reverse("account"))
-        self.client.logout()
-        self.assertTrue(self.client.login(username="test@example.com", password="Valid-password-123"))

@@ -24,19 +24,32 @@ class UserAccountTests(TestCase):
         self.assertEqual(user.get_full_name(), "Test User")
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
-    def test_registered_user_can_log_in_with_email(self):
-        User.objects.create_user(
+    def test_registered_user_can_log_in_with_email_and_next_is_respected(self):
+        user = User.objects.create_user(
             email="test@example.com",
             password="correct-password",
         )
 
         response = self.client.post(
             reverse("login"),
-            {"username": "test@example.com", "password": "correct-password"},
+            {"username": user.email, "password": "correct-password"},
         )
 
         self.assertRedirects(response, reverse("breeding_list"))
-        self.assertEqual(self.client.session["_auth_user_id"], str(User.objects.get().pk))
+        self.assertEqual(self.client.session["_auth_user_id"], str(user.pk))
+
+        self.client.logout()
+        next_url = reverse("account")
+        response = self.client.post(
+            f"{reverse('login')}?next={next_url}",
+            {
+                "username": user.email,
+                "password": "correct-password",
+                "next": next_url,
+            },
+        )
+
+        self.assertRedirects(response, next_url)
 
     def test_invalid_credentials_are_denied(self):
         User.objects.create_user(
@@ -53,14 +66,6 @@ class UserAccountTests(TestCase):
         self.assertNotIn("_auth_user_id", self.client.session)
         self.assertContains(response, "Ange ett korrekt")
 
-    def test_account_page_is_not_accessible_anonymously(self):
-        response = self.client.get(reverse("account"))
-
-        self.assertRedirects(
-            response,
-            f'{reverse("login")}?next={reverse("account")}',
-        )
-
     def test_logged_in_user_can_log_out(self):
         user = User.objects.create_user(
             email="test@example.com",
@@ -73,13 +78,10 @@ class UserAccountTests(TestCase):
         self.assertRedirects(response, reverse("login"))
         self.assertNotIn("_auth_user_id", self.client.session)
 
-    def test_public_site_is_swedish(self):
-        response = self.client.get(reverse("login"))
+    def test_login_surfaces_are_swedish(self):
+        for url in (reverse("login"), "/admin/login/"):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertContains(response, "Logga in")
 
-        self.assertContains(response, "Logga in")
-        self.assertContains(response, "Lösenord")
-
-    def test_admin_is_swedish(self):
-        response = self.client.get("/admin/login/")
-
-        self.assertContains(response, "Logga in")
+        self.assertContains(self.client.get(reverse("login")), "Lösenord")

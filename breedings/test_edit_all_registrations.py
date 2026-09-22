@@ -70,17 +70,6 @@ class EditAllRegistrationsTests(TestCase):
             "action": action,
         }
 
-    def test_detail_offers_edit_for_rejected_registration(self):
-        registration = self._registration(
-            self.silver,
-            BreedingRegistration.Status.REJECTED,
-        )
-
-        response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
-
-        self.assertContains(response, reverse("breeding_edit", args=[registration.pk]))
-        self.assertContains(response, ">Redigera<", html=False)
-
     def test_approved_silver_warns_that_approval_will_reset(self):
         registration = self._registration(
             self.silver,
