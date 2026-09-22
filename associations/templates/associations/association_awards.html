@@ -28,7 +28,13 @@
                     {% endif %}
 
                     <div id="member-list" class="border rounded p-3 overflow-auto" style="max-height:24rem;">
-                        {{ form.users }}
+                        {% for checkbox in form.users %}
+                        <div class="form-check mb-2" data-member-item>
+                            {{ checkbox.tag }}
+                            <label class="form-check-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                        </div>
+                        {% endfor %}
+                        <p id="member-no-results" class="text-body-secondary mb-0" hidden>Inga medlemmar matchar sökningen.</p>
                     </div>
                     <div class="d-flex justify-content-between align-items-center mt-2">
                         <span class="text-body-secondary"><span id="selected-user-count">0</span> valda</span>
@@ -176,6 +182,8 @@
     const search = document.getElementById('member-search');
     const memberList = document.getElementById('member-list');
     const userCheckboxes = [...memberList.querySelectorAll('input[type="checkbox"]')];
+    const memberItems = [...memberList.querySelectorAll('[data-member-item]')];
+    const noResults = document.getElementById('member-no-results');
     const levelField = document.getElementById('{{ form.level.id_for_label }}');
     const levelChoices = [...document.querySelectorAll('.manual-level-choice')];
     const count = document.getElementById('selected-user-count');
@@ -206,12 +214,18 @@
         }
     };
 
-    search.addEventListener('input', () => {
+    const filterMembers = () => {
         const term = search.value.trim().toLocaleLowerCase('sv-SE');
-        memberList.querySelectorAll('li').forEach(item => {
-            item.hidden = term && !item.textContent.toLocaleLowerCase('sv-SE').includes(term);
+        let visibleCount = 0;
+        memberItems.forEach(item => {
+            const matches = !term || item.textContent.toLocaleLowerCase('sv-SE').includes(term);
+            item.hidden = !matches;
+            if (matches) visibleCount += 1;
         });
-    });
+        noResults.hidden = visibleCount !== 0;
+    };
+
+    search.addEventListener('input', filterMembers);
 
     userCheckboxes.forEach(box => box.addEventListener('change', updateSummary));
     levelChoices.forEach(choice => choice.addEventListener('change', updateSummary));
