@@ -57,10 +57,17 @@ class DatabaseBackupAccessTests(TestCase):
         self.assertContains(response, "Ladda ner databasbackup")
 
     def test_association_admin_does_not_see_backup_action(self):
+        second_association = Association.objects.create(name="Andra backupföreningen")
+        Membership.objects.create(
+            user=self.association_admin,
+            association=second_association,
+            is_association_admin=True,
+        )
         self.client.force_login(self.association_admin)
 
         response = self.client.get(reverse("association_management"))
 
+        self.assertEqual(response.status_code, 200)
         self.assertNotContains(response, self.url)
         self.assertNotContains(response, "Ladda ner databasbackup")
 
