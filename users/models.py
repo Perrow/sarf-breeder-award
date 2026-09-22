@@ -68,6 +68,6 @@ class User(AbstractUser):
     def get_short_name(self):
         return self.name.strip()
 
-    def public_display_name(self, profile_information_is_public=False):
+    def public_display_name(self):
         """Return a name safe to expose in a public context."""
         return self.public_username or "Användare"
