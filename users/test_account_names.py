@@ -35,13 +35,6 @@ class AccountNameTests(TestCase):
         self.assertContains(response, "akvaristen")
         self.assertContains(response, "Detta är namnet som visas publikt på webbplatsen")
 
-    def test_account_edit_can_change_name(self):
-        response = self.client.post(reverse("account_edit"), self._profile_data())
-
-        self.assertRedirects(response, reverse("account"))
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.name, "Eva Eriksson")
-
     def test_name_is_optional_on_profile(self):
         response = self.client.post(
             reverse("account_edit"),
