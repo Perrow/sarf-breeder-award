@@ -92,7 +92,7 @@ class AchievementAdminForm(_ExistingImageMixin, forms.ModelForm):
 
     class Meta:
         model = Achievement
-        exclude = ("calendar_year_based",)
+        fields = "__all__"
 
 
 class AchievementBackgroundAdminForm(_ExistingImageMixin, forms.ModelForm):
