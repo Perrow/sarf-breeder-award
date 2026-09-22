@@ -82,6 +82,12 @@
                         {{ form.review_comment }}
                         {% for error in form.review_comment.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
                     </div>
+                    <div class="form-check mb-3">
+                        {{ form.show_on_species_page }}
+                        <label class="form-check-label" for="{{ form.show_on_species_page.id_for_label }}">
+                            {{ form.show_on_species_page.label }}
+                        </label>
+                    </div>
                     <div class="d-grid gap-2">
                         <button class="btn btn-success" type="submit" name="approve" value="Godkänn">Godkänn</button>
                         <button class="btn btn-outline-danger" type="submit" name="reject" value="Avslå">Avslå</button>
