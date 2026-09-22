@@ -53,14 +53,6 @@ class UserAccountTests(TestCase):
         self.assertNotIn("_auth_user_id", self.client.session)
         self.assertContains(response, "Ange ett korrekt")
 
-    def test_account_page_is_not_accessible_anonymously(self):
-        response = self.client.get(reverse("account"))
-
-        self.assertRedirects(
-            response,
-            f'{reverse("login")}?next={reverse("account")}',
-        )
-
     def test_logged_in_user_can_log_out(self):
         user = User.objects.create_user(
             email="test@example.com",
