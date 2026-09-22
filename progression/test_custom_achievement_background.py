@@ -68,7 +68,7 @@ class CustomAchievementBackgroundTests(TestCase):
         )
         achievement = Achievement.objects.create(
             name="Egen årsbild",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
             background_image=image_file("custom-year.png"),
         )
         self._earned(achievement, 2026)
@@ -89,7 +89,7 @@ class CustomAchievementBackgroundTests(TestCase):
         )
         achievement = Achievement.objects.create(
             name="Fallback",
-            calendar_year_based=True,
+            achievement_type=Achievement.Type.YEARLY,
         )
         self._earned(achievement, 2026)
 
