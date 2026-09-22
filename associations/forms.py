@@ -37,8 +37,17 @@ class SystemAssociationAdminForm(forms.Form):
         self.fields["is_association_admin"].widget.attrs["class"] = "form-check-input"
 
 
+class MemberMultipleChoiceField(forms.ModelMultipleChoiceField):
+    def label_from_instance(self, user):
+        name = user.name.strip()
+        public_username = user.public_username or ""
+        if name and public_username:
+            return f"{name} ({public_username})"
+        return name or public_username or "Användare"
+
+
 class AssociationManualAwardForm(forms.Form):
-    users = forms.ModelMultipleChoiceField(
+    users = MemberMultipleChoiceField(
         queryset=get_user_model().objects.none(),
         label="Medlemmar",
         widget=forms.CheckboxSelectMultiple(),
