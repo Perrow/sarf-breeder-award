@@ -88,7 +88,7 @@ class AssociationSpecificAdministrationTests(TestCase):
             reverse("association_edit", args=[self.first.pk]),
         )
 
-    def test_multiple_association_admin_sees_management_list(self):
+    def test_multiple_association_admin_sees_management_list_and_actions(self):
         self.regular_membership.is_association_admin = True
         self.regular_membership.save(update_fields=["is_association_admin"])
         self.client.force_login(self.association_admin)
@@ -98,6 +98,10 @@ class AssociationSpecificAdministrationTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.first.name)
         self.assertContains(response, self.second.name)
+        self.assertContains(
+            response,
+            reverse("association_awards", args=[self.first.pk]),
+        )
 
     def test_system_admin_sees_management_list_even_with_one_association(self):
         self.second.delete()
@@ -230,20 +234,14 @@ class AssociationSpecificAdministrationTests(TestCase):
 
         self.assertEqual(response.status_code, 403)
 
-    def test_account_links_to_association_management_for_association_admin(self):
-        self.client.force_login(self.association_admin)
+    def test_account_navigation_links_to_association_management_for_admins(self):
+        for user in (self.association_admin, self.system_admin):
+            with self.subTest(user=user.email):
+                self.client.force_login(user)
 
-        response = self.client.get(reverse("account"))
+                response = self.client.get(reverse("account"))
 
-        self.assertContains(response, reverse("association_management"))
-        self.assertContains(response, ">Administration</a>", html=False)
-        self.assertNotContains(response, ">Föreningsadministration</a>", html=False)
-        self.assertNotContains(response, reverse("system_association_admins"))
-
-    def test_account_navigation_links_to_association_management_for_system_admin(self):
-        self.client.force_login(self.system_admin)
-
-        response = self.client.get(reverse("account"))
-
-        self.assertContains(response, reverse("association_management"))
-        self.assertNotContains(response, reverse("system_association_admins"))
+                self.assertContains(response, reverse("association_management"))
+                self.assertContains(response, ">Administration</a>", html=False)
+                self.assertNotContains(response, ">Föreningsadministration</a>", html=False)
+                self.assertNotContains(response, reverse("system_association_admins"))
