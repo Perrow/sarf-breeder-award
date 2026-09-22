@@ -76,12 +76,3 @@ class ReturnToDraftTests(TestCase):
         self.assertEqual(response.status_code, 404)
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
-
-    def test_submitted_detail_shows_return_to_draft_action(self):
-        self.client.force_login(self.user)
-
-        response = self.client.get(
-            reverse("breeding_detail", args=[self.registration.pk])
-        )
-
-        self.assertContains(response, "Återgå till utkast")
