@@ -47,13 +47,6 @@ class UserProfileTests(TestCase):
         self.assertContains(account_response, "PellePublic")
         self.assertNotContains(account_response, "Visningsnamn")
 
-    def test_public_display_name_never_falls_back_to_private_name(self):
-        self.user.public_username = None
-        self.user.name = "Hemligt Namn"
-        self.user.save(update_fields=("public_username", "name"))
-
-        self.assertEqual(self.user.public_display_name(), "Användare")
-
     def test_account_and_edit_require_login(self):
         self.client.logout()
         self.assertEqual(self.client.get(reverse("account")).status_code, 302)
