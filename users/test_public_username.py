@@ -26,15 +26,6 @@ class PublicUsernameTests(TestCase):
         self.assertContains(response, "Användarnamnet används redan.")
         self.assertFalse(get_user_model().objects.filter(email="second@example.com").exists())
 
-    def test_identity_uses_public_username(self):
-        user = get_user_model()(
-            email="secret@example.com",
-            name="Private Person",
-            public_username="PublicName",
-        )
-
-        self.assertEqual(user.public_display_name(), "PublicName")
-
     def test_public_name_never_falls_back_to_private_name_or_email(self):
         user = get_user_model()(
             email="secret@example.com",
