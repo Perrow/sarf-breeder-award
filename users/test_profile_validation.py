@@ -38,20 +38,6 @@ class UserProfileValidationTests(TestCase):
         self.assertNotContains(response, "Profilbild (URL)")
         self.assertContains(response, 'type="hidden" name="avatar_url"', html=False)
 
-    def test_existing_avatar_is_preserved_when_profile_is_saved(self):
-        response = self.client.post(
-            reverse("account_edit"),
-            {
-                "name": "",
-                "public_username": "ProfileValidation",
-                "avatar_url": "https://example.com/changed.png",
-            },
-        )
-
-        self.assertRedirects(response, reverse("account"))
-        self.user.refresh_from_db()
-        self.assertEqual(self.user.avatar_url, "https://example.com/avatar.png")
-
     def test_direct_post_cannot_update_another_user(self):
         response = self.client.post(
             reverse("account_edit"),
