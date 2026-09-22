@@ -130,11 +130,11 @@ class AssociationManualAwardTests(TestCase):
         )
 
         self.assertEqual(response.status_code, 200)
-        self.assertContains(
-            response,
-            f'value="{self.member_a.pk}" checked',
-            html=False,
-        )
+        content = response.content.decode()
+        checkbox = f'value="{self.member_a.pk}"'
+        checkbox_index = content.index(checkbox)
+        checkbox_end = content.index(">", checkbox_index)
+        self.assertIn("checked", content[checkbox_index:checkbox_end])
 
     def test_association_admin_can_assign_same_level_to_multiple_members(self):
         second_member = get_user_model().objects.create_user(
