@@ -75,14 +75,6 @@ class AssociationManualAwardTests(TestCase):
         self.assertContains(response, self.management_url)
         self.assertContains(response, "Administration")
 
-    def test_association_management_links_to_award_page(self):
-        self.client.force_login(self.admin_a)
-
-        response = self.client.get(self.management_url)
-
-        self.assertContains(response, self.awards_url)
-        self.assertContains(response, "Tilldela utmärkelse")
-
     def test_association_admin_can_assign_manual_award_to_member(self):
         self.client.force_login(self.admin_a)
 

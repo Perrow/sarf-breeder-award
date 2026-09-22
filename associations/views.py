@@ -27,6 +27,11 @@ def _require_association_access(user, association):
 @login_required
 def association_management(request):
     associations = managed_associations(request.user).order_by("name")
+    if not is_system_admin(request.user):
+        association_ids = list(associations.values_list("pk", flat=True)[:2])
+        if len(association_ids) == 1:
+            return redirect("association_edit", pk=association_ids[0])
+
     return render(
         request,
         "associations/management_index.html",
