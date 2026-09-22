@@ -61,6 +61,7 @@ class ReviewDecisionForm(forms.Form):
     show_on_species_page = forms.BooleanField(
         label="Visa rapporten på artsidan",
         required=False,
+        widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
 
 
