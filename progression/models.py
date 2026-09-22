@@ -41,10 +41,6 @@ class Achievement(models.Model):
         default=Type.CAREER,
         verbose_name="typ",
     )
-    calendar_year_based = models.BooleanField(
-        default=False,
-        verbose_name="ska uppnås inom kalenderår",
-    )
     active = models.BooleanField(default=True, verbose_name="aktiv")
     image = models.ImageField(
         upload_to="achievements/images/",
@@ -63,12 +59,6 @@ class Achievement(models.Model):
         ordering = ("name",)
         verbose_name = "utmärkelse"
         verbose_name_plural = "utmärkelser"
-
-    def clean(self):
-        super().clean()
-        if self.calendar_year_based and self.achievement_type == self.Type.CAREER:
-            self.achievement_type = self.Type.YEARLY
-        self.calendar_year_based = self.achievement_type == self.Type.YEARLY
 
     def save(self, *args, **kwargs):
         self.full_clean()
