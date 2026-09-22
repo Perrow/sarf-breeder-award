@@ -78,6 +78,36 @@ class AssociationSpecificAdministrationTests(TestCase):
 
         self.assertEqual(response.status_code, 403)
 
+    def test_single_association_admin_is_redirected_to_association(self):
+        self.client.force_login(self.association_admin)
+
+        response = self.client.get(reverse("association_management"))
+
+        self.assertRedirects(
+            response,
+            reverse("association_edit", args=[self.first.pk]),
+        )
+
+    def test_multiple_association_admin_sees_management_list(self):
+        self.regular_membership.is_association_admin = True
+        self.regular_membership.save(update_fields=["is_association_admin"])
+        self.client.force_login(self.association_admin)
+
+        response = self.client.get(reverse("association_management"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.first.name)
+        self.assertContains(response, self.second.name)
+
+    def test_system_admin_sees_management_list_even_with_one_association(self):
+        self.second.delete()
+        self.client.force_login(self.system_admin)
+
+        response = self.client.get(reverse("association_management"))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.first.name)
+
     def test_association_admin_can_edit_only_allowed_association_fields(self):
         self.client.force_login(self.association_admin)
 
