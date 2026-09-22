@@ -42,7 +42,7 @@ class NavigationTests(TestCase):
         navigation = self._navigation_html(self.client.get(reverse("home")))
 
         self.assertNotIn(f'href="{reverse("admin:index")}"', navigation)
-        self.assertNotIn(">Admin</a>", navigation)
+        self.assertNotIn(">System</a>", navigation)
 
         user.is_staff = True
         user.save(update_fields=("is_staff",))
@@ -50,7 +50,7 @@ class NavigationTests(TestCase):
         navigation = self._navigation_html(self.client.get(reverse("home")))
 
         self.assertIn(
-            f'<a class="nav-link" href="{reverse("admin:index")}">Admin</a>',
+            f'<a class="nav-link" href="{reverse("admin:index")}">System</a>',
             navigation,
         )
 
