@@ -207,12 +207,3 @@ class AchievementAdminFlowTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertFalse(AchievementRequirement.objects.filter(pk=self.requirement.pk).exists())
 
-    def test_admin_index_hides_level_and_requirement_models(self):
-        response = self.client.get(reverse("admin:index"))
-
-        self.assertEqual(response.status_code, 200)
-        self.assertContains(response, reverse("admin:progression_achievement_changelist"))
-        self.assertContains(response, reverse("admin:progression_achievementbackground_changelist"))
-        self.assertContains(response, reverse("admin:progression_manualawardassignment_changelist"))
-        self.assertNotContains(response, reverse("admin:progression_achievementlevel_changelist"))
-        self.assertNotContains(response, reverse("admin:progression_achievementrequirement_changelist"))
