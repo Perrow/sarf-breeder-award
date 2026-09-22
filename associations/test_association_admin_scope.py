@@ -206,6 +206,8 @@ class AssociationSpecificAdministrationTests(TestCase):
         response = self.client.get(reverse("account"))
 
         self.assertContains(response, reverse("association_management"))
+        self.assertContains(response, ">Administration</a>", html=False)
+        self.assertNotContains(response, ">Föreningsadministration</a>", html=False)
         self.assertNotContains(response, reverse("system_association_admins"))
 
     def test_account_navigation_links_to_association_management_for_system_admin(self):

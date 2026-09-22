@@ -72,7 +72,7 @@ class AssociationManualAwardTests(TestCase):
 
         self.assertFalse(self.admin_a.is_staff)
         self.assertContains(response, self.management_url)
-        self.assertContains(response, "Föreningsadministration")
+        self.assertContains(response, "Administration")
 
     def test_association_management_links_to_award_page(self):
         self.client.force_login(self.admin_a)
