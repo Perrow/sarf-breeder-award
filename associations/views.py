@@ -1,7 +1,11 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.http import FileResponse, HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
+from django.utils import timezone
+
+from breeder_awards.database_backup import DatabaseBackupError, create_database_backup
 
 from progression.models import Achievement, AchievementBackground, UserAchievement
 from progression.services import assign_manual_level_to_users
@@ -175,4 +179,31 @@ def system_association_admins(request):
         request,
         "associations/system_association_admins.html",
         {"form": form, "administrators": administrators},
+    )
+
+
+@login_required
+def system_database_backup(request):
+    if not is_system_admin(request.user):
+        raise PermissionDenied
+    if request.method != "POST":
+        return HttpResponseNotAllowed(["POST"])
+
+    try:
+        backup_file = create_database_backup()
+    except DatabaseBackupError:
+        messages.error(
+            request,
+            "Databasbackupen kunde inte skapas. Kontrollera att backupverktyget är installerat och försök igen.",
+        )
+        return redirect("association_management")
+
+    filename = timezone.localtime().strftime(
+        "odlingskampanjen-db-%Y-%m-%d-%H%M.sql"
+    )
+    return FileResponse(
+        backup_file,
+        as_attachment=True,
+        filename=filename,
+        content_type="application/sql",
     )
