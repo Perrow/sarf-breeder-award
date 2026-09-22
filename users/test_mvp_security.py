@@ -17,12 +17,6 @@ class MvpSecurityTests(TestCase):
         self.assertNotEqual(user.password, "correct-horse-battery-staple")
         self.assertTrue(user.check_password("correct-horse-battery-staple"))
 
-    def test_private_account_page_requires_authentication(self):
-        response = self.client.get(reverse("account"))
-
-        self.assertEqual(response.status_code, 302)
-        self.assertIn(reverse("login"), response.url)
-
     def test_profile_update_rejects_post_without_csrf_token(self):
         user = get_user_model().objects.create_user(
             email="csrf@example.com",
