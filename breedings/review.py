@@ -58,6 +58,10 @@ class ReviewDecisionForm(forms.Form):
             }
         ),
     )
+    show_on_species_page = forms.BooleanField(
+        label="Visa rapporten på artsidan",
+        required=False,
+    )
 
 
 class TaxonomyResolutionForm(forms.Form):
@@ -143,6 +147,9 @@ def review_registration(request, pk):
                 registration.approved_at = timezone.now()
                 registration.awarded_breeding_class = breeding_class
                 registration.awarded_points = BREEDING_CLASS_POINTS[breeding_class]
+                registration.show_on_species_page = form.cleaned_data[
+                    "show_on_species_page"
+                ]
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -151,6 +158,7 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
+                        "show_on_species_page",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har godkänts.")
@@ -159,6 +167,7 @@ def review_registration(request, pk):
                 registration.approved_at = None
                 registration.awarded_breeding_class = ""
                 registration.awarded_points = None
+                registration.show_on_species_page = False
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -167,11 +176,19 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
+                        "show_on_species_page",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har avslagits.")
             else:
-                registration.save(update_fields=("reviewer", "review_comment"))
+                registration.show_on_species_page = False
+                registration.save(
+                    update_fields=(
+                        "reviewer",
+                        "review_comment",
+                        "show_on_species_page",
+                    )
+                )
                 messages.success(
                     request,
                     "Granskningsuppgifterna har sparats utan beslut.",
