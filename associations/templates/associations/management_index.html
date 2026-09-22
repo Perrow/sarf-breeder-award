@@ -6,7 +6,18 @@
 <h1>Föreningsadministration</h1>
 
 {% if is_system_admin %}
-<p><a class="btn btn-outline-primary" href="{% url 'system_association_admins' %}">Hantera föreningsadministratörer</a></p>
+<section class="card mb-4">
+    <div class="card-body">
+        <h2 class="h4">Systemadministration</h2>
+        <div class="d-flex gap-2 flex-wrap">
+            <a class="btn btn-outline-primary" href="{% url 'system_association_admins' %}">Hantera föreningsadministratörer</a>
+            <form method="post" action="{% url 'system_database_backup' %}">
+                {% csrf_token %}
+                <button class="btn btn-outline-secondary" type="submit">Ladda ner databasbackup</button>
+            </form>
+        </div>
+    </div>
+</section>
 {% endif %}
 
 {% if associations %}
