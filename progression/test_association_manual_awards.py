@@ -28,6 +28,7 @@ class AssociationManualAwardTests(TestCase):
         self.member_a = User.objects.create_user(
             email="member-a@example.com",
             password="test-password",
+            name="Internt Namn",
             public_username="Medlem A",
         )
         Membership.objects.create(
@@ -107,10 +108,33 @@ class AssociationManualAwardTests(TestCase):
         response = self.client.get(self.awards_url)
 
         self.assertContains(response, 'id="member-search"')
+        self.assertContains(response, 'data-member-item')
+        self.assertContains(response, "Internt Namn")
+        self.assertContains(response, "Medlem A")
+        self.assertContains(response, "Inga medlemmar matchar sökningen.")
+        self.assertContains(response, "filterMembers")
         self.assertContains(response, self.achievement.name)
         self.assertContains(response, self.level.name)
         self.assertContains(response, "3. Tilldela")
         self.assertContains(response, "manual-level-choice")
+
+    def test_selected_member_remains_selected_when_form_is_redisplayed(self):
+        self.client.force_login(self.admin_a)
+
+        response = self.client.post(
+            self.awards_url,
+            {
+                "users": [self.member_a.pk],
+                "level": "",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(
+            response,
+            f'value="{self.member_a.pk}" checked',
+            html=False,
+        )
 
     def test_association_admin_can_assign_same_level_to_multiple_members(self):
         second_member = get_user_model().objects.create_user(
