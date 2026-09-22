@@ -103,16 +103,10 @@ class AssociationCompetitionLimitAdminTests(TestCase):
         self.assertEqual(settings.default_max_registrations_per_genus, 3)
         self.assertEqual(settings.effective_from_year, timezone.localdate().year)
 
-    def test_association_admin_cannot_view_competition_limits(self):
+    def test_association_admin_cannot_access_competition_limit_admin(self):
         self.client.force_login(self.association_admin)
 
-        response = self.client.get(self.changelist_url)
-
-        self.assertEqual(response.status_code, 403)
-
-    def test_association_admin_cannot_create_competition_limit(self):
-        self.client.force_login(self.association_admin)
-
-        response = self.client.get(self.add_url)
-
-        self.assertEqual(response.status_code, 403)
+        for url in (self.changelist_url, self.add_url):
+            with self.subTest(url=url):
+                response = self.client.get(url)
+                self.assertEqual(response.status_code, 403)
