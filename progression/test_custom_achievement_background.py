@@ -1,7 +1,9 @@
 import io
+from pathlib import Path
 import tempfile
 
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -89,12 +91,19 @@ class CustomAchievementBackgroundTests(TestCase):
         self.assertEqual(preview.count(achievement.background_image.url), 3)
         self.assertEqual(background.tint_mode, AchievementBackground.TintMode.MULTIPLY)
 
-    def test_background_admin_loads_live_preview_script(self):
-        model_admin = AchievementBackgroundAdmin(AchievementBackground, admin.site)
+    def test_background_change_form_loads_color_preview_script(self):
+        template = (
+            Path(settings.BASE_DIR)
+            / "templates"
+            / "admin"
+            / "progression"
+            / "achievementbackground"
+            / "change_form.html"
+        ).read_text(encoding="utf-8")
 
         self.assertIn(
-            "progression/achievement_background_admin.js",
-            model_admin.media._js,
+            "progression/js/achievement_background_color.js",
+            template,
         )
 
     def test_background_preview_keeps_image_and_alpha_mask_for_live_blending(self):
