@@ -123,6 +123,22 @@ class CustomAchievementBackgroundTests(TestCase):
 
         self.assertEqual(background.tint_mode, AchievementBackground.TintMode.COLOR)
 
+    def test_background_admin_defaults_missing_tint_mode_to_color(self):
+        form = AchievementBackgroundAdminForm(
+            data={
+                "calendar_year": 2026,
+                "tint_color": "#224466",
+                "existing_image": "",
+            },
+            files={"image": image_file("form-default.png")},
+        )
+
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(
+            form.cleaned_data["tint_mode"],
+            AchievementBackground.TintMode.COLOR,
+        )
+
     def test_background_admin_offers_supported_tint_modes(self):
         form = AchievementBackgroundAdminForm()
 
