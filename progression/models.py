@@ -69,6 +69,12 @@ class Achievement(models.Model):
 
 
 class AchievementBackground(models.Model):
+    class TintMode(models.TextChoices):
+        NORMAL = "normal", "Normal"
+        COLOR = "color", "Color"
+        MULTIPLY = "multiply", "Multiply"
+        SOFT_LIGHT = "soft-light", "Soft light"
+
     calendar_year = models.PositiveIntegerField(
         null=True,
         blank=True,
@@ -87,6 +93,13 @@ class AchievementBackground(models.Model):
         validators=[hex_color_validator],
         verbose_name="färgning",
         help_text="Valfri färg i formatet #RRGGBB. Används bara för årsbakgrunder.",
+    )
+    tint_mode = models.CharField(
+        max_length=16,
+        choices=TintMode.choices,
+        default=TintMode.COLOR,
+        verbose_name="färgläge",
+        help_text="Bestämmer hur den valda färgen blandas med bakgrundsbilden.",
     )
 
     class Meta:

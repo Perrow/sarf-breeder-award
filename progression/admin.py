@@ -34,37 +34,47 @@ def _image_preview(background=None, overlay=None, custom_background=None):
     tint_html = ""
     overlay_html = ""
 
-    if custom_background:
+    display_image = custom_background or (
+        background.image if background and background.image else None
+    )
+    if display_image:
         background_html = format_html(
-            '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
-            custom_background.url,
-        )
-    elif background and background.image:
-        background_html = format_html(
-            '<img src="{}" alt="Bakgrund" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;">',
-            background.image.url,
+            '<img src="{}" alt="Bakgrund" '
+            'style="position:absolute;inset:0;width:200px;height:250px;'
+            'object-fit:contain;z-index:0;">',
+            display_image.url,
         )
 
-    if background and background.tint_color and background.image:
-        tint_html = format_html(
-            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;'
-            "mask-image:url('{}');-webkit-mask-image:url('{}');mask-size:contain;"
-            "-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;"
-            'mask-position:center;-webkit-mask-position:center;"></span>',
-            background.tint_color,
-            background.image.url,
-            background.image.url,
-        )
+        if background:
+            tint_html = format_html(
+                '<span data-background-tint '
+                'style="position:absolute;inset:0;background:{};'
+                'mix-blend-mode:{};display:{};z-index:1;'
+                "mask-image:url('{}');-webkit-mask-image:url('{}');"
+                'mask-size:contain;-webkit-mask-size:contain;'
+                'mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;'
+                'mask-position:center;-webkit-mask-position:center;"></span>',
+                background.tint_color or "transparent",
+                background.tint_mode,
+                "" if background.tint_color else "none",
+                display_image.url,
+                display_image.url,
+            )
 
     if overlay:
         overlay_html = format_html(
-            '<img src="{}" alt="Utmärkelse" style="position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:2;">',
+            '<img src="{}" alt="Utmärkelse" '
+            'style="position:absolute;inset:0;width:200px;height:250px;'
+            'object-fit:contain;z-index:2;">',
             overlay.url,
         )
 
     return format_html(
-        '<span style="display:inline-block;position:relative;width:200px;height:250px;overflow:hidden;">{}{}</span>',
-        format_html("{}{}", background_html, tint_html),
+        '<span data-achievement-background-preview '
+        'style="display:inline-block;position:relative;width:200px;'
+        'height:250px;overflow:hidden;isolation:isolate;">{}{}{}</span>',
+        background_html,
+        tint_html,
         overlay_html,
     )
 
@@ -399,7 +409,7 @@ class AchievementAdmin(admin.ModelAdmin):
 @admin.register(AchievementBackground)
 class AchievementBackgroundAdmin(admin.ModelAdmin):
     form = AchievementBackgroundAdminForm
-    list_display = ("background_type", "tint_color", "preview")
+    list_display = ("background_type", "tint_color", "tint_mode", "preview")
     readonly_fields = ("preview",)
     ordering = ("calendar_year",)
 

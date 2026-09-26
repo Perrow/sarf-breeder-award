@@ -1,14 +1,17 @@
 import io
+from pathlib import Path
 import tempfile
 
 from django.contrib import admin
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from PIL import Image
 
-from .admin import AchievementAdmin
+from .admin import AchievementAdmin, AchievementBackgroundAdmin
+from .forms import AchievementBackgroundAdminForm
 from .models import Achievement, AchievementBackground, AchievementLevel, UserAchievement
 from .services import achievement_presentations_for_user
 
@@ -61,10 +64,11 @@ class CustomAchievementBackgroundTests(TestCase):
         self.assertEqual(presentation["overlay"].name, achievement.image.name)
 
     def test_custom_background_for_yearly_achievement_keeps_year_tint(self):
-        AchievementBackground.objects.create(
+        background = AchievementBackground.objects.create(
             calendar_year=2026,
             image=image_file("2026.png"),
             tint_color="#336699",
+            tint_mode=AchievementBackground.TintMode.MULTIPLY,
         )
         achievement = Achievement.objects.create(
             name="Egen årsbild",
@@ -77,9 +81,83 @@ class CustomAchievementBackgroundTests(TestCase):
 
         self.assertEqual(presentation["background_image"].name, achievement.background_image.name)
         self.assertEqual(presentation["background_tint"], "#336699")
+        self.assertEqual(
+            presentation["background_tint_mode"],
+            AchievementBackground.TintMode.MULTIPLY,
+        )
         preview = str(AchievementAdmin(Achievement, admin.site).preview(achievement))
         self.assertIn("#336699", preview)
-        self.assertIn(achievement.background_image.url, preview)
+        self.assertIn("mix-blend-mode:multiply", preview)
+        self.assertEqual(preview.count(achievement.background_image.url), 3)
+        self.assertEqual(background.tint_mode, AchievementBackground.TintMode.MULTIPLY)
+
+    def test_background_change_form_loads_color_preview_script(self):
+        template = (
+            Path(settings.BASE_DIR)
+            / "templates"
+            / "admin"
+            / "progression"
+            / "achievementbackground"
+            / "change_form.html"
+        ).read_text(encoding="utf-8")
+
+        self.assertIn(
+            "progression/js/achievement_background_color.js",
+            template,
+        )
+
+    def test_background_preview_keeps_image_and_alpha_mask_for_live_blending(self):
+        background = AchievementBackground.objects.create(
+            calendar_year=2026,
+            image=image_file("live-preview.png"),
+        )
+
+        preview = str(
+            AchievementBackgroundAdmin(
+                AchievementBackground,
+                admin.site,
+            ).preview(background)
+        )
+
+        self.assertIn("data-achievement-background-preview", preview)
+        self.assertIn('src="', preview)
+        self.assertIn("data-background-tint", preview)
+        self.assertIn("mask-image:url(", preview)
+        self.assertIn("isolation:isolate", preview)
+        self.assertIn("display:none", preview)
+
+    def test_background_tint_mode_defaults_to_existing_color_behavior(self):
+        background = AchievementBackground.objects.create(
+            calendar_year=2026,
+            image=image_file("default-mode.png"),
+            tint_color="#224466",
+        )
+
+        self.assertEqual(background.tint_mode, AchievementBackground.TintMode.COLOR)
+
+    def test_background_admin_defaults_missing_tint_mode_to_color(self):
+        form = AchievementBackgroundAdminForm(
+            data={
+                "calendar_year": 2026,
+                "tint_color": "#224466",
+                "existing_image": "",
+            },
+            files={"image": image_file("form-default.png")},
+        )
+
+        self.assertTrue(form.is_valid(), form.errors)
+        self.assertEqual(
+            form.cleaned_data["tint_mode"],
+            AchievementBackground.TintMode.COLOR,
+        )
+
+    def test_background_admin_offers_supported_tint_modes(self):
+        form = AchievementBackgroundAdminForm()
+
+        self.assertEqual(
+            list(form.fields["tint_mode"].choices),
+            list(AchievementBackground.TintMode.choices),
+        )
 
     def test_missing_custom_background_uses_existing_fallback(self):
         fallback = AchievementBackground.objects.create(

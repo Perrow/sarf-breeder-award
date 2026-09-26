@@ -108,6 +108,10 @@ class AchievementBackgroundAdminForm(_ExistingImageMixin, forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["image"].required = False
+        self.fields["tint_mode"].required = False
+
+    def clean_tint_mode(self):
+        return self.cleaned_data.get("tint_mode") or AchievementBackground.TintMode.COLOR
 
     class Meta:
         model = AchievementBackground
