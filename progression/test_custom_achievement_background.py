@@ -8,7 +8,7 @@ from django.core.files.uploadedfile import SimpleUploadedFile
 from django.test import TestCase, override_settings
 from PIL import Image
 
-from .admin import AchievementAdmin
+from .admin import AchievementAdmin, AchievementBackgroundAdmin
 from .forms import AchievementBackgroundAdminForm
 from .models import Achievement, AchievementBackground, AchievementLevel, UserAchievement
 from .services import achievement_presentations_for_user
@@ -88,6 +88,31 @@ class CustomAchievementBackgroundTests(TestCase):
         self.assertIn("mix-blend-mode:multiply", preview)
         self.assertEqual(preview.count(achievement.background_image.url), 3)
         self.assertEqual(background.tint_mode, AchievementBackground.TintMode.MULTIPLY)
+
+    def test_background_admin_loads_live_preview_script(self):
+        model_admin = AchievementBackgroundAdmin(AchievementBackground, admin.site)
+
+        self.assertIn(
+            "progression/achievement_background_admin.js",
+            model_admin.media._js,
+        )
+
+    def test_background_preview_has_live_tint_layer_without_saved_color(self):
+        background = AchievementBackground.objects.create(
+            calendar_year=2026,
+            image=image_file("live-preview.png"),
+        )
+
+        preview = str(
+            AchievementBackgroundAdmin(
+                AchievementBackground,
+                admin.site,
+            ).preview(background)
+        )
+
+        self.assertIn("data-achievement-background-preview", preview)
+        self.assertIn("data-background-tint", preview)
+        self.assertIn("display:none", preview)
 
     def test_background_tint_mode_defaults_to_existing_color_behavior(self):
         background = AchievementBackground.objects.create(
