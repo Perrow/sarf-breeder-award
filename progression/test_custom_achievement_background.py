@@ -85,7 +85,7 @@ class CustomAchievementBackgroundTests(TestCase):
         )
         preview = str(AchievementAdmin(Achievement, admin.site).preview(achievement))
         self.assertIn("#336699", preview)
-        self.assertIn("mix-blend-mode:multiply", preview)
+        self.assertIn("background-blend-mode:multiply", preview)
         self.assertEqual(preview.count(achievement.background_image.url), 3)
         self.assertEqual(background.tint_mode, AchievementBackground.TintMode.MULTIPLY)
 
@@ -97,7 +97,7 @@ class CustomAchievementBackgroundTests(TestCase):
             model_admin.media._js,
         )
 
-    def test_background_preview_has_live_tint_layer_without_saved_color(self):
+    def test_background_preview_is_ready_for_live_blend_updates_without_saved_color(self):
         background = AchievementBackground.objects.create(
             calendar_year=2026,
             image=image_file("live-preview.png"),
@@ -111,8 +111,8 @@ class CustomAchievementBackgroundTests(TestCase):
         )
 
         self.assertIn("data-achievement-background-preview", preview)
-        self.assertIn("data-background-tint", preview)
-        self.assertIn("display:none", preview)
+        self.assertIn("background-image:", preview)
+        self.assertNotIn("background-blend-mode:", preview)
 
     def test_background_tint_mode_defaults_to_existing_color_behavior(self):
         background = AchievementBackground.objects.create(
