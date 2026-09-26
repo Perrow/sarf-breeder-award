@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const hexInput = document.getElementById('id_tint_color');
     if (!hexInput) return;
 
+    const modeInput = document.getElementById('id_tint_mode');
     const calendarYearInput = document.getElementById('id_calendar_year');
     const imageInput = document.getElementById('id_image');
     const previewRoot = document.querySelector('.field-preview .readonly');
@@ -25,11 +26,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (previewRoot) {
         const wrapper = document.createElement('span');
-        wrapper.style.cssText = 'display:inline-block;position:relative;width:200px;height:250px;overflow:hidden;';
+        wrapper.style.cssText = 'display:inline-block;position:relative;width:200px;height:250px;overflow:hidden;isolation:isolate;';
 
         previewImage = document.createElement('img');
         previewImage.alt = 'Bakgrund';
-        previewImage.style.cssText = 'position:absolute;inset:0;width:200px;height:250px;object-fit:contain;';
+        previewImage.style.cssText = 'position:absolute;inset:0;width:200px;height:250px;object-fit:contain;z-index:0;';
         if (existingImageUrl) {
             previewImage.src = existingImageUrl;
         } else {
@@ -38,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         tintLayer = document.createElement('span');
         tintLayer.setAttribute('aria-hidden', 'true');
-        tintLayer.style.cssText = 'position:absolute;inset:0;mix-blend-mode:color;mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center;';
+        tintLayer.style.cssText = 'position:absolute;inset:0;z-index:1;mask-size:contain;-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;mask-position:center;-webkit-mask-position:center;';
 
         wrapper.append(previewImage, tintLayer);
         previewRoot.replaceChildren(wrapper);
@@ -54,8 +55,16 @@ document.addEventListener('DOMContentLoaded', () => {
         tintLayer.style.webkitMaskImage = maskValue;
     };
 
+    const updateBlendMode = () => {
+        if (!tintLayer) return;
+        tintLayer.style.mixBlendMode = modeInput?.value || 'color';
+    };
+
     const updateTint = (value) => {
-        if (tintLayer) tintLayer.style.background = isHex(value) ? value : 'transparent';
+        if (!tintLayer) return;
+        const hasColor = isHex(value);
+        tintLayer.style.background = hasColor ? value : 'transparent';
+        tintLayer.style.display = hasColor ? '' : 'none';
     };
 
     const syncFromText = () => {
@@ -71,6 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     picker.value = isHex(hexInput.value.trim()) ? hexInput.value.trim() : '#000000';
     updateMask();
+    updateBlendMode();
     syncFromText();
     updateAvailability();
 
@@ -80,6 +90,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     hexInput.addEventListener('input', syncFromText);
+    modeInput?.addEventListener('change', updateBlendMode);
     calendarYearInput?.addEventListener('input', updateAvailability);
 
     imageInput?.addEventListener('change', () => {
