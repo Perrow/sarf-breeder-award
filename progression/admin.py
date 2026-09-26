@@ -46,14 +46,16 @@ def _image_preview(background=None, overlay=None, custom_background=None):
         )
 
     tint_image = custom_background or (background.image if background and background.image else None)
-    if background and background.tint_color and tint_image:
+    if background and tint_image:
         tint_html = format_html(
-            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:{};'
-            "mask-image:url('{}');-webkit-mask-image:url('{}');mask-size:contain;"
-            "-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;"
+            '<span data-background-tint style="position:absolute;inset:0;background:{};'
+            'mix-blend-mode:{};display:{};mask-image:url(\'{}\');'
+            '-webkit-mask-image:url(\'{}\');mask-size:contain;'
+            '-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;'
             'mask-position:center;-webkit-mask-position:center;"></span>',
-            background.tint_color,
+            background.tint_color or "transparent",
             background.tint_mode,
+            "" if background.tint_color else "none",
             tint_image.url,
             tint_image.url,
         )
@@ -65,7 +67,7 @@ def _image_preview(background=None, overlay=None, custom_background=None):
         )
 
     return format_html(
-        '<span style="display:inline-block;position:relative;width:200px;height:250px;overflow:hidden;">{}{}</span>',
+        '<span data-achievement-background-preview style="display:inline-block;position:relative;width:200px;height:250px;overflow:hidden;">{}{}</span>',
         format_html("{}{}", background_html, tint_html),
         overlay_html,
     )
@@ -404,6 +406,9 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
     list_display = ("background_type", "tint_color", "tint_mode", "preview")
     readonly_fields = ("preview",)
     ordering = ("calendar_year",)
+
+    class Media:
+        js = ("progression/achievement_background_admin.js",)
 
     @admin.display(description="Typ/år")
     def background_type(self, obj):
