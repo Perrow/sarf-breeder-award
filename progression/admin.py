@@ -31,31 +31,33 @@ def _image_preview(background=None, overlay=None, custom_background=None):
         return "-"
 
     background_html = ""
+    tint_html = ""
     overlay_html = ""
 
     display_image = custom_background or (
         background.image if background and background.image else None
     )
     if display_image:
-        tint_color = background.tint_color if background else ""
-        tint_mode = background.tint_mode if background else AchievementBackground.TintMode.COLOR
-        if tint_color:
-            background_html = format_html(
-                '<span data-achievement-background-preview '
-                'style="position:absolute;inset:0;background-color:{};'
-                "background-image:url('{}');background-size:contain;"
-                "background-repeat:no-repeat;background-position:center;"
-                'background-blend-mode:{};"></span>',
-                tint_color,
+        background_html = format_html(
+            '<img src="{}" alt="Bakgrund" '
+            'style="position:absolute;inset:0;width:200px;height:250px;'
+            'object-fit:contain;z-index:0;">',
+            display_image.url,
+        )
+
+        if background:
+            tint_html = format_html(
+                '<span data-background-tint '
+                'style="position:absolute;inset:0;background:{};'
+                'mix-blend-mode:{};display:{};z-index:1;'
+                "mask-image:url('{}');-webkit-mask-image:url('{}');"
+                'mask-size:contain;-webkit-mask-size:contain;'
+                'mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;'
+                'mask-position:center;-webkit-mask-position:center;"></span>',
+                background.tint_color or "transparent",
+                background.tint_mode,
+                "" if background.tint_color else "none",
                 display_image.url,
-                tint_mode,
-            )
-        else:
-            background_html = format_html(
-                '<span data-achievement-background-preview '
-                'style="position:absolute;inset:0;background-image:url(\'{}\');'
-                'background-size:contain;background-repeat:no-repeat;'
-                'background-position:center;"></span>',
                 display_image.url,
             )
 
@@ -68,9 +70,11 @@ def _image_preview(background=None, overlay=None, custom_background=None):
         )
 
     return format_html(
-        '<span style="display:inline-block;position:relative;width:200px;'
-        'height:250px;overflow:hidden;">{}{}</span>',
+        '<span data-achievement-background-preview '
+        'style="display:inline-block;position:relative;width:200px;'
+        'height:250px;overflow:hidden;isolation:isolate;">{}{}{}</span>',
         background_html,
+        tint_html,
         overlay_html,
     )
 
