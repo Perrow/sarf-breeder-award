@@ -413,9 +413,6 @@ class AchievementBackgroundAdmin(admin.ModelAdmin):
     readonly_fields = ("preview",)
     ordering = ("calendar_year",)
 
-    class Media:
-        js = ("progression/achievement_background_admin.js",)
-
     @admin.display(description="Typ/år")
     def background_type(self, obj):
         return obj.calendar_year if obj.calendar_year is not None else "Livstid"
