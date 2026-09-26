@@ -118,6 +118,31 @@ class AchievementDisplayTests(TestCase):
         self.assertContains(history_response, "<strong>År:</strong> 2025", html=True)
         self.assertContains(history_response, "<strong>År:</strong> 2026", html=True)
 
+    def test_yearly_background_uses_selected_tint_mode(self):
+        AchievementBackground.objects.create(
+            calendar_year=2026,
+            image=image_file("multiply.png"),
+            tint_color="#336699",
+            tint_mode=AchievementBackground.TintMode.SOFT_LIGHT,
+        )
+        self.create_earned(name="Färgläge", year=2026)
+
+        response = self.client.get(reverse("breeding_list"))
+
+        self.assertContains(response, "mix-blend-mode:soft-light")
+
+    def test_background_without_tint_does_not_render_blend_layer(self):
+        AchievementBackground.objects.create(
+            calendar_year=2026,
+            image=image_file("plain.png"),
+            tint_mode=AchievementBackground.TintMode.MULTIPLY,
+        )
+        self.create_earned(name="Utan färg", year=2026)
+
+        response = self.client.get(reverse("breeding_list"))
+
+        self.assertNotContains(response, "mix-blend-mode:")
+
     def test_yearly_achievement_uses_latest_previous_background_when_exact_year_is_missing(self):
         background_2026 = AchievementBackground.objects.create(
             calendar_year=2026,
