@@ -392,6 +392,7 @@ def _presentation_for(earned, all_registrations=None):
         "background": fallback_background,
         "background_image": custom_background if custom_background else fallback_background.image if fallback_background else None,
         "background_tint": fallback_background.tint_color if earned.calendar_year is not None and fallback_background else "",
+        "background_tint_mode": fallback_background.tint_mode if earned.calendar_year is not None and fallback_background else AchievementBackground.TintMode.COLOR,
         "overlay": achievement.image if achievement.image else None,
         "level_overlay": earned.level.image if earned.level.image else None,
         "requirements": current_progress,
