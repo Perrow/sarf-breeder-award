@@ -86,7 +86,7 @@ class CustomAchievementBackgroundTests(TestCase):
         preview = str(AchievementAdmin(Achievement, admin.site).preview(achievement))
         self.assertIn("#336699", preview)
         self.assertIn("mix-blend-mode:multiply", preview)
-        self.assertIn(achievement.background_image.url, preview)
+        self.assertEqual(preview.count(achievement.background_image.url), 3)
         self.assertEqual(background.tint_mode, AchievementBackground.TintMode.MULTIPLY)
 
     def test_background_tint_mode_defaults_to_existing_color_behavior(self):
