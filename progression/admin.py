@@ -47,11 +47,12 @@ def _image_preview(background=None, overlay=None, custom_background=None):
 
     if background and background.tint_color and background.image:
         tint_html = format_html(
-            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:color;'
+            '<span style="position:absolute;inset:0;background:{};mix-blend-mode:{};'
             "mask-image:url('{}');-webkit-mask-image:url('{}');mask-size:contain;"
             "-webkit-mask-size:contain;mask-repeat:no-repeat;-webkit-mask-repeat:no-repeat;"
             'mask-position:center;-webkit-mask-position:center;"></span>',
             background.tint_color,
+            background.tint_mode,
             background.image.url,
             background.image.url,
         )
@@ -399,7 +400,7 @@ class AchievementAdmin(admin.ModelAdmin):
 @admin.register(AchievementBackground)
 class AchievementBackgroundAdmin(admin.ModelAdmin):
     form = AchievementBackgroundAdminForm
-    list_display = ("background_type", "tint_color", "preview")
+    list_display = ("background_type", "tint_color", "tint_mode", "preview")
     readonly_fields = ("preview",)
     ordering = ("calendar_year",)
 
