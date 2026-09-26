@@ -45,7 +45,8 @@ def _image_preview(background=None, overlay=None, custom_background=None):
             background.image.url,
         )
 
-    if background and background.tint_color and background.image:
+    tint_image = custom_background or (background.image if background and background.image else None)
+    if background and background.tint_color and tint_image:
         tint_html = format_html(
             '<span style="position:absolute;inset:0;background:{};mix-blend-mode:{};'
             "mask-image:url('{}');-webkit-mask-image:url('{}');mask-size:contain;"
@@ -53,8 +54,8 @@ def _image_preview(background=None, overlay=None, custom_background=None):
             'mask-position:center;-webkit-mask-position:center;"></span>',
             background.tint_color,
             background.tint_mode,
-            background.image.url,
-            background.image.url,
+            tint_image.url,
+            tint_image.url,
         )
 
     if overlay:
