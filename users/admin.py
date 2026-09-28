@@ -19,6 +19,7 @@ class AppUserChangeForm(UserChangeForm):
 
 @admin.register(User)
 class AppUserAdmin(UserAdmin):
+    actions = ("delete_selected",)
     add_form = AppUserCreationForm
     form = AppUserChangeForm
     model = User
