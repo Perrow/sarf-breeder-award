@@ -59,8 +59,12 @@ class AssociationCompetitionLimitAdminForm(forms.ModelForm):
 
 @admin.register(AssociationCompetitionSettings)
 class AssociationCompetitionSettingsAdmin(admin.ModelAdmin):
-    list_display = ("effective_from_year", "default_max_registrations_per_genus")
-    fields = ("default_max_registrations_per_genus",)
+    list_display = (
+        "effective_from_year",
+        "default_max_registrations_per_genus",
+        "late_reporting_days",
+    )
+    fields = ("default_max_registrations_per_genus", "late_reporting_days")
 
     def has_module_permission(self, request):
         return is_system_admin(request.user)
