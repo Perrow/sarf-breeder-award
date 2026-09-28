@@ -51,6 +51,18 @@ class RegistrationForm(UserCreationForm):
         help_text=PUBLIC_USERNAME_HELP,
     )
     email = forms.EmailField(label="E-post")
+    country = forms.CharField(
+        label="Land",
+        required=False,
+        widget=forms.TextInput(
+            attrs={
+                "autocomplete": "off",
+                "tabindex": "-1",
+                "aria-hidden": "true",
+                "style": "position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;",
+            }
+        ),
+    )
     associations = _association_field()
 
     class Meta(UserCreationForm.Meta):
@@ -59,10 +71,17 @@ class RegistrationForm(UserCreationForm):
             "name",
             "public_username",
             "email",
+            "country",
             "associations",
             "password1",
             "password2",
         )
+
+    def clean_country(self):
+        country = self.cleaned_data["country"].strip()
+        if country:
+            raise forms.ValidationError("Registreringen kunde inte genomföras.")
+        return country
 
     def clean_email(self):
         email = self.cleaned_data["email"].strip().lower()
