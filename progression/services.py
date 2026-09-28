@@ -417,6 +417,16 @@ def _highest_level_per_achievement(earned):
     return list(highest.values())
 
 
+def _highest_level_per_achievement_and_year(earned):
+    highest = {}
+    for item in earned:
+        key = (item.level.achievement_id, item.calendar_year)
+        current = highest.get(key)
+        if current is None or (item.level.order, item.pk) > (current.level.order, current.pk):
+            highest[key] = item
+    return list(highest.values())
+
+
 def latest_achievement_presentations_for_user(user, limit=6):
     current_year = timezone.localdate().year
     earned = achievements_for_user(user)
@@ -443,21 +453,47 @@ def latest_achievement_presentations_for_user(user, limit=6):
 def all_achievement_presentations_for_user(user):
     earned = achievements_for_user(user)
     registrations = _registrations_for(user)
-    earned.sort(key=lambda item: (item.achieved_at, item.pk), reverse=True)
 
-    career = [
-        _presentation_for(item, registrations)
+    career = _highest_level_per_achievement(
+        item
         for item in earned
         if item.level.achievement.achievement_type == Achievement.Type.CAREER
-    ]
-    yearly_by_year = {}
-    for item in earned:
-        if item.level.achievement.achievement_type != Achievement.Type.YEARLY:
-            continue
-        yearly_by_year.setdefault(item.calendar_year, []).append(_presentation_for(item, registrations))
+        and item.calendar_year is None
+    )
+    yearly = _highest_level_per_achievement_and_year(
+        item
+        for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.YEARLY
+    )
+    manual = _highest_level_per_achievement(
+        item
+        for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.MANUAL
+    )
+    selfmade = _highest_level_per_achievement(
+        item
+        for item in earned
+        if item.level.achievement.achievement_type == Achievement.Type.SELFMADE
+    )
 
-    yearly = [
-        {"year": year, "achievements": yearly_by_year[year]}
-        for year in sorted(yearly_by_year, reverse=True)
-    ]
-    return {"career": career, "yearly": yearly}
+    sort_key = lambda item: (item.achieved_at, item.pk)
+    career.sort(key=sort_key, reverse=True)
+    yearly.sort(key=sort_key, reverse=True)
+    manual.sort(key=sort_key, reverse=True)
+    selfmade.sort(key=sort_key, reverse=True)
+
+    yearly_by_year = {}
+    for item in yearly:
+        yearly_by_year.setdefault(item.calendar_year, []).append(
+            _presentation_for(item, registrations)
+        )
+
+    return {
+        "career": [_presentation_for(item, registrations) for item in career],
+        "yearly": [
+            {"year": year, "achievements": yearly_by_year[year]}
+            for year in sorted(yearly_by_year, reverse=True)
+        ],
+        "manual": [_presentation_for(item, registrations) for item in manual],
+        "selfmade": [_presentation_for(item, registrations) for item in selfmade],
+    }

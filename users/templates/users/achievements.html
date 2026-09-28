@@ -1,35 +1,8 @@
 {% extends "base.html" %}
-{% load manual_awards selfmade_badges %}
-
 {% block title %}Alla utmärkelser | Odlingskampanjen{% endblock %}
 
 {% block content %}
-{% manual_awards_for request.user as manual_awards %}
-{% selfmade_badges_for request.user as selfmade_badges %}
 <h1>Alla utmärkelser</h1>
-
-<h2 class="h4 mt-4">Manuellt utdelade utmärkelser</h2>
-{% if manual_awards %}
-<div class="d-flex flex-wrap gap-3 mb-4">
-    {% for presentation in manual_awards %}
-        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
-    {% endfor %}
-</div>
-{% else %}
-<p class="text-body-secondary">Du har ännu ingen manuellt utdelad utmärkelse.</p>
-{% endif %}
-
-<h2 class="h4 mt-4">Egenvalda utmärkelser</h2>
-{% if selfmade_badges %}
-<div class="d-flex flex-wrap gap-3 mb-3">
-    {% for presentation in selfmade_badges %}
-        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
-    {% endfor %}
-</div>
-{% else %}
-<p class="text-body-secondary">Du har ännu ingen egenvald utmärkelse.</p>
-{% endif %}
-<p><a href="{% url 'selfmade_badges' %}">Välj egenvalda utmärkelser</a></p>
 
 <h2 class="h4 mt-4">Karriärsutmärkelser</h2>
 {% if career_achievements %}
@@ -55,6 +28,29 @@
 <h2 class="h4 mt-4">Årsutmärkelser</h2>
 <p class="text-body-secondary">Du har ännu ingen årsutmärkelse.</p>
 {% endfor %}
+
+<h2 class="h4 mt-4">Manuellt utdelade utmärkelser</h2>
+{% if manual_awards %}
+<div class="d-flex flex-wrap gap-3 mb-4">
+    {% for presentation in manual_awards %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen manuellt utdelad utmärkelse.</p>
+{% endif %}
+
+<h2 class="h4 mt-4">Egenvalda utmärkelser</h2>
+{% if selfmade_badges %}
+<div class="d-flex flex-wrap gap-3 mb-3">
+    {% for presentation in selfmade_badges %}
+        {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=False %}
+    {% endfor %}
+</div>
+{% else %}
+<p class="text-body-secondary">Du har ännu ingen egenvald utmärkelse.</p>
+{% endif %}
+<p><a href="{% url 'selfmade_badges' %}">Välj egenvalda utmärkelser</a></p>
 
 <p><a href="{% url 'breeding_list' %}">Tillbaka till Mina odlingar</a></p>
 {% endblock %}
