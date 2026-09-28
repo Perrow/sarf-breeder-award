@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
-from django.test import TestCase
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from .models import User
@@ -8,9 +8,16 @@ from .models import User
 
 class UserAdminTests(TestCase):
     def test_user_admin_offers_delete_selected_action(self):
-        model_admin = admin.site._registry[get_user_model()]
+        User = get_user_model()
+        superuser = User.objects.create_superuser(
+            email="admin@example.com",
+            password="test-password",
+        )
+        request = RequestFactory().get("/admin/users/user/")
+        request.user = superuser
+        model_admin = admin.site._registry[User]
 
-        self.assertIn("delete_selected", model_admin.get_actions(None))
+        self.assertIn("delete_selected", model_admin.get_actions(request))
 
 
 class UserAccountTests(TestCase):
