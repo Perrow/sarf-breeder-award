@@ -20,6 +20,40 @@ class UserAdminTests(TestCase):
         self.assertIn("delete_selected", model_admin.get_actions(request))
 
 
+class UserNavigationTests(TestCase):
+    def test_authenticated_user_links_are_grouped_in_user_menu(self):
+        user = User.objects.create_user(
+            email="member@example.com",
+            password="test-password",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("account"))
+
+        self.assertContains(response, 'aria-label="Användarmeny"')
+        self.assertContains(response, 'data-bs-toggle="dropdown"')
+        self.assertContains(response, f'href="{reverse("account")}"')
+        self.assertContains(response, f'action="{reverse("logout")}"')
+        self.assertContains(response, ">Konto</a>")
+        self.assertContains(response, ">Logga ut</button>")
+        self.assertNotContains(response, ">Administration</a>")
+        self.assertNotContains(response, ">System</a>")
+
+    def test_superuser_user_menu_contains_administration_and_system(self):
+        user = User.objects.create_superuser(
+            email="admin-menu@example.com",
+            password="test-password",
+        )
+        self.client.force_login(user)
+
+        response = self.client.get(reverse("account"))
+
+        self.assertContains(response, ">Konto</a>")
+        self.assertContains(response, ">Administration</a>")
+        self.assertContains(response, ">System</a>")
+        self.assertContains(response, ">Logga ut</button>")
+
+
 class UserAccountTests(TestCase):
     def test_visitor_can_create_account_with_name_and_email(self):
         response = self.client.post(
