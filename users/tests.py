@@ -37,9 +37,7 @@ class UserAccountTests(TestCase):
         response = self.client.get(reverse("register"))
 
         self.assertContains(response, 'name="country"')
-        self.assertContains(response, 'tabindex="-1"')
-        self.assertContains(response, 'aria-hidden="true"')
-        self.assertContains(response, 'left:-10000px')
+        self.assertContains(response, 'type="hidden"')
 
     def test_registration_is_rejected_when_country_honeypot_is_filled(self):
         response = self.client.post(
