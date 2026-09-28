@@ -72,6 +72,37 @@ class BreedingReviewTests(TestCase):
         self.assertContains(response, 'name="show_on_species_page"')
         self.assertContains(response, "Visa rapporten på artsidan")
 
+    def test_review_link_is_in_navigation_for_reviewer(self):
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(reverse("account"))
+
+        self.assertContains(
+            response,
+            f'href="{reverse("breeding_review_list")}">Granska odlingar</a>',
+        )
+
+    def test_review_link_is_hidden_from_user_without_review_access(self):
+        self.client.force_login(self.owner)
+
+        response = self.client.get(reverse("account"))
+
+        self.assertNotContains(
+            response,
+            f'href="{reverse("breeding_review_list")}">Granska odlingar</a>',
+        )
+
+    def test_review_link_is_not_rendered_as_button_on_my_page(self):
+        self.client.force_login(self.reviewer)
+
+        response = self.client.get(reverse("breeding_list"))
+
+        self.assertContains(response, ">Granska odlingar</a>", count=1)
+        self.assertNotContains(
+            response,
+            f'class="btn btn-outline-primary" href="{reverse("breeding_review_list")}"',
+        )
+
     def test_association_admin_can_approve_registration(self):
         self.client.force_login(self.reviewer)
         response = self.client.post(
