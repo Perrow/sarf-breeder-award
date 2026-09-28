@@ -11,7 +11,6 @@ from taxonomy.models import Species
 
 from .forms import BreedingRegistrationForm
 from .models import BreedingRegistration
-from .review import can_review_breedings
 from .templatetags.breeding_markdown import render_limited_markdown
 from .scoring import (
     association_competition_rules,
@@ -263,7 +262,6 @@ def breeding_list(request):
             "registrations": registrations,
             "yearly_achievements": achievements["yearly"],
             "career_achievements": achievements["career"],
-            "can_review_breedings": can_review_breedings(request.user),
         },
     )
 
