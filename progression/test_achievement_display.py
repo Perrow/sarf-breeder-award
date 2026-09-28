@@ -8,7 +8,11 @@ from django.urls import reverse
 from PIL import Image
 
 from .models import Achievement, AchievementBackground, AchievementLevel, UserAchievement
-from .services import achievement_presentations_for_user, latest_achievement_presentations_for_user
+from .services import (
+    achievement_presentations_for_user,
+    all_achievement_presentations_for_user,
+    latest_achievement_presentations_for_user,
+)
 
 
 def image_file(name, mode="RGBA", transparent=True):
@@ -209,7 +213,7 @@ class AchievementDisplayTests(TestCase):
         self.assertEqual(presentations["career"][0]["earned"].level, gold)
 
         history_response = self.client.get(reverse("achievements"))
-        self.assertContains(history_response, "Brons")
+        self.assertNotContains(history_response, "Brons")
         self.assertContains(history_response, "Guld")
 
     def test_my_page_shows_only_highest_earned_level_for_current_year(self):
@@ -281,3 +285,102 @@ class AchievementDisplayTests(TestCase):
             {item["earned"].level.achievement for item in presentations["career"]},
             {first, second},
         )
+    def test_all_achievements_shows_highest_level_per_achievement_and_year(self):
+        career = Achievement.objects.create(
+            name="Karriärnivå",
+            achievement_type=Achievement.Type.CAREER,
+        )
+        career_bronze = AchievementLevel.objects.create(
+            achievement=career,
+            name="Karriär brons",
+            order=1,
+        )
+        career_gold = AchievementLevel.objects.create(
+            achievement=career,
+            name="Karriär guld",
+            order=3,
+        )
+        yearly = Achievement.objects.create(
+            name="Årsnivå",
+            achievement_type=Achievement.Type.YEARLY,
+        )
+        yearly_bronze = AchievementLevel.objects.create(
+            achievement=yearly,
+            name="År brons",
+            order=1,
+        )
+        yearly_gold = AchievementLevel.objects.create(
+            achievement=yearly,
+            name="År guld",
+            order=3,
+        )
+
+        for level, year in (
+            (career_bronze, None),
+            (career_gold, None),
+            (yearly_bronze, 2025),
+            (yearly_gold, 2025),
+            (yearly_bronze, 2026),
+        ):
+            UserAchievement.objects.create(
+                user=self.user,
+                level=level,
+                achievement_name=level.achievement.name,
+                level_name=level.name,
+                calendar_year=year,
+            )
+
+        presentations = all_achievement_presentations_for_user(self.user)
+
+        self.assertEqual(
+            [item["earned"].level for item in presentations["career"]],
+            [career_gold],
+        )
+        yearly_levels = {
+            group["year"]: [item["earned"].level for item in group["achievements"]]
+            for group in presentations["yearly"]
+        }
+        self.assertEqual(yearly_levels[2025], [yearly_gold])
+        self.assertEqual(yearly_levels[2026], [yearly_bronze])
+
+    def test_all_achievements_orders_sections_career_yearly_manual_selfmade(self):
+        manual = Achievement.objects.create(
+            name="Manuell merit",
+            achievement_type=Achievement.Type.MANUAL,
+        )
+        manual_level = AchievementLevel.objects.create(
+            achievement=manual,
+            name="Manuell nivå",
+            order=1,
+        )
+        selfmade = Achievement.objects.create(
+            name="Självvald merit",
+            achievement_type=Achievement.Type.SELFMADE,
+        )
+        selfmade_level = AchievementLevel.objects.create(
+            achievement=selfmade,
+            name="Självvald nivå",
+            order=1,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=manual_level,
+            achievement_name=manual.name,
+            level_name=manual_level.name,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=selfmade_level,
+            achievement_name=selfmade.name,
+            level_name=selfmade_level.name,
+        )
+        self.create_earned(name="Karriär merit")
+        self.create_earned(name="Års merit", year=2026)
+
+        response = self.client.get(reverse("achievements"))
+        content = response.content.decode()
+
+        self.assertLess(content.index("Karriärsutmärkelser"), content.index("Årsutmärkelser"))
+        self.assertLess(content.index("Årsutmärkelser"), content.index("Manuellt utdelade utmärkelser"))
+        self.assertLess(content.index("Manuellt utdelade utmärkelser"), content.index("Egenvalda utmärkelser"))
+
