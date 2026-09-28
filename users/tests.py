@@ -1,7 +1,23 @@
-from django.test import TestCase
+from django.contrib import admin
+from django.contrib.auth import get_user_model
+from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
 from .models import User
+
+
+class UserAdminTests(TestCase):
+    def test_user_admin_offers_delete_selected_action(self):
+        User = get_user_model()
+        superuser = User.objects.create_superuser(
+            email="admin@example.com",
+            password="test-password",
+        )
+        request = RequestFactory().get("/admin/users/user/")
+        request.user = superuser
+        model_admin = admin.site._registry[User]
+
+        self.assertIn("delete_selected", model_admin.get_actions(request))
 
 
 class UserAccountTests(TestCase):
@@ -23,6 +39,29 @@ class UserAccountTests(TestCase):
         self.assertEqual(user.public_username, "TestUser")
         self.assertEqual(user.get_full_name(), "Test User")
         self.assertTrue(response.wsgi_request.user.is_authenticated)
+
+    def test_registration_form_contains_hidden_country_honeypot(self):
+        response = self.client.get(reverse("register"))
+
+        self.assertContains(response, 'name="country"')
+        self.assertContains(response, 'type="hidden"')
+
+    def test_registration_is_rejected_when_country_honeypot_is_filled(self):
+        response = self.client.post(
+            reverse("register"),
+            {
+                "name": "Spam User",
+                "public_username": "SpamUser",
+                "email": "spam@example.com",
+                "country": "Sweden",
+                "password1": "A-secure-test-password-123",
+                "password2": "A-secure-test-password-123",
+            },
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(User.objects.filter(email="spam@example.com").exists())
+        self.assertContains(response, "Registreringen kunde inte genomföras.")
 
     def test_registered_user_can_log_in_with_email_and_next_is_respected(self):
         user = User.objects.create_user(
