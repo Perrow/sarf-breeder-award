@@ -54,14 +54,7 @@ class RegistrationForm(UserCreationForm):
     country = forms.CharField(
         label="Land",
         required=False,
-        widget=forms.TextInput(
-            attrs={
-                "autocomplete": "off",
-                "tabindex": "-1",
-                "aria-hidden": "true",
-                "style": "position:absolute;left:-10000px;width:1px;height:1px;overflow:hidden;",
-            }
-        ),
+        widget=forms.HiddenInput(),
     )
     associations = _association_field()
 
