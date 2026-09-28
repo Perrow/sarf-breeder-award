@@ -56,9 +56,6 @@ def registration_is_timely_for_competition_year(registration, year):
     if registration.breeding_date.year != year:
         return False
 
-    if year >= timezone.localdate().year:
-        return True
-
     # Legacy approved rows created before submitted_at was introduced keep their
     # historical result. All registrations submitted through the application
     # have submitted_at and are subject to the deadline below.
