@@ -67,6 +67,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 "associations.context_processors.association_admin_access",
+                "breedings.context_processors.breeding_review_access",
                 "siteconfig.context_processors.site_branding",
             ],
         },
