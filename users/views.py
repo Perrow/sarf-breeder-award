@@ -77,5 +77,7 @@ def achievements(request):
         {
             "career_achievements": presentations["career"],
             "yearly_achievement_groups": presentations["yearly"],
+            "manual_awards": presentations["manual"],
+            "selfmade_badges": presentations["selfmade"],
         },
     )
