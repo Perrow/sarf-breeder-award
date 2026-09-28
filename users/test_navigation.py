@@ -24,7 +24,10 @@ class NavigationTests(TestCase):
             f'href="{url}" aria-current="page">{label}</a>',
             navigation,
         )
-        self.assertIn("fw-semibold text-decoration-underline", navigation)
+        if label == "Konto":
+            self.assertIn('class="dropdown-item active"', navigation)
+        else:
+            self.assertIn("fw-semibold text-decoration-underline", navigation)
         self.assertEqual(navigation.count('aria-current="page"'), 1)
 
     def test_authenticated_navigation_uses_requested_order(self):
@@ -50,7 +53,7 @@ class NavigationTests(TestCase):
         navigation = self._navigation_html(self.client.get(reverse("home")))
 
         self.assertIn(
-            f'<a class="nav-link" href="{reverse("admin:index")}">System</a>',
+            f'<a class="dropdown-item" href="{reverse("admin:index")}">System</a>',
             navigation,
         )
 
