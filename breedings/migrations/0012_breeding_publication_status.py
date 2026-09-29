@@ -1,6 +1,13 @@
 from django.db import migrations, models
 
 
+def restore_show_on_species_page(apps, schema_editor):
+    BreedingRegistration = apps.get_model("breedings", "BreedingRegistration")
+    BreedingRegistration.objects.filter(publication_status="published").update(
+        show_on_species_page=True
+    )
+
+
 def migrate_publication_status(apps, schema_editor):
     BreedingRegistration = apps.get_model("breedings", "BreedingRegistration")
 
@@ -43,7 +50,7 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             migrate_publication_status,
-            migrations.RunPython.noop,
+            restore_show_on_species_page,
         ),
         migrations.RemoveField(
             model_name="breedingregistration",
