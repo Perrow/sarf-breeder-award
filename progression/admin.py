@@ -118,6 +118,8 @@ class AchievementLevelInline(admin.TabularInline):
             Achievement.Type.SELFMADE,
         }:
             return "Automatiskt"
+        if obj.achievement.achievement_type == Achievement.Type.ASSOCIATION:
+            return "–"
         return obj.requirements.count()
 
     @admin.display(description="Redigera")
