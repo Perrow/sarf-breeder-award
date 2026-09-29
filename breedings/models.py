@@ -147,6 +147,14 @@ class AssociationCompetitionSettings(models.Model):
     default_max_registrations_per_genus = models.PositiveIntegerField(
         verbose_name="standard: max odlingar per medlem och genus"
     )
+    late_reporting_days = models.PositiveIntegerField(
+        default=30,
+        verbose_name="dagar efter årsskifte för sen rapportering",
+        help_text=(
+            "Antal dagar efter årets slut som en odlingsrapport fortfarande "
+            "får räknas med i årets poänglistor."
+        ),
+    )
 
     class Meta:
         ordering = ("-effective_from_year",)
@@ -170,7 +178,8 @@ class AssociationCompetitionSettings(models.Model):
     def __str__(self):
         return (
             f"Från {self.effective_from_year}: max "
-            f"{self.default_max_registrations_per_genus} per medlem och genus"
+            f"{self.default_max_registrations_per_genus} per medlem och genus, "
+            f"{self.late_reporting_days} dagar för sen rapportering"
         )
 
 

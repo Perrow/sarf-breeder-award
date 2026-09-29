@@ -43,12 +43,18 @@ def competition_points_for_registration(registration, year):
     return points_for_registration(registration)
 
 
+def competition_late_reporting_days(year):
+    settings = (
+        AssociationCompetitionSettings.objects.filter(effective_from_year__lte=year)
+        .order_by("-effective_from_year", "-pk")
+        .first()
+    )
+    return settings.late_reporting_days if settings is not None else 30
+
+
 def registration_is_timely_for_competition_year(registration, year):
     if registration.breeding_date.year != year:
         return False
-
-    if year >= timezone.localdate().year:
-        return True
 
     # Legacy approved rows created before submitted_at was introduced keep their
     # historical result. All registrations submitted through the application
@@ -56,7 +62,9 @@ def registration_is_timely_for_competition_year(registration, year):
     if registration.submitted_at is None:
         return True
 
-    deadline = date(year, 12, 31) + timedelta(days=30)
+    deadline = date(year, 12, 31) + timedelta(
+        days=competition_late_reporting_days(year)
+    )
     submitted_date = timezone.localtime(registration.submitted_at).date()
     return submitted_date <= deadline
 
