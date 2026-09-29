@@ -91,7 +91,7 @@ class PublishedReportRequirementTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
-    def test_multiple_published_reports_are_counted_individually(self):
+    def test_multiple_published_reports_for_different_species_are_counted(self):
         _, level, _ = self._achievement(2)
         self._registration(self.species_a, published=True)
         self._registration(self.species_b, published=True)
@@ -99,6 +99,17 @@ class PublishedReportRequirementTests(TestCase):
         sync_achievements(self.user)
 
         self.assertTrue(
+            UserAchievement.objects.filter(user=self.user, level=level).exists()
+        )
+
+    def test_multiple_published_reports_for_same_species_count_once(self):
+        _, level, _ = self._achievement(2)
+        self._registration(self.species_a, published=True)
+        self._registration(self.species_a, published=True)
+
+        sync_achievements(self.user)
+
+        self.assertFalse(
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
