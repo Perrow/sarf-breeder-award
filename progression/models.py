@@ -270,12 +270,14 @@ class AchievementRequirement(models.Model):
 class RequirementTextTemplate(models.Model):
     ALLOWED_PLACEHOLDERS = {
         "current", "target", "missing", "unit", "target_unit", "missing_unit",
-        "target_text", "missing_text", "scope", "scope_suffix",
+        "target_text", "missing_text", "target_report_text", "missing_report_unit",
+        "scope", "scope_suffix",
     }
     PLACEHOLDER_HELP = (
         "Tillgängliga platshållare: {current}, {target}, {missing}, {unit}, "
         "{target_unit}, {missing_unit}, {target_text}, {missing_text}, "
-        "{scope}, {scope_suffix}. {scope_suffix} innehåller ' inom …' när ett "
+        "{target_report_text}, {missing_report_unit}, {scope}, {scope_suffix}. "
+        "{scope_suffix} innehåller ' inom …' när ett "
         "släkte eller en artgrupp finns, annars tom text."
     )
 
@@ -300,8 +302,8 @@ class RequirementTextTemplate(models.Model):
             AchievementRequirement.Kind.SPECIES_COUNT: ("Odla {target_text}{scope_suffix}.", "Odla {missing_text} till{scope_suffix}."),
             AchievementRequirement.Kind.BREEDING_COUNT: ("Gör {target_text}{scope_suffix}.", "Gör {missing_text} till{scope_suffix}."),
             AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT: (
-                "Ha {target_text}{scope_suffix}.",
-                "Publicera {missing_text} till{scope_suffix}.",
+                "Skrivit {target_report_text}{scope_suffix}.",
+                "Skriv {missing} till {missing_report_unit}{scope_suffix}.",
             ),
             AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }

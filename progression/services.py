@@ -405,6 +405,20 @@ def _requirement_progress(requirement, registrations):
     missing = max(requirement.value - current, 0)
     scope = _requirement_scope(requirement)
     singular, plural, one_text = _unit_forms(requirement.kind)
+    target_report_text = ""
+    missing_report_unit = ""
+    if requirement.kind == AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT:
+        target_report_text = (
+            "1 odlingsrapport som blivit publicerad"
+            if requirement.value == 1
+            else f"{requirement.value} odlingsrapporter som blivit publicerade"
+        )
+        missing_report_unit = (
+            "odlingsrapport som blir publicerad"
+            if missing == 1
+            else "odlingsrapporter som blir publicerade"
+        )
+
     context = {
         "current": current,
         "target": requirement.value,
@@ -414,6 +428,8 @@ def _requirement_progress(requirement, registrations):
         "missing_unit": singular if missing == 1 else plural,
         "target_text": _quantity_text(requirement.value, singular, plural, one_text),
         "missing_text": _quantity_text(missing, singular, plural, one_text),
+        "target_report_text": target_report_text,
+        "missing_report_unit": missing_report_unit,
         "scope": scope,
         "scope_suffix": f" inom {scope}" if scope else "",
     }
