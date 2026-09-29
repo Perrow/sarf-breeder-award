@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from types import SimpleNamespace
 from unittest.mock import patch
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
@@ -111,12 +112,17 @@ class AssociationAchievementTests(TestCase):
             calendar_year=2025,
         )
 
+        lifetime_background = SimpleNamespace(
+            image=None,
+            tint_color="",
+            tint_mode="color",
+        )
         with patch(
             "progression.services.AchievementBackground.for_year",
             return_value=None,
         ), patch(
             "progression.services.AchievementBackground.lifetime",
-            return_value="lifetime-background",
+            return_value=lifetime_background,
         ):
             from .services import association_achievement_presentations
 
@@ -124,7 +130,7 @@ class AssociationAchievementTests(TestCase):
 
         self.assertEqual(len(presentations), 1)
         self.assertEqual(presentations[0]["earned"], award)
-        self.assertEqual(presentations[0]["background"], "lifetime-background")
+        self.assertIs(presentations[0]["background"], lifetime_background)
 
     def test_award_snapshot_survives_level_definition_change(self):
         award = AssociationAchievement.objects.create(
