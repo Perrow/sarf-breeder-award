@@ -170,7 +170,7 @@ class StructuredWaterParameterTests(TestCase):
             description="Publicerad rapport",
             status=BreedingRegistration.Status.APPROVED,
             awarded_breeding_class=Species.BreedingClass.BRONZE,
-            show_on_species_page=True,
+            publication_status=BreedingRegistration.PublicationStatus.PUBLISHED,
         )
         ph = WaterParameterDefinition.objects.get(name="pH")
         BreedingWaterParameterValue.objects.create(
