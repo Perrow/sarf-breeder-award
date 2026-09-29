@@ -65,6 +65,18 @@
     {% endif %}
 </dl>
 
+{% if registration.water_parameter_values.all %}
+<section class="mt-4">
+    <h2 class="h4">Vattenparametrar</h2>
+    <dl class="row">
+        {% for item in registration.water_parameter_values.all %}
+        <dt class="col-sm-4">{{ item.parameter.name }}</dt>
+        <dd class="col-sm-8">{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
+        {% endfor %}
+    </dl>
+</section>
+{% endif %}
+
 {% if registration.species %}
 <section class="mt-4">
     <h2 class="h4">Andra odlingar av samma art</h2>

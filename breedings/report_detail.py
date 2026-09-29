@@ -9,7 +9,7 @@ def breeding_detail(request, pk):
     registration = get_object_or_404(
         BreedingRegistration.objects.select_related(
             "species__genus", "association", "reviewer", "owner"
-        ),
+        ).prefetch_related("water_parameter_values__parameter"),
         pk=pk,
         owner=request.user,
     )

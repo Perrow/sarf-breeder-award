@@ -27,6 +27,15 @@
             <div class="card-body">
                 <h2 class="h5">Odlingsrapport</h2>
                 <div>{{ registration.description|default:"Ingen beskrivning angiven."|limited_markdown }}</div>
+                {% if registration.water_parameter_values.all %}
+                <h3 class="h6 mt-3">Vattenparametrar</h3>
+                <dl class="row mb-0">
+                    {% for item in registration.water_parameter_values.all %}
+                    <dt class="col-sm-4">{{ item.parameter.name }}</dt>
+                    <dd class="col-sm-8">{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
+                    {% endfor %}
+                </dl>
+                {% endif %}
             </div>
         </div>
     </div>

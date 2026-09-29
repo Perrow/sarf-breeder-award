@@ -56,6 +56,108 @@ class BreedingRegistration(models.Model):
         return f"{self.owner} – {species_name} – {self.breeding_date}"
 
 
+class WaterParameterDefinition(models.Model):
+    name = models.CharField(max_length=50, unique=True, verbose_name="namn")
+    unit = models.CharField(max_length=20, blank=True, verbose_name="enhet")
+    sort_order = models.PositiveIntegerField(default=0, verbose_name="sorteringsordning")
+    min_value = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="minvärde",
+    )
+    max_value = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        verbose_name="maxvärde",
+    )
+    active = models.BooleanField(default=True, verbose_name="aktiv")
+
+    class Meta:
+        ordering = ("sort_order", "name")
+        verbose_name = "vattenparameter"
+        verbose_name_plural = "vattenparametrar"
+
+    def clean(self):
+        super().clean()
+        if (
+            self.min_value is not None
+            and self.max_value is not None
+            and self.min_value > self.max_value
+        ):
+            raise ValidationError({"max_value": "Maxvärdet måste vara minst minvärdet."})
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.name} ({self.unit})" if self.unit else self.name
+
+
+class BreedingWaterParameterValue(models.Model):
+    registration = models.ForeignKey(
+        BreedingRegistration,
+        on_delete=models.CASCADE,
+        related_name="water_parameter_values",
+        verbose_name="odlingsrapport",
+    )
+    parameter = models.ForeignKey(
+        WaterParameterDefinition,
+        on_delete=models.PROTECT,
+        related_name="values",
+        verbose_name="parameter",
+    )
+    value = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        verbose_name="värde",
+    )
+
+    class Meta:
+        ordering = ("parameter", "pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("registration", "parameter"),
+                name="unique_water_parameter_per_registration",
+            ),
+        ]
+        verbose_name = "vattenparametervärde"
+        verbose_name_plural = "vattenparametervärden"
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if self.parameter_id:
+            if (
+                self.parameter.min_value is not None
+                and self.value < self.parameter.min_value
+            ):
+                errors["value"] = (
+                    f"Värdet måste vara minst {self.parameter.min_value}."
+                )
+            if (
+                self.parameter.max_value is not None
+                and self.value > self.parameter.max_value
+            ):
+                errors["value"] = (
+                    f"Värdet får vara högst {self.parameter.max_value}."
+                )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        suffix = f" {self.parameter.unit}" if self.parameter.unit else ""
+        return f"{self.parameter.name}: {self.value}{suffix}"
+
+
 class SpeciesReclassificationRequest(models.Model):
     class Status(models.TextChoices):
         PENDING = "pending", "Väntar på beslut"
