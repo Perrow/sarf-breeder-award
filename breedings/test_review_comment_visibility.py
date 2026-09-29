@@ -81,3 +81,4 @@ class ApprovedReviewCommentVisibilityTests(TestCase):
         self.assertContains(list_response, "Granskningskommentar finns")
         self.assertContains(detail_response, "Granskningskommentar")
         self.assertContains(detail_response, "Kommentar som ska visas")
+        self.assertContains(detail_response, 'class="alert alert-danger"')
