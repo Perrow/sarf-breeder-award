@@ -18,8 +18,10 @@ from .scoring import (
     association_member_year_registration_ids,
     association_year_scores,
     competition_points,
+    competition_points_for_registration,
     points_for_breeding_class,
     points_for_registration,
+    registration_is_timely_for_competition_year,
 )
 
 
@@ -37,17 +39,38 @@ def _leaderboard_year(raw_year):
 
 
 def _available_leaderboard_years(selected_year, queryset=None):
-    current_year = timezone.localdate().year
     registrations = BreedingRegistration.objects.all() if queryset is None else queryset
-    available_years = {
-        date.year
-        for date in registrations.filter(
-            status=BreedingRegistration.Status.APPROVED
-        ).dates("breeding_date", "year", order="DESC")
-    }
-    available_years.add(current_year)
-    available_years.add(selected_year)
-    return sorted(available_years, reverse=True)
+    approved = registrations.filter(
+        status=BreedingRegistration.Status.APPROVED,
+    )
+    candidate_years = [
+        value.year
+        for value in approved.dates("breeding_date", "year", order="DESC")
+    ]
+
+    available_years = []
+    for year in candidate_years:
+        year_registrations = (
+            approved.filter(breeding_date__year=year)
+            .select_related("species")
+            .only(
+                "species_id",
+                "species__breeding_class",
+                "status",
+                "awarded_breeding_class",
+                "breeding_date",
+                "submitted_at",
+            )
+        )
+        if any(
+            registration.species_id is not None
+            and registration_is_timely_for_competition_year(registration, year)
+            and competition_points_for_registration(registration, year) is not None
+            for registration in year_registrations
+        ):
+            available_years.append(year)
+
+    return available_years
 
 
 def _individual_leaderboard_rows(selected_year):
