@@ -184,5 +184,8 @@ class StructuredWaterParameterTests(TestCase):
         )
 
         self.assertContains(response, "Publicerad rapport")
+        self.assertContains(response, "Vattenparametrar")
+        self.assertContains(response, 'class="col-lg-8"')
+        self.assertContains(response, 'class="col-lg-4"')
         self.assertContains(response, "pH")
         self.assertContains(response, "7,20")
