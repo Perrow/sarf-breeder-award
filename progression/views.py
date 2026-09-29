@@ -62,7 +62,6 @@ def remove_selfmade_badge(request, level_id):
         pk=level_id,
         achievement__achievement_type=Achievement.Type.SELFMADE,
     )
-    _ensure_self_selected_requirement(level)
     try:
         deleted = remove_selfmade_level(request.user, level)
     except ValidationError:
