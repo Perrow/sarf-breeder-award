@@ -85,6 +85,7 @@ class AchievementDisplayTests(TestCase):
         achievement = Achievement.objects.create(
             name="Årsutmärkelse",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
             image=image_file("year-overlay.png"),
         )
         level = AchievementLevel.objects.create(
