@@ -201,10 +201,16 @@ class AchievementRequirement(models.Model):
         POINTS = "points", "Poäng"
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
         SPECIES_COUNT = "species_count", "Antal arter"
+        PUBLISHED_REPORT_COUNT = "published_report_count", "Publicerade odlingsrapporter"
         MANUAL_ASSIGNMENT = "manual_assignment", "Manuell tilldelning"
         SELF_SELECTED = "self_selected", "Egenvald"
 
-    AUTOMATIC_KINDS = {Kind.POINTS, Kind.BREEDING_COUNT, Kind.SPECIES_COUNT}
+    AUTOMATIC_KINDS = {
+        Kind.POINTS,
+        Kind.BREEDING_COUNT,
+        Kind.SPECIES_COUNT,
+        Kind.PUBLISHED_REPORT_COUNT,
+    }
     EXPLICIT_KINDS = {Kind.MANUAL_ASSIGNMENT, Kind.SELF_SELECTED}
 
     level = models.ForeignKey(
@@ -236,7 +242,10 @@ class AchievementRequirement(models.Model):
     def clean(self):
         super().clean()
         errors = {}
-        if self.kind in self.AUTOMATIC_KINDS:
+        if self.kind == self.Kind.PUBLISHED_REPORT_COUNT:
+            if self.value is None:
+                errors["value"] = "Kravvärdet måste anges."
+        elif self.kind in self.AUTOMATIC_KINDS:
             if self.value is None or self.value < 1:
                 errors["value"] = "Kravvärdet måste vara minst 1."
         elif self.value is not None:
@@ -288,6 +297,10 @@ class RequirementTextTemplate(models.Model):
         defaults = {
             AchievementRequirement.Kind.SPECIES_COUNT: ("Odla {target_text}{scope_suffix}.", "Odla {missing_text} till{scope_suffix}."),
             AchievementRequirement.Kind.BREEDING_COUNT: ("Gör {target_text}{scope_suffix}.", "Gör {missing_text} till{scope_suffix}."),
+            AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT: (
+                "Ha {target_text}{scope_suffix}.",
+                "Publicera {missing_text} till{scope_suffix}.",
+            ),
             AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }
         return defaults[kind]

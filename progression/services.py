@@ -73,6 +73,14 @@ def _requirement_current_value(requirement, registrations):
         return len(matching)
     if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
         return len({registration.species_id for registration in matching})
+    if requirement.kind == AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT:
+        return len(
+            {
+                registration.species_id
+                for registration in matching
+                if registration.show_on_species_page
+            }
+        )
 
     best_points_by_species = {}
     for registration in matching:
@@ -376,6 +384,12 @@ def _unit_forms(kind):
         return "art", "arter", "en art"
     if kind == AchievementRequirement.Kind.BREEDING_COUNT:
         return "odling", "odlingar", "en odling"
+    if kind == AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT:
+        return (
+            "publicerad odlingsrapport",
+            "publicerade odlingsrapporter",
+            "en publicerad odlingsrapport",
+        )
     return "poäng", "poäng", "1 poäng"
 
 
