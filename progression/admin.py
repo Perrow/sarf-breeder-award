@@ -539,6 +539,22 @@ class AchievementRequirementOptionInline(admin.TabularInline):
     extra = 1
     fields = ("minimum_level",)
 
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        queryset = AchievementLevel.objects.exclude(
+            achievement__achievement_type=Achievement.Type.ASSOCIATION,
+        ).select_related("achievement")
+        if obj is not None:
+            queryset = queryset.exclude(
+                achievement_id=obj.level.achievement_id,
+            )
+        formset.form.base_fields["minimum_level"].queryset = queryset.order_by(
+            "achievement__name",
+            "order",
+            "name",
+        )
+        return formset
+
 
 @admin.register(AchievementRequirement)
 class AchievementRequirementAdmin(admin.ModelAdmin):
