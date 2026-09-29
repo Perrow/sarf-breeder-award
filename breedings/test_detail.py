@@ -52,6 +52,22 @@ class BreedingDetailTests(TestCase):
         self.assertContains(response, "Ancistrus sp.")
         self.assertContains(response, "Utkast")
 
+    def test_detail_emphasizes_report_content_and_separates_metadata(self):
+        self.registration.description = "En **formatterad** rapport."
+        self.registration.save(update_fields=("description",))
+        self.client.force_login(self.user)
+
+        response = self.client.get(
+            reverse("breeding_detail", args=[self.registration.pk])
+        )
+
+        self.assertContains(response, "Odlingsbeskrivning")
+        self.assertContains(response, "<strong>formatterad</strong>", html=False)
+        self.assertContains(response, "Rapportinformation")
+        self.assertContains(response, "Status")
+        self.assertContains(response, "Odlingsdatum")
+        self.assertContains(response, "Förening")
+
     def test_other_user_cannot_view_registration(self):
         self.client.force_login(self.other_user)
 
