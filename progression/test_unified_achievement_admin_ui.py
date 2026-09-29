@@ -150,6 +150,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
     def test_selfmade_level_without_requirement_is_visible_but_cannot_be_selected(self):
         achievement = Achievement.objects.create(
             name="Egenvald nivå utan krav",
+            active=True,
             achievement_type=Achievement.Type.SELFMADE,
         )
         level = AchievementLevel.objects.create(
@@ -171,6 +172,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
     def test_manual_assignment_page_assigns_selected_level(self):
         achievement = Achievement.objects.create(
             name="Hedersutmärkelse",
+            active=True,
             achievement_type=Achievement.Type.MANUAL,
         )
         level = AchievementLevel.objects.create(
@@ -203,6 +205,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
     def test_separate_assignment_admin_assigns_manual_level(self):
         achievement = Achievement.objects.create(
             name="Separat utdelning",
+            active=True,
             achievement_type=Achievement.Type.MANUAL,
         )
         level = AchievementLevel.objects.create(
@@ -235,6 +238,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
     def test_shared_card_displays_type_and_description_in_detail_modal(self):
         achievement = Achievement.objects.create(
             name="Gemensamt kort",
+            active=True,
             description="Beskrivning av hela utmärkelsen.",
             achievement_type=Achievement.Type.MANUAL,
         )

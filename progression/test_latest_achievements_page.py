@@ -20,6 +20,7 @@ class LatestAchievementsPageTests(TestCase):
         achievement = Achievement.objects.create(
             name=name,
             achievement_type=Achievement.Type.YEARLY if year is not None else Achievement.Type.CAREER,
+            active=True,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,

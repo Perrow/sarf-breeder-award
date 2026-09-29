@@ -39,7 +39,7 @@ class AchievementCardInteractionTests(TestCase):
             common_name="Pandapansarmal",
             breeding_class=Species.BreedingClass.BRONZE,
         )
-        achievement = Achievement.objects.create(name="Pansarmalsodlare")
+        achievement = Achievement.objects.create(name="Pansarmalsodlare", active=True)
         bronze = AchievementLevel.objects.create(
             achievement=achievement,
             name="Brons",

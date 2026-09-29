@@ -49,6 +49,7 @@ class AssociationManualAwardTests(TestCase):
         self.achievement = Achievement.objects.create(
             name="Föreningsutmärkelse",
             achievement_type=Achievement.Type.MANUAL,
+            active=True,
         )
         self.level = AchievementLevel.objects.create(
             achievement=self.achievement,

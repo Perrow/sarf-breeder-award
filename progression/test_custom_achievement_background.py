@@ -51,6 +51,7 @@ class CustomAchievementBackgroundTests(TestCase):
         fallback = AchievementBackground.objects.create(image=image_file("lifetime.png"))
         achievement = Achievement.objects.create(
             name="Egen lifetime",
+            active=True,
             background_image=image_file("custom.png"),
             image=image_file("overlay.png", transparent=True),
         )
@@ -73,6 +74,7 @@ class CustomAchievementBackgroundTests(TestCase):
         achievement = Achievement.objects.create(
             name="Egen årsbild",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
             background_image=image_file("custom-year.png"),
         )
         self._earned(achievement, 2026)
@@ -168,6 +170,7 @@ class CustomAchievementBackgroundTests(TestCase):
         achievement = Achievement.objects.create(
             name="Fallback",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
         )
         self._earned(achievement, 2026)
 

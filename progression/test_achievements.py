@@ -66,7 +66,7 @@ class AchievementTests(TestCase):
         return requirement
 
     def test_multiple_levels_and_multiple_requirements(self):
-        achievement = Achievement.objects.create(name="Malodlare")
+        achievement = Achievement.objects.create(name="Malodlare", active=True)
         level_one = AchievementLevel.objects.create(
             achievement=achievement,
             name="Första",
@@ -158,7 +158,7 @@ class AchievementTests(TestCase):
             )
 
     def test_achievement_snapshot_survives_definition_change(self):
-        achievement = Achievement.objects.create(name="Historisk")
+        achievement = Achievement.objects.create(name="Historisk", active=True)
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Original",
@@ -189,6 +189,7 @@ class AchievementTests(TestCase):
         achievement = Achievement.objects.create(
             name="Årsutmärkelse",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,
@@ -224,7 +225,7 @@ class AchievementTests(TestCase):
         )
 
     def test_account_data_contains_current_achievements(self):
-        achievement = Achievement.objects.create(name="Synlig")
+        achievement = Achievement.objects.create(name="Synlig", active=True)
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Nivå",

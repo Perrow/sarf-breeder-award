@@ -32,7 +32,7 @@ class AchievementLevelImageTests(TestCase):
         self.client.force_login(self.user)
 
     def test_level_image_is_optional_and_exposed_in_presentation(self):
-        achievement = Achievement.objects.create(name="Med nivåbild")
+        achievement = Achievement.objects.create(name="Med nivåbild", active=True)
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Guld",
@@ -54,7 +54,7 @@ class AchievementLevelImageTests(TestCase):
         self.assertContains(response, "z-index:3")
 
     def test_level_without_image_has_no_level_overlay(self):
-        achievement = Achievement.objects.create(name="Utan nivåbild")
+        achievement = Achievement.objects.create(name="Utan nivåbild", active=True)
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Brons",
