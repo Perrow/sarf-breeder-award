@@ -159,4 +159,4 @@ class AchievementYearLimitAdminTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'name="available_year"')
-        self.assertContains(response, "endast möjlig år")
+        self.assertContains(response, "Gäller endast år")
