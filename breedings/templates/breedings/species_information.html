@@ -101,14 +101,23 @@
         <article class="card">
             <div class="card-body">
                 <h3 class="h5">Odlingsrapport: {{ report.owner.public_display_name }}</h3>
-                <div>{{ report.description|limited_markdown }}</div>
                 {% if report.water_parameter_values.all %}
-                <dl class="row mt-3 mb-0">
-                    {% for item in report.water_parameter_values.all %}
-                    <dt class="col-sm-4">{{ item.parameter.name }}</dt>
-                    <dd class="col-sm-8">{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
-                    {% endfor %}
-                </dl>
+                <div class="row g-4">
+                    <div class="col-lg-8">
+                        <div>{{ report.description|limited_markdown }}</div>
+                    </div>
+                    <aside class="col-lg-4">
+                        <h4 class="h6">Vattenparametrar</h4>
+                        <dl class="mb-0">
+                            {% for item in report.water_parameter_values.all %}
+                            <dt>{{ item.parameter.name }}</dt>
+                            <dd>{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
+                            {% endfor %}
+                        </dl>
+                    </aside>
+                </div>
+                {% else %}
+                <div>{{ report.description|limited_markdown }}</div>
                 {% endif %}
             </div>
         </article>
