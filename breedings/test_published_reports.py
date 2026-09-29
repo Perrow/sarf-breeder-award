@@ -87,10 +87,7 @@ class PublishedBreedingReportTests(TestCase):
             {"publication_status": BreedingRegistration.PublicationStatus.NOT_PUBLISHED},
         )
 
-        self.assertRedirects(
-            response,
-            reverse("breeding_approved_detail", args=[self.approved.pk]),
-        )
+        self.assertRedirects(response, reverse("breeding_review_list"))
         self.approved.refresh_from_db()
         self.assertEqual(
             self.approved.publication_status,
