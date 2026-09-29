@@ -365,7 +365,7 @@ class RequirementTextTemplate(models.Model):
             ),
             AchievementRequirement.Kind.ACHIEVEMENT_COUNT: (
                 "Uppnå {target_text} av de angivna utmärkelserna.",
-                "Uppnå {missing_text} till av de angivna utmärkelserna.",
+                "Uppnå ytterligare {missing_text} av de angivna utmärkelserna.",
             ),
             AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }
