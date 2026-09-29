@@ -4,7 +4,12 @@ from django.utils import timezone
 from associations.models import Association
 from taxonomy.models import Species
 
-from .models import BreedingRegistration, SpeciesReclassificationRequest
+from .models import (
+    BreedingRegistration,
+    BreedingWaterParameterValue,
+    SpeciesReclassificationRequest,
+    WaterParameterDefinition,
+)
 
 
 class BreedingRegistrationForm(forms.ModelForm):
@@ -53,6 +58,31 @@ class BreedingRegistrationForm(forms.ModelForm):
         self.fields["species"].queryset = Species.objects.available_for_registration()
         self.fields["species"].required = False
         self.fields["description"].required = False
+
+        existing_values = {}
+        if self.instance and self.instance.pk:
+            existing_values = {
+                item.parameter_id: item.value
+                for item in self.instance.water_parameter_values.all()
+            }
+        self.water_parameter_definitions = list(
+            WaterParameterDefinition.objects.filter(active=True)
+        )
+        self.water_parameter_field_names = []
+        for parameter in self.water_parameter_definitions:
+            field_name = f"water_parameter_{parameter.pk}"
+            self.water_parameter_field_names.append(field_name)
+            self.fields[field_name] = forms.DecimalField(
+                label=parameter.name,
+                required=False,
+                min_value=parameter.min_value,
+                max_value=parameter.max_value,
+                decimal_places=2,
+                max_digits=8,
+                help_text=parameter.unit,
+                widget=forms.NumberInput(attrs={"step": "any"}),
+                initial=existing_values.get(parameter.pk),
+            )
 
         selected_species = getattr(self.instance, "species", None)
         if self.is_bound and self.data.get("species"):
@@ -118,6 +148,26 @@ class BreedingRegistrationForm(forms.ModelForm):
             self.add_error("description", "Beskrivning är obligatorisk för silver- och guldodlingar.")
 
         return cleaned_data
+
+
+    def water_parameter_fields(self):
+        return [self[field_name] for field_name in self.water_parameter_field_names]
+
+    def save_water_parameters(self, registration):
+        for parameter in self.water_parameter_definitions:
+            field_name = f"water_parameter_{parameter.pk}"
+            value = self.cleaned_data.get(field_name)
+            if value is None:
+                BreedingWaterParameterValue.objects.filter(
+                    registration=registration,
+                    parameter=parameter,
+                ).delete()
+                continue
+            BreedingWaterParameterValue.objects.update_or_create(
+                registration=registration,
+                parameter=parameter,
+                defaults={"value": value},
+            )
 
 
 class SpeciesReclassificationRequestForm(forms.ModelForm):
