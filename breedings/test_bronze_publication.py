@@ -103,10 +103,7 @@ class BronzePublicationSelectionTests(TestCase):
             {"publication_status": BreedingRegistration.PublicationStatus.PUBLISHED},
         )
 
-        self.assertRedirects(
-            response,
-            reverse("breeding_approved_detail", args=[registration.pk]),
-        )
+        self.assertRedirects(response, reverse("breeding_review_list"))
         registration.refresh_from_db()
         self.assertEqual(
             registration.publication_status,
