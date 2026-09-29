@@ -284,7 +284,7 @@ class AchievementRequirementOption(models.Model):
     )
 
     class Meta:
-        ordering = ("minimum_level__achievement__name", "minimum_level__order")
+        ordering = ("minimum_level",)
         constraints = [
             models.UniqueConstraint(
                 fields=("requirement", "minimum_level"),
