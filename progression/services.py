@@ -568,7 +568,6 @@ def all_achievement_presentations_for_user(user):
 
 
 def association_achievement_presentations(association):
-    background = AchievementBackground.lifetime()
     awards = (
         AssociationAchievement.objects.filter(
             association=association,
@@ -580,6 +579,11 @@ def association_achievement_presentations(association):
     presentations = []
     for award in awards:
         achievement = award.level.achievement
+        background = (
+            AchievementBackground.for_year(award.calendar_year)
+            if award.calendar_year is not None
+            else AchievementBackground.lifetime()
+        )
         custom_background = (
             achievement.background_image if achievement.background_image else None
         )
@@ -592,8 +596,16 @@ def association_achievement_presentations(association):
                     if custom_background
                     else background.image if background else None
                 ),
-                "background_tint": "",
-                "background_tint_mode": AchievementBackground.TintMode.COLOR,
+                "background_tint": (
+                    background.tint_color
+                    if award.calendar_year is not None and background
+                    else ""
+                ),
+                "background_tint_mode": (
+                    background.tint_mode
+                    if award.calendar_year is not None and background
+                    else AchievementBackground.TintMode.COLOR
+                ),
                 "overlay": achievement.image if achievement.image else None,
                 "level_overlay": award.level.image if award.level.image else None,
                 "requirements": [],
