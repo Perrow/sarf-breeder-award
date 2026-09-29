@@ -16,7 +16,7 @@
     <h2 class="h4" id="association-achievements-heading">Utmärkelser</h2>
     <div class="d-flex flex-wrap gap-3">
         {% for presentation in association_achievements %}
-            {% include "progression/includes/achievement_card.html" with presentation=presentation %}
+            {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
         {% endfor %}
     </div>
 </section>
