@@ -5,6 +5,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from associations.models import Association
+from taxonomy.models import Genus, Species
 
 from .models import BreedingRegistration
 
@@ -39,6 +40,32 @@ class BreedingDetailActionTests(TestCase):
         self.assertNotContains(response, edit_href, html=False)
         self.assertContains(response, return_action)
         self.assertContains(response, "Återgå till utkast")
+
+    def test_approved_silver_edit_warns_only_when_edit_is_clicked(self):
+        genus = Genus.objects.create(scientific_name="Warningus")
+        species = Species.objects.create(
+            genus=genus,
+            scientific_name="silver",
+            breeding_class=Species.BreedingClass.SILVER,
+        )
+        registration = BreedingRegistration.objects.create(
+            owner=self.user,
+            association=self.association,
+            species=species,
+            breeding_date=date(2026, 8, 1),
+            description="Test",
+            status=BreedingRegistration.Status.APPROVED,
+            awarded_breeding_class=Species.BreedingClass.SILVER,
+        )
+
+        response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
+
+        self.assertNotContains(response, 'class="alert alert-warning"')
+        self.assertContains(
+            response,
+            "Om du redigerar den här odlingen återställs godkännandet.",
+        )
+        self.assertContains(response, "onclick=\"return confirm(")
 
     def test_non_submitted_shows_edit(self):
         for status in (
