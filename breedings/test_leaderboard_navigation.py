@@ -33,7 +33,7 @@ class LeaderboardNavigationTests(TestCase):
         )
         self.assertContains(
             response,
-            f"?year={self.previous_year}&type=association",
+            f"?type=association&year={self.previous_year}",
         )
 
     def test_shared_page_defaults_to_association(self):
@@ -53,7 +53,7 @@ class LeaderboardNavigationTests(TestCase):
         self.assertContains(response, "Bidrag till föreningen per medlem")
         self.assertContains(
             response,
-            f"?year={self.current_year}&view=individual",
+            f"?year={self.previous_year}&view=individual",
         )
         self.assertEqual(response.context["view_mode"], "individual")
         self.assertEqual(response.context["selected_year"], self.previous_year)
