@@ -158,7 +158,7 @@ class AchievementTests(TestCase):
             )
 
     def test_achievement_snapshot_survives_definition_change(self):
-        achievement = Achievement.objects.create(name="Historisk")
+        achievement = Achievement.objects.create(name="Historisk", active=True)
         level = AchievementLevel.objects.create(
             achievement=achievement,
             name="Original",
