@@ -18,7 +18,22 @@ def migrate_publication_status(apps, schema_editor):
     BreedingRegistration.objects.filter(
         show_on_species_page=False,
         status="approved",
+    ).exclude(
+        awarded_breeding_class="bronze",
+    ).update(publication_status="not_published")
+
+    BreedingRegistration.objects.filter(
+        show_on_species_page=False,
+        status="approved",
+        awarded_breeding_class="bronze",
         reviewer__isnull=False,
+    ).update(publication_status="not_published")
+
+    BreedingRegistration.objects.filter(
+        show_on_species_page=False,
+        status="approved",
+        awarded_breeding_class="bronze",
+        description="",
     ).update(publication_status="not_published")
 
     BreedingRegistration.objects.filter(
