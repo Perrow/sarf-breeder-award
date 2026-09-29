@@ -387,6 +387,11 @@ def _edit_breeding(
                     breeding.awarded_points = points_for_breeding_class(
                         Species.BreedingClass.BRONZE
                     )
+                    breeding.publication_status = (
+                        BreedingRegistration.PublicationStatus.UNREVIEWED
+                        if (breeding.description or "").strip()
+                        else BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+                    )
                     message = "Bronsodlingen har registrerats och godkänts direkt."
                 else:
                     breeding.status = BreedingRegistration.Status.SUBMITTED
