@@ -60,7 +60,9 @@
     <dt class="col-sm-4">Godkänd</dt><dd class="col-sm-8">{{ registration.approved_at|default:"–" }}</dd>
     <dt class="col-sm-4">Tilldelad odlingsklass</dt><dd class="col-sm-8">{{ registration.get_awarded_breeding_class_display|default:"–" }}</dd>
     <dt class="col-sm-4">Tilldelade poäng</dt><dd class="col-sm-8">{{ registration.awarded_points|default_if_none:"–" }}</dd>
+    {% if registration.status != "approved" %}
     <dt class="col-sm-4">Granskningskommentar</dt><dd class="col-sm-8">{{ registration.review_comment|default:"–"|linebreaksbr }}</dd>
+    {% endif %}
 </dl>
 
 {% if registration.species %}

@@ -80,7 +80,7 @@
                 {% endif %}
             </td>
             <td class="text-center">
-                {% if registration.review_comment %}
+                {% if registration.review_comment and registration.status != "approved" %}
                     <span title="Granskningskommentar finns" aria-label="Granskningskommentar finns"><span aria-hidden="true">💬</span></span>
                 {% endif %}
             </td>
