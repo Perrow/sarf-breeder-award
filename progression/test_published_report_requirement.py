@@ -138,7 +138,7 @@ class PublishedReportRequirementTests(TestCase):
                 scope="",
                 scope_suffix="",
             ),
-            "Publicera en publicerad odlingsrapport.",
+            "Ha en publicerad odlingsrapport.",
         )
         self.assertEqual(level.requirements.get(), requirement)
 
