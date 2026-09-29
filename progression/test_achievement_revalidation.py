@@ -152,6 +152,13 @@ class AchievementRevalidationAdminTests(TestCase):
                 args=[self.achievement.pk],
             ),
         )
+        self.assertContains(
+            response,
+            'data-confirm-title="Granska utdelade utmärkelser"',
+        )
+        self.assertContains(response, 'data-confirm-variant="warning"')
+        self.assertContains(response, "data-confirm-dialog")
+        self.assertNotContains(response, "confirm(")
 
     def test_revalidation_endpoint_requires_post(self):
         response = self.client.get(
