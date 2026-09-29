@@ -581,6 +581,7 @@ def association_achievement_presentations(association):
         achievement = award.level.achievement
         background = (
             AchievementBackground.for_year(award.calendar_year)
+            or AchievementBackground.lifetime()
             if award.calendar_year is not None
             else AchievementBackground.lifetime()
         )
