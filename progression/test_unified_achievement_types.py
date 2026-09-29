@@ -27,6 +27,7 @@ class UnifiedAchievementTypeTests(TestCase):
         achievement = Achievement.objects.create(
             name=f"{achievement_type}-{name}-{order}",
             achievement_type=achievement_type,
+            active=True,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,
@@ -95,6 +96,7 @@ class UnifiedAchievementTypeTests(TestCase):
         achievement = Achievement.objects.create(
             name="Manuell flernivå",
             achievement_type=Achievement.Type.MANUAL,
+            active=True,
         )
         first = AchievementLevel.objects.create(achievement=achievement, name="Brons", order=1)
         second = AchievementLevel.objects.create(achievement=achievement, name="Silver", order=2)
