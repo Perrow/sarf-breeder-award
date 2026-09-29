@@ -365,6 +365,18 @@ class AssociationAchievement(models.Model):
         blank=True,
         verbose_name="nivåbeskrivning",
     )
+    calendar_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="kalenderår",
+        help_text="Valfritt år som föreningsutmärkelsen gäller.",
+    )
+    achievement_period_key = models.GeneratedField(
+        expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
+        output_field=models.IntegerField(),
+        db_persist=False,
+        editable=False,
+    )
     awarded_by = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.SET_NULL,
@@ -379,18 +391,29 @@ class AssociationAchievement(models.Model):
         ordering = ("-achieved_at", "-pk")
         constraints = [
             models.UniqueConstraint(
-                fields=("association", "level"),
-                name="unique_association_achievement_level",
+                fields=("association", "level", "achievement_period_key"),
+                name="unique_association_achievement_period",
             ),
         ]
         verbose_name = "föreningsutmärkelse"
         verbose_name_plural = "föreningsutmärkelser"
+
+    def clean(self):
+        super().clean()
+        if (
+            self.level_id
+            and self.level.achievement.achievement_type != Achievement.Type.MANUAL
+        ):
+            raise ValidationError(
+                {"level": "Föreningsutmärkelser måste vara manuellt utdelade utmärkelser."}
+            )
 
     def save(self, *args, **kwargs):
         if self._state.adding and self.level_id:
             self.achievement_name = self.level.achievement.name
             self.level_name = self.level.name
             self.level_description = self.level.description
+        self.full_clean()
         return super().save(*args, **kwargs)
 
     def __str__(self):
