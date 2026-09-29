@@ -287,7 +287,7 @@ class UnifiedAchievementAdminUiTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
-    def test_shared_card_displays_type_and_description_in_detail_modal(self):
+    def test_shared_card_hides_type_and_displays_description_in_detail_modal(self):
         achievement = Achievement.objects.create(
             name="Gemensamt kort",
             active=True,
@@ -316,7 +316,8 @@ class UnifiedAchievementAdminUiTests(TestCase):
         response = self.client.get(reverse("achievements"))
 
         self.assertContains(response, "Gemensamt kort")
-        self.assertContains(response, "Manuellt utdelad utmärkelse")
+        self.assertNotContains(response, "<strong>Typ:</strong>", html=True)
+        self.assertNotContains(response, "Manuellt utdelad utmärkelse")
         self.assertContains(response, "Beskrivning av hela utmärkelsen.")
         self.assertContains(response, "Beskrivning av nivån.")
         self.assertContains(response, 'class="modal fade" id="achievement-modal-', count=1)
