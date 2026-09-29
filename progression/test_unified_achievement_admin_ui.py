@@ -89,6 +89,15 @@ class UnifiedAchievementAdminUiTests(TestCase):
                 ("Lägg till krav för alla nivåer", "Granska utdelade utmärkelser"),
             ),
             (
+                Achievement.Type.ASSOCIATION,
+                (),
+                (
+                    "Tilldela nivå",
+                    "Lägg till krav för alla nivåer",
+                    "Granska utdelade utmärkelser",
+                ),
+            ),
+            (
                 Achievement.Type.SELFMADE,
                 (),
                 (
