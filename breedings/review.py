@@ -94,13 +94,20 @@ def review_list(request):
     ).order_by("breeding_date", "pk")
     approved_registrations = available.filter(
         status=BreedingRegistration.Status.APPROVED
+    ).exclude(
+        awarded_breeding_class=Species.BreedingClass.BRONZE
     ).order_by("-breeding_date", "-pk")
+    bronze_publication_candidates = available.filter(
+        status=BreedingRegistration.Status.APPROVED,
+        awarded_breeding_class=Species.BreedingClass.BRONZE,
+    ).exclude(description="").order_by("-breeding_date", "-pk")
     return render(
         request,
         "breedings/review_list.html",
         {
             "registrations": registrations,
             "approved_registrations": approved_registrations,
+            "bronze_publication_candidates": bronze_publication_candidates,
         },
     )
 
