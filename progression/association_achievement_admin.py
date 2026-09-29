@@ -4,19 +4,22 @@ from django.contrib import admin
 from associations.models import Association
 from associations.permissions import is_system_admin
 
-from .models import AssociationAchievement, AchievementLevel
+from .models import AssociationAchievement, Achievement, AchievementLevel
 
 
 class AssociationAchievementAdminForm(forms.ModelForm):
     class Meta:
         model = AssociationAchievement
-        fields = ("association", "level")
+        fields = ("association", "level", "calendar_year")
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields["association"].queryset = Association.objects.order_by("name", "pk")
         self.fields["level"].queryset = (
-            AchievementLevel.objects.filter(achievement__active=True)
+            AchievementLevel.objects.filter(
+                achievement__active=True,
+                achievement__achievement_type=Achievement.Type.MANUAL,
+            )
             .select_related("achievement")
             .order_by("achievement__name", "order", "name")
         )
@@ -29,6 +32,7 @@ class AssociationAchievementAdmin(admin.ModelAdmin):
         "association",
         "achievement_name",
         "level_name",
+        "calendar_year",
         "awarded_by",
         "achieved_at",
     )
