@@ -35,6 +35,7 @@ class AchievementDisplayTests(TestCase):
         achievement = Achievement.objects.create(
             name=name,
             achievement_type=Achievement.Type.YEARLY if year is not None else Achievement.Type.CAREER,
+            active=True,
             image=image or "",
         )
         level = AchievementLevel.objects.create(
@@ -183,7 +184,7 @@ class AchievementDisplayTests(TestCase):
         self.assertNotContains(response, "Inte vunnen")
 
     def test_my_page_shows_only_highest_earned_career_level_per_achievement(self):
-        achievement = Achievement.objects.create(name="Karriär")
+        achievement = Achievement.objects.create(name="Karriär", active=True)
         bronze = AchievementLevel.objects.create(
             achievement=achievement,
             name="Brons",
@@ -220,6 +221,7 @@ class AchievementDisplayTests(TestCase):
         achievement = Achievement.objects.create(
             name="Årsgrad",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
         )
         bronze = AchievementLevel.objects.create(
             achievement=achievement,
@@ -253,7 +255,7 @@ class AchievementDisplayTests(TestCase):
         self.assertEqual(presentations["yearly"][0]["earned"].level, silver)
 
     def test_my_page_applies_limit_after_reducing_duplicate_levels(self):
-        first = Achievement.objects.create(name="Första")
+        first = Achievement.objects.create(name="Första", active=True)
         first_low = AchievementLevel.objects.create(
             achievement=first,
             name="Brons",
@@ -264,7 +266,7 @@ class AchievementDisplayTests(TestCase):
             name="Silver",
             order=2,
         )
-        second = Achievement.objects.create(name="Andra")
+        second = Achievement.objects.create(name="Andra", active=True)
         second_level = AchievementLevel.objects.create(
             achievement=second,
             name="Brons",
@@ -289,6 +291,7 @@ class AchievementDisplayTests(TestCase):
         career = Achievement.objects.create(
             name="Karriärnivå",
             achievement_type=Achievement.Type.CAREER,
+            active=True,
         )
         career_bronze = AchievementLevel.objects.create(
             achievement=career,
@@ -303,6 +306,7 @@ class AchievementDisplayTests(TestCase):
         yearly = Achievement.objects.create(
             name="Årsnivå",
             achievement_type=Achievement.Type.YEARLY,
+            active=True,
         )
         yearly_bronze = AchievementLevel.objects.create(
             achievement=yearly,
@@ -347,6 +351,7 @@ class AchievementDisplayTests(TestCase):
         manual = Achievement.objects.create(
             name="Manuell merit",
             achievement_type=Achievement.Type.MANUAL,
+            active=True,
         )
         manual_level = AchievementLevel.objects.create(
             achievement=manual,
@@ -356,6 +361,7 @@ class AchievementDisplayTests(TestCase):
         selfmade = Achievement.objects.create(
             name="Självvald merit",
             achievement_type=Achievement.Type.SELFMADE,
+            active=True,
         )
         selfmade_level = AchievementLevel.objects.create(
             achievement=selfmade,
