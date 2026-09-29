@@ -1,5 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
+from django.core.exceptions import ValidationError
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -44,10 +45,12 @@ class AssociationAchievementTests(TestCase):
         AssociationAchievement.objects.create(
             association=self.association_a,
             level=self.level_one,
+            calendar_year=2024,
         )
         AssociationAchievement.objects.create(
             association=self.association_a,
             level=self.level_two,
+            calendar_year=2025,
         )
 
         self.assertEqual(self.association_a.achievements.count(), 2)
@@ -56,10 +59,12 @@ class AssociationAchievementTests(TestCase):
         AssociationAchievement.objects.create(
             association=self.association_a,
             level=self.level_one,
+            calendar_year=2025,
         )
         AssociationAchievement.objects.create(
             association=self.association_b,
             level=self.level_one,
+            calendar_year=2025,
         )
 
         self.assertEqual(
@@ -79,6 +84,7 @@ class AssociationAchievementTests(TestCase):
         award = AssociationAchievement.objects.create(
             association=self.association_a,
             level=self.level_one,
+            calendar_year=2023,
         )
 
         response = self.client.get(
@@ -94,6 +100,7 @@ class AssociationAchievementTests(TestCase):
         self.assertContains(response, award.level_name)
         self.assertContains(response, "En utmärkelse för en förening.")
         self.assertContains(response, "Silvernivån")
+        self.assertContains(response, "<strong>År:</strong> 2023", html=True)
         self.assertContains(response, 'data-achievement="Föreningsheder"')
 
     def test_award_snapshot_survives_level_definition_change(self):
@@ -121,6 +128,7 @@ class AssociationAchievementTests(TestCase):
             {
                 "association": self.association_a.pk,
                 "level": self.level_one.pk,
+                "calendar_year": 2021,
                 "_save": "Spara",
             },
         )
@@ -134,6 +142,66 @@ class AssociationAchievementTests(TestCase):
         self.assertEqual(award.achievement_name, self.achievement.name)
         self.assertEqual(award.level_name, self.level_one.name)
         self.assertEqual(award.level_description, self.level_one.description)
+        self.assertEqual(award.calendar_year, 2021)
+
+    def test_same_level_can_be_awarded_to_same_association_for_different_years(self):
+        AssociationAchievement.objects.create(
+            association=self.association_a,
+            level=self.level_one,
+            calendar_year=2024,
+        )
+        AssociationAchievement.objects.create(
+            association=self.association_a,
+            level=self.level_one,
+            calendar_year=2025,
+        )
+
+        self.assertEqual(
+            AssociationAchievement.objects.filter(
+                association=self.association_a,
+                level=self.level_one,
+            ).count(),
+            2,
+        )
+
+    def test_association_award_must_use_manual_achievement(self):
+        automatic = Achievement.objects.create(
+            name="Automatisk föreningsutmärkelse",
+            achievement_type=Achievement.Type.CAREER,
+            active=True,
+        )
+        automatic_level = AchievementLevel.objects.create(
+            achievement=automatic,
+            name="Brons",
+            order=1,
+        )
+
+        with self.assertRaises(ValidationError):
+            AssociationAchievement.objects.create(
+                association=self.association_a,
+                level=automatic_level,
+                calendar_year=2025,
+            )
+
+    def test_admin_only_offers_manual_achievement_levels(self):
+        automatic = Achievement.objects.create(
+            name="Automatisk adminnivå",
+            achievement_type=Achievement.Type.CAREER,
+            active=True,
+        )
+        automatic_level = AchievementLevel.objects.create(
+            achievement=automatic,
+            name="Brons",
+            order=1,
+        )
+        self.client.force_login(self.admin_user)
+
+        response = self.client.get(
+            reverse("admin:progression_associationachievement_add")
+        )
+
+        self.assertContains(response, str(self.level_one))
+        self.assertNotContains(response, str(automatic_level))
 
     def test_admin_menu_contains_association_achievements(self):
         request = RequestFactory().get("/admin/")
