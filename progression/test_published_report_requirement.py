@@ -131,6 +131,46 @@ class PublishedReportRequirementTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
+    def test_popup_uses_requested_published_report_wording(self):
+        achievement = Achievement.objects.create(
+            name="Rapportpopup",
+            active=True,
+        )
+        first_level = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Brons",
+            order=1,
+        )
+        AchievementRequirement.objects.create(
+            level=first_level,
+            kind=AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT,
+            value=1,
+        )
+        second_level = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Silver",
+            order=2,
+        )
+        AchievementRequirement.objects.create(
+            level=second_level,
+            kind=AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT,
+            value=3,
+        )
+        self._registration(self.species_a, published=True)
+        sync_achievements(self.user)
+        self.client.force_login(self.user)
+
+        response = self.client.get("/utmarkelser/")
+
+        self.assertContains(
+            response,
+            "Skrivit 1 odlingsrapport som blivit publicerad.",
+        )
+        self.assertContains(
+            response,
+            "Skriv 2 till odlingsrapporter som blir publicerade.",
+        )
+
     def test_default_requirement_text_uses_requested_singular_wording(self):
         _, level, requirement = self._achievement(1)
         achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
