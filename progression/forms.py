@@ -249,7 +249,11 @@ class BulkAchievementRequirementsForm(forms.Form):
             existing = self.existing_requirements.get(level.pk)
             self.fields[self.field_name(level)] = forms.IntegerField(
                 label=f"Kravvärde för {level.name}",
-                min_value=1,
+                min_value=(
+                    0
+                    if kind == AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT
+                    else 1
+                ),
                 initial=existing.value if existing else None,
             )
 
