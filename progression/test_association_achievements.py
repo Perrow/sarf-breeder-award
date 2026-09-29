@@ -96,6 +96,23 @@ class AssociationAchievementTests(TestCase):
         self.assertContains(response, "Silvernivån")
         self.assertContains(response, 'data-achievement="Föreningsheder"')
 
+    def test_award_snapshot_survives_level_definition_change(self):
+        award = AssociationAchievement.objects.create(
+            association=self.association_a,
+            level=self.level_one,
+        )
+
+        self.achievement.name = "Nytt namn"
+        self.achievement.save()
+        self.level_one.name = "Ny nivå"
+        self.level_one.description = "Ny beskrivning"
+        self.level_one.save()
+        award.refresh_from_db()
+
+        self.assertEqual(award.achievement_name, "Föreningsheder")
+        self.assertEqual(award.level_name, "Silver")
+        self.assertEqual(award.level_description, "Silvernivån")
+
     def test_system_admin_can_assign_award_in_admin(self):
         self.client.force_login(self.admin_user)
 
