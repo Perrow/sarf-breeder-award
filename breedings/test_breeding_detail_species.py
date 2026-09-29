@@ -66,7 +66,7 @@ class BreedingDetailSpeciesTests(TestCase):
         self.assertContains(response, "Pandapansarmal")
         self.assertContains(response, "Panda cory")
         self.assertContains(response, "Silver")
-        self.assertContains(response, "Din odling:")
+        self.assertContains(response, "Odlingsdatum")
         self.assertContains(response, date_format(self.registration.breeding_date))
 
     def test_detail_lists_only_other_approved_breedings(self):
