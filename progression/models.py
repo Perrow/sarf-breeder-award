@@ -45,7 +45,7 @@ class Achievement(models.Model):
     available_year = models.PositiveIntegerField(
         null=True,
         blank=True,
-        verbose_name="endast möjlig år",
+        verbose_name="gäller endast år",
         help_text=(
             "Valfritt kalenderår då en automatisk utmärkelse kan uppnås. "
             "Lämna tomt för att använda utmärkelsens vanliga regler."
