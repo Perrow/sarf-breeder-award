@@ -131,27 +131,64 @@ class PublishedReportRequirementTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
-    def test_default_requirement_text_uses_singular_and_plural(self):
+    def test_default_requirement_text_uses_requested_singular_wording(self):
         _, level, requirement = self._achievement(1)
-        achieved_template, _ = RequirementTextTemplate.templates_for_kind(
+        achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
             requirement.kind
         )
+        context = {
+            "current": 1,
+            "target": 1,
+            "missing": 1,
+            "unit": "publicerad odlingsrapport",
+            "target_unit": "publicerad odlingsrapport",
+            "missing_unit": "publicerad odlingsrapport",
+            "target_text": "en publicerad odlingsrapport",
+            "missing_text": "en publicerad odlingsrapport",
+            "target_report_text": "1 odlingsrapport som blivit publicerad",
+            "missing_report_unit": "odlingsrapport som blir publicerad",
+            "scope": "",
+            "scope_suffix": "",
+        }
+
         self.assertEqual(
-            achieved_template.format(
-                current=1,
-                target=1,
-                missing=0,
-                unit="publicerad odlingsrapport",
-                target_unit="publicerad odlingsrapport",
-                missing_unit="publicerade odlingsrapporter",
-                target_text="en publicerad odlingsrapport",
-                missing_text="0 publicerade odlingsrapporter",
-                scope="",
-                scope_suffix="",
-            ),
-            "Ha en publicerad odlingsrapport.",
+            achieved_template.format(**context),
+            "Skrivit 1 odlingsrapport som blivit publicerad.",
+        )
+        self.assertEqual(
+            next_template.format(**context),
+            "Skriv 1 till odlingsrapport som blir publicerad.",
         )
         self.assertEqual(level.requirements.get(), requirement)
+
+    def test_default_requirement_text_uses_requested_plural_wording(self):
+        _, _, requirement = self._achievement(3)
+        achieved_template, next_template = RequirementTextTemplate.templates_for_kind(
+            requirement.kind
+        )
+        context = {
+            "current": 1,
+            "target": 3,
+            "missing": 2,
+            "unit": "publicerad odlingsrapport",
+            "target_unit": "publicerade odlingsrapporter",
+            "missing_unit": "publicerade odlingsrapporter",
+            "target_text": "3 publicerade odlingsrapporter",
+            "missing_text": "2 publicerade odlingsrapporter",
+            "target_report_text": "3 odlingsrapporter som blivit publicerade",
+            "missing_report_unit": "odlingsrapporter som blir publicerade",
+            "scope": "",
+            "scope_suffix": "",
+        }
+
+        self.assertEqual(
+            achieved_template.format(**context),
+            "Skrivit 3 odlingsrapporter som blivit publicerade.",
+        )
+        self.assertEqual(
+            next_template.format(**context),
+            "Skriv 2 till odlingsrapporter som blir publicerade.",
+        )
 
 
 class PublishedReportBulkRequirementFormTests(TestCase):
