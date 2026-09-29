@@ -43,6 +43,7 @@ class PublishedBreedingReportTests(TestCase):
             approved_at=timezone.now(),
             awarded_breeding_class=Species.BreedingClass.SILVER,
             awarded_points=3,
+            publication_status=BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
         )
         self.pending = BreedingRegistration.objects.create(
             owner=self.owner,
