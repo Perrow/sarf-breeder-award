@@ -223,6 +223,60 @@ class AchievementCountRequirementTests(TestCase):
             ).exists()
         )
 
+    def test_bulk_editor_does_not_offer_achievement_count_requirement(self):
+        admin_user = get_user_model().objects.create_superuser(
+            email="achievement-count-bulk@example.com",
+            password="test-password",
+        )
+        target, _, _ = self._target_requirement(1)
+        self.client.force_login(admin_user)
+
+        response = self.client.get(
+            reverse(
+                "admin:progression_achievement_requirements_bulk",
+                args=[target.pk],
+            )
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertNotContains(response, "Antal uppnådda utmärkelser")
+
+    def test_admin_filters_own_and_association_achievements_from_options(self):
+        admin_user = get_user_model().objects.create_superuser(
+            email="achievement-count-filter@example.com",
+            password="test-password",
+        )
+        _, allowed_levels = self._achievement_with_levels("Tillåten", 1)
+        target, target_level, requirement = self._target_requirement(1)
+        own_other_level = AchievementLevel.objects.create(
+            achievement=target,
+            name="Egen annan nivå",
+            order=2,
+        )
+        association_achievement = Achievement.objects.create(
+            name="Föreningspris",
+            achievement_type=Achievement.Type.ASSOCIATION,
+            active=True,
+        )
+        association_level = AchievementLevel.objects.create(
+            achievement=association_achievement,
+            name="Föreningsnivå",
+            order=1,
+        )
+        self.client.force_login(admin_user)
+
+        response = self.client.get(
+            reverse(
+                "admin:progression_achievementrequirement_change",
+                args=[requirement.pk],
+            )
+        )
+
+        self.assertContains(response, str(allowed_levels[0]))
+        self.assertNotContains(response, str(own_other_level))
+        self.assertNotContains(response, str(association_level))
+        self.assertContains(response, str(target_level))
+
     def test_admin_shows_configured_qualifying_achievement(self):
         admin_user = get_user_model().objects.create_superuser(
             email="achievement-count-admin@example.com",
