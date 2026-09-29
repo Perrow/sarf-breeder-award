@@ -20,6 +20,7 @@ from .models import (
     AchievementBackground,
     AchievementLevel,
     AchievementRequirement,
+    AchievementRequirementOption,
     RequirementTextTemplate,
     UserAchievement,
 )
@@ -210,7 +211,9 @@ class AchievementAdmin(admin.ModelAdmin):
         ):
             raise PermissionDenied
 
-        available_kinds = set(AchievementRequirement.AUTOMATIC_KINDS)
+        available_kinds = set(AchievementRequirement.AUTOMATIC_KINDS) - {
+            AchievementRequirement.Kind.ACHIEVEMENT_COUNT,
+        }
         default_kind = AchievementRequirement.Kind.POINTS
         if request.method == "POST":
             selected_kind = request.POST.get("kind", default_kind)
@@ -519,10 +522,17 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         return format_html("{}{}", table, add_link)
 
 
+class AchievementRequirementOptionInline(admin.TabularInline):
+    model = AchievementRequirementOption
+    extra = 1
+    fields = ("minimum_level",)
+
+
 @admin.register(AchievementRequirement)
 class AchievementRequirementAdmin(admin.ModelAdmin):
     list_display = ("level", "kind", "value")
     filter_horizontal = ("genera", "species_groups")
+    inlines = (AchievementRequirementOptionInline,)
 
     def response_change(self, request, obj):
         if _uses_special_save_action(request):
