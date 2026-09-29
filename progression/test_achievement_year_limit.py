@@ -32,6 +32,7 @@ class AchievementYearLimitTests(TestCase):
         achievement = Achievement.objects.create(
             name=name,
             achievement_type=achievement_type,
+            active=True,
             available_year=available_year,
         )
         level = AchievementLevel.objects.create(
