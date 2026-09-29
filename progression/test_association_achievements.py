@@ -27,7 +27,7 @@ class AssociationAchievementTests(TestCase):
         self.achievement = Achievement.objects.create(
             name="Föreningsheder",
             description="En utmärkelse för en förening.",
-            achievement_type=Achievement.Type.MANUAL,
+            achievement_type=Achievement.Type.ASSOCIATION,
             active=True,
         )
         self.level_one = AchievementLevel.objects.create(
@@ -193,7 +193,7 @@ class AssociationAchievementTests(TestCase):
             2,
         )
 
-    def test_association_award_must_use_manual_achievement(self):
+    def test_association_award_must_use_association_achievement(self):
         automatic = Achievement.objects.create(
             name="Automatisk föreningsutmärkelse",
             achievement_type=Achievement.Type.CAREER,
@@ -212,7 +212,7 @@ class AssociationAchievementTests(TestCase):
                 calendar_year=2025,
             )
 
-    def test_admin_only_offers_manual_achievement_levels(self):
+    def test_admin_only_offers_association_achievement_levels(self):
         automatic = Achievement.objects.create(
             name="Automatisk adminnivå",
             achievement_type=Achievement.Type.CAREER,
