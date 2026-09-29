@@ -53,9 +53,11 @@ class EditAutoApprovedBronzeTests(TestCase):
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.BRONZE)
         self.assertEqual(self.registration.awarded_points, 1)
 
-    def test_editing_published_bronze_resets_species_page_visibility(self):
-        self.registration.show_on_species_page = True
-        self.registration.save(update_fields=("show_on_species_page",))
+    def test_editing_published_bronze_resets_publication_status(self):
+        self.registration.publication_status = (
+            BreedingRegistration.PublicationStatus.PUBLISHED
+        )
+        self.registration.save(update_fields=("publication_status",))
         self.client.force_login(self.user)
 
         response = self.client.post(
@@ -71,7 +73,10 @@ class EditAutoApprovedBronzeTests(TestCase):
 
         self.assertRedirects(response, reverse("breeding_list"))
         self.registration.refresh_from_db()
-        self.assertFalse(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.UNREVIEWED,
+        )
         self.assertEqual(
             self.registration.status,
             BreedingRegistration.Status.APPROVED,
