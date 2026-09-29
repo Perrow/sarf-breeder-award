@@ -15,6 +15,7 @@ class RequirementTextTemplateTests(TestCase):
                 AchievementRequirement.Kind.BREEDING_COUNT,
                 AchievementRequirement.Kind.SPECIES_COUNT,
                 AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT,
+                AchievementRequirement.Kind.ACHIEVEMENT_COUNT,
             },
         )
 
