@@ -6,7 +6,10 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from associations.models import Association
-from progression.services import latest_achievement_presentations_for_user
+from progression.services import (
+    association_achievement_presentations,
+    latest_achievement_presentations_for_user,
+)
 from taxonomy.models import Species
 
 from .forms import BreedingRegistrationForm
@@ -209,6 +212,7 @@ def association_member_leaderboard(request, association_id):
         "breedings/association_member_leaderboard.html",
         {
             "association": association,
+            "association_achievements": association_achievement_presentations(association),
             "leaderboard": leaderboard,
             "selected_year": selected_year,
             "available_years": _available_leaderboard_years(
