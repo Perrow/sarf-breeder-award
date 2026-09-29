@@ -4,7 +4,10 @@ from django.utils import timezone
 
 from associations.models import Membership
 from breedings.models import BreedingRegistration
-from breedings.scoring import points_for_registration
+from breedings.scoring import (
+    points_for_registration,
+    registration_is_timely_for_competition_year,
+)
 
 from .models import (
     Achievement,
@@ -24,6 +27,20 @@ def _registrations_for(user, year=None):
     if year is not None:
         queryset = queryset.filter(breeding_date__year=year)
     return list(queryset)
+
+
+def _registrations_for_achievement(achievement, registrations):
+    if achievement.available_year is None:
+        return registrations
+    return [
+        registration
+        for registration in registrations
+        if registration.breeding_date.year == achievement.available_year
+        and registration_is_timely_for_competition_year(
+            registration,
+            achievement.available_year,
+        )
+    ]
 
 
 def _target_species_ids(requirement):
@@ -96,7 +113,14 @@ def _expected_achievement_keys(achievement, registrations):
     }:
         return set(), {}
     years = sorted({registration.breeding_date.year for registration in registrations})
-    evaluation_years = years if achievement.achievement_type == Achievement.Type.YEARLY else [None]
+    if achievement.achievement_type == Achievement.Type.YEARLY:
+        evaluation_years = (
+            [achievement.available_year]
+            if achievement.available_year is not None
+            else years
+        )
+    else:
+        evaluation_years = [None]
     expected = set()
 
     levels = list(
@@ -107,11 +131,21 @@ def _expected_achievement_keys(achievement, registrations):
         )
     )
     for year in evaluation_years:
-        period_registrations = (
-            [registration for registration in registrations if registration.breeding_date.year == year]
-            if year is not None
-            else registrations
-        )
+        if achievement.available_year is not None:
+            period_registrations = _registrations_for_achievement(
+                achievement,
+                registrations,
+            )
+        else:
+            period_registrations = (
+                [
+                    registration
+                    for registration in registrations
+                    if registration.breeding_date.year == year
+                ]
+                if year is not None
+                else registrations
+            )
         for level in levels:
             if _level_is_met(level, period_registrations):
                 expected.add((level.pk, year))
@@ -131,13 +165,30 @@ def sync_achievements(user):
     years = sorted({registration.breeding_date.year for registration in all_registrations})
 
     for achievement in achievements:
-        evaluation_years = years if achievement.achievement_type == Achievement.Type.YEARLY else [None]
-        for year in evaluation_years:
-            registrations = (
-                [registration for registration in all_registrations if registration.breeding_date.year == year]
-                if year is not None
-                else all_registrations
+        if achievement.achievement_type == Achievement.Type.YEARLY:
+            evaluation_years = (
+                [achievement.available_year]
+                if achievement.available_year is not None
+                else years
             )
+        else:
+            evaluation_years = [None]
+        for year in evaluation_years:
+            if achievement.available_year is not None:
+                registrations = _registrations_for_achievement(
+                    achievement,
+                    all_registrations,
+                )
+            else:
+                registrations = (
+                    [
+                        registration
+                        for registration in all_registrations
+                        if registration.breeding_date.year == year
+                    ]
+                    if year is not None
+                    else all_registrations
+                )
             for level in achievement.levels.all():
                 if not _level_is_met(level, registrations):
                     continue

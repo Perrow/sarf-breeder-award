@@ -148,6 +148,7 @@ class AchievementAdmin(admin.ModelAdmin):
         "description",
         "achievement_type",
         "active",
+        "available_year",
         "image",
         "existing_image",
         "background_image",
