@@ -345,6 +345,61 @@ class RequirementTextTemplate(models.Model):
         return self.get_kind_display()
 
 
+class AssociationAchievement(models.Model):
+    association = models.ForeignKey(
+        "associations.Association",
+        on_delete=models.CASCADE,
+        related_name="achievements",
+        verbose_name="förening",
+    )
+    level = models.ForeignKey(
+        AchievementLevel,
+        on_delete=models.PROTECT,
+        related_name="association_achievements",
+        verbose_name="nivå",
+    )
+    achievement_name = models.CharField(max_length=100, verbose_name="utmärkelse")
+    level_name = models.CharField(max_length=100, verbose_name="nivånamn")
+    level_description = models.CharField(
+        max_length=300,
+        blank=True,
+        verbose_name="nivåbeskrivning",
+    )
+    awarded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="awarded_association_achievements",
+        verbose_name="utdelad av",
+    )
+    achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
+
+    class Meta:
+        ordering = ("-achieved_at", "-pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("association", "level"),
+                name="unique_association_achievement_level",
+            ),
+        ]
+        verbose_name = "föreningsutmärkelse"
+        verbose_name_plural = "föreningsutmärkelser"
+
+    def save(self, *args, **kwargs):
+        if self.level_id:
+            if not self.achievement_name:
+                self.achievement_name = self.level.achievement.name
+            if not self.level_name:
+                self.level_name = self.level.name
+            if not self.level_description:
+                self.level_description = self.level.description
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.association}: {self.achievement_name} – {self.level_name}"
+
+
 class UserAchievement(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
