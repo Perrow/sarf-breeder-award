@@ -1,4 +1,10 @@
 {% extends "admin/change_form.html" %}
+{% load static %}
+
+{% block extrahead %}
+{{ block.super }}
+<link href="{% static 'css/confirm_dialog.css' %}" rel="stylesheet">
+{% endblock %}
 
 {% block object-tools-items %}
 {{ block.super }}
@@ -10,9 +16,15 @@
         </a>
     </li>
     <li>
-        <form method="post" action="{% url 'admin:progression_achievement_revalidate' original.pk %}" style="display:inline;">
+        <form method="post"
+              action="{% url 'admin:progression_achievement_revalidate' original.pk %}"
+              style="display:inline;"
+              data-confirm-title="Granska utdelade utmärkelser"
+              data-confirm-message="Ogiltiga utdelningar tas bort och saknade giltiga utdelningar skapas."
+              data-confirm-action-label="Granska"
+              data-confirm-variant="warning">
             {% csrf_token %}
-            <button type="submit" class="button" onclick="return confirm('Granska utdelade utmärkelser mot nu gällande krav? Ogiltiga utdelningar tas bort och saknade giltiga utdelningar skapas.');">
+            <button type="submit" class="button">
                 Granska utdelade utmärkelser
             </button>
         </form>
@@ -25,4 +37,10 @@
     </li>
     {% endif %}
 {% endif %}
+{% endblock %}
+
+{% block footer %}
+{{ block.super }}
+{% include "includes/confirm_dialog.html" %}
+<script src="{% static 'js/confirm_dialog.js' %}"></script>
 {% endblock %}
