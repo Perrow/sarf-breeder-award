@@ -4,9 +4,9 @@
 {% block title %}Odlingsrapport | Odlingskampanjen{% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-between align-items-center mb-3">
+<div class="d-flex justify-content-between align-items-center mb-3 gap-2 flex-wrap">
     <h1>Odlingsrapport</h1>
-    <div class="d-flex gap-2">
+    <div class="d-flex gap-2 flex-wrap">
         {% if registration.status == "submitted" %}
             <form method="post" action="{% url 'breeding_return_to_draft' registration.pk %}">
                 {% csrf_token %}
@@ -35,7 +35,6 @@
         {% if registration.species.common_name or registration.species.english_name %}
             <p class="lead mb-1">{{ registration.species.common_name }}{% if registration.species.english_name %}{% if registration.species.common_name %} · {% endif %}{{ registration.species.english_name }}{% endif %}</p>
         {% endif %}
-        <p class="text-body-secondary mb-0">Din odling: {{ registration.breeding_date }}</p>
     </div>
     <div class="text-end">
         <span class="badge text-bg-secondary fs-6">{{ registration.species.get_breeding_class_display }}</span>
@@ -47,35 +46,65 @@
 {% else %}
 <div class="mb-4">
     <h2 class="h4">Föreslagen art</h2>
-    <p class="mb-1"><em>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</em>{% if registration.proposed_common_name %} · {{ registration.proposed_common_name }}{% endif %}</p>
-    <p class="text-body-secondary mb-0">Din odling: {{ registration.breeding_date }}</p>
+    <p class="mb-0"><em>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</em>{% if registration.proposed_common_name %} · {{ registration.proposed_common_name }}{% endif %}</p>
 </div>
 {% endif %}
 
-<dl class="row">
-    <dt class="col-sm-4">Förening</dt><dd class="col-sm-8">{{ registration.association }}</dd>
-    <dt class="col-sm-4">Beskrivning</dt><dd class="col-sm-8">{{ registration.description|default:"–"|limited_markdown }}</dd>
-    <dt class="col-sm-4">Status</dt><dd class="col-sm-8">{{ registration.get_status_display }}</dd>
-    <dt class="col-sm-4">Inskickad</dt><dd class="col-sm-8">{{ registration.submitted_at|default:"–" }}</dd>
-    <dt class="col-sm-4">Godkänd</dt><dd class="col-sm-8">{{ registration.approved_at|default:"–" }}</dd>
-    <dt class="col-sm-4">Tilldelad odlingsklass</dt><dd class="col-sm-8">{{ registration.get_awarded_breeding_class_display|default:"–" }}</dd>
-    <dt class="col-sm-4">Tilldelade poäng</dt><dd class="col-sm-8">{{ registration.awarded_points|default_if_none:"–" }}</dd>
-    {% if registration.status != "approved" %}
-    <dt class="col-sm-4">Granskningskommentar</dt><dd class="col-sm-8">{{ registration.review_comment|default:"–"|linebreaksbr }}</dd>
-    {% endif %}
-</dl>
+<div class="row g-4">
+    <div class="col-lg-8">
+        {% if registration.status != "approved" and registration.review_comment %}
+        <div class="alert alert-danger" role="alert">
+            <h2 class="h5 alert-heading">Granskningskommentar</h2>
+            <div>{{ registration.review_comment|linebreaksbr }}</div>
+        </div>
+        {% endif %}
 
-{% if registration.water_parameter_values.all %}
-<section class="mt-4">
-    <h2 class="h4">Vattenparametrar</h2>
-    <dl class="row">
-        {% for item in registration.water_parameter_values.all %}
-        <dt class="col-sm-4">{{ item.parameter.name }}</dt>
-        <dd class="col-sm-8">{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
-        {% endfor %}
-    </dl>
-</section>
-{% endif %}
+        <article class="card">
+            <div class="card-body">
+                <h2 class="h4">Odlingsbeskrivning</h2>
+                <div>{{ registration.description|default:"Ingen beskrivning angiven."|limited_markdown }}</div>
+
+                {% if registration.water_parameter_values.all %}
+                <section class="mt-4 pt-3 border-top">
+                    <h3 class="h5">Vattenparametrar</h3>
+                    <dl class="row mb-0">
+                        {% for item in registration.water_parameter_values.all %}
+                        <dt class="col-sm-4">{{ item.parameter.name }}</dt>
+                        <dd class="col-sm-8">{{ item.value }}{% if item.parameter.unit %} {{ item.parameter.unit }}{% endif %}</dd>
+                        {% endfor %}
+                    </dl>
+                </section>
+                {% endif %}
+            </div>
+        </article>
+    </div>
+
+    <aside class="col-lg-4">
+        <div class="card h-100">
+            <div class="card-body">
+                <h2 class="h5">Rapportinformation</h2>
+                <div class="mb-4">
+                    <div class="small text-body-secondary">Status</div>
+                    <div class="fs-4 fw-semibold">{{ registration.get_status_display }}</div>
+                </div>
+                <dl class="mb-0">
+                    <dt>Förening</dt>
+                    <dd>{{ registration.association }}</dd>
+                    <dt>Odlingsdatum</dt>
+                    <dd>{{ registration.breeding_date }}</dd>
+                    <dt>Inskickad</dt>
+                    <dd>{{ registration.submitted_at|default:"–" }}</dd>
+                    <dt>Godkänd</dt>
+                    <dd>{{ registration.approved_at|default:"–" }}</dd>
+                    <dt>Tilldelad odlingsklass</dt>
+                    <dd>{{ registration.get_awarded_breeding_class_display|default:"–" }}</dd>
+                    <dt>Tilldelade poäng</dt>
+                    <dd>{{ registration.awarded_points|default_if_none:"–" }}</dd>
+                </dl>
+            </div>
+        </div>
+    </aside>
+</div>
 
 {% if registration.species %}
 <section class="mt-4">
