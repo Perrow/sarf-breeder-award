@@ -35,6 +35,7 @@ class AchievementRevalidationTests(TestCase):
         achievement = Achievement.objects.create(
             name=name,
             achievement_type=achievement_type,
+            active=True,
         )
         level = AchievementLevel.objects.create(
             achievement=achievement,

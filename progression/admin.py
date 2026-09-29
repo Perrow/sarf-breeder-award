@@ -340,6 +340,11 @@ class AchievementAdmin(admin.ModelAdmin):
             return redirect(
                 reverse("admin:progression_achievement_change", args=[achievement.pk])
             )
+        if not achievement.active:
+            messages.error(request, "En inaktiv utmärkelse kan inte tilldelas.")
+            return redirect(
+                reverse("admin:progression_achievement_change", args=[achievement.pk])
+            )
 
         form = ManualAssignmentAdminForm(
             request.POST or None,
