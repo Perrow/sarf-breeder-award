@@ -61,6 +61,30 @@ class BronzePublicationSelectionTests(TestCase):
             reverse("breeding_approved_detail", args=[registration.pk]),
         )
 
+    def test_unreviewed_bronze_shares_queue_with_submitted_silver(self):
+        bronze = self._bronze()
+        silver_species = Species.objects.create(
+            genus=self.species.genus,
+            scientific_name="silver",
+            common_name="Silverart",
+            breeding_class=Species.BreedingClass.SILVER,
+        )
+        silver = BreedingRegistration.objects.create(
+            owner=self.owner,
+            association=self.association,
+            species=silver_species,
+            breeding_date=date(2026, 9, 2),
+            description="Silverrapport.",
+            status=BreedingRegistration.Status.SUBMITTED,
+        )
+
+        response = self.client.get(reverse("breeding_review_list"))
+
+        self.assertEqual(
+            [item.pk for item in response.context["review_queue"]],
+            [bronze.pk, silver.pk],
+        )
+
     def test_bronze_without_description_is_not_listed_for_publication_review(self):
         registration = self._bronze(description="")
 
