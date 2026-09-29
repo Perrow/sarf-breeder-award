@@ -14,6 +14,7 @@ from .models import (
     AchievementLevel,
     UserAchievement,
 )
+from .services import assign_manual_level
 
 
 class AssociationAchievementTests(TestCase):
@@ -231,6 +232,14 @@ class AssociationAchievementTests(TestCase):
 
         self.assertContains(response, str(self.level_one))
         self.assertNotContains(response, str(automatic_level))
+
+    def test_association_achievement_cannot_be_awarded_to_user(self):
+        with self.assertRaises(ValidationError):
+            assign_manual_level(self.admin_user, self.level_one)
+
+        self.assertFalse(
+            UserAchievement.objects.filter(level=self.level_one).exists()
+        )
 
     def test_admin_menu_contains_association_achievements(self):
         request = RequestFactory().get("/admin/")
