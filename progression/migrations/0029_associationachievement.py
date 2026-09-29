@@ -41,27 +41,6 @@ class Migration(migrations.Migration):
                     ),
                 ),
                 (
-                    "calendar_year",
-                    models.PositiveIntegerField(
-                        blank=True,
-                        help_text="Valfritt år som föreningsutmärkelsen gäller.",
-                        null=True,
-                        verbose_name="kalenderår",
-                    ),
-                ),
-                (
-                    "achievement_period_key",
-                    models.GeneratedField(
-                        db_persist=False,
-                        editable=False,
-                        expression=models.functions.Coalesce(
-                            "calendar_year",
-                            models.Value(-1),
-                        ),
-                        output_field=models.IntegerField(),
-                    ),
-                ),
-                (
                     "achieved_at",
                     models.DateTimeField(auto_now_add=True, verbose_name="uppnådd"),
                 ),
@@ -104,8 +83,8 @@ class Migration(migrations.Migration):
         migrations.AddConstraint(
             model_name="associationachievement",
             constraint=models.UniqueConstraint(
-                fields=("association", "level", "achievement_period_key"),
-                name="unique_association_achievement_period",
+                fields=("association", "level"),
+                name="unique_association_achievement_level",
             ),
         ),
     ]
