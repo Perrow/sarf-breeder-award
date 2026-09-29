@@ -18,7 +18,7 @@ class AssociationAchievementAdminForm(forms.ModelForm):
         self.fields["level"].queryset = (
             AchievementLevel.objects.filter(
                 achievement__active=True,
-                achievement__achievement_type=Achievement.Type.MANUAL,
+                achievement__achievement_type=Achievement.Type.ASSOCIATION,
             )
             .select_related("achievement")
             .order_by("achievement__name", "order", "name")
