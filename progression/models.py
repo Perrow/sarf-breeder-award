@@ -298,7 +298,7 @@ class RequirementTextTemplate(models.Model):
             AchievementRequirement.Kind.SPECIES_COUNT: ("Odla {target_text}{scope_suffix}.", "Odla {missing_text} till{scope_suffix}."),
             AchievementRequirement.Kind.BREEDING_COUNT: ("Gör {target_text}{scope_suffix}.", "Gör {missing_text} till{scope_suffix}."),
             AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT: (
-                "Publicera {target_text}{scope_suffix}.",
+                "Ha {target_text}{scope_suffix}.",
                 "Publicera {missing_text} till{scope_suffix}.",
             ),
             AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
