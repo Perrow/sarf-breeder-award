@@ -308,7 +308,7 @@ def approved_registration_detail(request, pk):
             registration.publication_status = publication_status
             registration.save(update_fields=("publication_status",))
             messages.success(request, "Publiceringsstatusen har uppdaterats.")
-        return redirect("breeding_approved_detail", pk=registration.pk)
+        return redirect("breeding_review_list")
 
     return render(
         request,
