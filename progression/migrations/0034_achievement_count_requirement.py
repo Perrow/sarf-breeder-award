@@ -92,10 +92,7 @@ class Migration(migrations.Migration):
             options={
                 "verbose_name": "kvalificerande utmärkelse",
                 "verbose_name_plural": "kvalificerande utmärkelser",
-                "ordering": (
-                    "minimum_level__achievement__name",
-                    "minimum_level__order",
-                ),
+                "ordering": ("minimum_level",),
             },
         ),
         migrations.AddConstraint(
