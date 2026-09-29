@@ -203,6 +203,7 @@ class AchievementRequirement(models.Model):
         BREEDING_COUNT = "breeding_count", "Antal odlingar"
         SPECIES_COUNT = "species_count", "Antal arter"
         PUBLISHED_REPORT_COUNT = "published_report_count", "Publicerade odlingsrapporter"
+        ACHIEVEMENT_COUNT = "achievement_count", "Antal uppnådda utmärkelser"
         MANUAL_ASSIGNMENT = "manual_assignment", "Manuell tilldelning"
         SELF_SELECTED = "self_selected", "Egenvald"
 
@@ -211,6 +212,7 @@ class AchievementRequirement(models.Model):
         Kind.BREEDING_COUNT,
         Kind.SPECIES_COUNT,
         Kind.PUBLISHED_REPORT_COUNT,
+        Kind.ACHIEVEMENT_COUNT,
     }
     EXPLICIT_KINDS = {Kind.MANUAL_ASSIGNMENT, Kind.SELF_SELECTED}
 
@@ -267,6 +269,62 @@ class AchievementRequirement(models.Model):
             raise ValidationError(errors)
 
 
+class AchievementRequirementOption(models.Model):
+    requirement = models.ForeignKey(
+        AchievementRequirement,
+        on_delete=models.CASCADE,
+        related_name="achievement_options",
+        verbose_name="krav",
+    )
+    minimum_level = models.ForeignKey(
+        AchievementLevel,
+        on_delete=models.CASCADE,
+        related_name="qualifying_requirement_options",
+        verbose_name="utmärkelse och miniminivå",
+    )
+
+    class Meta:
+        ordering = ("minimum_level",)
+        constraints = [
+            models.UniqueConstraint(
+                fields=("requirement", "minimum_level"),
+                name="unique_requirement_achievement_level_option",
+            ),
+        ]
+        verbose_name = "kvalificerande utmärkelse"
+        verbose_name_plural = "kvalificerande utmärkelser"
+
+    def clean(self):
+        super().clean()
+        errors = {}
+        if (
+            self.requirement_id
+            and self.requirement.kind != AchievementRequirement.Kind.ACHIEVEMENT_COUNT
+        ):
+            errors["requirement"] = (
+                "Kvalificerande utmärkelser kan bara användas med kravtypen "
+                "Antal uppnådda utmärkelser."
+            )
+        if (
+            self.requirement_id
+            and self.minimum_level_id
+            and self.minimum_level.achievement_id
+            == self.requirement.level.achievement_id
+        ):
+            errors["minimum_level"] = (
+                "Utmärkelsen som kravet tillhör kan inte kvalificera för sig själv."
+            )
+        if errors:
+            raise ValidationError(errors)
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return str(self.minimum_level)
+
+
 class RequirementTextTemplate(models.Model):
     ALLOWED_PLACEHOLDERS = {
         "current", "target", "missing", "unit", "target_unit", "missing_unit",
@@ -304,6 +362,10 @@ class RequirementTextTemplate(models.Model):
             AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT: (
                 "Skrivit {target_report_text}{scope_suffix}.",
                 "Skriv {missing} till {missing_report_unit}{scope_suffix}.",
+            ),
+            AchievementRequirement.Kind.ACHIEVEMENT_COUNT: (
+                "Uppnå {target_text} av de angivna utmärkelserna.",
+                "Uppnå ytterligare {missing_text} av de angivna utmärkelserna.",
             ),
             AchievementRequirement.Kind.POINTS: ("Samla {target_text}{scope_suffix}.", "Samla {missing_text} till{scope_suffix}."),
         }

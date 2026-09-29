@@ -20,6 +20,7 @@ from .models import (
     AchievementBackground,
     AchievementLevel,
     AchievementRequirement,
+    AchievementRequirementOption,
     RequirementTextTemplate,
     UserAchievement,
 )
@@ -210,7 +211,9 @@ class AchievementAdmin(admin.ModelAdmin):
         ):
             raise PermissionDenied
 
-        available_kinds = set(AchievementRequirement.AUTOMATIC_KINDS)
+        available_kinds = set(AchievementRequirement.AUTOMATIC_KINDS) - {
+            AchievementRequirement.Kind.ACHIEVEMENT_COUNT,
+        }
         default_kind = AchievementRequirement.Kind.POINTS
         if request.method == "POST":
             selected_kind = request.POST.get("kind", default_kind)
@@ -476,11 +479,21 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         if obj.achievement.achievement_type == Achievement.Type.SELFMADE:
             return "Nivån kan väljas av användaren själv."
 
-        requirements = obj.requirements.prefetch_related("genera", "species_groups").all()
+        requirements = obj.requirements.prefetch_related(
+            "genera",
+            "species_groups",
+            "achievement_options__minimum_level__achievement",
+        ).all()
         rows = []
         for requirement in requirements:
             genera = ", ".join(str(genus) for genus in requirement.genera.all()) or "–"
             groups = ", ".join(str(group) for group in requirement.species_groups.all()) or "–"
+            qualifying = "–"
+            if requirement.kind == AchievementRequirement.Kind.ACHIEVEMENT_COUNT:
+                qualifying = ", ".join(
+                    str(option.minimum_level)
+                    for option in requirement.achievement_options.all()
+                ) or "–"
             edit_url = reverse(
                 "admin:progression_achievementrequirement_change",
                 args=[requirement.pk],
@@ -491,6 +504,7 @@ class AchievementLevelAdmin(admin.ModelAdmin):
                     requirement.value,
                     genera,
                     groups,
+                    qualifying,
                     edit_url,
                 )
             )
@@ -498,13 +512,14 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         if rows:
             body = format_html_join(
                 "",
-                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td>"
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>"
                 '<td><a href="{}">Redigera</a></td></tr>',
                 rows,
             )
             table = format_html(
                 '<table><thead><tr><th>Typ</th><th>Värde</th><th>Släkten</th>'
-                "<th>Artgrupper</th><th></th></tr></thead><tbody>{}</tbody></table>",
+                "<th>Artgrupper</th><th>Kvalificerande utmärkelser</th>"
+                "<th></th></tr></thead><tbody>{}</tbody></table>",
                 body,
             )
         else:
@@ -519,10 +534,41 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         return format_html("{}{}", table, add_link)
 
 
+class AchievementRequirementOptionInline(admin.TabularInline):
+    model = AchievementRequirementOption
+    extra = 1
+    fields = ("minimum_level",)
+
+    def get_formset(self, request, obj=None, **kwargs):
+        formset = super().get_formset(request, obj, **kwargs)
+        queryset = AchievementLevel.objects.exclude(
+            achievement__achievement_type=Achievement.Type.ASSOCIATION,
+        ).select_related("achievement")
+        if obj is not None:
+            queryset = queryset.exclude(
+                achievement_id=obj.level.achievement_id,
+            )
+        formset.form.base_fields["minimum_level"].queryset = queryset.order_by(
+            "achievement__name",
+            "order",
+            "name",
+        )
+        return formset
+
+
 @admin.register(AchievementRequirement)
 class AchievementRequirementAdmin(admin.ModelAdmin):
     list_display = ("level", "kind", "value")
     filter_horizontal = ("genera", "species_groups")
+    inlines = (AchievementRequirementOptionInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        if (
+            obj is None
+            or obj.kind != AchievementRequirement.Kind.ACHIEVEMENT_COUNT
+        ):
+            return []
+        return super().get_inline_instances(request, obj)
 
     def response_change(self, request, obj):
         if _uses_special_save_action(request):

@@ -66,9 +66,41 @@ def _matching_registrations(requirement, registrations):
     ]
 
 
-def _requirement_current_value(requirement, registrations):
+def _requirement_current_value(requirement, registrations, user=None):
     if requirement.kind not in AchievementRequirement.AUTOMATIC_KINDS:
         raise ValueError("Explicita utmärkelsekrav utvärderas inte mot odlingsdata.")
+
+    if requirement.kind == AchievementRequirement.Kind.ACHIEVEMENT_COUNT:
+        if user is None:
+            raise ValueError("Användare krävs för krav på uppnådda utmärkelser.")
+        options = list(
+            requirement.achievement_options.select_related(
+                "minimum_level__achievement",
+            )
+        )
+        achievement_ids = {
+            option.minimum_level.achievement_id
+            for option in options
+        }
+        highest_orders = {}
+        user_id = getattr(user, "pk", user)
+        for earned in UserAchievement.objects.filter(
+            user_id=user_id,
+            level__achievement_id__in=achievement_ids,
+        ).select_related("level"):
+            achievement_id = earned.level.achievement_id
+            highest_orders[achievement_id] = max(
+                earned.level.order,
+                highest_orders.get(achievement_id, 0),
+            )
+
+        qualified = set()
+        for option in options:
+            achievement_id = option.minimum_level.achievement_id
+            if highest_orders.get(achievement_id, 0) >= option.minimum_level.order:
+                qualified.add(achievement_id)
+        return len(qualified)
+
     matching = _matching_registrations(requirement, registrations)
     if requirement.kind == AchievementRequirement.Kind.BREEDING_COUNT:
         return len(matching)
@@ -96,11 +128,14 @@ def _requirement_current_value(requirement, registrations):
     return sum(best_points_by_species.values())
 
 
-def _requirement_is_met(requirement, registrations):
-    return _requirement_current_value(requirement, registrations) >= requirement.value
+def _requirement_is_met(requirement, registrations, user=None):
+    return (
+        _requirement_current_value(requirement, registrations, user=user)
+        >= requirement.value
+    )
 
 
-def _level_is_met(level, registrations):
+def _level_is_met(level, registrations, user=None):
     requirements = list(
         level.requirements.prefetch_related(
             "genera",
@@ -113,10 +148,13 @@ def _level_is_met(level, registrations):
         for requirement in requirements
     ):
         return False
-    return all(_requirement_is_met(requirement, registrations) for requirement in requirements)
+    return all(
+        _requirement_is_met(requirement, registrations, user=user)
+        for requirement in requirements
+    )
 
 
-def _expected_achievement_keys(achievement, registrations):
+def _expected_achievement_keys(achievement, registrations, user=None):
     if achievement.achievement_type not in {
         Achievement.Type.CAREER,
         Achievement.Type.YEARLY,
@@ -157,61 +195,68 @@ def _expected_achievement_keys(achievement, registrations):
                 else registrations
             )
         for level in levels:
-            if _level_is_met(level, period_registrations):
+            if _level_is_met(level, period_registrations, user=user):
                 expected.add((level.pk, year))
     return expected, {level.pk: level for level in levels}
 
 
 def sync_achievements(user):
-    achievements = Achievement.objects.filter(
-        active=True,
-        achievement_type__in=(Achievement.Type.CAREER, Achievement.Type.YEARLY),
-    ).prefetch_related(
-        "levels__requirements__genera",
-        "levels__requirements__species_groups__genera",
-        "levels__requirements__species_groups__species",
+    achievements = list(
+        Achievement.objects.filter(
+            active=True,
+            achievement_type__in=(Achievement.Type.CAREER, Achievement.Type.YEARLY),
+        ).prefetch_related(
+            "levels__requirements__genera",
+            "levels__requirements__species_groups__genera",
+            "levels__requirements__species_groups__species",
+            "levels__requirements__achievement_options__minimum_level__achievement",
+        )
     )
     all_registrations = _registrations_for(user)
     years = sorted({registration.breeding_date.year for registration in all_registrations})
 
-    for achievement in achievements:
-        if achievement.achievement_type == Achievement.Type.YEARLY:
-            evaluation_years = (
-                [achievement.available_year]
-                if achievement.available_year is not None
-                else years
-            )
-        else:
-            evaluation_years = [None]
-        for year in evaluation_years:
-            if achievement.available_year is not None:
-                registrations = _registrations_for_achievement(
-                    achievement,
-                    all_registrations,
+    created_in_pass = True
+    while created_in_pass:
+        created_in_pass = False
+        for achievement in achievements:
+            if achievement.achievement_type == Achievement.Type.YEARLY:
+                evaluation_years = (
+                    [achievement.available_year]
+                    if achievement.available_year is not None
+                    else years
                 )
             else:
-                registrations = (
-                    [
-                        registration
-                        for registration in all_registrations
-                        if registration.breeding_date.year == year
-                    ]
-                    if year is not None
-                    else all_registrations
-                )
-            for level in achievement.levels.all():
-                if not _level_is_met(level, registrations):
-                    continue
-                UserAchievement.objects.get_or_create(
-                    user=user,
-                    level=level,
-                    calendar_year=year,
-                    defaults={
-                        "achievement_name": achievement.name,
-                        "level_name": level.name,
-                        "level_description": level.description,
-                    },
-                )
+                evaluation_years = [None]
+            for year in evaluation_years:
+                if achievement.available_year is not None:
+                    registrations = _registrations_for_achievement(
+                        achievement,
+                        all_registrations,
+                    )
+                else:
+                    registrations = (
+                        [
+                            registration
+                            for registration in all_registrations
+                            if registration.breeding_date.year == year
+                        ]
+                        if year is not None
+                        else all_registrations
+                    )
+                for level in achievement.levels.all():
+                    if not _level_is_met(level, registrations, user=user):
+                        continue
+                    _, created = UserAchievement.objects.get_or_create(
+                        user=user,
+                        level=level,
+                        calendar_year=year,
+                        defaults={
+                            "achievement_name": achievement.name,
+                            "level_name": level.name,
+                            "level_description": level.description,
+                        },
+                    )
+                    created_in_pass = created_in_pass or created
 
 
 def _validate_explicit_level(level, achievement_type, requirement_kind):
@@ -336,7 +381,11 @@ def revalidate_achievement(achievement):
                 species__isnull=False,
             ).select_related("species__genus")
         )
-        expected, levels_by_id = _expected_achievement_keys(achievement, registrations)
+        expected, levels_by_id = _expected_achievement_keys(
+            achievement,
+            registrations,
+            user=user_id,
+        )
         existing = {
             (earned.level_id, earned.calendar_year): earned
             for earned in existing_queryset.filter(user_id=user_id)
@@ -382,6 +431,8 @@ def _requirement_scope(requirement):
 
 
 def _unit_forms(kind):
+    if kind == AchievementRequirement.Kind.ACHIEVEMENT_COUNT:
+        return "utmärkelse", "utmärkelser", "en utmärkelse"
     if kind == AchievementRequirement.Kind.SPECIES_COUNT:
         return "art", "arter", "en art"
     if kind == AchievementRequirement.Kind.BREEDING_COUNT:
@@ -401,8 +452,8 @@ def _quantity_text(value, singular, plural, one_text):
     return f"{value} {plural}"
 
 
-def _requirement_progress(requirement, registrations):
-    current = _requirement_current_value(requirement, registrations)
+def _requirement_progress(requirement, registrations, user=None):
+    current = _requirement_current_value(requirement, registrations, user=user)
     missing = max(requirement.value - current, 0)
     scope = _requirement_scope(requirement)
     singular, plural, one_text = _unit_forms(requirement.kind)
@@ -463,11 +514,14 @@ def _presentation_for(earned, all_registrations=None):
         if requirement.kind in AchievementRequirement.AUTOMATIC_KINDS
     ]
     next_level = achievement.levels.filter(order__gt=earned.level.order).order_by("order").first()
-    current_progress = [_requirement_progress(requirement, registrations) for requirement in requirements]
+    current_progress = [
+        _requirement_progress(requirement, registrations, user=earned.user_id)
+        for requirement in requirements
+    ]
     next_progress = []
     if next_level:
         next_progress = [
-            _requirement_progress(requirement, registrations)
+            _requirement_progress(requirement, registrations, user=earned.user_id)
             for requirement in next_level.requirements.all()
             if requirement.kind in AchievementRequirement.AUTOMATIC_KINDS
         ]
