@@ -170,6 +170,7 @@ def species_information(request, pk):
             show_on_species_page=True,
         )
         .select_related("owner")
+        .prefetch_related("water_parameter_values__parameter")
         .order_by("-breeding_date", "-pk")
     )
     context = {
