@@ -2,17 +2,28 @@ from django.db import migrations, models
 import django.db.models.deletion
 
 
+ACHIEVED_TEMPLATE = "Uppnå {target_text} av de angivna utmärkelserna."
+NEXT_LEVEL_TEMPLATE = "Uppnå ytterligare {missing_text} av de angivna utmärkelserna."
+
+
 def add_default_requirement_text(apps, schema_editor):
     RequirementTextTemplate = apps.get_model("progression", "RequirementTextTemplate")
     RequirementTextTemplate.objects.get_or_create(
         kind="achievement_count",
         defaults={
-            "achieved_template": "Uppnå {target_text} av de angivna utmärkelserna.",
-            "next_level_template": (
-                "Uppnå ytterligare {missing_text} av de angivna utmärkelserna."
-            ),
+            "achieved_template": ACHIEVED_TEMPLATE,
+            "next_level_template": NEXT_LEVEL_TEMPLATE,
         },
     )
+
+
+def remove_default_requirement_text(apps, schema_editor):
+    RequirementTextTemplate = apps.get_model("progression", "RequirementTextTemplate")
+    RequirementTextTemplate.objects.filter(
+        kind="achievement_count",
+        achieved_template=ACHIEVED_TEMPLATE,
+        next_level_template=NEXT_LEVEL_TEMPLATE,
+    ).delete()
 
 
 class Migration(migrations.Migration):
@@ -104,6 +115,6 @@ class Migration(migrations.Migration):
         ),
         migrations.RunPython(
             add_default_requirement_text,
-            migrations.RunPython.noop,
+            remove_default_requirement_text,
         ),
     ]
