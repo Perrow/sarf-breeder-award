@@ -1,6 +1,7 @@
 from django.contrib import admin
 from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
+from unittest.mock import patch
 from django.test import RequestFactory, TestCase
 from django.urls import reverse
 
@@ -102,6 +103,28 @@ class AssociationAchievementTests(TestCase):
         self.assertContains(response, "Silvernivån")
         self.assertContains(response, "<strong>År:</strong> 2023", html=True)
         self.assertContains(response, 'data-achievement="Föreningsheder"')
+
+    def test_dated_award_falls_back_to_lifetime_background(self):
+        award = AssociationAchievement.objects.create(
+            association=self.association_a,
+            level=self.level_one,
+            calendar_year=2025,
+        )
+
+        with patch(
+            "progression.services.AchievementBackground.for_year",
+            return_value=None,
+        ), patch(
+            "progression.services.AchievementBackground.lifetime",
+            return_value="lifetime-background",
+        ):
+            from .services import association_achievement_presentations
+
+            presentations = association_achievement_presentations(self.association_a)
+
+        self.assertEqual(len(presentations), 1)
+        self.assertEqual(presentations[0]["earned"], award)
+        self.assertEqual(presentations[0]["background"], "lifetime-background")
 
     def test_award_snapshot_survives_level_definition_change(self):
         award = AssociationAchievement.objects.create(
