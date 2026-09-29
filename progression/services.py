@@ -355,7 +355,9 @@ def revalidate_achievement(achievement):
 def achievements_for_user(user):
     sync_achievements(user)
     return list(
-        user.achievements.select_related("level__achievement").order_by(
+        user.achievements.filter(
+            level__achievement__active=True,
+        ).select_related("level__achievement").order_by(
             "achievement_name",
             "calendar_year",
             "level__order",
