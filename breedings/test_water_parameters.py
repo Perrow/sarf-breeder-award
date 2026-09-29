@@ -158,7 +158,7 @@ class StructuredWaterParameterTests(TestCase):
 
         self.assertContains(response, "Vattenparametrar")
         self.assertContains(response, "Temperatur")
-        self.assertContains(response, "24.50")
+        self.assertContains(response, "24,50")
         self.assertContains(response, "°C")
 
     def test_published_report_shows_water_parameters_on_species_page(self):
@@ -185,4 +185,4 @@ class StructuredWaterParameterTests(TestCase):
 
         self.assertContains(response, "Publicerad rapport")
         self.assertContains(response, "pH")
-        self.assertContains(response, "7.20")
+        self.assertContains(response, "7,20")
