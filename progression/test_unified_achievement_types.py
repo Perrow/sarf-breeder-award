@@ -133,6 +133,7 @@ class UnifiedAchievementTypeTests(TestCase):
         achievement = Achievement.objects.create(
             name="Egenvald flernivå",
             achievement_type=Achievement.Type.SELFMADE,
+            active=True,
         )
         first = AchievementLevel.objects.create(achievement=achievement, name="Bra", order=1)
         second = AchievementLevel.objects.create(achievement=achievement, name="Mindre bra", order=2)
