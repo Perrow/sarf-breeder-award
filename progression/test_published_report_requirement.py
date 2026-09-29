@@ -64,7 +64,11 @@ class PublishedReportRequirementTests(TestCase):
             description="Publiceringstest",
             status=BreedingRegistration.Status.APPROVED,
             awarded_breeding_class=species.breeding_class,
-            show_on_species_page=published,
+            publication_status=(
+                BreedingRegistration.PublicationStatus.PUBLISHED
+                if published
+                else BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+            ),
         )
 
     def test_zero_is_valid_requirement_value(self):
@@ -122,8 +126,10 @@ class PublishedReportRequirementTests(TestCase):
             UserAchievement.objects.filter(user=self.user, level=level).exists()
         )
 
-        registration.show_on_species_page = False
-        registration.save(update_fields=("show_on_species_page",))
+        registration.publication_status = (
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+        )
+        registration.save(update_fields=("publication_status",))
 
         result = revalidate_achievement(achievement)
 

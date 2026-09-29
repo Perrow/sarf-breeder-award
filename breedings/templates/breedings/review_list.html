@@ -6,53 +6,66 @@
 <div class="d-flex justify-content-between align-items-start gap-3 mb-4">
     <div>
         <h1 class="mb-1">Granska odlingar</h1>
-        <p class="text-body-secondary mb-0">Inskickade odlingsrapporter som väntar på behandling.</p>
+        <p class="text-body-secondary mb-0">Odlingsrapporter som väntar på bedömning eller publiceringsbeslut.</p>
     </div>
     <a class="btn btn-outline-secondary" href="{% url 'breeding_list' %}">Min sida</a>
 </div>
 
-{% if registrations %}
-<div class="table-responsive">
-<table class="table table-hover align-middle">
-    <thead>
-        <tr>
-            <th scope="col">Art</th>
-            <th scope="col">Datum</th>
-            <th scope="col">Åtgärd</th>
-        </tr>
-    </thead>
-    <tbody>
-    {% for registration in registrations %}
-        <tr>
-            <td>
-                {% if registration.species %}
-                    <strong>{{ registration.species }}</strong>
-                    {% if registration.species.common_name %}<div class="small text-body-secondary">{{ registration.species.common_name }}</div>{% endif %}
-                {% else %}
-                    <strong>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</strong>
-                    <div class="small text-warning-emphasis">Taxonomin behöver lösas</div>
-                {% endif %}
-            </td>
-            <td>{{ registration.breeding_date }}</td>
-            <td>
-                {% if registration.taxonomy_needs_resolution %}
-                    <a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_review_taxonomy' registration.pk %}">Lös taxonomi</a>
-                {% else %}
-                    <a class="btn btn-sm btn-primary" href="{% url 'breeding_review' registration.pk %}">Granska</a>
-                {% endif %}
-            </td>
-        </tr>
-    {% endfor %}
-    </tbody>
-</table>
-</div>
-{% else %}
-<div class="alert alert-light border">Det finns inga inskickade odlingsrapporter att granska.</div>
-{% endif %}
+<section>
+    <h2 class="h4">Att bedöma</h2>
+    {% if review_queue %}
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead>
+                <tr>
+                    <th scope="col">Art</th>
+                    <th scope="col">Datum</th>
+                    <th scope="col">Typ av bedömning</th>
+                    <th scope="col">Åtgärd</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for registration in review_queue %}
+                <tr>
+                    <td>
+                        {% if registration.species %}
+                            <strong>{{ registration.species }}</strong>
+                            {% if registration.species.common_name %}<div class="small text-body-secondary">{{ registration.species.common_name }}</div>{% endif %}
+                        {% else %}
+                            <strong>{{ registration.proposed_genus_name }} {{ registration.proposed_species_name }}</strong>
+                            <div class="small text-warning-emphasis">Taxonomin behöver lösas</div>
+                        {% endif %}
+                    </td>
+                    <td>{{ registration.breeding_date }}</td>
+                    <td>
+                        {% if registration.status == "submitted" %}
+                            Odlingsrapport
+                        {% else %}
+                            Publicering
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if registration.taxonomy_needs_resolution %}
+                            <a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_review_taxonomy' registration.pk %}">Lös taxonomi</a>
+                        {% elif registration.status == "submitted" %}
+                            <a class="btn btn-sm btn-primary" href="{% url 'breeding_review' registration.pk %}">Granska</a>
+                        {% else %}
+                            <a class="btn btn-sm btn-primary" href="{% url 'breeding_approved_detail' registration.pk %}">Bedöm publicering</a>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-light border">Det finns inga odlingsrapporter att bedöma.</div>
+    {% endif %}
+</section>
 
 <section class="mt-5">
-    <h2 class="h4">Godkända odlingsrapporter</h2>
-    <p class="text-body-secondary">Öppna en rapport för att ändra om den ska visas på artsidan.</p>
+    <h2 class="h4">Bedömda odlingsrapporter</h2>
+    <p class="text-body-secondary">Öppna en rapport för att ändra publiceringsbeslutet.</p>
 
     {% if approved_registrations %}
     <div class="table-responsive">
@@ -62,7 +75,7 @@
                     <th scope="col">Art</th>
                     <th scope="col">Odlare</th>
                     <th scope="col">Datum</th>
-                    <th scope="col">Visas på artsidan</th>
+                    <th scope="col">Publiceringsstatus</th>
                     <th scope="col">Åtgärd</th>
                 </tr>
             </thead>
@@ -72,7 +85,7 @@
                     <td><strong>{{ registration.species }}</strong></td>
                     <td>{{ registration.owner.public_display_name }}</td>
                     <td>{{ registration.breeding_date }}</td>
-                    <td>{% if registration.show_on_species_page %}Ja{% else %}Nej{% endif %}</td>
+                    <td>{{ registration.get_publication_status_display }}</td>
                     <td><a class="btn btn-sm btn-outline-primary" href="{% url 'breeding_approved_detail' registration.pk %}">Visa rapport</a></td>
                 </tr>
             {% endfor %}
@@ -80,7 +93,7 @@
         </table>
     </div>
     {% else %}
-    <p>Det finns inga godkända odlingsrapporter.</p>
+    <p>Det finns inga bedömda odlingsrapporter.</p>
     {% endif %}
 </section>
 {% endblock %}

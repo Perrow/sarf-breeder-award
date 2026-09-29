@@ -53,6 +53,39 @@ class EditAutoApprovedBronzeTests(TestCase):
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.BRONZE)
         self.assertEqual(self.registration.awarded_points, 1)
 
+    def test_editing_published_bronze_resets_publication_status(self):
+        self.registration.publication_status = (
+            BreedingRegistration.PublicationStatus.PUBLISHED
+        )
+        self.registration.save(update_fields=("publication_status",))
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("breeding_edit", args=[self.registration.pk]),
+            {
+                "association": self.association.pk,
+                "species": self.species.pk,
+                "breeding_date": "2026-08-02",
+                "description": "Ändrad publicerad rapport",
+                "action": "submit",
+            },
+        )
+
+        self.assertRedirects(response, reverse("breeding_list"))
+        self.registration.refresh_from_db()
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.UNREVIEWED,
+        )
+        self.assertEqual(
+            self.registration.status,
+            BreedingRegistration.Status.APPROVED,
+        )
+        self.assertEqual(
+            self.registration.awarded_breeding_class,
+            Species.BreedingClass.BRONZE,
+        )
+
     def test_other_user_cannot_edit_auto_approved_bronze(self):
         self.client.force_login(self.other)
         response = self.client.get(reverse("breeding_edit", args=[self.registration.pk]))

@@ -58,8 +58,8 @@ class ReviewDecisionForm(forms.Form):
             }
         ),
     )
-    show_on_species_page = forms.BooleanField(
-        label="Visa rapporten på artsidan",
+    publish_on_species_page = forms.BooleanField(
+        label="Publicera rapporten på artsidan",
         required=False,
         widget=forms.CheckboxInput(attrs={"class": "form-check-input"}),
     )
@@ -92,15 +92,26 @@ def review_list(request):
     registrations = available.filter(
         status=BreedingRegistration.Status.SUBMITTED
     ).order_by("breeding_date", "pk")
+    bronze_publication_candidates = available.filter(
+        status=BreedingRegistration.Status.APPROVED,
+        awarded_breeding_class=Species.BreedingClass.BRONZE,
+        publication_status=BreedingRegistration.PublicationStatus.UNREVIEWED,
+    ).exclude(description="").order_by("breeding_date", "pk")
     approved_registrations = available.filter(
-        status=BreedingRegistration.Status.APPROVED
+        status=BreedingRegistration.Status.APPROVED,
+    ).exclude(
+        publication_status=BreedingRegistration.PublicationStatus.UNREVIEWED,
     ).order_by("-breeding_date", "-pk")
+    review_queue = list(registrations) + list(bronze_publication_candidates)
+    review_queue.sort(key=lambda registration: (registration.breeding_date, registration.pk))
     return render(
         request,
         "breedings/review_list.html",
         {
             "registrations": registrations,
             "approved_registrations": approved_registrations,
+            "bronze_publication_candidates": bronze_publication_candidates,
+            "review_queue": review_queue,
         },
     )
 
@@ -151,9 +162,11 @@ def review_registration(request, pk):
                 registration.approved_at = timezone.now()
                 registration.awarded_breeding_class = breeding_class
                 registration.awarded_points = BREEDING_CLASS_POINTS[breeding_class]
-                registration.show_on_species_page = form.cleaned_data[
-                    "show_on_species_page"
-                ]
+                registration.publication_status = (
+                    BreedingRegistration.PublicationStatus.PUBLISHED
+                    if form.cleaned_data["publish_on_species_page"]
+                    else BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+                )
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -162,7 +175,7 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
-                        "show_on_species_page",
+                        "publication_status",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har godkänts.")
@@ -171,7 +184,9 @@ def review_registration(request, pk):
                 registration.approved_at = None
                 registration.awarded_breeding_class = ""
                 registration.awarded_points = None
-                registration.show_on_species_page = False
+                registration.publication_status = (
+                    BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+                )
                 registration.save(
                     update_fields=(
                         "reviewer",
@@ -180,17 +195,19 @@ def review_registration(request, pk):
                         "approved_at",
                         "awarded_breeding_class",
                         "awarded_points",
-                        "show_on_species_page",
+                        "publication_status",
                     )
                 )
                 messages.success(request, "Odlingsregistreringen har avslagits.")
             else:
-                registration.show_on_species_page = False
+                registration.publication_status = (
+                    BreedingRegistration.PublicationStatus.UNREVIEWED
+                )
                 registration.save(
                     update_fields=(
                         "reviewer",
                         "review_comment",
-                        "show_on_species_page",
+                        "publication_status",
                     )
                 )
                 messages.success(
@@ -281,12 +298,17 @@ def approved_registration_detail(request, pk):
     _require_review_access(request.user, registration)
 
     if request.method == "POST":
-        registration.show_on_species_page = (
-            request.POST.get("show_on_species_page") == "on"
-        )
-        registration.save(update_fields=("show_on_species_page",))
-        messages.success(request, "Visningen på artsidan har uppdaterats.")
-        return redirect("breeding_approved_detail", pk=registration.pk)
+        publication_status = request.POST.get("publication_status")
+        if publication_status not in {
+            BreedingRegistration.PublicationStatus.PUBLISHED,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        }:
+            messages.error(request, "Välj om rapporten ska publiceras eller inte.")
+        else:
+            registration.publication_status = publication_status
+            registration.save(update_fields=("publication_status",))
+            messages.success(request, "Publiceringsstatusen har uppdaterats.")
+        return redirect("breeding_review_list")
 
     return render(
         request,

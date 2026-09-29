@@ -19,6 +19,11 @@ class BreedingRegistration(models.Model):
         APPROVED = "approved", "Godkänd"
         REJECTED = "rejected", "Avslagen"
 
+    class PublicationStatus(models.TextChoices):
+        UNREVIEWED = "unreviewed", "Ej granskad"
+        PUBLISHED = "published", "Publicerad"
+        NOT_PUBLISHED = "not_published", "Ej publicerad"
+
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, related_name="breeding_registrations", verbose_name="användare")
     association = models.ForeignKey(Association, on_delete=models.PROTECT, related_name="breeding_registrations", verbose_name="förening")
     species = models.ForeignKey(Species, on_delete=models.PROTECT, null=True, blank=True, related_name="breeding_registrations", verbose_name="art")
@@ -35,7 +40,12 @@ class BreedingRegistration(models.Model):
     awarded_points = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="tilldelade poäng")
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="reviewed_breeding_registrations", verbose_name="granskare")
     review_comment = models.TextField(blank=True, verbose_name="granskningskommentar")
-    show_on_species_page = models.BooleanField(default=False, verbose_name="visa på artsidan")
+    publication_status = models.CharField(
+        max_length=20,
+        choices=PublicationStatus.choices,
+        default=PublicationStatus.UNREVIEWED,
+        verbose_name="publiceringsstatus",
+    )
 
     class Meta:
         ordering = ["-breeding_date", "-pk"]

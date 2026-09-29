@@ -60,6 +60,23 @@ class BronzeAutoApprovalTests(TestCase):
         self.assertEqual(breeding.awarded_breeding_class, Species.BreedingClass.BRONZE)
         self.assertEqual(breeding.awarded_points, 1)
         self.assertIsNone(breeding.reviewer)
+        self.assertEqual(
+            breeding.publication_status,
+            BreedingRegistration.PublicationStatus.UNREVIEWED,
+        )
+
+    def test_bronze_without_description_is_not_waiting_for_publication_review(self):
+        response = self.client.post(
+            reverse("breeding_create"),
+            self._post_data(self.bronze_species, description=""),
+        )
+
+        self.assertRedirects(response, reverse("breeding_list"))
+        breeding = BreedingRegistration.objects.get()
+        self.assertEqual(
+            breeding.publication_status,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        )
 
     def test_submitted_silver_breeding_waits_for_review(self):
         response = self.client.post(

@@ -69,8 +69,8 @@ class BreedingReviewTests(TestCase):
         )
         self.assertContains(response, 'name="review_comment"')
         self.assertContains(response, 'rows="6"')
-        self.assertContains(response, 'name="show_on_species_page"')
-        self.assertContains(response, "Visa rapporten på artsidan")
+        self.assertContains(response, 'name="publish_on_species_page"')
+        self.assertContains(response, "Publicera rapporten på artsidan")
 
     def test_review_link_is_in_navigation_for_reviewer(self):
         self.client.force_login(self.reviewer)
@@ -122,7 +122,10 @@ class BreedingReviewTests(TestCase):
         self.assertEqual(self.registration.awarded_breeding_class, Species.BreedingClass.SILVER)
         self.assertEqual(self.registration.awarded_points, 3)
         self.assertEqual(self.registration.review_comment, "Godkänd odling.")
-        self.assertFalse(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        )
 
 
     def test_association_admin_can_publish_report_when_approving(self):
@@ -132,14 +135,17 @@ class BreedingReviewTests(TestCase):
             {
                 "approve": "Godkänn",
                 "review_comment": "Godkänd för publicering.",
-                "show_on_species_page": "on",
+                "publish_on_species_page": "on",
             },
         )
 
         self.assertRedirects(response, reverse("breeding_review_list"))
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.APPROVED)
-        self.assertTrue(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.PUBLISHED,
+        )
 
     def test_association_admin_can_reject_registration(self):
         self.client.force_login(self.reviewer)
@@ -149,7 +155,7 @@ class BreedingReviewTests(TestCase):
                 "reject": "Avslå",
                 "awarded_breeding_class": "",
                 "review_comment": "Behöver kompletteras.",
-                "show_on_species_page": "on",
+                "publish_on_species_page": "on",
             },
         )
 
@@ -160,7 +166,10 @@ class BreedingReviewTests(TestCase):
         self.assertEqual(self.registration.review_comment, "Behöver kompletteras.")
         self.assertIsNone(self.registration.approved_at)
         self.assertIsNone(self.registration.awarded_points)
-        self.assertFalse(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        )
 
     def test_association_admin_can_save_without_decision(self):
         self.client.force_login(self.reviewer)
@@ -169,7 +178,7 @@ class BreedingReviewTests(TestCase):
             {
                 "save_without_decision": "Spara utan beslut",
                 "review_comment": "Anteckning inför senare beslut.",
-                "show_on_species_page": "on",
+                "publish_on_species_page": "on",
             },
         )
 
@@ -181,7 +190,10 @@ class BreedingReviewTests(TestCase):
         self.assertIsNone(self.registration.approved_at)
         self.assertEqual(self.registration.awarded_breeding_class, "")
         self.assertIsNone(self.registration.awarded_points)
-        self.assertFalse(self.registration.show_on_species_page)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.UNREVIEWED,
+        )
 
     def test_saved_comment_is_shown_when_review_is_opened_again(self):
         self.registration.review_comment = "Tidigare granskningsanteckning."

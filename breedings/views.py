@@ -361,8 +361,14 @@ def _edit_breeding(
         if form.is_valid():
             breeding = form.save(commit=False)
             breeding.owner = request.user
-            if registration is not None and breeding.show_on_species_page:
-                breeding.show_on_species_page = False
+            if (
+                registration is not None
+                and breeding.publication_status
+                != BreedingRegistration.PublicationStatus.UNREVIEWED
+            ):
+                breeding.publication_status = (
+                    BreedingRegistration.PublicationStatus.UNREVIEWED
+                )
             if reset_approval_on_save:
                 breeding.approved_at = None
                 breeding.awarded_breeding_class = ""
@@ -380,6 +386,11 @@ def _edit_breeding(
                     breeding.awarded_breeding_class = Species.BreedingClass.BRONZE
                     breeding.awarded_points = points_for_breeding_class(
                         Species.BreedingClass.BRONZE
+                    )
+                    breeding.publication_status = (
+                        BreedingRegistration.PublicationStatus.UNREVIEWED
+                        if (breeding.description or "").strip()
+                        else BreedingRegistration.PublicationStatus.NOT_PUBLISHED
                     )
                     message = "Bronsodlingen har registrerats och godkänts direkt."
                 else:

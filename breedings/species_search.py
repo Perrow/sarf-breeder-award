@@ -167,7 +167,7 @@ def species_information(request, pk):
         BreedingRegistration.objects.filter(
             species=species,
             status=BreedingRegistration.Status.APPROVED,
-            show_on_species_page=True,
+            publication_status=BreedingRegistration.PublicationStatus.PUBLISHED,
         )
         .select_related("owner")
         .prefetch_related("water_parameter_values__parameter")
