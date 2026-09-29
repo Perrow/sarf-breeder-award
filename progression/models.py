@@ -41,7 +41,7 @@ class Achievement(models.Model):
         default=Type.CAREER,
         verbose_name="typ",
     )
-    active = models.BooleanField(default=True, verbose_name="aktiv")
+    active = models.BooleanField(default=False, verbose_name="aktiv")
     available_year = models.PositiveIntegerField(
         null=True,
         blank=True,
