@@ -74,7 +74,13 @@ def _requirement_current_value(requirement, registrations):
     if requirement.kind == AchievementRequirement.Kind.SPECIES_COUNT:
         return len({registration.species_id for registration in matching})
     if requirement.kind == AchievementRequirement.Kind.PUBLISHED_REPORT_COUNT:
-        return sum(1 for registration in matching if registration.show_on_species_page)
+        return len(
+            {
+                registration.species_id
+                for registration in matching
+                if registration.show_on_species_page
+            }
+        )
 
     best_points_by_species = {}
     for registration in matching:
