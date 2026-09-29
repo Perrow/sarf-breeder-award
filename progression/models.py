@@ -42,6 +42,15 @@ class Achievement(models.Model):
         verbose_name="typ",
     )
     active = models.BooleanField(default=True, verbose_name="aktiv")
+    available_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="endast möjlig år",
+        help_text=(
+            "Valfritt kalenderår då en automatisk utmärkelse kan uppnås. "
+            "Lämna tomt för att använda utmärkelsens vanliga regler."
+        ),
+    )
     image = models.ImageField(
         upload_to="achievements/images/",
         blank=True,
@@ -59,6 +68,16 @@ class Achievement(models.Model):
         ordering = ("name",)
         verbose_name = "utmärkelse"
         verbose_name_plural = "utmärkelser"
+
+    def clean(self):
+        super().clean()
+        if (
+            self.available_year is not None
+            and self.achievement_type not in {self.Type.CAREER, self.Type.YEARLY}
+        ):
+            raise ValidationError(
+                {"available_year": "Årsbegränsning kan bara användas för automatiska utmärkelser."}
+            )
 
     def save(self, *args, **kwargs):
         self.full_clean()
