@@ -479,11 +479,21 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         if obj.achievement.achievement_type == Achievement.Type.SELFMADE:
             return "Nivån kan väljas av användaren själv."
 
-        requirements = obj.requirements.prefetch_related("genera", "species_groups").all()
+        requirements = obj.requirements.prefetch_related(
+            "genera",
+            "species_groups",
+            "achievement_options__minimum_level__achievement",
+        ).all()
         rows = []
         for requirement in requirements:
             genera = ", ".join(str(genus) for genus in requirement.genera.all()) or "–"
             groups = ", ".join(str(group) for group in requirement.species_groups.all()) or "–"
+            qualifying = "–"
+            if requirement.kind == AchievementRequirement.Kind.ACHIEVEMENT_COUNT:
+                qualifying = ", ".join(
+                    str(option.minimum_level)
+                    for option in requirement.achievement_options.all()
+                ) or "–"
             edit_url = reverse(
                 "admin:progression_achievementrequirement_change",
                 args=[requirement.pk],
@@ -494,6 +504,7 @@ class AchievementLevelAdmin(admin.ModelAdmin):
                     requirement.value,
                     genera,
                     groups,
+                    qualifying,
                     edit_url,
                 )
             )
@@ -501,13 +512,14 @@ class AchievementLevelAdmin(admin.ModelAdmin):
         if rows:
             body = format_html_join(
                 "",
-                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td>"
+                "<tr><td>{}</td><td>{}</td><td>{}</td><td>{}</td><td>{}</td>"
                 '<td><a href="{}">Redigera</a></td></tr>',
                 rows,
             )
             table = format_html(
                 '<table><thead><tr><th>Typ</th><th>Värde</th><th>Släkten</th>'
-                "<th>Artgrupper</th><th></th></tr></thead><tbody>{}</tbody></table>",
+                "<th>Artgrupper</th><th>Kvalificerande utmärkelser</th>"
+                "<th></th></tr></thead><tbody>{}</tbody></table>",
                 body,
             )
         else:
@@ -533,6 +545,14 @@ class AchievementRequirementAdmin(admin.ModelAdmin):
     list_display = ("level", "kind", "value")
     filter_horizontal = ("genera", "species_groups")
     inlines = (AchievementRequirementOptionInline,)
+
+    def get_inline_instances(self, request, obj=None):
+        if (
+            obj is None
+            or obj.kind != AchievementRequirement.Kind.ACHIEVEMENT_COUNT
+        ):
+            return []
+        return super().get_inline_instances(request, obj)
 
     def response_change(self, request, obj):
         if _uses_special_save_action(request):
