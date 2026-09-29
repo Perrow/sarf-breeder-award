@@ -2,6 +2,7 @@ from datetime import date
 
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.urls import reverse
 
 from associations.models import Association
 from breedings.models import BreedingRegistration
@@ -160,7 +161,7 @@ class PublishedReportRequirementTests(TestCase):
         sync_achievements(self.user)
         self.client.force_login(self.user)
 
-        response = self.client.get("/utmarkelser/")
+        response = self.client.get(reverse("achievements"))
 
         self.assertContains(
             response,
