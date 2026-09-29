@@ -390,6 +390,7 @@ def _edit_breeding(
                 breeding.submitted_at = None
                 message = "Utkastet har sparats."
             breeding.save()
+            form.save_water_parameters(breeding)
             messages.success(request, message)
             return redirect("breeding_list")
     else:
