@@ -22,6 +22,7 @@ class Achievement(models.Model):
         CAREER = "career", "Karriärsutmärkelse"
         YEARLY = "yearly", "Årsutmärkelse"
         MANUAL = "manual", "Manuellt utdelad utmärkelse"
+        ASSOCIATION = "association", "Föreningsutmärkelse"
         SELFMADE = "selfmade", "Egenvald utmärkelse"
 
     name = models.CharField(
@@ -257,6 +258,7 @@ class AchievementRequirement(models.Model):
                 Achievement.Type.CAREER: self.AUTOMATIC_KINDS,
                 Achievement.Type.YEARLY: self.AUTOMATIC_KINDS,
                 Achievement.Type.MANUAL: {self.Kind.MANUAL_ASSIGNMENT},
+                Achievement.Type.ASSOCIATION: set(),
                 Achievement.Type.SELFMADE: {self.Kind.SELF_SELECTED},
             }[achievement_type]
             if self.kind not in allowed:
@@ -402,10 +404,10 @@ class AssociationAchievement(models.Model):
         super().clean()
         if (
             self.level_id
-            and self.level.achievement.achievement_type != Achievement.Type.MANUAL
+            and self.level.achievement.achievement_type != Achievement.Type.ASSOCIATION
         ):
             raise ValidationError(
-                {"level": "Föreningsutmärkelser måste vara manuellt utdelade utmärkelser."}
+                {"level": "Föreningar kan endast tilldelas föreningsutmärkelser."}
             )
 
     def save(self, *args, **kwargs):
