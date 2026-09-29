@@ -110,7 +110,10 @@ def review_registration(request, pk):
     registration = get_object_or_404(
         BreedingRegistration.objects.select_related(
             "owner", "association", "species__genus"
-        ).prefetch_related("species__external_links"),
+        ).prefetch_related(
+            "species__external_links",
+            "water_parameter_values__parameter",
+        ),
         pk=pk,
     )
     _require_review_access(request.user, registration)
@@ -271,7 +274,7 @@ def approved_registration_detail(request, pk):
     registration = get_object_or_404(
         BreedingRegistration.objects.select_related(
             "owner", "association", "species__genus"
-        ),
+        ).prefetch_related("water_parameter_values__parameter"),
         pk=pk,
         status=BreedingRegistration.Status.APPROVED,
     )
