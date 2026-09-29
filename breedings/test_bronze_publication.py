@@ -55,7 +55,8 @@ class BronzePublicationSelectionTests(TestCase):
 
         self.assertContains(response, "Att bedöma")
         self.assertContains(response, str(registration.species))
-                self.assertContains(
+        self.assertContains(response, "Publicering")
+        self.assertContains(
             response,
             reverse("breeding_approved_detail", args=[registration.pk]),
         )
