@@ -10,6 +10,18 @@
 {% if association.website_url %}
 <p><a href="{{ association.website_url }}" target="_blank" rel="noopener">Besök föreningens hemsida</a></p>
 {% endif %}
+
+{% if association_achievements %}
+<section class="mb-4" aria-labelledby="association-achievements-heading">
+    <h2 class="h4" id="association-achievements-heading">Utmärkelser</h2>
+    <div class="d-flex flex-wrap gap-3">
+        {% for presentation in association_achievements %}
+            {% include "progression/includes/achievement_card.html" with presentation=presentation show_year=True %}
+        {% endfor %}
+    </div>
+</section>
+{% endif %}
+
 <h2>Medlemstopplista</h2>
 <p class="text-body-secondary">För {{ selected_year }}.</p>
 

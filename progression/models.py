@@ -22,6 +22,7 @@ class Achievement(models.Model):
         CAREER = "career", "Karriärsutmärkelse"
         YEARLY = "yearly", "Årsutmärkelse"
         MANUAL = "manual", "Manuellt utdelad utmärkelse"
+        ASSOCIATION = "association", "Föreningsutmärkelse"
         SELFMADE = "selfmade", "Egenvald utmärkelse"
 
     name = models.CharField(
@@ -257,6 +258,7 @@ class AchievementRequirement(models.Model):
                 Achievement.Type.CAREER: self.AUTOMATIC_KINDS,
                 Achievement.Type.YEARLY: self.AUTOMATIC_KINDS,
                 Achievement.Type.MANUAL: {self.Kind.MANUAL_ASSIGNMENT},
+                Achievement.Type.ASSOCIATION: set(),
                 Achievement.Type.SELFMADE: {self.Kind.SELF_SELECTED},
             }[achievement_type]
             if self.kind not in allowed:
@@ -343,6 +345,81 @@ class RequirementTextTemplate(models.Model):
 
     def __str__(self):
         return self.get_kind_display()
+
+
+class AssociationAchievement(models.Model):
+    association = models.ForeignKey(
+        "associations.Association",
+        on_delete=models.CASCADE,
+        related_name="achievements",
+        verbose_name="förening",
+    )
+    level = models.ForeignKey(
+        AchievementLevel,
+        on_delete=models.PROTECT,
+        related_name="association_achievements",
+        verbose_name="nivå",
+    )
+    achievement_name = models.CharField(max_length=100, verbose_name="utmärkelse")
+    level_name = models.CharField(max_length=100, verbose_name="nivånamn")
+    level_description = models.CharField(
+        max_length=300,
+        blank=True,
+        verbose_name="nivåbeskrivning",
+    )
+    calendar_year = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name="kalenderår",
+        help_text="Valfritt år som föreningsutmärkelsen gäller.",
+    )
+    achievement_period_key = models.GeneratedField(
+        expression=models.functions.Coalesce("calendar_year", models.Value(-1)),
+        output_field=models.IntegerField(),
+        db_persist=False,
+        editable=False,
+    )
+    awarded_by = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name="awarded_association_achievements",
+        verbose_name="utdelad av",
+    )
+    achieved_at = models.DateTimeField(auto_now_add=True, verbose_name="uppnådd")
+
+    class Meta:
+        ordering = ("-achieved_at", "-pk")
+        constraints = [
+            models.UniqueConstraint(
+                fields=("association", "level", "achievement_period_key"),
+                name="unique_association_achievement_period",
+            ),
+        ]
+        verbose_name = "föreningsutmärkelse"
+        verbose_name_plural = "föreningsutmärkelser"
+
+    def clean(self):
+        super().clean()
+        if (
+            self.level_id
+            and self.level.achievement.achievement_type != Achievement.Type.ASSOCIATION
+        ):
+            raise ValidationError(
+                {"level": "Föreningar kan endast tilldelas föreningsutmärkelser."}
+            )
+
+    def save(self, *args, **kwargs):
+        if self._state.adding and self.level_id:
+            self.achievement_name = self.level.achievement.name
+            self.level_name = self.level.name
+            self.level_description = self.level.description
+        self.full_clean()
+        return super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.association}: {self.achievement_name} – {self.level_name}"
 
 
 class UserAchievement(models.Model):

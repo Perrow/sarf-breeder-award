@@ -44,11 +44,21 @@ class UnifiedAchievementAdminUiTests(TestCase):
 
         self.assertEqual(
             [model["object_name"] for model in progression_app["models"]],
-            ["Achievement", "AchievementBackground", "ManualAwardAssignment"],
+            [
+                "Achievement",
+                "AchievementBackground",
+                "ManualAwardAssignment",
+                "AssociationAchievement",
+            ],
         )
         self.assertEqual(
             [model["name"] for model in progression_app["models"]],
-            ["Utmärkelser", "Bakgrunder", "Tilldela utmärkelser"],
+            [
+                "Utmärkelser",
+                "Bakgrunder",
+                "Tilldela utmärkelser",
+                "Föreningsutmärkelser",
+            ],
         )
 
     def test_achievement_form_uses_type_dropdown_and_common_fields(self):
@@ -77,6 +87,15 @@ class UnifiedAchievementAdminUiTests(TestCase):
                 Achievement.Type.MANUAL,
                 ("Tilldela nivå",),
                 ("Lägg till krav för alla nivåer", "Granska utdelade utmärkelser"),
+            ),
+            (
+                Achievement.Type.ASSOCIATION,
+                (),
+                (
+                    "Tilldela nivå",
+                    "Lägg till krav för alla nivåer",
+                    "Granska utdelade utmärkelser",
+                ),
             ),
             (
                 Achievement.Type.SELFMADE,

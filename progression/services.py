@@ -13,6 +13,7 @@ from .models import (
     Achievement,
     AchievementBackground,
     AchievementRequirement,
+    AssociationAchievement,
     RequirementTextTemplate,
     UserAchievement,
 )
@@ -564,3 +565,53 @@ def all_achievement_presentations_for_user(user):
         "manual": [_presentation_for(item, registrations) for item in manual],
         "selfmade": [_presentation_for(item, registrations) for item in selfmade],
     }
+
+
+def association_achievement_presentations(association):
+    awards = (
+        AssociationAchievement.objects.filter(
+            association=association,
+            level__achievement__active=True,
+        )
+        .select_related("level__achievement")
+        .order_by("-achieved_at", "-pk")
+    )
+    presentations = []
+    for award in awards:
+        achievement = award.level.achievement
+        background = (
+            AchievementBackground.for_year(award.calendar_year)
+            or AchievementBackground.lifetime()
+            if award.calendar_year is not None
+            else AchievementBackground.lifetime()
+        )
+        custom_background = (
+            achievement.background_image if achievement.background_image else None
+        )
+        presentations.append(
+            {
+                "earned": award,
+                "background": background,
+                "background_image": (
+                    custom_background
+                    if custom_background
+                    else background.image if background else None
+                ),
+                "background_tint": (
+                    background.tint_color
+                    if award.calendar_year is not None and background
+                    else ""
+                ),
+                "background_tint_mode": (
+                    background.tint_mode
+                    if award.calendar_year is not None and background
+                    else AchievementBackground.TintMode.COLOR
+                ),
+                "overlay": achievement.image if achievement.image else None,
+                "level_overlay": award.level.image if award.level.image else None,
+                "requirements": [],
+                "next_level": None,
+                "next_requirements": [],
+            }
+        )
+    return presentations
