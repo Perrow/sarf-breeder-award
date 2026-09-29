@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                     "Lämna tomt för att använda utmärkelsens vanliga regler."
                 ),
                 null=True,
-                verbose_name="endast möjlig år",
+                verbose_name="gäller endast år",
             ),
         ),
     ]
