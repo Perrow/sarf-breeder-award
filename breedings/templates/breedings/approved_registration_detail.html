@@ -43,14 +43,17 @@
     <div class="col-lg-4">
         <div class="card shadow-sm">
             <div class="card-body">
-                <h2 class="h5">Visning på artsidan</h2>
+                <h2 class="h5">Publicering på artsidan</h2>
+                <p class="text-body-secondary">Nuvarande status: <strong>{{ registration.get_publication_status_display }}</strong></p>
                 <form method="post">
                     {% csrf_token %}
+                    <div class="form-check mb-2">
+                        <input class="form-check-input" type="radio" id="publication_status_published" name="publication_status" value="published" {% if registration.publication_status == "published" %}checked{% endif %}>
+                        <label class="form-check-label" for="publication_status_published">Publicerad</label>
+                    </div>
                     <div class="form-check mb-3">
-                        <input class="form-check-input" type="checkbox" id="show_on_species_page" name="show_on_species_page" {% if registration.show_on_species_page %}checked{% endif %}>
-                        <label class="form-check-label" for="show_on_species_page">
-                            Visa rapporten på artsidan
-                        </label>
+                        <input class="form-check-input" type="radio" id="publication_status_not_published" name="publication_status" value="not_published" {% if registration.publication_status == "not_published" %}checked{% endif %}>
+                        <label class="form-check-label" for="publication_status_not_published">Ej publicerad</label>
                     </div>
                     <button class="btn btn-primary" type="submit">Spara</button>
                 </form>
