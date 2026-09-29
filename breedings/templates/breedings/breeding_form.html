@@ -54,6 +54,23 @@
         </div>
     {% endif %}
 
+    {% if form.water_parameter_field_names %}
+    <fieldset class="mb-4">
+        <legend class="h5">Vattenparametrar</legend>
+        <p class="form-text">Alla vattenparametrar är valfria.</p>
+        <div class="row g-3">
+            {% for field in form.water_parameter_fields %}
+            <div class="col-sm-6">
+                <div class="form-field mb-0">
+                    {{ field.label_tag }} {{ field }} {{ field.errors }}
+                    {% if field.help_text %}<div class="form-text">{{ field.help_text }}</div>{% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </fieldset>
+    {% endif %}
+
     <div class="form-field">
         {{ form.description.label_tag }} {{ form.description }} {{ form.description.errors }}
         {% if form.description.help_text %}<div class="form-text" id="{{ form.description.auto_id }}_helptext">{{ form.description.help_text }}</div>{% endif %}
