@@ -70,7 +70,7 @@ class BreedingReviewTests(TestCase):
         self.assertContains(response, 'name="review_comment"')
         self.assertContains(response, 'rows="6"')
         self.assertContains(response, 'name="publish_on_species_page"')
-        self.assertContains(response, "Visa rapporten på artsidan")
+        self.assertContains(response, "Publicera rapporten på artsidan")
 
     def test_review_link_is_in_navigation_for_reviewer(self):
         self.client.force_login(self.reviewer)
