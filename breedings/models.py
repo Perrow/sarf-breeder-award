@@ -118,7 +118,7 @@ class BreedingWaterParameterValue(models.Model):
     )
 
     class Meta:
-        ordering = ("parameter__sort_order", "parameter__name")
+        ordering = ("parameter", "pk")
         constraints = [
             models.UniqueConstraint(
                 fields=("registration", "parameter"),
