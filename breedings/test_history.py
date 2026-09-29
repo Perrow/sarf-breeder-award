@@ -46,7 +46,7 @@ class BreedingHistoryTests(TestCase):
         self.assertEqual(registration.breeding_date, date(2024, 5, 12))
         self.assertEqual(registration.status, BreedingRegistration.Status.SUBMITTED)
 
-    def test_history_shows_status_class_and_review_comment_indicator(self):
+    def test_history_shows_status_and_class_but_hides_approved_review_comment(self):
         registration = BreedingRegistration.objects.create(
             owner=self.user,
             association=self.association,
@@ -67,12 +67,12 @@ class BreedingHistoryTests(TestCase):
         self.assertContains(response, str(registration.species))
         self.assertContains(response, "Godkänd")
         self.assertContains(response, "Silver")
-        self.assertContains(response, "Granskningskommentar finns")
+        self.assertNotContains(response, "Granskningskommentar finns")
         self.assertNotContains(response, "Godkänd historisk odling.")
         self.assertNotContains(response, ">2<", html=False)
 
         detail_response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
-        self.assertContains(detail_response, "Godkänd historisk odling.")
+        self.assertNotContains(detail_response, "Godkänd historisk odling.")
         self.assertContains(detail_response, "2")
 
     def test_history_is_ordered_newest_first(self):
