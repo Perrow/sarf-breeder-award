@@ -65,7 +65,21 @@ class BreedingDetailActionTests(TestCase):
             response,
             "Om du redigerar den här odlingen återställs godkännandet.",
         )
-        self.assertContains(response, "onclick=\"return confirm(")
+        self.assertNotContains(response, "confirm(")
+        self.assertContains(response, 'data-confirm-title="Redigera godkänd odling"')
+        self.assertContains(response, 'data-confirm-variant="warning"')
+        self.assertContains(response, 'data-confirm-action-label="Redigera"')
+        self.assertContains(response, "data-confirm-dialog")
+
+    def test_delete_uses_destructive_styled_confirmation(self):
+        registration = self._registration(BreedingRegistration.Status.DRAFT)
+
+        response = self.client.get(reverse("breeding_detail", args=[registration.pk]))
+
+        self.assertContains(response, 'data-confirm-title="Ta bort odlingsrapport"')
+        self.assertContains(response, 'data-confirm-variant="danger"')
+        self.assertContains(response, 'data-confirm-action-label="Ta bort"')
+        self.assertNotContains(response, "onsubmit=")
 
     def test_non_submitted_shows_edit(self):
         for status in (
