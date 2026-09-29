@@ -58,16 +58,16 @@ class PublishedBreedingReportTests(TestCase):
     def test_review_list_keeps_pending_reports_anonymous_but_names_approved_reports(self):
         response = self.client.get(reverse("breeding_review_list"))
 
-        self.assertContains(response, "Godkända odlingsrapporter")
+        self.assertContains(response, "Bedömda odlingsrapporter")
         self.assertContains(response, "Publik odlare")
-        self.assertContains(response, "Visas på artsidan")
+        self.assertContains(response, "Publiceringsstatus")
         self.assertNotContains(response, self.owner.email)
         self.assertNotContains(response, self.association.name)
 
-    def test_approved_report_detail_can_enable_species_page_visibility(self):
+    def test_approved_report_detail_can_publish_report(self):
         response = self.client.post(
             reverse("breeding_approved_detail", args=[self.approved.pk]),
-            {"show_on_species_page": "on"},
+            {"publication_status": BreedingRegistration.PublicationStatus.PUBLISHED},
         )
 
         self.assertRedirects(
@@ -75,15 +75,18 @@ class PublishedBreedingReportTests(TestCase):
             reverse("breeding_approved_detail", args=[self.approved.pk]),
         )
         self.approved.refresh_from_db()
-        self.assertTrue(self.approved.show_on_species_page)
+        self.assertEqual(
+            self.approved.publication_status,
+            BreedingRegistration.PublicationStatus.PUBLISHED,
+        )
 
-    def test_approved_report_detail_can_disable_species_page_visibility(self):
-        self.approved.show_on_species_page = True
-        self.approved.save(update_fields=("show_on_species_page",))
+    def test_approved_report_detail_can_mark_report_not_published(self):
+        self.approved.publication_status = BreedingRegistration.PublicationStatus.PUBLISHED
+        self.approved.save(update_fields=("publication_status",))
 
         response = self.client.post(
             reverse("breeding_approved_detail", args=[self.approved.pk]),
-            {},
+            {"publication_status": BreedingRegistration.PublicationStatus.NOT_PUBLISHED},
         )
 
         self.assertRedirects(
@@ -91,11 +94,14 @@ class PublishedBreedingReportTests(TestCase):
             reverse("breeding_approved_detail", args=[self.approved.pk]),
         )
         self.approved.refresh_from_db()
-        self.assertFalse(self.approved.show_on_species_page)
+        self.assertEqual(
+            self.approved.publication_status,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        )
 
     def test_species_page_shows_only_reports_marked_for_display(self):
-        self.approved.show_on_species_page = True
-        self.approved.save(update_fields=("show_on_species_page",))
+        self.approved.publication_status = BreedingRegistration.PublicationStatus.PUBLISHED
+        self.approved.save(update_fields=("publication_status",))
 
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
@@ -104,8 +110,10 @@ class PublishedBreedingReportTests(TestCase):
         self.assertContains(response, "Odlingsrapport: Publik odlare")
         self.assertContains(response, "<strong>godkänd</strong>", html=False)
 
-        self.approved.show_on_species_page = False
-        self.approved.save(update_fields=("show_on_species_page",))
+        self.approved.publication_status = (
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+        )
+        self.approved.save(update_fields=("publication_status",))
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
         )
