@@ -169,6 +169,39 @@ class UnifiedAchievementAdminUiTests(TestCase):
         self.assertFalse(UserAchievement.objects.filter(user=self.user, level=level).exists())
         self.assertFalse(level.requirements.exists())
 
+
+    def test_selfmade_award_can_be_removed_through_endpoint(self):
+        achievement = Achievement.objects.create(
+            name="Egenvald att ta bort",
+            achievement_type=Achievement.Type.SELFMADE,
+            active=True,
+        )
+        level = AchievementLevel.objects.create(
+            achievement=achievement,
+            name="Nivå 1",
+            order=1,
+        )
+        AchievementRequirement.objects.create(
+            level=level,
+            kind=AchievementRequirement.Kind.SELF_SELECTED,
+        )
+        UserAchievement.objects.create(
+            user=self.user,
+            level=level,
+            achievement_name=achievement.name,
+            level_name=level.name,
+        )
+        self.client.force_login(self.user)
+
+        response = self.client.post(
+            reverse("remove_selfmade_badge", args=[level.pk])
+        )
+
+        self.assertRedirects(response, reverse("selfmade_badges"))
+        self.assertFalse(
+            UserAchievement.objects.filter(user=self.user, level=level).exists()
+        )
+
     def test_manual_assignment_page_assigns_selected_level(self):
         achievement = Achievement.objects.create(
             name="Hedersutmärkelse",
