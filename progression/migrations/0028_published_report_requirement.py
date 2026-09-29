@@ -6,7 +6,7 @@ def add_default_requirement_text(apps, schema_editor):
     RequirementTextTemplate.objects.get_or_create(
         kind="published_report_count",
         defaults={
-            "achieved_template": "Publicera {target_text}{scope_suffix}.",
+            "achieved_template": "Ha {target_text}{scope_suffix}.",
             "next_level_template": "Publicera {missing_text} till{scope_suffix}.",
         },
     )
@@ -47,6 +47,7 @@ class Migration(migrations.Migration):
                     ("manual_assignment", "Manuell tilldelning"),
                     ("self_selected", "Egenvald"),
                 ],
+                db_collation="uca1400_swedish_as_ci",
                 max_length=24,
                 unique=True,
                 verbose_name="kravtyp",
