@@ -94,6 +94,7 @@ class AssociationCompetitionLimitAdminTests(TestCase):
             self.settings_add_url,
             {
                 "default_max_registrations_per_genus": 3,
+                "late_reporting_days": 30,
                 "_save": "Spara",
             },
         )
@@ -101,6 +102,7 @@ class AssociationCompetitionLimitAdminTests(TestCase):
         self.assertEqual(response.status_code, 302)
         settings = AssociationCompetitionSettings.objects.get()
         self.assertEqual(settings.default_max_registrations_per_genus, 3)
+        self.assertEqual(settings.late_reporting_days, 30)
         self.assertEqual(settings.effective_from_year, timezone.localdate().year)
 
     def test_association_admin_cannot_access_competition_limit_admin(self):
