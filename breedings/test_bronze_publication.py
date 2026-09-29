@@ -53,10 +53,9 @@ class BronzePublicationSelectionTests(TestCase):
 
         response = self.client.get(reverse("breeding_review_list"))
 
-        self.assertContains(response, "Bronsrapporter för publicering")
+        self.assertContains(response, "Att bedöma")
         self.assertContains(response, str(registration.species))
-        self.assertContains(response, "Bronsodlaren")
-        self.assertContains(
+                self.assertContains(
             response,
             reverse("breeding_approved_detail", args=[registration.pk]),
         )
@@ -76,7 +75,7 @@ class BronzePublicationSelectionTests(TestCase):
 
         response = self.client.post(
             reverse("breeding_approved_detail", args=[registration.pk]),
-            {"show_on_species_page": "on"},
+            {"publication_status": BreedingRegistration.PublicationStatus.PUBLISHED},
         )
 
         self.assertRedirects(
@@ -84,7 +83,10 @@ class BronzePublicationSelectionTests(TestCase):
             reverse("breeding_approved_detail", args=[registration.pk]),
         )
         registration.refresh_from_db()
-        self.assertTrue(registration.show_on_species_page)
+        self.assertEqual(
+            registration.publication_status,
+            BreedingRegistration.PublicationStatus.PUBLISHED,
+        )
         self.assertEqual(
             registration.status,
             BreedingRegistration.Status.APPROVED,
@@ -97,8 +99,8 @@ class BronzePublicationSelectionTests(TestCase):
 
     def test_published_bronze_report_is_shown_on_species_page(self):
         registration = self._bronze()
-        registration.show_on_species_page = True
-        registration.save(update_fields=("show_on_species_page",))
+        registration.publication_status = BreedingRegistration.PublicationStatus.PUBLISHED
+        registration.save(update_fields=("publication_status",))
 
         response = self.client.get(
             reverse("species_information", args=[self.species.pk])
