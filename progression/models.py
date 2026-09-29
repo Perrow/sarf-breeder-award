@@ -387,13 +387,10 @@ class AssociationAchievement(models.Model):
         verbose_name_plural = "föreningsutmärkelser"
 
     def save(self, *args, **kwargs):
-        if self.level_id:
-            if not self.achievement_name:
-                self.achievement_name = self.level.achievement.name
-            if not self.level_name:
-                self.level_name = self.level.name
-            if not self.level_description:
-                self.level_description = self.level.description
+        if self._state.adding and self.level_id:
+            self.achievement_name = self.level.achievement.name
+            self.level_name = self.level.name
+            self.level_description = self.level.description
         return super().save(*args, **kwargs)
 
     def __str__(self):
