@@ -15,6 +15,7 @@ from .models import (
     AssociationCompetitionLimit,
     AssociationCompetitionSettings,
     BreedingRegistration,
+    WaterParameterDefinition,
     current_competition_year,
 )
 from .scoring import BREEDING_CLASS_POINTS
@@ -55,6 +56,28 @@ class AssociationCompetitionLimitAdminForm(forms.ModelForm):
             .distinct()
             .order_by("name")
         )
+
+
+@admin.register(WaterParameterDefinition)
+class WaterParameterDefinitionAdmin(admin.ModelAdmin):
+    list_display = ("name", "unit", "sort_order", "min_value", "max_value", "active")
+    list_editable = ("sort_order", "active")
+    ordering = ("sort_order", "name")
+
+    def has_module_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_view_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_add_permission(self, request):
+        return is_system_admin(request.user)
+
+    def has_change_permission(self, request, obj=None):
+        return is_system_admin(request.user)
+
+    def has_delete_permission(self, request, obj=None):
+        return is_system_admin(request.user)
 
 
 @admin.register(AssociationCompetitionSettings)
