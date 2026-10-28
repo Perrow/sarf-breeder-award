@@ -9,6 +9,7 @@ from django.utils import timezone
 from django.utils.html import format_html
 
 from associations.admin import is_association_admin, is_system_admin, managed_associations
+from .delete_actions import delete_registration_and_revalidate
 from taxonomy.models import Genus, Species, SpeciesGroup
 
 from .models import (
@@ -161,6 +162,7 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         "breeding_date",
         "status",
         "action_link",
+        "delete_link",
     )
     list_filter = ("status", "taxonomy_needs_resolution", "association")
     search_fields = (
@@ -207,6 +209,11 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         urls = super().get_urls()
         custom_urls = [
             path(
+                "<int:object_id>/delete-incorrect/",
+                self.admin_site.admin_view(self.delete_incorrect_view),
+                name="breedings_breedingregistration_delete_incorrect",
+            ),
+            path(
                 "<int:object_id>/review/",
                 self.admin_site.admin_view(self.review_view),
                 name="breedings_breedingregistration_review",
@@ -228,6 +235,36 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
             return format_html('<a href="{}">Lös taxonomi</a>', url)
         url = reverse("breeding_review", args=[obj.pk])
         return format_html('<a href="{}">Granska</a>', url)
+
+    @admin.display(description="Ta bort")
+    def delete_link(self, obj):
+        url = reverse("admin:breedings_breedingregistration_delete_incorrect", args=[obj.pk])
+        return format_html('<a href="{}">Ta bort</a>', url)
+
+    def delete_incorrect_view(self, request, object_id):
+        registration = get_object_or_404(
+            self.get_queryset(request).select_related("owner", "association", "species"),
+            pk=object_id,
+        )
+        if not (
+            is_system_admin(request.user)
+            or is_association_admin(request.user, registration.association)
+        ):
+            raise PermissionDenied
+
+        if request.method == "POST":
+            delete_registration_and_revalidate(registration)
+            messages.success(request, "Odlingsregistreringen har tagits bort.")
+            return redirect("admin:breedings_breedingregistration_changelist")
+        if request.method != "GET":
+            from django.http import HttpResponseNotAllowed
+            return HttpResponseNotAllowed(["GET", "POST"])
+
+        return render(
+            request,
+            "admin/breedings/breedingregistration/confirm_delete_incorrect.html",
+            {"registration": registration, "opts": self.model._meta},
+        )
 
     def _next_reviewable_registration(self, request, registration):
         return (
