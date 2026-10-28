@@ -104,7 +104,10 @@ class RegistrationForm(UserCreationForm):
 
 
 class EmailAuthenticationForm(AuthenticationForm):
-    username = forms.EmailField(label="E-post")
+    username = forms.EmailField(
+        label="E-post",
+        widget=forms.EmailInput(attrs={"autocomplete": "email"}),
+    )
 
     def clean(self):
         email = self.cleaned_data.get("username")
