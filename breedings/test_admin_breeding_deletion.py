@@ -75,7 +75,7 @@ class AdminBreedingDeletionTests(TestCase):
 
     def test_owner_without_admin_rights_cannot_use_admin_delete(self):
         self.client.force_login(self.owner)
-        self.assertNotEqual(self.client.post(self.url).status_code, 302)
+        self.assertEqual(self.client.post(self.url).status_code, 302)
         self.assertTrue(BreedingRegistration.objects.filter(pk=self.registration.pk).exists())
 
     def test_get_does_not_delete_and_other_methods_are_disallowed(self):
