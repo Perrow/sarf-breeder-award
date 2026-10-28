@@ -174,6 +174,12 @@ class BreedingRegistrationAdmin(admin.ModelAdmin):
         "proposed_common_name",
     )
 
+    def get_list_display(self, request):
+        fields = super().get_list_display(request)
+        if is_system_admin(request.user) or is_association_admin(request.user):
+            return fields
+        return tuple(field for field in fields if field != "delete_link")
+
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
         if is_breeding_manager(request.user):
