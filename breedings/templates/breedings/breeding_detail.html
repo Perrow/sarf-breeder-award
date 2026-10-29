@@ -25,7 +25,7 @@
         <form method="post"
               action="{% url 'breeding_delete' registration.pk %}"
               data-confirm-title="Ta bort odlingsrapport"
-              data-confirm-message="Vill du verkligen ta bort odlingsrapporten?"
+              data-confirm-message="Vill du verkligen ta bort odlingsrapporten? Den tas bort permanent och åtgärden kan inte ångras."
               data-confirm-action-label="Ta bort"
               data-confirm-variant="danger">
             {% csrf_token %}
