@@ -1,0 +1,17 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+<h1>Ta bort felaktig odling</h1>
+<p>Du håller på att permanent ta bort följande odling:</p>
+<dl>
+    <dt>Odlare</dt><dd>{{ registration.owner }}</dd>
+    <dt>Art</dt><dd>{{ registration.species|default:registration.proposed_species_name }}</dd>
+    <dt>Förening</dt><dd>{{ registration.association }}</dd>
+    <dt>Odlingsdatum</dt><dd>{{ registration.breeding_date }}</dd>
+</dl>
+<p><strong>Åtgärden kan inte ångras.</strong> Tillhörande vattenparametrar tas bort och poäng samt automatiska utmärkelser räknas om.</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit" class="deletelink">Bekräfta borttagning</button>
+    <a href="{% url 'admin:breedings_breedingregistration_changelist' %}">Avbryt</a>
+</form>
+{% endblock %}
