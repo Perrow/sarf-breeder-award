@@ -429,6 +429,8 @@ def _edit_breeding(
             "form": form,
             "registration": registration,
             "selected_species": selected_species,
+            "free_text_registration": bool(free_text and not selected_species and registration is None),
+            "free_text": free_text,
             "approval_will_reset": reset_approval_on_save,
         },
     )
