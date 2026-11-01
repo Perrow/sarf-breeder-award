@@ -50,7 +50,8 @@ class SpeciesSelectionTests(TestCase):
         response = self.client.get(reverse("species_select"))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, 'id="species-search"')
-        self.assertContains(response, "Jag hittar inte arten")
+        self.assertContains(response, "Om du inte hittar den odlade arten i våra listor, välj den här och registrera ändå.")
+        self.assertContains(response, 'createUrl + "?free_text=" + encodeURIComponent(query)')
         self.assertContains(response, reverse("breeding_create"))
         self.assertNotContains(response, 'registeredAs.textContent = "Registreras som: "')
 
