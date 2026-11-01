@@ -33,7 +33,7 @@ class NavigationTests(TestCase):
     def test_authenticated_navigation_uses_requested_order(self):
         self._create_authenticated_user()
 
-        navigation = self._navigation_html(self.client.get(reverse("home")))
+        navigation = self._navigation_html(self.client.get(reverse("breeding_list")))
 
         labels = ("Min sida", "Topplistor", "Arter", "Konto", "Logga ut")
         positions = [navigation.index(label) for label in labels]
@@ -42,7 +42,7 @@ class NavigationTests(TestCase):
     def test_admin_link_is_only_shown_for_staff_users(self):
         user = self._create_authenticated_user("normal-navigation@example.com")
 
-        navigation = self._navigation_html(self.client.get(reverse("home")))
+        navigation = self._navigation_html(self.client.get(reverse("breeding_list")))
 
         self.assertNotIn(f'href="{reverse("admin:index")}"', navigation)
         self.assertNotIn(">System</a>", navigation)
@@ -50,7 +50,7 @@ class NavigationTests(TestCase):
         user.is_staff = True
         user.save(update_fields=("is_staff",))
 
-        navigation = self._navigation_html(self.client.get(reverse("home")))
+        navigation = self._navigation_html(self.client.get(reverse("breeding_list")))
 
         self.assertIn(
             f'<a class="dropdown-item" href="{reverse("admin:index")}">System</a>',
@@ -104,7 +104,7 @@ class NavigationTests(TestCase):
     def test_logout_remains_a_post_action(self):
         self._create_authenticated_user("logout-navigation@example.com")
 
-        navigation = self._navigation_html(self.client.get(reverse("home")))
+        navigation = self._navigation_html(self.client.get(reverse("breeding_list")))
 
         self.assertIn(f'<form method="post" action="{reverse("logout")}">', navigation)
         self.assertIn('type="submit">Logga ut</button>', navigation)
