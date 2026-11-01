@@ -12,7 +12,7 @@
 </div>
 {% endif %}
 
-<form method="post" class="site-form">
+<form method="post" class="site-form"{% if free_text_registration %} action="?free_text={{ free_text|urlencode }}"{% endif %}>
     {% csrf_token %}
     {% include "includes/form_error_summary.html" %}
     {{ form.non_field_errors }}
@@ -33,6 +33,8 @@
             {{ form.species.as_hidden }}
             <div class="form-text"><a href="{% url 'species_select' %}">Välj en annan art</a></div>
         </div>
+    {% elif free_text_registration %}
+        {{ form.species.as_hidden }}
     {% else %}
         <div class="form-field">{{ form.species.label_tag }} {{ form.species }} {{ form.species.errors }}</div>
     {% endif %}
@@ -155,7 +157,7 @@
 })();
 </script>
 
-{% if not selected_species %}
+{% if not selected_species and not free_text_registration %}
 <script>
 (function () {
     const speciesSelect = document.getElementById("id_species");
