@@ -12,23 +12,19 @@
 </div>
 
 <div id="species-search-results" class="list-group mb-3" aria-live="polite"></div>
-<p id="species-search-empty" class="text-body-secondary" hidden>Inga arter hittades.</p>
-
-<p><a href="{{ breeding_create_url }}">Jag hittar inte arten – ange taxonomin i fritext</a></p>
 
 <script>
 (function () {
     const input = document.getElementById("species-search");
     const results = document.getElementById("species-search-results");
-    const empty = document.getElementById("species-search-empty");
     const searchUrl = "{{ search_url|escapejs }}";
     const createUrl = "{{ breeding_create_url|escapejs }}";
     let requestNumber = 0;
     let timer = null;
 
-    function render(items) {
+    function render(items, query) {
         results.replaceChildren();
-        empty.hidden = items.length !== 0 || input.value.trim() === "";
+
 
         items.forEach(function (item) {
             const link = document.createElement("a");
@@ -79,13 +75,30 @@
 
             results.appendChild(link);
         });
+
+        if (query && items.length === 0) {
+            const link = document.createElement("a");
+            link.className = "list-group-item list-group-item-action";
+            link.href = createUrl + "?free_text=" + encodeURIComponent(query);
+
+            const name = document.createElement("div");
+            name.className = "fw-semibold fst-italic";
+            name.textContent = query;
+            link.appendChild(name);
+
+            const explanation = document.createElement("div");
+            explanation.className = "small text-body-secondary";
+            explanation.textContent = "Om du inte hittar den odlade arten i våra listor, välj den här och registrera ändå.";
+            link.appendChild(explanation);
+            results.appendChild(link);
+        }
     }
 
     async function search() {
         const query = input.value.trim();
         const currentRequest = ++requestNumber;
         if (!query) {
-            render([]);
+            render([], "");
             return;
         }
 
@@ -97,7 +110,7 @@
         }
         const data = await response.json();
         if (currentRequest === requestNumber) {
-            render(data.results);
+            render(data.results, query);
         }
     }
 

@@ -336,7 +336,11 @@ def breeding_create(request):
             Species.objects.available_for_registration().select_related("genus"),
             pk=species_id,
         )
-    return _edit_breeding(request, selected_species=selected_species)
+    return _edit_breeding(
+        request,
+        selected_species=selected_species,
+        free_text=request.GET.get("free_text", "").strip() if not species_id else "",
+    )
 
 
 @login_required
@@ -355,6 +359,7 @@ def _edit_breeding(
     registration=None,
     selected_species=None,
     reset_approval_on_save=False,
+    free_text="",
 ):
     if request.method == "POST":
         form = BreedingRegistrationForm(request.user, request.POST, instance=registration)
@@ -405,7 +410,12 @@ def _edit_breeding(
             messages.success(request, message)
             return redirect("breeding_list")
     else:
-        initial = {"species": selected_species} if selected_species else None
+        initial = {"species": selected_species} if selected_species else {}
+        if free_text and not selected_species and registration is None:
+            parts = free_text.split(maxsplit=1)
+            initial["proposed_genus_name"] = parts[0][:100]
+            if len(parts) > 1:
+                initial["proposed_species_name"] = parts[1][:100]
         form = BreedingRegistrationForm(
             request.user,
             instance=registration,
