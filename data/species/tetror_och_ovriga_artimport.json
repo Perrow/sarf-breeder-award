@@ -1,0 +1,810 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Myxocyprinus",
+      "scientific_name": "asiaticus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fladdermusfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "asiatica",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Channa asiatica"
+      ]
+    },
+    {
+      "genus": "Acnodon",
+      "scientific_name": "normani",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Får-paku"
+      ]
+    },
+    {
+      "genus": "Aphyocharax",
+      "scientific_name": "alburnus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyocharax alburnus"
+      ]
+    },
+    {
+      "genus": "Aphyocharax",
+      "scientific_name": "anisitsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rödfena"
+      ]
+    },
+    {
+      "genus": "Astyanax",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Astyanax bimaculatus"
+      ]
+    },
+    {
+      "genus": "Astyanax",
+      "scientific_name": "mexicanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Blind grottetra"
+      ],
+      "scientific_synonyms": [
+        "Astyanax fasciatus mexicanus"
+      ]
+    },
+    {
+      "genus": "Axelrodia",
+      "scientific_name": "stigmatias",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Axelrodia stigmatias"
+      ]
+    },
+    {
+      "genus": "Boehlkea",
+      "scientific_name": "fredcochui",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Moskitotetra"
+      ]
+    },
+    {
+      "genus": "Brycon",
+      "scientific_name": "falcatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Brycon falcatus"
+      ]
+    },
+    {
+      "genus": "Carlastyanax",
+      "scientific_name": "aurocaudatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Carlastyanax aurocaudatus"
+      ]
+    },
+    {
+      "genus": "Catoprion",
+      "scientific_name": "mento",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Vimpelpiraya"
+      ]
+    },
+    {
+      "genus": "Chalceus",
+      "scientific_name": "macrolepidotus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Chalceus macrolepidotus"
+      ]
+    },
+    {
+      "genus": "Charax",
+      "scientific_name": "gibbosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Puckelryggig bottentittare"
+      ]
+    },
+    {
+      "genus": "Cheirodon",
+      "scientific_name": "interruptus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Cheirodon interruptus"
+      ]
+    },
+    {
+      "genus": "Cheirodon",
+      "scientific_name": "parahybae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Cheirodon parahybae"
+      ]
+    },
+    {
+      "genus": "Coelurichthys",
+      "scientific_name": "tenuis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Bredbandstetra"
+      ]
+    },
+    {
+      "genus": "Colossoma",
+      "scientific_name": "macropomum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Svart paku"
+      ],
+      "scientific_synonyms": [
+        "Collosoma macropomum"
+      ]
+    },
+    {
+      "genus": "Corynopoma",
+      "scientific_name": "riisei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Liten drakfena"
+      ]
+    },
+    {
+      "genus": "Creagrutus",
+      "scientific_name": "beni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Guldbandstetra"
+      ]
+    },
+    {
+      "genus": "Ctenobrycon",
+      "scientific_name": "spilurus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Silvertetra"
+      ]
+    },
+    {
+      "genus": "Exodon",
+      "scientific_name": "paradoxus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Turkostetra"
+      ]
+    },
+    {
+      "genus": "Gnathocharax",
+      "scientific_name": "steindachneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Gnathocharax steindachneri"
+      ],
+      "scientific_synonyms": [
+        "Gnatocharax steindachneri"
+      ]
+    },
+    {
+      "genus": "Gymnocorymbus",
+      "scientific_name": "ternetzi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Sorgmanteltetra"
+      ]
+    },
+    {
+      "genus": "Gymnocorymbus",
+      "scientific_name": "thayeri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Silvermanteltetra"
+      ]
+    },
+    {
+      "genus": "Hasemania",
+      "scientific_name": "nana",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Koppartetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "bleheri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rödhuvudstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "caudovittatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Buenos Aires-tetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "erythrozonus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Glödbandstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "guyanensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rödpunktstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "hyanuary",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Costellotetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "ocellifer",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lykttetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "pulcher",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kilfläckstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "rhodostomus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rödmunstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "stictus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hemigrammus stictus"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "ulreyi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hemigrammus ulreyi"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "unilineatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Enbandstetra"
+      ]
+    },
+    {
+      "genus": "Hemigrammus",
+      "scientific_name": "vorderwinkleri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Guldglanstetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "amandae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Gnisttetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "bentosi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rosentetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "bifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mässingstetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "callistus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Serpatetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "columbianus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Opaltetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "copelandi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hyphessobrycon copelandi"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "elachys",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "slöjfenad silvertera"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "eos",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Soltetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "erythrostigma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dolkstyngstetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "flammeus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Riotetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "griemei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Griemi-tetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "herbertaxelrodi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Svart neon"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "heterorhabdus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Trebandstetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "loretoensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Loretotetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "metae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rio Meta tetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "minor",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Röd minortetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "pulchripinnis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Citrontetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "robertsi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Robertsi-tetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "rosaceus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rosentetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "scholzei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Svartbandstetra"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "socolofi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hyphessobrycon socolofi"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "sp. \"Muzel red cherry\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hyphessobrycon sp. \"Muzel red cherry\""
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "vilmae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hyphessobrycon vilmae"
+      ]
+    },
+    {
+      "genus": "Hyphessobrycon",
+      "scientific_name": "wadai",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "blåbärstetra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Iguanodectes",
+      "scientific_name": "spilurus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Iguanodectes spilurus"
+      ],
+      "scientific_synonyms": [
+        "Iganuodectes spilurus"
+      ]
+    },
+    {
+      "genus": "Inpaichthys",
+      "scientific_name": "kerri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Kerri-tetra"
+      ]
+    },
+    {
+      "genus": "Megalamphodus",
+      "scientific_name": "megalopterus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Svart fantomtetra"
+      ]
+    },
+    {
+      "genus": "Megalamphodus",
+      "scientific_name": "roseus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Gul fantomtetra"
+      ]
+    },
+    {
+      "genus": "Megalamphodus",
+      "scientific_name": "sweglesi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Röd fantomtetra"
+      ]
+    },
+    {
+      "genus": "Metynnis",
+      "scientific_name": "argenteus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Skivtetra"
+      ]
+    },
+    {
+      "genus": "Metynnis",
+      "scientific_name": "hypsauchen",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Schreitmullers skivtetra"
+      ]
+    },
+    {
+      "genus": "Metynnis",
+      "scientific_name": "lippincottianus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lippincotts skivtetra"
+      ]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "colletti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Colletti-tetra"
+      ]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "intermedia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Moenkhausia intermedia"
+      ]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "pittieri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Briljanttetra"
+      ]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "sanctaefilomenae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Nättetra"
+      ]
+    },
+    {
+      "genus": "Moenkhausia",
+      "scientific_name": "sp cf. Phaeonota",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Moenkhausia sp cf. Phaeonota"
+      ]
+    },
+    {
+      "genus": "Myleus",
+      "scientific_name": "rubripinnis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rödfenad skivtetra"
+      ]
+    },
+    {
+      "genus": "Mylossoma",
+      "scientific_name": "duriventre",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kvarnstenstetra"
+      ]
+    },
+    {
+      "genus": "Nematobrycon",
+      "scientific_name": "lacortei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Regnbågstetra"
+      ]
+    },
+    {
+      "genus": "Nematobrycon",
+      "scientific_name": "palmeri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Kejsartetra"
+      ]
+    },
+    {
+      "genus": "Paracheirodon",
+      "scientific_name": "axelrodi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kardinaltetra"
+      ]
+    },
+    {
+      "genus": "Paracheirodon",
+      "scientific_name": "innesi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neontetra"
+      ]
+    },
+    {
+      "genus": "Paracheirodon",
+      "scientific_name": "simulans",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Blå neon"
+      ]
+    },
+    {
+      "genus": "Paragoniates",
+      "scientific_name": "alburnus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paragoniates alburnus"
+      ]
+    },
+    {
+      "genus": "Petitella",
+      "scientific_name": "georgiae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Purpurhuvudstetra"
+      ]
+    },
+    {
+      "genus": "Poptella",
+      "scientific_name": "orbicularis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Diskustetra"
+      ]
+    },
+    {
+      "genus": "Prionobrama",
+      "scientific_name": "filigera",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Glastetra"
+      ]
+    },
+    {
+      "genus": "Pristella",
+      "scientific_name": "maxillaris",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pristella"
+      ]
+    },
+    {
+      "genus": "Roeboides",
+      "scientific_name": "caucae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roeboides caucae"
+      ]
+    },
+    {
+      "genus": "Roeboides",
+      "scientific_name": "microlepis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Röntgentetra"
+      ]
+    },
+    {
+      "genus": "Serrasalmus",
+      "scientific_name": "calmoni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Serrasalmus calmoni"
+      ]
+    },
+    {
+      "genus": "Serrasalmus",
+      "scientific_name": "nattereri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Röd piraya"
+      ]
+    },
+    {
+      "genus": "Serrasalmus",
+      "scientific_name": "rhombeus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Vit piraya"
+      ]
+    },
+    {
+      "genus": "Serrasalmus",
+      "scientific_name": "spilopleura",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Serrasalmus spilopleura"
+      ]
+    },
+    {
+      "genus": "Serrasalmus",
+      "scientific_name": "ternetzi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Diamantpiraya"
+      ]
+    },
+    {
+      "genus": "Thayeria",
+      "scientific_name": "boehlkei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Vinkeltetra"
+      ]
+    },
+    {
+      "genus": "Thayeria",
+      "scientific_name": "obliqua",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pingvintetra"
+      ]
+    },
+    {
+      "genus": "Triportheus",
+      "scientific_name": "angulatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Triportheus angulatus"
+      ]
+    },
+    {
+      "genus": "Xenagoniates",
+      "scientific_name": "bondi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Xenagoniates bondi"
+      ]
+    }
+  ]
+}
