@@ -805,6 +805,17 @@
       "swedish_names": [
         "Xenagoniates bondi"
       ]
+    },
+    {
+      "genus": "Chilodus",
+      "scientific_name": "punctatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Prickig bottentittare"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
     }
   ]
 }
