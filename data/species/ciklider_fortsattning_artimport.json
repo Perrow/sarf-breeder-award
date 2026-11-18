@@ -270,6 +270,13 @@
       ],
       "geographies": [
         "Malawisjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=581",
+          "source_name": "NCS Artregister",
+          "title": "Aulonocara stuartgranti"
+        }
       ]
     },
     {
@@ -339,6 +346,13 @@
       ],
       "scientific_synonyms": [
         "Bentochromis horii"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=2209",
+          "source_name": "NCS Artregister",
+          "title": "Benthochromis horii"
+        }
       ]
     },
     {
