@@ -1,0 +1,142 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Abactochromis",
+      "scientific_name": "labrosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tjockläppsmbuna"
+      ],
+      "geographies": [
+        "Afrika",
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Melanochromis labrosus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=615",
+          "source_name": "NCS Artregister",
+          "title": "Abactochromis labrosus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "calvus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus calvus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=779",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus calvus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "compressiceps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus compressiceps"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=222",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus compressiceps"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "sp. \"compressiceps shell\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Altolamprologus sp. \"compressiceps shell\""
+      ],
+      "scientific_synonyms": [
+        "Altolamprologus compressiceps, \"Sumbu\"",
+        "Altolamprologus sp. \"sumbu\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=2374",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus sp. compressiceps shell"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "fasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Altolamprologus fasciatus"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus fasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1121",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus fasciatus"
+        }
+      ]
+    },
+    {
+      "genus": "Anomalochromis",
+      "scientific_name": "thomasi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Thomasciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=192",
+          "source_name": "NCS Artregister",
+          "title": "Anomalochromis thomasi"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "atahualpa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Sunset Apistogramma"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1561",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma atahualpa"
+        }
+      ]
+    }
+  ]
+}
