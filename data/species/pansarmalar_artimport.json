@@ -1255,6 +1255,639 @@
         "Corydoras sp. Red stripe CW014",
         "Corydoras sp. Red stripe CW023"
       ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C150",
+      "scientific_synonyms": [
+        "Corydoras sp. C150",
+        "Hoplisoma sp. C150"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Alf Cory"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C124",
+      "scientific_synonyms": [
+        "Corydoras sp. C124"
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Osteogaster sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "CW010",
+      "scientific_synonyms": [
+        "Corydoras sp. CW010",
+        "Osteogaster sp. CW010",
+        "Osteogaster sp. Golden stripe CW010",
+        "Osteogaster sp. Gold laser CW010",
+        "Corydoras sp. Golden stripe CW010",
+        "Corydoras sp. Gold laser CW010"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "CW140",
+      "scientific_synonyms": [
+        "Corydoras sp. CW140",
+        "Hoplisoma sp. CW140"
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Green Laser Cory"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "CW009",
+      "scientific_synonyms": [
+        "Corydoras sp. CW009",
+        "Osteogaster sp. CW009"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp. C139"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C139",
+      "scientific_synonyms": [
+        "Corydoras sp. CW139"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp. \"nijsseni\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "nijsseni"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras spec."
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C003",
+      "scientific_synonyms": [
+        "Corydoras spec. C003"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C005",
+      "scientific_synonyms": [
+        "Corydoras spec. C005"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C006",
+      "scientific_synonyms": [
+        "Corydoras spec. C006"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C007",
+      "scientific_synonyms": [
+        "Corydoras spec. C007"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C008",
+      "scientific_synonyms": [
+        "Corydoras spec. C008"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C009",
+      "scientific_synonyms": [
+        "Corydoras spec. C009"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C010",
+      "scientific_synonyms": [
+        "Corydoras spec. C010"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C011",
+      "scientific_synonyms": [
+        "Corydoras spec. C011"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C013",
+      "scientific_synonyms": [
+        "Corydoras spec. C013"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C014",
+      "scientific_synonyms": [
+        "Corydoras spec. C014"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C015",
+      "scientific_synonyms": [
+        "Corydoras spec. C015"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C016",
+      "scientific_synonyms": [
+        "Corydoras spec. C016"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C017",
+      "scientific_synonyms": [
+        "Corydoras spec. C017"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C018",
+      "scientific_synonyms": [
+        "Corydoras spec. C018"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C019",
+      "scientific_synonyms": [
+        "Corydoras spec. C019"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "C020",
+      "scientific_synonyms": [
+        "Corydoras spec. C020"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "spilurus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras spilurus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Brochis",
+      "scientific_name": "splendens",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Grön pansarmal"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras splendens"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "steindachneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras steindachneri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "stenocephalus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras stenocephalus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sterbai",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hoplisoma sterbai"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras sterbai"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "surinamensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras surinamensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "sychri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras sychri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "treitlii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras treitlii"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "trilineatum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hoplisoma trilineatum"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras trilineatus"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "undulatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vågpansarmal"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "venezuelanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Osteogaster venezuelanus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras venezuelanus"
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "venezuelanus \"Orange\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Venezuelanus Orange"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras venezuelanus “Orange”"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "virginiae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras virginiae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "vittatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Corydoras vittatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "weitzmani",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hoplisoma weitzmani"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras weitzmani"
+      ]
+    },
+    {
+      "genus": "Corydoras",
+      "scientific_name": "xinguensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Corydoras xinguensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "zygata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Osteogaster zygata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Corydoras zygatus"
+      ]
+    },
+    {
+      "genus": "Dianema",
+      "scientific_name": "longibarbis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dianema longibarbis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Dianema",
+      "scientific_name": "urostriatum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Flaggstjärtsmal"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hoplosternum",
+      "scientific_name": "littorale",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hoplosternum littorale"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Lepthoplosternum",
+      "scientific_name": "pectorale",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lepthoplosternum pectorale"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Hoplosternum pectorale"
+      ]
+    },
+    {
+      "genus": "Megalechis",
+      "scientific_name": "thoracata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Megalechis thoracata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Hoplosternum thoracatum"
+      ]
+    },
+    {
+      "genus": "Scleromystax",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Scleromystax sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "CW038"
     }
   ]
 }
