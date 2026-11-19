@@ -2,6 +2,182 @@
   "version": 1,
   "species": [
     {
+      "genus": "Taeniolethrinops",
+      "scientific_name": "furcicauda",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Taeniolethrinops furcicauda"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tahuantinsuyoa",
+      "scientific_name": "macantzatza",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tahuantinsuyoa macantzatza"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Tanganicodus",
+      "scientific_name": "irsacae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tanganicodus irsacae"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Teleocichla",
+      "scientific_name": "cinderella",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Teleocichla cinderella"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Teleocichla",
+      "scientific_name": "gephyrogramma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Teleocichla gephyrogramma"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Teleocichla",
+      "scientific_name": "monogramma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Teleocichla monogramma"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Teleocichla",
+      "scientific_name": "proselytus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Teleocichla proselytus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Teleogramma",
+      "scientific_name": "brichardi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Teleogramma brichardi"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "bifrenatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Telmatochromis bifrenatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "brichardi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Telmatochromis brichardi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "dhonti",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Telmatochromis dhonti"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "temporalis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Telmatochromis temporalis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "vittatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Telmatochromis vittatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Theraps",
+      "scientific_name": "coeruleus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Theraps coeruleus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Theraps",
+      "scientific_name": "irregularis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Theraps irregularis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Theraps",
+      "scientific_name": "lentiginosus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Theraps lentiginosus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
       "genus": "Thoracochromis",
       "scientific_name": "brauschi",
       "breeding_class": "bronze",
@@ -123,20 +299,6 @@
       ]
     },
     {
-      "genus": "Heterotilapia",
-      "scientific_name": "buttikoferi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Heterotilapia buttikoferi"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Tilapia buttikoferi"
-      ]
-    },
-    {
       "genus": "Tilapia",
       "scientific_name": "joka",
       "breeding_class": "silver",
@@ -145,35 +307,6 @@
       ],
       "geographies": [
         "Afrika"
-      ]
-    },
-    {
-      "genus": "Pelmatolapia",
-      "scientific_name": "mariae",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Pelmatolapia mariae"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Tilapia mariae"
-      ]
-    },
-    {
-      "genus": "Coptodon",
-      "scientific_name": "rendalli",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Coptodon rendalli"
-      ],
-      "geographies": [
-        "Afrika",
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Tilapia rendalli"
       ]
     },
     {
@@ -196,20 +329,6 @@
       ],
       "geographies": [
         "Afrika"
-      ]
-    },
-    {
-      "genus": "Coptodon",
-      "scientific_name": "zillii",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Coptodon zillii"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Tilapia zilli"
       ]
     },
     {
@@ -332,6 +451,20 @@
       ],
       "geographies": [
         "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "tropheops",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tropheops tropheops"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus tropheops"
       ]
     },
     {
@@ -721,6 +854,18 @@
       ],
       "geographies": [
         "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "bathyphilus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotilapia bathyphilus",
+        "Xenotilapia batyphilus Kekese"
+      ],
+      "scientific_synonyms": [
+        "Xenotilapia batyphilus"
       ]
     },
     {

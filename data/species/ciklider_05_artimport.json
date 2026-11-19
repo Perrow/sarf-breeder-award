@@ -2,6 +2,207 @@
   "version": 1,
   "species": [
     {
+      "genus": "Apistogramma",
+      "scientific_name": "sp. D21",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma sp. D21"
+      ]
+    },
+    {
+      "genus": "Australoheros",
+      "scientific_name": "scitulus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Scitulusciklid"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "cyaneus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chindongo cyaneus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus cyaneus"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "demasoni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo demasoni"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus demasoni"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "elongatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo elongatus",
+        "Pseudotropheus elongatus \"Mbamba\"",
+        "Pseudotropheus elongatus \"Mpanga\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus elongatus"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "flavus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chindongo flavus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus flavus"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "heteropictus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo heteropictus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus heteropictus"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "minutus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo minutus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus minutus"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "saulosi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo saulosi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus saulosi"
+      ]
+    },
+    {
+      "genus": "Chindongo",
+      "scientific_name": "socolofi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chindongo socolofi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Pseudotropheus socolofi"
+      ]
+    },
+    {
+      "genus": "Coptodon",
+      "scientific_name": "rendalli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Coptodon rendalli"
+      ],
+      "geographies": [
+        "Afrika",
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Tilapia rendalli"
+      ]
+    },
+    {
+      "genus": "Coptodon",
+      "scientific_name": "zillii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Coptodon zillii"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia zilli"
+      ]
+    },
+    {
+      "genus": "Heterotilapia",
+      "scientific_name": "buttikoferi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Heterotilapia buttikoferi"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia buttikoferi"
+      ]
+    },
+    {
+      "genus": "Ivanacara",
+      "scientific_name": "bimaculata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ivanacara bimaculata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Nannacara bimaculata"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "multifasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lamprologus multifasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus multifasciatus"
+      ]
+    },
+    {
       "genus": "Lichnochromis",
       "scientific_name": "acuticeps",
       "breeding_class": "silver",
@@ -685,20 +886,6 @@
       ]
     },
     {
-      "genus": "Ivanacara",
-      "scientific_name": "bimaculata",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Ivanacara bimaculata"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Nannacara bimaculata"
-      ]
-    },
-    {
       "genus": "Nannacara",
       "scientific_name": "taenia",
       "breeding_class": "silver",
@@ -740,6 +927,14 @@
       ],
       "geographies": [
         "Västafrika"
+      ]
+    },
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "teugelsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nanochromis teugelsi"
       ]
     },
     {
@@ -795,199 +990,6 @@
       ],
       "geographies": [
         "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "bifasciatus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus bifasciatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "brevis",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus brevis"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ],
-      "scientific_synonyms": [
-        "Lamprologus brevis"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "brichardi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus brichardi"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "buescheri",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus buescheri"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "christyi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus christyi"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "crassus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus crassus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "cunningtoni",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus cunningtoni"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "cylindricus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus cylindricus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "falcicula",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus falcicula"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "furcifer",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Neolamprologus furcifer"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "gracilis",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus gracilis"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "kungweensis",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus kungweensis"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "longicaudatus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus longicaudatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "marunguensis",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus marunguensis"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "modestus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus modestus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "mondabu",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus mondabu"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Lamprologus",
-      "scientific_name": "multifasciatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Lamprologus multifasciatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ],
-      "scientific_synonyms": [
-        "Neolamprologus multifasciatus"
       ]
     }
   ]

@@ -2,6 +2,248 @@
   "version": 1,
   "species": [
     {
+      "genus": "Pelvicachromis",
+      "scientific_name": "taeniatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gul palettciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Petenia",
+      "scientific_name": "splendida",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Petenia splendida"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "ephippium",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Petrochromis ephippium"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "famula",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrochromis famula"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "fasciolatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrochromis fasciolatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "macrognathus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Petrochromis macrognathus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "orthognathus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrochromis orthognathus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrochromis",
+      "scientific_name": "trewavasae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrochromis trewavasae"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "genalutea",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia genalutea"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "nigra",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia nigra"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "sp. \"small blue\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia sp. \"small blue\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "sp. \"yellow chin\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia sp. \"yellow chin\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "sp. \"yellow ventral\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia sp. \"yellow ventral\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Petrotilapia",
+      "scientific_name": "tridentiger",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Petrotilapia tridentiger"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "electra",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Placidochromis electra"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "johnstoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Placidochromis johnstoni"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "milomo",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Placidochromis milomo"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "phenochilus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Placidochromis phenochilus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "sp cf electra \"Hongi\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Electra blue hongi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "sp. \"blue otter\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Placidochromis sp. \"blue otter\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "sp. \"johnstoni solo\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Placidochromis sp. \"johnstoni solo\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Placidochromis",
+      "scientific_name": "sp. \"phenochilus tanzania\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Placidochromis sp. \"phenochilus tanzania\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
       "genus": "Platytaeniodus",
       "scientific_name": "degeni",
       "breeding_class": "silver",
@@ -189,78 +431,6 @@
       ]
     },
     {
-      "genus": "Chindongo",
-      "scientific_name": "cyaneus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chindongo cyaneus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus cyaneus"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "demasoni",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo demasoni"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus demasoni"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "elongatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo elongatus",
-        "Pseudotropheus elongatus \"Mbamba\"",
-        "Pseudotropheus elongatus \"Mpanga\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus elongatus"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "flavus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chindongo flavus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus flavus"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "heteropictus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo heteropictus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus heteropictus"
-      ]
-    },
-    {
       "genus": "Pseudotropheus",
       "scientific_name": "microstoma",
       "breeding_class": "silver",
@@ -269,48 +439,6 @@
       ],
       "geographies": [
         "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "minutus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo minutus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus minutus"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "saulosi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo saulosi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus saulosi"
-      ]
-    },
-    {
-      "genus": "Chindongo",
-      "scientific_name": "socolofi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chindongo socolofi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus socolofi"
       ]
     },
     {
@@ -411,20 +539,6 @@
       ],
       "geographies": [
         "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Tropheops",
-      "scientific_name": "tropheops",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Tropheops tropheops"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Pseudotropheus tropheops"
       ]
     },
     {
@@ -832,182 +946,6 @@
       ],
       "geographies": [
         "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Taeniolethrinops",
-      "scientific_name": "furcicauda",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Taeniolethrinops furcicauda"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Tahuantinsuyoa",
-      "scientific_name": "macantzatza",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Tahuantinsuyoa macantzatza"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Tanganicodus",
-      "scientific_name": "irsacae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Tanganicodus irsacae"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Teleocichla",
-      "scientific_name": "cinderella",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Teleocichla cinderella"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Teleocichla",
-      "scientific_name": "gephyrogramma",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Teleocichla gephyrogramma"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Teleocichla",
-      "scientific_name": "monogramma",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Teleocichla monogramma"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Teleocichla",
-      "scientific_name": "proselytus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Teleocichla proselytus"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Teleogramma",
-      "scientific_name": "brichardi",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Teleogramma brichardi"
-      ],
-      "geographies": [
-        "Afrika"
-      ]
-    },
-    {
-      "genus": "Telmatochromis",
-      "scientific_name": "bifrenatus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Telmatochromis bifrenatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Telmatochromis",
-      "scientific_name": "brichardi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Telmatochromis brichardi"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Telmatochromis",
-      "scientific_name": "dhonti",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Telmatochromis dhonti"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Telmatochromis",
-      "scientific_name": "temporalis",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Telmatochromis temporalis"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Telmatochromis",
-      "scientific_name": "vittatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Telmatochromis vittatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Theraps",
-      "scientific_name": "coeruleus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Theraps coeruleus"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ]
-    },
-    {
-      "genus": "Theraps",
-      "scientific_name": "irregularis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Theraps irregularis"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ]
-    },
-    {
-      "genus": "Theraps",
-      "scientific_name": "lentiginosus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Theraps lentiginosus"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
       ]
     }
   ]
