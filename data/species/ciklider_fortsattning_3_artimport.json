@@ -1,0 +1,994 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Lichnochromis",
+      "scientific_name": "acuticeps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lichnochromis acuticeps"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Limbochromis",
+      "scientific_name": "robertsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Limbochromis robertsi"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Limnochromis",
+      "scientific_name": "auritus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Limnochromis auritus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Limnotilapia",
+      "scientific_name": "dardennii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Limnotilapia dardennii"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lipochromis",
+      "scientific_name": "cryptodon",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lipochromis cryptodon"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Lobochilotes",
+      "scientific_name": "labiatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lobochilotes labiatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "aurora",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia aurora"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "barlowi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia barlowi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "callainos",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia callainos",
+        "Bright blue",
+        "Pearl zebra"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "chrysomallus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia chrysomallus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "cyneusmarginatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia cyneusmarginatus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "elegans",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia elegans"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "estherae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia estherae",
+        "Rödzebra"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Metriaclima estherae"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "fainzilberi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia fainzilberi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "greshakei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia greshakei"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "hajomaylandi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia hajomaylandi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "livingstonii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Maylandia livingstonii"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "lombardoi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia lombardoi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "mbenji",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia mbenji"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "phaeos",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia phaeos"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "sp. \"membe deep\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia sp. \"membe deep\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "sp. \"msobo\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia sp. \"msobo\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "sp. \"patricki\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia sp. \"patricki\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "xanstomachus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia xanstomachus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Maylandia",
+      "scientific_name": "zebra",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Maylandia zebra",
+        "Maylandia zebra \"Nkhata\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mazarunia",
+      "scientific_name": "mazarunii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mazarunia mazarunii"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "auratus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis auratus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "baliodigma",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis baliodigma"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "chipokae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis chipokae"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "cyaneorhabdos",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanochromis cyaneorhabdos",
+        "Melanochromis cyaneorhabdos \"Maingano\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "dialeptos",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis dialeptos"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "interruptus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis interruptus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "joanjohnsonae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis joanjohnsonae"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "johanni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis johanni"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "lepidiadaptes",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanochromis lepidiadaptes"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "melanopterus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanochromis melanopterus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "parallelus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis parallelus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Melanochromis parallellus"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "perileucos",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis perileucos"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "simulans",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis simulans"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "vermivorus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanochromis vermivorus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mesonauta",
+      "scientific_name": "festiva",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Flaggciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Mesonauta",
+      "scientific_name": "insignis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mesonauta insignis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Microdontochromis",
+      "scientific_name": "tenuidentatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Microdontochromis tenuidentatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Mikrogeophagus",
+      "scientific_name": "altispinosa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Boliviansk fjärilsciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Mikrogeophagus",
+      "scientific_name": "ramirezi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fjärilsciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Myaka",
+      "scientific_name": "myaka",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Myaka"
+      ],
+      "geographies": [
+        "Östafrika"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "epichorialis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis epichorialis"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "ericotaenia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mylochromis ericotaenia"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "formosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis formosus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "gracilis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis gracilis"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "incola",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis incola"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "labidodon",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mylochromis labidodon"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "lateristriga",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis lateristriga",
+        "Mylochromis lateristriga Makanjila"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "melanonotus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis melanonotus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "mola",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis mola"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Mylochromis",
+      "scientific_name": "subocularis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mylochromis subocularis"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Naevochromis",
+      "scientific_name": "chrysogaster",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Naevochromis chrysogaster"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nandopsis",
+      "scientific_name": "tetracanthus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Kubaciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Nannacara",
+      "scientific_name": "adoketa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nannacara adoketa"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannacara",
+      "scientific_name": "anomala",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Grön bågfenciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannacara",
+      "scientific_name": "aureocephalus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nannacara aureocephalus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Ivanacara",
+      "scientific_name": "bimaculata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ivanacara bimaculata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Nannacara bimaculata"
+      ]
+    },
+    {
+      "genus": "Nannacara",
+      "scientific_name": "taenia",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Brun bågfensciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "dimidiatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Röd kongociklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "nudiceps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Opalciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "parilus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Blå kongociklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "transvestitus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nanochromis transvestitus"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Neetroplus",
+      "scientific_name": "nematopus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Nicaraguaclown"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Neetroplus",
+      "scientific_name": "panamensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neetroplus panamensis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Neochromis",
+      "scientific_name": "gigas",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neochromis gigas"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Neochromis",
+      "scientific_name": "rufocaudalis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neochromis rufocaudalis"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "bifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus bifasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brevis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus brevis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus brevis"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brichardi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus brichardi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "buescheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus buescheri"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "christyi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus christyi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "crassus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus crassus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "cunningtoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus cunningtoni"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "cylindricus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus cylindricus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "falcicula",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus falcicula"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "furcifer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neolamprologus furcifer"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "gracilis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus gracilis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "kungweensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus kungweensis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "longicaudatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus longicaudatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "marunguensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus marunguensis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "modestus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus modestus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "mondabu",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus mondabu"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "multifasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lamprologus multifasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus multifasciatus"
+      ]
+    }
+  ]
+}
