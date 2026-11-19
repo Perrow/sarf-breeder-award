@@ -1,0 +1,126 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Gyrinocheilus",
+      "scientific_name": "aymonieri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Algätare"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Copella",
+      "scientific_name": "arnoldi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Stänktetra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "beckfordi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Guldbandstetra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "bifasciatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nannostomus bifasciatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "eques",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pennfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "harrisoni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Harrisons pennfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "marginatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Smycketetra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "mortenthaleri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nannostomus mortenthaleri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "trifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Stor smycketetra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Nannostomus",
+      "scientific_name": "unifasciatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ögonfläckspennfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Lepidosiren",
+      "scientific_name": "paradoxus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Sydamerikansk lungfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    }
+  ]
+}
