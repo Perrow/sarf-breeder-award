@@ -1,0 +1,496 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "claro",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ancistrus claro"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "LDA008"
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "dolichopterus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Blå antennmal"
+      ]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "leucostictus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ancistrus leucostictus"
+      ]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ancistrus sp.",
+        "Ancistrus sp. Albino",
+        "Ancistrus sp. Lemon Longfin",
+        "Ancistrus sp. Super red",
+        "Ancistrus sp. Guld"
+      ]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ancistrus sp."
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "L107",
+      "scientific_synonyms": [
+        "Ancistrus sp. L107"
+      ]
+    },
+    {
+      "genus": "Farlowella",
+      "scientific_name": "acus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Vanlig grenmal"
+      ]
+    },
+    {
+      "genus": "Farlowella",
+      "scientific_name": "gracilis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Liten grenmal"
+      ]
+    },
+    {
+      "genus": "Hypancistrus",
+      "scientific_name": "contradens",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hypancistrus contradens"
+      ],
+      "cl_number": "L201"
+    },
+    {
+      "genus": "Hypancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Zebra Pleco"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "cl_number": "L333"
+    },
+    {
+      "genus": "Hypancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "King tiger pleco"
+      ],
+      "cl_number": "L066",
+      "scientific_synonyms": [
+        "Hypancistrus sp. \"L066\""
+      ]
+    },
+    {
+      "genus": "Hypoptopoma",
+      "scientific_name": "thoracatum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hypoptopoma thoracatum"
+      ]
+    },
+    {
+      "genus": "Hypostomus",
+      "scientific_name": "punctatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hypostomus punctatus"
+      ]
+    },
+    {
+      "genus": "Otocinclus",
+      "scientific_name": "affinis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Otocinclus affinis"
+      ]
+    },
+    {
+      "genus": "Panaqolus",
+      "scientific_name": "sp.",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Panaqolus sp."
+      ],
+      "cl_number": "L397"
+    },
+    {
+      "genus": "Peckoltia",
+      "scientific_name": "compta",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Peckoltia compta"
+      ],
+      "cl_number": "L134"
+    },
+    {
+      "genus": "Peckoltia",
+      "scientific_name": "pulcher",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Peckoltia pulcher"
+      ]
+    },
+    {
+      "genus": "Peckoltia",
+      "scientific_name": "vittata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Peckoltia vittata"
+      ]
+    },
+    {
+      "genus": "Pterygoplichthys",
+      "scientific_name": "gibbiceps",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pterygoplichthys gibbiceps"
+      ],
+      "scientific_synonyms": [
+        "Pterygoplichthys gibiceps"
+      ]
+    },
+    {
+      "genus": "Pterygoplichthys",
+      "scientific_name": "multiradiatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pterygoplichthys multiradiatus"
+      ]
+    },
+    {
+      "genus": "Rineloricaria",
+      "scientific_name": "fallax",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Harneskmal"
+      ]
+    },
+    {
+      "genus": "Rineloricaria",
+      "scientific_name": "microlepidogaster",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rineloricaria microlepidogaster"
+      ]
+    },
+    {
+      "genus": "Sturisoma",
+      "scientific_name": "aureum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Helikoptermal"
+      ]
+    },
+    {
+      "genus": "Sturisoma",
+      "scientific_name": "festivum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Sturisoma festivum"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Acantodoras",
+      "scientific_name": "cataphractus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Acantodoras cataphractus"
+      ]
+    },
+    {
+      "genus": "Acanthodoras",
+      "scientific_name": "spinosissimus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Acanthodoras spinosissimus"
+      ],
+      "scientific_synonyms": [
+        "Acantodoras spinosissmus"
+      ]
+    },
+    {
+      "genus": "Amblydoras",
+      "scientific_name": "hancockii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Amblydoras hancockii"
+      ]
+    },
+    {
+      "genus": "Bunocephalus",
+      "scientific_name": "bicolor",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Banjomal"
+      ]
+    },
+    {
+      "genus": "Chaca",
+      "scientific_name": "chaca",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Chaca chaca"
+      ]
+    },
+    {
+      "genus": "Clarias",
+      "scientific_name": "batrachus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Clarias batrachus"
+      ]
+    },
+    {
+      "genus": "Eutropiellus",
+      "scientific_name": "debauwi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Eutropiellus debauwi"
+      ]
+    },
+    {
+      "genus": "Ictalurus",
+      "scientific_name": "punctatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ictalurus punctatus"
+      ]
+    },
+    {
+      "genus": "Kryptopterus",
+      "scientific_name": "bicirrhis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kryptopterus bicirrhis"
+      ]
+    },
+    {
+      "genus": "Leiocassis",
+      "scientific_name": "micropogon",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Leiocassis micropogon"
+      ]
+    },
+    {
+      "genus": "Microglanis",
+      "scientific_name": "iheringi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dvärgharlekinmal"
+      ]
+    },
+    {
+      "genus": "Mystus",
+      "scientific_name": "micracanthus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mystus micracanthus"
+      ]
+    },
+    {
+      "genus": "Mystus",
+      "scientific_name": "vittatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mystus vittatus"
+      ]
+    },
+    {
+      "genus": "Ompok",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ompok bimaculatus"
+      ]
+    },
+    {
+      "genus": "Pangasius",
+      "scientific_name": "sutchi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hajmal"
+      ]
+    },
+    {
+      "genus": "Parauchenoglanis",
+      "scientific_name": "macrostoma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parauchenoglanis macrostoma"
+      ]
+    },
+    {
+      "genus": "Pimelodus",
+      "scientific_name": "blochii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pimelodus blochii"
+      ]
+    },
+    {
+      "genus": "Pimelodus",
+      "scientific_name": "pictus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pimelodus pictus"
+      ]
+    },
+    {
+      "genus": "Platydoras",
+      "scientific_name": "costatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Chokladmal"
+      ]
+    },
+    {
+      "genus": "Pseudoplatystoma",
+      "scientific_name": "fasciatum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pseudoplatystoma fasciatum"
+      ]
+    },
+    {
+      "genus": "Schilbe",
+      "scientific_name": "mystus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Silvermal"
+      ]
+    },
+    {
+      "genus": "Sorubim",
+      "scientific_name": "lima",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Sorubim lima"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "alberti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis alberti"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "decorus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis decorus"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "eupterus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis eupterus"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "flavitaeniatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis flavitaeniatus"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "multipunctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Synodontis multipunctatus"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "nigriventris",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Vändmal"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "notatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis notatus"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "nummifer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis nummifer"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "petricola",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Synodontis petricola"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "schoutedeni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Synodontis schoutedeni"
+      ]
+    },
+    {
+      "genus": "Tridensimilis",
+      "scientific_name": "brevis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tridensimilis brevis"
+      ]
+    },
+    {
+      "genus": "Platystacus",
+      "scientific_name": "cotylephorus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Spräklig Banjomal"
+      ]
+    }
+  ]
+}
