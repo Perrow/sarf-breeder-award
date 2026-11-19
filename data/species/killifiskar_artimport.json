@@ -1,0 +1,665 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Adamas",
+      "scientific_name": "formosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Adamas formosus"
+      ]
+    },
+    {
+      "genus": "Aphanius",
+      "scientific_name": "fasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphanius fasciatus"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "abacinum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion abacinum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "ahli",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion ahli",
+        "Aphyosemion ahli \"Likado\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "amieti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion amieti"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "arnoldi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion arnoldi"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "aureum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion aureum",
+        "Aphyosemion aureum \"Boudiangila GEB 94/9\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "australe",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Kap Lopez"
+      ]
+    },
+    {
+      "genus": "Chromaphyosemion",
+      "scientific_name": "bitaeniatum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chromaphyosemion bitaeniatum",
+        "Aphyosemion bitaeniatum \"Lagos\"",
+        "Aphyosemion bitaeniatum Afanyangan TMBB 90/13"
+      ],
+      "scientific_synonyms": [
+        "Aphyosemion bitaeniatum"
+      ]
+    },
+    {
+      "genus": "Chromaphyosemion",
+      "scientific_name": "bivittatum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chromaphyosemion bivittatum"
+      ],
+      "scientific_synonyms": [
+        "Aphyosemion bivittatum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "calliurum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion calliurum",
+        "Aphyosemion calliurum \"Ikorodu CI 05\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "celiae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion celiae"
+      ],
+      "scientific_synonyms": [
+        "Aphyosemion celiae celiae"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "christyi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion christyi"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "cinnamomeum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion cinnamomeum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "coeleste",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion coeleste"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "cognatum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion cognatum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "cyanostictum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion cyanostictum",
+        "Aphyosemion cyanostictum \"PEG 98/8\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "dargei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion dargei"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "elberti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion elberti"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "exigoideum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion exigoideum",
+        "Aphyosemion exigoideum \"BBW 2000/2\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "exiguum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion exiguum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "filamentosum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion filamentosum"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "fulgens",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion fulgens"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "gabunense",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gabontandkarp"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "georgiae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion georgiae"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "mirabile",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion mirabile"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "ogoense",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion ogoense"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "poliaki",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aphyosemion poliaki"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "primigenium",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion primigenium",
+        "Aphyosemion primigenium GBN 88/10"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "scheeli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aphyosemion scheeli"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "splendopleure",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aphyosemion splendopleure"
+      ],
+      "scientific_synonyms": [
+        "Aphyosemion splendoplerure",
+        "Chromaphyosemion splendopleure"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "spoorenbergi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aphyosemion spoorenbergi"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "striatum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aphyosemion striatum",
+        "Aphyosemion striatum \"Moyko GJS 2000/32\""
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "walkeri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aphyosemion walkeri"
+      ]
+    },
+    {
+      "genus": "Aphyosemion",
+      "scientific_name": "wildekampi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aphyosemion wildekampi",
+        "Aphyosemion wildekampi \"GKCAR 90 / 7 Ngola\""
+      ]
+    },
+    {
+      "genus": "Aplocheilichthys",
+      "scientific_name": "macrophthalmus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aplocheilichthys macrophthalmus"
+      ]
+    },
+    {
+      "genus": "Poropanchax",
+      "scientific_name": "normani",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poropanchax normani"
+      ],
+      "scientific_synonyms": [
+        "Aplocheilichthys normani"
+      ]
+    },
+    {
+      "genus": "Aplocheilichthys",
+      "scientific_name": "spilauchen",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Aplocheilichthys spilauchen"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "ansorgii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Epiplatys ansorgii"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "barenkampi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Epiplatys barenkampi"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "bifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Epiplatys bifasciatus",
+        "Epiplatys bifasciatus \"Venego TMBB 90/1\""
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "chaperi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys chaperi"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "chavalieri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Epiplatys chavalieri"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "dageti",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys dageti"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "fasciolatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys fasciolatus"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "grahami",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys grahami"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "lamottei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Epiplatys lamottei"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "sexfasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys sexfasciatus"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "singa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Epiplatys singa"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "deltaense",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax deltaense"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "filamentosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax filamentosus"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "gardneri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax gardneri",
+        "Fundulopanchax gardneri \"Lafia\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "gularis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax gularis"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "mamfensis \"Ossing\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax mamfensis \"Ossing\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "marmoratus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax marmoratus"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "nigerianus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax nigerianus",
+        "Fundulopanchax nigerianus \"Makurdi\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "occidentale",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fundulopanchax occidentale"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "oeseri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax oeseri"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "puerzli",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax puerzli"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "scheeli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Fundulopanchax scheeli"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "sjostedti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax sjostedti"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "sp. (oeseri) \"GS2/80\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax sp. (oeseri) \"GS2/80\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "toddi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fundulopanchax toddi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "eggersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius eggersi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "foerschi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius foerschi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "furzeri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nothobranchius furzeri"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "guentheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius guentheri"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "janpapi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius janpapi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "jubbi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius jubbi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "kirki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius kirki"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "korthausae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius korthausae"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "kuhntae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius kuhntae"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "melanospilus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius melanospilus"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "palmquisti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius palmquisti"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "patrizii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius patrizii"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "rachovii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius rachovii",
+        "Nothobranchius rachovii Nhan Gan MT 04/03"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "rubripinnis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius rubripinnis"
+      ]
+    },
+    {
+      "genus": "Mesoaphyosemion",
+      "scientific_name": "escherichi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Mesoaphyosemion escherichi"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    }
+  ]
+}
