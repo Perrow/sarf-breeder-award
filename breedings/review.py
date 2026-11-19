@@ -94,7 +94,10 @@ def review_list(request):
     ).order_by("breeding_date", "pk")
     bronze_publication_candidates = available.filter(
         status=BreedingRegistration.Status.APPROVED,
-        awarded_breeding_class=Species.BreedingClass.BRONZE,
+        awarded_breeding_class__in=[
+            Species.BreedingClass.BRONZE,
+            Species.BreedingClass.UNRATED,
+        ],
         publication_status=BreedingRegistration.PublicationStatus.UNREVIEWED,
     ).exclude(description="").order_by("breeding_date", "pk")
     approved_registrations = available.filter(

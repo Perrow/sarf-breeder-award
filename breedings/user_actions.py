@@ -10,7 +10,8 @@ from . import views
 def _is_auto_approved_bronze(registration):
     return (
         registration.status == BreedingRegistration.Status.APPROVED
-        and registration.awarded_breeding_class == Species.BreedingClass.BRONZE
+        and registration.awarded_breeding_class
+        in {Species.BreedingClass.BRONZE, Species.BreedingClass.UNRATED}
         and registration.reviewer_id is None
     )
 
@@ -19,7 +20,7 @@ def _requires_approval_reset(registration):
     return (
         registration.status == BreedingRegistration.Status.APPROVED
         and registration.awarded_breeding_class
-        in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD}
+        in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD, Species.BreedingClass.ELITE}
     )
 
 

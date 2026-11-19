@@ -384,20 +384,21 @@ def _edit_breeding(
                 breeding.submitted_at = submitted_at
                 if (
                     breeding.species
-                    and breeding.species.breeding_class == Species.BreedingClass.BRONZE
+                    and breeding.species.breeding_class
+                    in {Species.BreedingClass.BRONZE, Species.BreedingClass.UNRATED}
                 ):
                     breeding.status = BreedingRegistration.Status.APPROVED
                     breeding.approved_at = submitted_at
-                    breeding.awarded_breeding_class = Species.BreedingClass.BRONZE
+                    breeding.awarded_breeding_class = breeding.species.breeding_class
                     breeding.awarded_points = points_for_breeding_class(
-                        Species.BreedingClass.BRONZE
+                        breeding.species.breeding_class
                     )
                     breeding.publication_status = (
                         BreedingRegistration.PublicationStatus.UNREVIEWED
                         if (breeding.description or "").strip()
                         else BreedingRegistration.PublicationStatus.NOT_PUBLISHED
                     )
-                    message = "Bronsodlingen har registrerats och godkänts direkt."
+                    message = "Odlingen har registrerats och godkänts direkt."
                 else:
                     breeding.status = BreedingRegistration.Status.SUBMITTED
                     message = "Odlingsregistreringen har skickats in för granskning."

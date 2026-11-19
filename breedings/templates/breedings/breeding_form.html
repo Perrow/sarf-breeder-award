@@ -52,7 +52,7 @@
 
     {% if form.manual_review_required %}
         <div class="alert alert-info" role="note">
-            Silver- och guldodlingar måste godkännas av tävlingsansvariga innan de räknas som godkända.
+            Silver-, guld- och elitodlingar måste godkännas av tävlingsansvariga innan de räknas som godkända.
         </div>
     {% endif %}
 
@@ -96,7 +96,7 @@
     </div>
 
     <div class="form-actions">
-        {% if registration.status == "approved" and registration.awarded_breeding_class == "bronze" and not registration.reviewer_id %}
+        {% if registration.status == "approved" and registration.awarded_breeding_class == "bronze" or registration.awarded_breeding_class == "unrated" and not registration.reviewer_id %}
             <button class="btn btn-primary" type="submit" name="action" value="submit">Spara ändringar</button>
         {% else %}
             <button class="btn btn-outline-primary" type="submit" name="action" value="draft">Spara utkast</button>
