@@ -36,7 +36,7 @@ class BreedingRegistration(models.Model):
     status = models.CharField(max_length=10, choices=Status.choices, default=Status.DRAFT, verbose_name="status")
     submitted_at = models.DateTimeField(null=True, blank=True, verbose_name="inskickad")
     approved_at = models.DateTimeField(null=True, blank=True, verbose_name="godkänd")
-    awarded_breeding_class = models.CharField(max_length=6, choices=Species.BreedingClass.choices, blank=True, verbose_name="tilldelad odlingsklass")
+    awarded_breeding_class = models.CharField(max_length=10, choices=Species.BreedingClass.choices, blank=True, verbose_name="tilldelad odlingsklass")
     awarded_points = models.PositiveSmallIntegerField(null=True, blank=True, verbose_name="tilldelade poäng")
     reviewer = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.PROTECT, null=True, blank=True, related_name="reviewed_breeding_registrations", verbose_name="granskare")
     review_comment = models.TextField(blank=True, verbose_name="granskningskommentar")
@@ -187,12 +187,12 @@ class SpeciesReclassificationRequest(models.Model):
         verbose_name="begärd av",
     )
     current_breeding_class = models.CharField(
-        max_length=6,
+        max_length=10,
         choices=Species.BreedingClass.choices,
         verbose_name="klass vid begäran",
     )
     requested_breeding_class = models.CharField(
-        max_length=6,
+        max_length=10,
         choices=Species.BreedingClass.choices,
         verbose_name="önskad klass",
     )

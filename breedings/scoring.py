@@ -17,6 +17,8 @@ BREEDING_CLASS_POINTS = {
     Species.BreedingClass.BRONZE: 1,
     Species.BreedingClass.SILVER: 3,
     Species.BreedingClass.GOLD: 7,
+    Species.BreedingClass.ELITE: 7,
+    Species.BreedingClass.UNRATED: 1,
 }
 
 

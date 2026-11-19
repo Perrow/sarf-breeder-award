@@ -136,7 +136,7 @@ class BronzeAutoApprovalTests(TestCase):
 
         self.assertContains(
             response,
-            "Silver- och guldodlingar måste godkännas av tävlingsansvariga",
+            "Silver-, guld- och elitodlingar måste godkännas av tävlingsansvariga",
         )
 
     def test_bronze_form_does_not_show_manual_review_notice(self):
@@ -147,5 +147,5 @@ class BronzeAutoApprovalTests(TestCase):
 
         self.assertNotContains(
             response,
-            "Silver- och guldodlingar måste godkännas av tävlingsansvariga",
+            "Silver-, guld- och elitodlingar måste godkännas av tävlingsansvariga",
         )

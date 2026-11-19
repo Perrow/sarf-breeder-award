@@ -100,6 +100,8 @@ class Species(models.Model):
         BRONZE = "bronze", "Brons"
         SILVER = "silver", "Silver"
         GOLD = "gold", "Guld"
+        ELITE = "elite", "Elit"
+        UNRATED = "unrated", "Ej bedömd"
 
     genus = models.ForeignKey(Genus, on_delete=models.PROTECT, related_name="species", verbose_name="släkte")
     scientific_name = models.CharField(
@@ -110,7 +112,7 @@ class Species(models.Model):
     common_name = models.CharField(max_length=200, verbose_name="populärnamn")
     english_name = models.CharField(max_length=200, blank=True, verbose_name="engelskt namn")
     cl_number = models.CharField(max_length=50, blank=True, verbose_name="C/L-nummer")
-    breeding_class = models.CharField(max_length=6, choices=BreedingClass.choices, verbose_name="odlingsklass")
+    breeding_class = models.CharField(max_length=10, choices=BreedingClass.choices, verbose_name="odlingsklass")
     geographies = models.ManyToManyField(Geography, blank=True, related_name="species", verbose_name="geografier")
     is_active = models.BooleanField(default=True, verbose_name="aktiv")
 
@@ -138,8 +140,35 @@ class Species(models.Model):
             raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
+        from django.db import transaction
+
         self.cl_number = normalize_cl_number(self.cl_number)
-        super().save(*args, **kwargs)
+        update_fields = kwargs.get("update_fields")
+        class_can_change = update_fields is None or "breeding_class" in update_fields
+        with transaction.atomic(using=self._state.db):
+            previous_class = None
+            if self.pk and class_can_change:
+                previous_class = (
+                    type(self).objects.filter(pk=self.pk)
+                    .values_list("breeding_class", flat=True)
+                    .first()
+                )
+            super().save(*args, **kwargs)
+            if (
+                previous_class == self.BreedingClass.UNRATED
+                and self.breeding_class != self.BreedingClass.UNRATED
+            ):
+                from breedings.models import BreedingRegistration
+                from breedings.scoring import points_for_breeding_class
+
+                BreedingRegistration.objects.filter(
+                    species=self,
+                    status=BreedingRegistration.Status.APPROVED,
+                    awarded_breeding_class=self.BreedingClass.UNRATED,
+                ).update(
+                    awarded_breeding_class=self.breeding_class,
+                    awarded_points=points_for_breeding_class(self.breeding_class),
+                )
 
     def get_species_groups(self, include_hidden=False):
         groups = SpeciesGroup.objects.filter(Q(genera=self.genus) | Q(species=self)).distinct()

@@ -98,14 +98,14 @@ class BreedingRegistrationForm(forms.ModelForm):
         self.manual_review_required = bool(
             selected_species
             and selected_species.breeding_class
-            in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD}
+            in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD, Species.BreedingClass.ELITE}
         )
 
         if self.manual_review_required:
             self.fields["description"].required = True
-            self.fields["description"].help_text = "Obligatorisk för silver- och guldodlingar."
+            self.fields["description"].help_text = "Obligatorisk för silver-, guld- och elitodlingar."
         else:
-            self.fields["description"].help_text = "Obligatorisk endast för silver- och guldodlingar."
+            self.fields["description"].help_text = "Obligatorisk endast för silver-, guld- och elitodlingar."
 
     def clean_association(self):
         if self.single_association:
@@ -142,10 +142,10 @@ class BreedingRegistrationForm(forms.ModelForm):
             raise forms.ValidationError("Välj en art eller ange både släkte och art i fritext.")
         if (
             species
-            and species.breeding_class in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD}
+            and species.breeding_class in {Species.BreedingClass.SILVER, Species.BreedingClass.GOLD, Species.BreedingClass.ELITE}
             and not description
         ):
-            self.add_error("description", "Beskrivning är obligatorisk för silver- och guldodlingar.")
+            self.add_error("description", "Beskrivning är obligatorisk för silver-, guld- och elitodlingar.")
 
         return cleaned_data
 
