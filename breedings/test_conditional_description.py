@@ -52,16 +52,16 @@ class ConditionalDescriptionTests(TestCase):
     def test_silver_requires_description(self):
         response = self.client.post(reverse("breeding_create"), self._data(self.silver))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Beskrivning är obligatorisk för silver- och guldodlingar.")
+        self.assertContains(response, "Beskrivning är obligatorisk för silver-, guld- och elitodlingar.")
         self.assertFalse(BreedingRegistration.objects.exists())
 
     def test_gold_requires_description(self):
         response = self.client.post(reverse("breeding_create"), self._data(self.gold))
         self.assertEqual(response.status_code, 200)
-        self.assertContains(response, "Beskrivning är obligatorisk för silver- och guldodlingar.")
+        self.assertContains(response, "Beskrivning är obligatorisk för silver-, guld- och elitodlingar.")
         self.assertFalse(BreedingRegistration.objects.exists())
 
     def test_selected_silver_species_marks_description_required(self):
         response = self.client.get(reverse("breeding_create"), {"species": self.silver.pk})
         self.assertContains(response, 'name="description"', html=False)
-        self.assertContains(response, "Obligatorisk för silver- och guldodlingar.")
+        self.assertContains(response, "Obligatorisk för silver-, guld- och elitodlingar.")
