@@ -1,0 +1,64 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Clea",
+      "scientific_name": "helena",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "snäckätande snäcka"
+      ],
+      "scientific_synonyms": [
+        "Anentome helena"
+      ]
+    },
+    {
+      "genus": "Atyoida",
+      "scientific_name": "sulcatepis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "solfjädersräka"
+      ]
+    },
+    {
+      "genus": "Filopaludina",
+      "scientific_name": "martensi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Wizard white snail"
+      ]
+    },
+    {
+      "genus": "Macrobrachium",
+      "scientific_name": "assamense",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "rödkload räka"
+      ]
+    },
+    {
+      "genus": "Macrobrachium",
+      "scientific_name": "dayanum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Macrobrachium dayanum"
+      ]
+    },
+    {
+      "genus": "Macrobrachium",
+      "scientific_name": "kulsiense",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "snowflake"
+      ]
+    },
+    {
+      "genus": "Macrobrachium",
+      "scientific_name": "lanchesteri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "glasräka"
+      ]
+    }
+  ]
+}
