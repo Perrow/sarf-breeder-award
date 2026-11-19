@@ -1,0 +1,317 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Oryzias",
+      "scientific_name": "carnaticus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Oryzias carnaticus"
+      ],
+      "scientific_synonyms": [
+        "Oryzias carnaticus ?"
+      ]
+    },
+    {
+      "genus": "Oryzias",
+      "scientific_name": "celebensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Oryzias celebensis"
+      ]
+    },
+    {
+      "genus": "Pachypanchax",
+      "scientific_name": "playfairii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pachypanchax playfairii"
+      ]
+    },
+    {
+      "genus": "Procatopus",
+      "scientific_name": "abberans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Procatopus abberans"
+      ]
+    },
+    {
+      "genus": "Procatopus",
+      "scientific_name": "similis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Procatopus similis"
+      ]
+    },
+    {
+      "genus": "Profundulus",
+      "scientific_name": "punctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Profundulus punctatus"
+      ]
+    },
+    {
+      "genus": "Epiplatys",
+      "scientific_name": "annulatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Epiplatys annulatus",
+        "Pseudepiplatys annulatus \"Maboshi\""
+      ],
+      "scientific_synonyms": [
+        "Pseudepiplatys annulatus"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "longipinnis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias longipinnis"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "peruensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias peruensis"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "staecki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias staecki"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "zonatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pterolebias zonatus"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "brevis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia brevis"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "hummelinki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia hummelinki"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "pyropunctata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia pyropunctata"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "agilae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus agilae",
+        "Rivulus agilae SVS 00/9"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "amphoreus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus amphoreus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "cryptocallus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus cryptocallus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "cylindraceus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus cylindraceus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "hartii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus hartii"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "holmiae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus holmiae"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "luelingi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus luelingi"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "magdalenae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus magdalenae"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "micropus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus micropus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "ornatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus ornatus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "roloffi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus roloffi"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "tenuis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus tenuis"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "geryi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Roloffia geryi"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "liberiense",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Roloffia liberiense"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "maeseni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia maeseni"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "monroviae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Roloffia monroviae"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "petersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia petersi"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "schmitti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia schmitti"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "antenori",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys antenori"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "boitonei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Simpsonichthys boitonei"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "bokermanni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys bokermanni"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "constanciae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys constanciae"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "suzarti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys suzarti"
+      ]
+    },
+    {
+      "genus": "Terranatos",
+      "scientific_name": "dolichopterus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Terranatos dolichopterus"
+      ]
+    }
+  ]
+}
