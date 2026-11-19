@@ -1,0 +1,145 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Erpetoichthys",
+      "scientific_name": "calabaricus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pansarål, Öronål"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Apteronotus",
+      "scientific_name": "albifrons",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apteronotus albifrons",
+        "Sydamerikansk knivfisk"
+      ]
+    },
+    {
+      "genus": "Badis",
+      "scientific_name": "singenensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Badis sp. buxar"
+      ]
+    },
+    {
+      "genus": "Bedotia",
+      "scientific_name": "geayi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Bedotia"
+      ]
+    },
+    {
+      "genus": "Carinotetraodon",
+      "scientific_name": "imitator",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Carinotetraodon imitator"
+      ]
+    },
+    {
+      "genus": "Carinotetraodon",
+      "scientific_name": "lorteti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Carinotetraodon lorteti"
+      ]
+    },
+    {
+      "genus": "Carinotetraodon",
+      "scientific_name": "travancoricus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Carinotetraodon travancoricus"
+      ]
+    },
+    {
+      "genus": "Copella",
+      "scientific_name": "nigrofasciata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Copella nigrofasciata"
+      ]
+    },
+    {
+      "genus": "Dermogenys",
+      "scientific_name": "pusillus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gäddhalvnäbb"
+      ]
+    },
+    {
+      "genus": "Doryichthys",
+      "scientific_name": "boaja",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Doryichthys boaja"
+      ]
+    },
+    {
+      "genus": "Eigenmannia",
+      "scientific_name": "virescens",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Eigenmannia virescens"
+      ]
+    },
+    {
+      "genus": "Garra",
+      "scientific_name": "rufa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Doktorsfisk"
+      ]
+    },
+    {
+      "genus": "Gasterosteus",
+      "scientific_name": "aculeatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Storspigg"
+      ]
+    },
+    {
+      "genus": "Helostoma",
+      "scientific_name": "temminckii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kyssande gurami"
+      ]
+    },
+    {
+      "genus": "Hemirhamphodon",
+      "scientific_name": "pogognathus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Röd gäddhalvnäbb"
+      ]
+    },
+    {
+      "genus": "Leuciscus",
+      "scientific_name": "idus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Leuciscus idus"
+      ]
+    },
+    {
+      "genus": "Marosatherina",
+      "scientific_name": "ladigesi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Solstrålefisk"
+      ]
+    }
+  ]
+}
