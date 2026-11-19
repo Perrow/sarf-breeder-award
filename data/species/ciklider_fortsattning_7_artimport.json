@@ -1,0 +1,41 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Nanochromis",
+      "scientific_name": "teugelsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nanochromis teugelsi"
+      ]
+    },
+    {
+      "genus": "Australoheros",
+      "scientific_name": "scitulus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Scitulusciklid"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "sp. D21",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma sp. D21"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "bathyphilus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotilapia bathyphilus",
+        "Xenotilapia batyphilus Kekese"
+      ],
+      "scientific_synonyms": [
+        "Xenotilapia batyphilus"
+      ]
+    }
+  ]
+}
