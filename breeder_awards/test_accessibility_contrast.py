@@ -66,7 +66,7 @@ class SarfContrastTests(SimpleTestCase):
     def test_bootstrap_buttons_and_navigation_keep_keyboard_focus_outline(self):
         self.assertRegex(
             CSS,
-            r"\.btn:focus-visible,\s*\.nav-link:focus-visible,\s*"
+            r"\.btn:focus-visible,\s*\.btn-close:focus-visible,\s*\.nav-link:focus-visible,\s*"
             r"\.navbar-toggler:focus-visible\s*\{\s*"
             r"outline:\s*3px solid var\(--sarf-accent\);",
         )

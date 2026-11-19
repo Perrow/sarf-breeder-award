@@ -92,6 +92,7 @@ a:hover {
 
 /* Bootstrap suppresses the outline on these components. */
 .btn:focus-visible,
+.btn-close:focus-visible,
 .nav-link:focus-visible,
 .navbar-toggler:focus-visible {
     outline: 3px solid var(--sarf-accent);
