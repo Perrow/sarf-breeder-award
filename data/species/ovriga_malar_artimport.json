@@ -1,0 +1,112 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Acantodoras",
+      "scientific_name": "cataphractus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Acantodoras cataphractus"
+      ]
+    },
+    {
+      "genus": "Acanthodoras",
+      "scientific_name": "spinosissimus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Acanthodoras spinosissimus"
+      ],
+      "scientific_synonyms": [
+        "Acantodoras spinosissmus"
+      ]
+    },
+    {
+      "genus": "Amblydoras",
+      "scientific_name": "hancockii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Amblydoras hancockii"
+      ]
+    },
+    {
+      "genus": "Bunocephalus",
+      "scientific_name": "bicolor",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Banjomal"
+      ]
+    },
+    {
+      "genus": "Chaca",
+      "scientific_name": "chaca",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Chaca chaca"
+      ]
+    },
+    {
+      "genus": "Clarias",
+      "scientific_name": "batrachus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Clarias batrachus"
+      ]
+    },
+    {
+      "genus": "Eutropiellus",
+      "scientific_name": "debauwi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Eutropiellus debauwi"
+      ]
+    },
+    {
+      "genus": "Ictalurus",
+      "scientific_name": "punctatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ictalurus punctatus"
+      ]
+    },
+    {
+      "genus": "Kryptopterus",
+      "scientific_name": "bicirrhis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kryptopterus bicirrhis"
+      ]
+    },
+    {
+      "genus": "Leiocassis",
+      "scientific_name": "micropogon",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Leiocassis micropogon"
+      ]
+    },
+    {
+      "genus": "Microglanis",
+      "scientific_name": "iheringi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dvärgharlekinmal"
+      ]
+    },
+    {
+      "genus": "Mystus",
+      "scientific_name": "micracanthus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mystus micracanthus"
+      ]
+    },
+    {
+      "genus": "Mystus",
+      "scientific_name": "vittatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mystus vittatus"
+      ]
+    }
+  ]
+}
