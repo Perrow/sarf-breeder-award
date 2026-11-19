@@ -32,7 +32,7 @@ Importfilen är JSON med formatversion 1:
 
 `genus` och `scientific_name` är alltid obligatoriska och identifierar arten. Matchningen mot befintligt genus, aktuellt vetenskapligt namn och vetenskapliga synonymer är skiftlägesokänslig. Importen ändrar däremot inte stavningen/casing på en befintlig post.
 
-`breeding_class` är `bronze`, `silver` eller `gold`. Fältet krävs när en ny art skapas men kan utelämnas när en befintlig art bara kompletteras. Om fältet anges för en befintlig art uppdateras artens odlingsklass till det angivna värdet.
+`breeding_class` är `bronze` (Brons, 1 poäng), `silver` (Silver, 3 poäng), `gold` (Guld, 7 poäng), `elite` (Elit, 7 poäng) eller `unrated` (Ej bedömd, preliminärt 1 poäng). Fältet krävs när en ny art skapas men kan utelämnas när en befintlig art bara kompletteras. Om fältet anges för en befintlig art uppdateras artens odlingsklass till det angivna värdet. När en art ändras från Ej bedömd till en faktisk klass uppdateras även tidigare godkända odlingar som fortfarande har Ej bedömd som tilldelad klass; individuellt bedömda odlingar behåller sin historiska klass.
 
 `cl_number` är valfritt och används för L-, C- och CW-nummer, till exempel `L046`, `C123` eller `CW009`. Whitespace tas bort och värdet normaliseras till versaler, så exempelvis `l 046` sparas som `L046` och `cw 009` som `CW009`. För en befintlig art kompletteras fältet bara om arten ännu saknar C/L-nummer.
 
