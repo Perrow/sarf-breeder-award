@@ -1,0 +1,1065 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Haplochromis",
+      "scientific_name": "sp. \"Thick skin\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Haplochromis obliquidens"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Haplochromis",
+      "scientific_name": "theliodon",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Haplochromis theliodon"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Harpagochromis",
+      "scientific_name": "serranus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Harpagochromis serranus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Hemichromis",
+      "scientific_name": "elongatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hemichromis elongatus"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Hemichromis",
+      "scientific_name": "exsul",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Hemichromis exsul"
+      ]
+    },
+    {
+      "genus": "Hemichromis",
+      "scientific_name": "fasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hemichromis fasciatus"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Hemitaeniochromis",
+      "scientific_name": "spilopterus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hemitaeniochromis spilopterus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Hemitaeniochromis",
+      "scientific_name": "urotaenia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hemitaeniochromis urotaenia"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Hemitilapia",
+      "scientific_name": "oxyrhynchus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hemitilapia oxyrhynchus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "bartoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Herichthys bartoni"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "carpintis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Herichthys carpintis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "cyanoguttatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Texasciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Herichtyhs cyanoguttatus"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "labridens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Herichthys labridens"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "minckleyi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Herichthys minckleyi"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Herichthys",
+      "scientific_name": "pearsei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Herichthys pearsei"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Herichtyhs pearsi"
+      ]
+    },
+    {
+      "genus": "Heros",
+      "scientific_name": "efasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hantelciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Heros",
+      "scientific_name": "notatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Heros notatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Heros",
+      "scientific_name": "severus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Munruvande hantelciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Herotilapia",
+      "scientific_name": "multispinosa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Herotilapia multispinosa"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=294",
+          "source_name": "NCS Artregister",
+          "title": "Herotilapia multispinosa"
+        }
+      ]
+    },
+    {
+      "genus": "Hoplarchus",
+      "scientific_name": "psittacus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Papegojciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hypselecara",
+      "scientific_name": "coryphaenoides",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hypselecara coryphaenoides"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hypselecara",
+      "scientific_name": "temporalis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chokladciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Hypsophrys",
+      "scientific_name": "nicaraguensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hypsophrys nicaraguensis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Iodotropheus",
+      "scientific_name": "sprengerae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Iodotropheus sprengerae"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Iodotropheus",
+      "scientific_name": "stuartgranti",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Iodotropheus stuartgranti"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "dickfeldi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Julidochromis dickfeldi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "marlieri",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Julidochromis marlieri"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "ornatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Julidochromis ornatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "regani",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Julidochromis regani",
+        "Julidochromis regani \"Kipili\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Julidochromis",
+      "scientific_name": "transcriptus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Julidochromis transcriptus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Krobia",
+      "scientific_name": "guianensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Delfinciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Krobia",
+      "scientific_name": "itanyi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Delfinciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Krobia",
+      "scientific_name": "xinguensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Krobia xinguensis"
+      ]
+    },
+    {
+      "genus": "Labeotropheus",
+      "scientific_name": "fuelleborni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labeotropheus fuelleborni"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labeotropheus",
+      "scientific_name": "trewavasae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labeotropheus trewavasae",
+        "Labeotropheus trewavasae \"Chilumba\"",
+        "Labeotropheus trewavasae \"Mpanga\"",
+        "Labeotropheus trewavasae \"Thumbi Island West\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "caeruleus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis caeruleus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "chisumulae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis chisumulae"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "freibergi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis freibergi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "maculicauda",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis maculicauda"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "mylodon",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis mylodon"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"gigas\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis sp. \"gigas\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Labidochromis sp. “gigas”"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"hongi\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis sp. \"hongi\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Labidochromis sp. “hongi”"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"mbamba\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis sp. \"mbamba\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Labidochromis sp. “mbamba”"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "sp. \"perlmutt\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis sp. \"perlmutt\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Labidochromis sp. “perlmutt”"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "textilis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Labidochromis textilis"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "vellicans",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis vellicans"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labidochromis",
+      "scientific_name": "zebroides",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labidochromis zebroides"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Labrochromis",
+      "scientific_name": "ishmaeli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Labrochromis ishmaeli"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Laetacara",
+      "scientific_name": "curviceps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Kurvciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Laetacara",
+      "scientific_name": "dorsiger",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Laetacara dorsiger"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Laetacara",
+      "scientific_name": "flavilabris",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Laetacara flavilabris"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Laetacara",
+      "scientific_name": "thayeri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Laetacara thayeri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "callipterus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus callipterus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "calliurus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lamprologus calliurus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "congoensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus congoensis"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "ocellatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus ocellatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Julidochromis ocellatus",
+        "Neolamprologus ocellatus",
+        "Lamprologus lestradei"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=904",
+          "source_name": "NCS Artregister",
+          "title": "Lamprologus ocellatus"
+        }
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "ornatipinnis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lamprologus ornatipinnis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "similis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus similis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "speciosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus speciosus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "stappersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus stappersi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus meleagris",
+        "Lamprologus meleagris"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=211",
+          "source_name": "NCS Artregister",
+          "title": "Lamprologus stappersi"
+        }
+      ]
+    },
+    {
+      "genus": "Lamprologus",
+      "scientific_name": "wauthioni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprologus wauthioni"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "attenuatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lepidiolamprologus attenuatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "boulengeri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus boulengeri"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "elongatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Lepidiolamprologus elongatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "hecqui",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus hecqui"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "kendalli",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus kendalli"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "lemairii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lepidiolamprologus lemairii"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "meeli",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus meeli"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "pleuromaculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus pleuromaculatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "profundicola",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepidiolamprologus profundicola"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lestradea",
+      "scientific_name": "perspicax",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lestradea perspicax"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "auritus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops auritus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Lehrinops auritus"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "furcifer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops furcifer"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "lethrinus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lethrinops lethrinus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "macrochir",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops macrochir"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "microstoma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops microstoma"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "sp. \"micrentodon\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops sp. \"micrentodon\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Lethrinops sp. “micrentodon”"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
+      "scientific_name": "sp. \"nyassae\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lethrinops sp. \"nyassae\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Lethrinops sp. “nyassae”"
+      ]
+    },
+    {
+      "genus": "Mayaheros",
+      "scientific_name": "urophthalmus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mayaheros urophthalmus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma urophthalmus"
+      ]
+    },
+    {
+      "genus": "Mesoheros",
+      "scientific_name": "festae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mesoheros festae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma festae"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "caudopunctatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus caudopunctatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus caudopunctatus"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "leleupi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus leleupi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus leleoupi"
+      ]
+    },
+    {
+      "genus": "Rocio",
+      "scientific_name": "octofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Jack Dempsey"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma octofasciatum"
+      ]
+    },
+    {
+      "genus": "Rocio",
+      "scientific_name": "spinosissima",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rocio spinosissima"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus spinosissimus"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Röd ciklid"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis bimaculatus"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "letourneuxi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rubricatochromis letourneuxi"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis letourneauxi"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "lifalili",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Röd juvelciklid"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis lifalili"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=417",
+          "source_name": "NCS Artregister",
+          "title": "Rubricatochromis lifalili"
+        }
+      ]
+    },
+    {
+      "genus": "Trichromis",
+      "scientific_name": "salvini",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Trichromis salvini"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma salvini"
+      ]
+    }
+  ]
+}

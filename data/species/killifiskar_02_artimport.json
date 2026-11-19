@@ -1,0 +1,633 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "gardneri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax gardneri",
+        "Fundulopanchax gardneri \"Lafia\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "gularis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax gularis"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "mamfensis \"Ossing\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax mamfensis \"Ossing\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "marmoratus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax marmoratus"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "nigerianus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax nigerianus",
+        "Fundulopanchax nigerianus \"Makurdi\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "occidentale",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fundulopanchax occidentale"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "oeseri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax oeseri"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "puerzli",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax puerzli"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "scheeli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Fundulopanchax scheeli"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "sjostedti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax sjostedti"
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "sp. (oeseri) \"GS2/80\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulopanchax sp. (oeseri) \"GS2/80\""
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "toddi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fundulopanchax toddi"
+      ]
+    },
+    {
+      "genus": "Fundulosoma",
+      "scientific_name": "thierryi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Fundulosoma thierryi"
+      ],
+      "scientific_synonyms": [
+        "Fundulusoma thierryi"
+      ]
+    },
+    {
+      "genus": "Fundulus",
+      "scientific_name": "chrysotus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fundulus chrysotus"
+      ],
+      "scientific_synonyms": [
+        "Fundulus crysotus"
+      ]
+    },
+    {
+      "genus": "Garmanella",
+      "scientific_name": "pulchra",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Garmanella pulchra"
+      ]
+    },
+    {
+      "genus": "Jordanella",
+      "scientific_name": "floridae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Floridatandkarp"
+      ]
+    },
+    {
+      "genus": "Laimosemion",
+      "scientific_name": "xiphidius",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Laimosemion xiphidius"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Rivulus xiphidus"
+      ]
+    },
+    {
+      "genus": "Lamprichthys",
+      "scientific_name": "tanganicanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lamprichthys tanganicanus"
+      ]
+    },
+    {
+      "genus": "Leptolebias",
+      "scientific_name": "minimus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Leptolebias minimus"
+      ]
+    },
+    {
+      "genus": "Mesoaphyosemion",
+      "scientific_name": "escherichi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Mesoaphyosemion escherichi"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Micropanchax",
+      "scientific_name": "katangae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Micropanchax katangae"
+      ],
+      "scientific_synonyms": [
+        "Lacustricola katangae"
+      ]
+    },
+    {
+      "genus": "Nematolebias",
+      "scientific_name": "whitei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nematolebias whitei"
+      ]
+    },
+    {
+      "genus": "Neofundulus",
+      "scientific_name": "paraguayensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neofundulus paraguayensis"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "eggersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius eggersi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "foerschi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius foerschi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "furzeri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nothobranchius furzeri"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "guentheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius guentheri"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "janpapi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius janpapi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "jubbi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius jubbi"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "kirki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius kirki"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "korthausae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius korthausae"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "kuhntae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius kuhntae"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "melanospilus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius melanospilus"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "palmquisti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius palmquisti"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "patrizii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius patrizii"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "rachovii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius rachovii",
+        "Nothobranchius rachovii Nhan Gan MT 04/03"
+      ]
+    },
+    {
+      "genus": "Nothobranchius",
+      "scientific_name": "rubripinnis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nothobranchius rubripinnis"
+      ]
+    },
+    {
+      "genus": "Oryzias",
+      "scientific_name": "carnaticus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Oryzias carnaticus"
+      ],
+      "scientific_synonyms": [
+        "Oryzias carnaticus ?"
+      ]
+    },
+    {
+      "genus": "Oryzias",
+      "scientific_name": "celebensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Oryzias celebensis"
+      ]
+    },
+    {
+      "genus": "Pachypanchax",
+      "scientific_name": "playfairii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pachypanchax playfairii"
+      ]
+    },
+    {
+      "genus": "Poropanchax",
+      "scientific_name": "normani",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poropanchax normani"
+      ],
+      "scientific_synonyms": [
+        "Aplocheilichthys normani"
+      ]
+    },
+    {
+      "genus": "Procatopus",
+      "scientific_name": "abberans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Procatopus abberans"
+      ]
+    },
+    {
+      "genus": "Procatopus",
+      "scientific_name": "similis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Procatopus similis"
+      ]
+    },
+    {
+      "genus": "Profundulus",
+      "scientific_name": "punctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Profundulus punctatus"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "longipinnis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias longipinnis"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "peruensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias peruensis"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "staecki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pterolebias staecki"
+      ]
+    },
+    {
+      "genus": "Pterolebias",
+      "scientific_name": "zonatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pterolebias zonatus"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "brevis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia brevis"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "hummelinki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia hummelinki"
+      ]
+    },
+    {
+      "genus": "Rachovia",
+      "scientific_name": "pyropunctata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rachovia pyropunctata"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "agilae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus agilae",
+        "Rivulus agilae SVS 00/9"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "amphoreus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus amphoreus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "cryptocallus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus cryptocallus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "cylindraceus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus cylindraceus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "hartii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus hartii"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "holmiae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus holmiae"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "luelingi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus luelingi"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "magdalenae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus magdalenae"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "micropus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus micropus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "ornatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus ornatus"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "roloffi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rivulus roloffi"
+      ]
+    },
+    {
+      "genus": "Rivulus",
+      "scientific_name": "tenuis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rivulus tenuis"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "geryi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Roloffia geryi"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "liberiense",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Roloffia liberiense"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "maeseni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia maeseni"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "monroviae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Roloffia monroviae"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "petersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia petersi"
+      ]
+    },
+    {
+      "genus": "Roloffia",
+      "scientific_name": "schmitti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Roloffia schmitti"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "antenori",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys antenori"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "boitonei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Simpsonichthys boitonei"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "bokermanni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys bokermanni"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "constanciae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys constanciae"
+      ]
+    },
+    {
+      "genus": "Simpsonichthys",
+      "scientific_name": "suzarti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Simpsonichthys suzarti"
+      ]
+    },
+    {
+      "genus": "Terranatos",
+      "scientific_name": "dolichopterus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Terranatos dolichopterus"
+      ]
+    }
+  ]
+}

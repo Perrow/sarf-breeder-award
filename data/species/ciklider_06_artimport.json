@@ -1,0 +1,969 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "bifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus bifasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brevis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus brevis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus brevis"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "brichardi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus brichardi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "buescheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus buescheri"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "christyi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus christyi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "crassus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus crassus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "cunningtoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus cunningtoni"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "cylindricus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus cylindricus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "falcicula",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus falcicula"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "furcifer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neolamprologus furcifer"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "gracilis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus gracilis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "kungweensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus kungweensis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "longicaudatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus longicaudatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "marunguensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus marunguensis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "modestus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus modestus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "mondabu",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus mondabu"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "mustax",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus mustax"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "niger",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus niger"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "nigriventris",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus nigriventris"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "obscurus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus obscurus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "petricola",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus petricola"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "prochiius",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus prochiius"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus pulcher",
+        "Neolamprologus pulcher \"Daffodil\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "savoryi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus savoryi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "sexfasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus sexfasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "sexfasciatus \"Katete\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neolamprologus sexfasciatus \"Katete\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus sexfasciatus, \"Katete\""
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "signatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus signatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "splendens",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus splendens"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "tetracanthus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus tetracanthus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "toae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus toae"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "tretocephalus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neolamprologus tretocephalus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "variostigma",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus variostigma"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "ventralis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus ventralis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Nimbochromis",
+      "scientific_name": "fuscotaeniatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nimbochromis fuscotaeniatus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nimbochromis",
+      "scientific_name": "linni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nimbochromis linni"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nimbochromis",
+      "scientific_name": "livingstonii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nimbochromis livingstonii"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nimbochromis",
+      "scientific_name": "polystigma",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nimbochromis polystigma"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nimbochromis",
+      "scientific_name": "venustus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nimbochromis venustus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nyassachromis",
+      "scientific_name": "boadzulu",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nyassachromis boadzulu"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nyassachromis",
+      "scientific_name": "eucinostomus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nyassachromis eucinostomus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nyassachromis",
+      "scientific_name": "microcephalus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nyassachromis microcephalus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Nyassachromis",
+      "scientific_name": "prostoma",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nyassachromis prostoma"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Ophthalmotilapia",
+      "scientific_name": "boops",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ophthalmotilapia boops"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Ophthalmotilapia",
+      "scientific_name": "heterodonta",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ophthalmotilapia heterodonta"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Ophthalmotilapia",
+      "scientific_name": "nasuta",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ophthalmotilapia nasuta"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Ophthalmotilapia",
+      "scientific_name": "ventralis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ophthalmotilapia ventralis",
+        "Ophthalmotilapia ventralis \"Kalambo\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Oreochromis",
+      "scientific_name": "esculentus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Oreochromis esculentus"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Oreochromis",
+      "scientific_name": "grahami",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lake Magadi tilapia"
+      ],
+      "geographies": [
+        "Östafrika"
+      ],
+      "scientific_synonyms": [
+        "Oreochromis alcalicus grahami"
+      ]
+    },
+    {
+      "genus": "Oreochromis",
+      "scientific_name": "macrochir",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Långfenstilapia"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Oreochromis",
+      "scientific_name": "mossambicus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Natalciklid"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Oreochromis",
+      "scientific_name": "niloticus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Niltilapia"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "auromarginatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx auromarginatus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "decorus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx decorus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "heterodon",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx heterodon"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "lithobates",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx lithobates"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "selenurus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Otopharynx selenurus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "sp. \"Big spot mpombo\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx sp. \"Big spot mpombo\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Otopharynx",
+      "scientific_name": "sp. \"cave\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Otopharynx sp. \"cave\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Parachromis",
+      "scientific_name": "dovii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vargciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Parachromis",
+      "scientific_name": "friedrichstalii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Parachromis friedrichstalii"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Parachromis",
+      "scientific_name": "loisellei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Parachromis loisellei"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Parachromis",
+      "scientific_name": "managuensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Jaguarciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Parachromis",
+      "scientific_name": "motaguensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Parachromis motaguensis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Paracyprichromis",
+      "scientific_name": "brieni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Paracyprichromis brieni"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Paracyprichromis",
+      "scientific_name": "nigripinnis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tanganyika blå neon"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Paralabidochromis",
+      "scientific_name": "chilotes",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Paralabidochromis chilotes"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Paralabidochromis",
+      "scientific_name": "cyaneus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Paralabidochromis cyaneus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Paralabidochromis",
+      "scientific_name": "riponianus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Paralabidochromis riponianus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Parananochromis",
+      "scientific_name": "caudifasciatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Parananochromis caudifasciatus"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Paraneetroplus",
+      "scientific_name": "bulleri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paraneetroplus bulleri"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Paratilapia",
+      "scientific_name": "polleni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Markely"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "dami",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus dami"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "kieneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus kieneri"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "maculatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus maculatus"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "maromandia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus maromandia"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "menarambo",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus menarambo"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "nourissati",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus nourissati"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "petiti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus petiti"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "polyactis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus polyactis"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "tsimoly",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Paretroplus tsimoly"
+      ],
+      "geographies": [
+        "Madagaskar"
+      ]
+    },
+    {
+      "genus": "Pelmatolapia",
+      "scientific_name": "mariae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pelmatolapia mariae"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia mariae"
+      ]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "humilis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pelvicachromis humilis"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "kribensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gul palettcichlid",
+        "Pelvicachromis kribensis \"Moliwe\""
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Pelvicachromis kribensis \"Moliwe\""
+      ]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Palettciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "roloffi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pelvicachromis roloffi"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Pelvicachromis",
+      "scientific_name": "subocellatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rödbukspalett"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    }
+  ]
+}

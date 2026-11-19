@@ -1,0 +1,344 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Badis",
+      "scientific_name": "badis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Badis"
+      ]
+    },
+    {
+      "genus": "Badis",
+      "scientific_name": "burmanicus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Burmansk badis"
+      ]
+    },
+    {
+      "genus": "Brachygobius",
+      "scientific_name": "nunus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dvärghumlafisk"
+      ]
+    },
+    {
+      "genus": "Brachygobius",
+      "scientific_name": "xanthozona",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Humlafisk"
+      ]
+    },
+    {
+      "genus": "Centrarchus",
+      "scientific_name": "macropterus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Solabborre"
+      ]
+    },
+    {
+      "genus": "Chaenobryttus",
+      "scientific_name": "gulosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chaenobryttus gulosus"
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "micropeltes",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Channa micropeltes"
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "obscura",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Channa obscura"
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "orientalis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Channa orientalis"
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "striata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Channa striata"
+      ]
+    },
+    {
+      "genus": "Dario",
+      "scientific_name": "dario",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Scarlet"
+      ]
+    },
+    {
+      "genus": "Datnioides",
+      "scientific_name": "microlepis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Datnioides microlepis"
+      ]
+    },
+    {
+      "genus": "Datnioides",
+      "scientific_name": "polota",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Datnioides polota"
+      ]
+    },
+    {
+      "genus": "Dormitator",
+      "scientific_name": "latifrons",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dormitator latifrons"
+      ]
+    },
+    {
+      "genus": "Elassoma",
+      "scientific_name": "evergladei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Dvärgabborre"
+      ]
+    },
+    {
+      "genus": "Enneacanthus",
+      "scientific_name": "chaetodon",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Skivabborre"
+      ]
+    },
+    {
+      "genus": "Enneacanthus",
+      "scientific_name": "gloriosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Diamantabborre"
+      ]
+    },
+    {
+      "genus": "Enneacanthus",
+      "scientific_name": "obesus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Enneacanthus obesus"
+      ]
+    },
+    {
+      "genus": "Gymnochanda",
+      "scientific_name": "filamentosa",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Långfenad glasabborre"
+      ]
+    },
+    {
+      "genus": "Hypseleotris",
+      "scientific_name": "compressa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Hypseleotris compressa"
+      ]
+    },
+    {
+      "genus": "Hypseleotris",
+      "scientific_name": "modestus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Hypseleotris modestus"
+      ],
+      "scientific_synonyms": [
+        "Hypseleotris modestus =?"
+      ]
+    },
+    {
+      "genus": "Lepomis",
+      "scientific_name": "cyanellus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Grön solabborre"
+      ]
+    },
+    {
+      "genus": "Lepomis",
+      "scientific_name": "gibbosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Solabborre"
+      ]
+    },
+    {
+      "genus": "Lepomis",
+      "scientific_name": "macrochirus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Lepomis macrochirus"
+      ]
+    },
+    {
+      "genus": "Mastacembelus",
+      "scientific_name": "armatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mastacembelus armatus"
+      ]
+    },
+    {
+      "genus": "Mastacembelus",
+      "scientific_name": "circumcinctus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mastacembelus circumcinctus"
+      ]
+    },
+    {
+      "genus": "Mastacembelus",
+      "scientific_name": "erythrotaenia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mastacembelus erythrotaenia"
+      ]
+    },
+    {
+      "genus": "Mogurnda",
+      "scientific_name": "mogurnda",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Mogurnda"
+      ]
+    },
+    {
+      "genus": "Monocirrhus",
+      "scientific_name": "polyacanthus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Bladfisk"
+      ]
+    },
+    {
+      "genus": "Monodactylus",
+      "scientific_name": "sebae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Västafrikansk månfisk"
+      ]
+    },
+    {
+      "genus": "Nandus",
+      "scientific_name": "nandus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Nandus nandus"
+      ]
+    },
+    {
+      "genus": "Oxyeleotris",
+      "scientific_name": "marmoratus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Oxyeleotris marmoratus"
+      ]
+    },
+    {
+      "genus": "Pandaka",
+      "scientific_name": "pygmaea",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dvärgsmörbult"
+      ]
+    },
+    {
+      "genus": "Parambassis",
+      "scientific_name": "wolffii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parambassis wolffii"
+      ]
+    },
+    {
+      "genus": "Polycentropsis",
+      "scientific_name": "abbreviata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Spetsnosig mångtagg"
+      ]
+    },
+    {
+      "genus": "Polycentrus",
+      "scientific_name": "schomburgki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mångtagg"
+      ]
+    },
+    {
+      "genus": "Pseudambassis",
+      "scientific_name": "ranga",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Glasabborre"
+      ]
+    },
+    {
+      "genus": "Salarias",
+      "scientific_name": "fluviatilis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Flodskyggfisk"
+      ]
+    },
+    {
+      "genus": "Scatophagus",
+      "scientific_name": "tetracanthus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Scatophagus tetracanthus"
+      ]
+    },
+    {
+      "genus": "Stigmatogobius",
+      "scientific_name": "sadanundio",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Prickig smörbult"
+      ]
+    },
+    {
+      "genus": "Tateurndina",
+      "scientific_name": "ocellicauda",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tateurndina ocellicauda"
+      ]
+    },
+    {
+      "genus": "Toxotes",
+      "scientific_name": "chatareus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Toxotes chatareus"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,1146 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Abactochromis",
+      "scientific_name": "labrosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tjockläppsmbuna"
+      ],
+      "geographies": [
+        "Afrika",
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Melanochromis labrosus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=615",
+          "source_name": "NCS Artregister",
+          "title": "Abactochromis labrosus"
+        }
+      ]
+    },
+    {
+      "genus": "Acarichthys",
+      "scientific_name": "heckelii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Trådfensacara"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=179",
+          "source_name": "NCS Artregister",
+          "title": "Acarichthys heckelii"
+        }
+      ]
+    },
+    {
+      "genus": "Acaronia",
+      "scientific_name": "nassa",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Storögonciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "coerulopunctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens coerulopunctatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "diadema",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Diademaciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "duopunctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens duopunctatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "metae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens metae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "pallidus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens pallidus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "patricki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens patricki"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "potaroensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Aequidens potaroensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "sp cf rivulatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Guldsömsciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Aequidens",
+      "scientific_name": "tetramerus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Sadelciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "calvus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus calvus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=779",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus calvus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "compressiceps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus compressiceps"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=222",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus compressiceps"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "fasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Altolamprologus fasciatus"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus fasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1121",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus fasciatus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "sp. \"compressiceps shell\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Altolamprologus sp. \"compressiceps shell\""
+      ],
+      "scientific_synonyms": [
+        "Altolamprologus compressiceps, \"Sumbu\"",
+        "Altolamprologus sp. \"sumbu\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=2374",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus sp. compressiceps shell"
+        }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "myrnae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Amatitlania myrnae"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus myrnae"
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "nanolutea",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gul zebraciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus nanoluteus",
+        "Cryptoheros nanoluteus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=375",
+          "source_name": "NCS Artregister",
+          "title": "Amatitlania nanolutea"
+        }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "nigrofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Zebraciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus nigrofasciatus"
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "sajica",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Sajica-ciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus sajica"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=377",
+          "source_name": "NCS Artregister",
+          "title": "Amatitlania sajica"
+        }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "septemfasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Amatitlania septemfasciata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus septemfasciatus"
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "sp. \"honduras red point\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Honduras red point"
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "alfari",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Amphilophus alfari"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "citrinellus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Citronciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=243",
+          "source_name": "NCS Artregister",
+          "title": "Amphilophus citrinellus"
+        }
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "labiatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Red Devil"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=244",
+          "source_name": "NCS Artregister",
+          "title": "Amphilophus labiatus"
+        }
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "longimanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Amphilophus longimanus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "robertsoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Amphilophus robertsoni"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "rostratus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Amphilophus rostratus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Amphilophus",
+      "scientific_name": "trimaculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Amphilophus trimaculatus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "biseriatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara biseriatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens biseriatus"
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "latifrons",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara latifrons"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens latifrons"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=230",
+          "source_name": "NCS Artregister",
+          "title": "Andinoacara latifrons"
+        }
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Blå ciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens pulcher"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=181",
+          "source_name": "NCS Artregister",
+          "title": "Andinoacara pulcher"
+        }
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "sapayensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara sapayensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens sapayensis"
+      ]
+    },
+    {
+      "genus": "Anomalochromis",
+      "scientific_name": "thomasi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Thomasciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=192",
+          "source_name": "NCS Artregister",
+          "title": "Anomalochromis thomasi"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "agassizii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Regnbågsciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=253",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma agassizii"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "atahualpa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Sunset Apistogramma"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1561",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma atahualpa"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "baenschi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Inkadvärgciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "bitaeniata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma bitaeniata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "borellii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gul dvärgciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=255",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma borellii"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "cacatuoides",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Kakaduciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1060",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma cacatuoides"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "caetei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma caetei"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "commbrae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Corumba ciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "cruzi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma cruzi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "elizabethae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma elizabethae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "eremnopyge",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Jons apisto"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "eunotus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma eunotus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "geisleri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma geisleri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "gephyra",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma gephyra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "gibbiceps",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma gibbiceps"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "hippolytae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma hippolytae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "hoignei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma hoignei"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "hongsloi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma hongsloi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "iconspicua",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma iconspicua"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "iniridae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma iniridae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "juruensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma juruensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "linkei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma linkei"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "luelingi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma luelingi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "maciliensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma maciliensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "macmasteri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Macmasters dvärgciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=274",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma macmasteri"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "meinkeni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma meinkeni"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1573",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma meinkeni"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "mendezi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma mendezi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "nijsseni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Nijssenis apisto"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=277",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma nijsseni"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "norberti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma norberti"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=278",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma norberti"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "ortmanni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma ortmanni"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "panduro",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma panduro"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "paucisquamis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma paucisquamis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "pertensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma pertensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "piauiensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma piauiensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "pulchra",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma pulchra"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "regani",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma regani"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "resticulosa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma resticulosa"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "sp. Aruanâ",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma sp. Aruanâ"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "staecki",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma staecki"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "steindachneri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma steindachneri"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "trifasciata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma trifasciata"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "tucurui",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Apistogramma tucurui"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "uaupesi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Apistogramma uaupesi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "viejita",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Viejitas dvärgciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Apistogrammoides",
+      "scientific_name": "pucallpaensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "T-bar ciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Archocentrus",
+      "scientific_name": "centrarchus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Archocentrus centrarchus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Aristochromis",
+      "scientific_name": "christyi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aristochromis christyi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Asprotilapia",
+      "scientific_name": "leptura",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Asprotilapia leptura"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Astatoreochromis",
+      "scientific_name": "alluaudi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Astatoreochromis alluaudi"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Astatotilapia",
+      "scientific_name": "barbarae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Astatotilapia barbarae"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Astatotilapia",
+      "scientific_name": "burtoni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Astatotilapia burtoni"
+      ],
+      "geographies": [
+        "Östafrika"
+      ]
+    },
+    {
+      "genus": "Astatotilapia",
+      "scientific_name": "calliptera",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Astatotilapia calliptera"
+      ],
+      "geographies": [
+        "Östafrika",
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Astatotilapia",
+      "scientific_name": "latifasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Zebra obliquidens"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    }
+  ]
+}

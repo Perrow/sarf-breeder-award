@@ -1,0 +1,301 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Puntius",
+      "scientific_name": "narayani",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Puntius narayani"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "couchianus",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Monterey svärdbärare"
+      ]
+    },
+    {
+      "genus": "Atya",
+      "scientific_name": "gabonensis",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Giant fan shrimp"
+      ]
+    },
+    {
+      "genus": "Atyopsis",
+      "scientific_name": "moluccensis",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "mountain rock shrimp"
+      ]
+    },
+    {
+      "genus": "Cardisoma",
+      "scientific_name": "armatum",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "red-blue land crab"
+      ]
+    },
+    {
+      "genus": "Celetaia",
+      "scientific_name": "persculpta",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "blå turbosnäcka"
+      ]
+    },
+    {
+      "genus": "Cipangopaludina",
+      "scientific_name": "leucythoides",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "cleaner-snail"
+      ]
+    },
+    {
+      "genus": "Clibanarius",
+      "scientific_name": "africanus",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "African underwater hermit crab"
+      ]
+    },
+    {
+      "genus": "Cliton",
+      "scientific_name": "diadema",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "striped porcupine snail, solsnäcka"
+      ]
+    },
+    {
+      "genus": "Corbicula",
+      "scientific_name": "javanicus",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Guldsandmussla"
+      ]
+    },
+    {
+      "genus": "Faunus",
+      "scientific_name": "ater",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "devil thorn snail"
+      ]
+    },
+    {
+      "genus": "Filopaludina",
+      "scientific_name": "munensis",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Tornhjälm/tigersnäcka"
+      ]
+    },
+    {
+      "genus": "Marisa",
+      "scientific_name": "cornuarietis",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Striped ramshorn snail"
+      ]
+    },
+    {
+      "genus": "Nerita",
+      "scientific_name": "polita",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Nerita polita"
+      ]
+    },
+    {
+      "genus": "Pilsbryoconcha",
+      "scientific_name": "exilis",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Tropical freshwater mussel"
+      ]
+    },
+    {
+      "genus": "Planorbarius",
+      "scientific_name": "corneus",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Planorbarius corneus"
+      ]
+    },
+    {
+      "genus": "Pseudosesarma",
+      "scientific_name": "moeshi",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Rerd Thai crab"
+      ]
+    },
+    {
+      "genus": "Septaria",
+      "scientific_name": "porcellana",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "freshwater snail"
+      ]
+    },
+    {
+      "genus": "Sewellia",
+      "scientific_name": "lineolata",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Sewellia lineolata"
+      ]
+    },
+    {
+      "genus": "Umbra",
+      "scientific_name": "krameri",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Ungersk hundfisk"
+      ]
+    },
+    {
+      "genus": "Ancistrus",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Ancistrus sp."
+      ],
+      "cl_number": "L519"
+    },
+    {
+      "genus": "Osteogaster",
+      "scientific_name": "sp. \"neon green stripe\"",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Osteogaster sp. \"neon green stripe\""
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "albolineatum",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma albolineatum"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "knaacki",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma knaacki"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "cl_number": "CW062"
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "cl_number": "CW037"
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "nattereri",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma nattereri"
+      ]
+    },
+    {
+      "genus": "Panaqolus",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Panaqolus sp."
+      ],
+      "cl_number": "L271"
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "colossus",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma colossus"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "diphyes",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma diphyes"
+      ]
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "araguaiaense",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma araguaiaense"
+      ]
+    },
+    {
+      "genus": "Peckoltia",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Peckoltia sp."
+      ],
+      "cl_number": "L076"
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "cl_number": "CW111"
+    },
+    {
+      "genus": "Gastrodermus",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Gastrodermus sp."
+      ],
+      "cl_number": "C041"
+    },
+    {
+      "genus": "Hoplisoma",
+      "scientific_name": "sp.",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Hoplisoma sp."
+      ],
+      "cl_number": "C133"
+    },
+    {
+      "genus": "Limnopilos",
+      "scientific_name": "naiyanetri",
+      "breeding_class": "unrated",
+      "swedish_names": [
+        "Micro spider crab"
+      ]
+    }
+  ]
+}

@@ -1,0 +1,750 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Barbonymus",
+      "scientific_name": "schwanenfeldii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Stanniolbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Enteromius",
+      "scientific_name": "jae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Enteromius jae"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Barbus jae"
+      ]
+    },
+    {
+      "genus": "Boraras",
+      "scientific_name": "maculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Dvärgrasbora"
+      ],
+      "scientific_synonyms": [
+        "Boraras Maculatus"
+      ]
+    },
+    {
+      "genus": "Boraras",
+      "scientific_name": "naevus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Jordgubbsrasbora"
+      ],
+      "scientific_synonyms": [
+        "Boraras Naevus"
+      ]
+    },
+    {
+      "genus": "Carassius",
+      "scientific_name": "auratus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Guldfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Crossocheilus",
+      "scientific_name": "siamensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Siamesisk algätare"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Cyprinella",
+      "scientific_name": "lutrensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Amerikansk rödfensbarb"
+      ],
+      "geographies": [
+        "Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cuprinella lutrensis"
+      ]
+    },
+    {
+      "genus": "Cyclocheilichthys",
+      "scientific_name": "apogon",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Indisk flodbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "albolineatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Blå danio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "margaritatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Galaxyrasbora"
+      ],
+      "scientific_synonyms": [
+        "Celestichthys margaritatus"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "choprae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Danio choprae"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Danio choprai"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "kerri",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Kerridanio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "nigrofasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Prickdanio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "rerio",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Zebrafisk",
+        "Leoparddanio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Devario",
+      "scientific_name": "aequipinnatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Jättedanio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Devario",
+      "scientific_name": "devario",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Devariodanio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Epalzeorhynchus",
+      "scientific_name": "bicolor",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Eldstjärt"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Epalzeorhynchus",
+      "scientific_name": "erythrurus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Epalzeorhynchus erythrurus"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Epalzeorhynchus",
+      "scientific_name": "frenatum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Regnbågshaj"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Epalzeorhynchus",
+      "scientific_name": "stigmaeus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Guldbrun algätare"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Esomus",
+      "scientific_name": "danrica",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Esomus danrica"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Esomus",
+      "scientific_name": "malayensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Malacka flygkarp"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Esomus",
+      "scientific_name": "metallicus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Metallflygkarp"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Labeo",
+      "scientific_name": "chrysophekadion",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Svarthaj"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Osteochilus",
+      "scientific_name": "hasselti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Javakarp"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Pethia",
+      "scientific_name": "padamya",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Odessabarb"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Puntigrus",
+      "scientific_name": "anchisporus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tigerbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius anchisporus"
+      ]
+    },
+    {
+      "genus": "Dawkinsia",
+      "scientific_name": "arulius",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vimpelbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius arulius"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Puntius bimaculatus"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Pethia",
+      "scientific_name": "conchonius",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Praktbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius conchonius"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "cumingii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Cuming-barb"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "eugrammus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Linjebarb, fyra längsband"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Desmopuntius",
+      "scientific_name": "everetti",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Clownbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius everetti"
+      ]
+    },
+    {
+      "genus": "Dawkinsia",
+      "scientific_name": "filamentosa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Dawkinsia filamentosa"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius filamentosus"
+      ]
+    },
+    {
+      "genus": "Pethia",
+      "scientific_name": "gelius",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gelibarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius gelius"
+      ]
+    },
+    {
+      "genus": "Desmopuntius",
+      "scientific_name": "johorensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Linjebarb, tre längsband"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius johorensis"
+      ]
+    },
+    {
+      "genus": "Barbodes",
+      "scientific_name": "lateristriga",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Korsbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius lateristriga"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "lineatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Linjebarb, fyra längsband"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Pethia",
+      "scientific_name": "nigrofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Purpurhuvudsbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius nigrofasciatus"
+      ]
+    },
+    {
+      "genus": "Oliotius",
+      "scientific_name": "oligolepis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Nätbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius oligolepis"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "orphoides",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Puntius orphoides"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Desmopuntius",
+      "scientific_name": "pentazona",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fembandsbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius pentazona"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "phutunio",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Puntius phutunio"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "pradhani",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Puntius pradhani"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Desmopuntius",
+      "scientific_name": "rhomboocellatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Desmopuntius rhomboocellatus"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius rhomboocellatus"
+      ]
+    },
+    {
+      "genus": "Barbodes",
+      "scientific_name": "semifasciolatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Mässingsbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius semifasciolatus"
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "ticto",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Indianbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rohanella",
+      "scientific_name": "titteya",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Kopparbarb"
+      ],
+      "geographies": [
+        "Asien"
+      ],
+      "scientific_synonyms": [
+        "Puntius titteya"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "borapetensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rödstjärtsrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "caudimaculata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Rasbora caudimaculata"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "dorsiocellata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fenfläcksrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "einthoveni",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rasbora einthoveni"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "elegans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gul rasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "pauciperforata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Glödbandsrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "trilineata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Saxfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasboroides",
+      "scientific_name": "vaterifloris",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pärlemorrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Sawbwa",
+      "scientific_name": "resplendens",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Sawbwa resplendens"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Sundadanio",
+      "scientific_name": "axelrodi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Neonrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Tanichthys",
+      "scientific_name": "albonubes",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Kardinalfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Tanichthys",
+      "scientific_name": "micagemmae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Vietnamesisk kardinalfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Trigonostigma",
+      "scientific_name": "espei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Trigonostigma espei"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Trigonostigma",
+      "scientific_name": "hengeli",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Drottningrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Trigonostigma",
+      "scientific_name": "heteromorpha",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kilfläcksrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    }
+  ]
+}

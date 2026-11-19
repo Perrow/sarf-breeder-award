@@ -1,0 +1,504 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Belontia",
+      "scientific_name": "hasselti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Belontia hasselti"
+      ]
+    },
+    {
+      "genus": "Belontia",
+      "scientific_name": "signata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ceylonmakropod"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "akarensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Betta akarensis"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "albimarginata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta albimarginata"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "bellica",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta bellica"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "brownorum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta brownorum"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "burdigala",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta burdigala"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "channoides",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ormhuvudsbetta"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "coccina",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Browns röda betta"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "dennisyongi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta dennisyongi"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "dimidiata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Betta dimidiata"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "edithae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Betta edithae"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "foerschi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta foerschi"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "fusca",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Brun kampfisk"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "imbellis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Fredlig kampfisk"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "livida",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta livida"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "macrostoma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Spotfin betta/Bruneis skönhet"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "ocellata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Betta ocellata"
+      ],
+      "scientific_synonyms": [
+        "Betta occelata"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "persephone",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta persephone"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "picta",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Betta picta"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "pugnax",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Penang betta"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "rubra",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Toba betta/röd Sumatrakampfisk"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "rutilans",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Röd dvärgkampfisk"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "simorum",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta simorum"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "smaragdina",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Smaragdgrön kampfisk"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "splendens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Siamesisk kampfisk"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "strohi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta strohi"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "taeniata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Betta taeniata"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "tussyae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta tussyae"
+      ]
+    },
+    {
+      "genus": "Betta",
+      "scientific_name": "unimaculata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Betta unimaculata"
+      ]
+    },
+    {
+      "genus": "Trichogaster",
+      "scientific_name": "chuna",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Honungsgurami"
+      ],
+      "scientific_synonyms": [
+        "Colisa chuna"
+      ]
+    },
+    {
+      "genus": "Trichogaster",
+      "scientific_name": "fasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Bandgurami"
+      ],
+      "scientific_synonyms": [
+        "Colisa fasciata"
+      ]
+    },
+    {
+      "genus": "Trichogaster",
+      "scientific_name": "labiosa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Läppgurami"
+      ],
+      "scientific_synonyms": [
+        "Colisa labiosa"
+      ]
+    },
+    {
+      "genus": "Trichogaster",
+      "scientific_name": "lalius",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Dvärggurami"
+      ],
+      "scientific_synonyms": [
+        "Colisa lalia"
+      ]
+    },
+    {
+      "genus": "Ctenops",
+      "scientific_name": "nobilis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Ctenops nobilis"
+      ]
+    },
+    {
+      "genus": "Macropodus",
+      "scientific_name": "concolor",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Svart makropod"
+      ]
+    },
+    {
+      "genus": "Macropodus",
+      "scientific_name": "ocellatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Macropodus ocellatus"
+      ]
+    },
+    {
+      "genus": "Macropodus",
+      "scientific_name": "opercularis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Paradisfisk"
+      ]
+    },
+    {
+      "genus": "Malpulutta",
+      "scientific_name": "kretseri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Malpulutta kretseri"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "allani",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus allani"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "anjunganensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus anjunganensis"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "deissneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lakritsguarmi"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "filamentosus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus filamentosus"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "harveyi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus harveyi"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "linkei",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus linkei"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "nagyii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus nagyii"
+      ]
+    },
+    {
+      "genus": "Parosphromenus",
+      "scientific_name": "paludicola",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Parosphromenus paludicola"
+      ]
+    },
+    {
+      "genus": "Pseudosphromenus",
+      "scientific_name": "cupanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pseudosphromenus cupanus"
+      ]
+    },
+    {
+      "genus": "Pseudosphromenus",
+      "scientific_name": "dayi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Spetsstjärtsmakropod"
+      ]
+    },
+    {
+      "genus": "Sphaerichthys",
+      "scientific_name": "osphromenoides",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Chokladgurami"
+      ]
+    },
+    {
+      "genus": "Sphaerichthys",
+      "scientific_name": "vaillanti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Samuraigurami"
+      ]
+    },
+    {
+      "genus": "Trichopodus",
+      "scientific_name": "leerii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mosaikgurami"
+      ],
+      "scientific_synonyms": [
+        "Trichogaster leeri"
+      ]
+    },
+    {
+      "genus": "Trichopodus",
+      "scientific_name": "microlepis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Månskensgurami"
+      ],
+      "scientific_synonyms": [
+        "Trichogaster microlepis"
+      ]
+    },
+    {
+      "genus": "Trichopodus",
+      "scientific_name": "pectoralis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Ormskinnsgurami"
+      ],
+      "scientific_synonyms": [
+        "Trichogaster pectoralis"
+      ]
+    },
+    {
+      "genus": "Trichopodus",
+      "scientific_name": "trichopterus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Blå gurami",
+        "Marmorgurami",
+        "Blå gurami, marmorgurami"
+      ],
+      "scientific_synonyms": [
+        "Trichogaster trichopterus"
+      ]
+    },
+    {
+      "genus": "Trichopsis",
+      "scientific_name": "pumilus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pygmegurami"
+      ]
+    },
+    {
+      "genus": "Trichopsis",
+      "scientific_name": "shalleri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Trichopsis shalleri"
+      ]
+    },
+    {
+      "genus": "Trichopsis",
+      "scientific_name": "vittata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Knorrande gurami"
+      ]
+    }
+  ]
+}
