@@ -2,6 +2,28 @@
   "version": 1,
   "species": [
     {
+      "genus": "Abactochromis",
+      "scientific_name": "labrosus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tjockläppsmbuna"
+      ],
+      "geographies": [
+        "Afrika",
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Melanochromis labrosus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=615",
+          "source_name": "NCS Artregister",
+          "title": "Abactochromis labrosus"
+        }
+      ]
+    },
+    {
       "genus": "Acarichthys",
       "scientific_name": "heckelii",
       "breeding_class": "gold",
@@ -28,20 +50,6 @@
       ],
       "geographies": [
         "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Andinoacara",
-      "scientific_name": "biseriatus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Andinoacara biseriatus"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Aequidens biseriatus"
       ]
     },
     {
@@ -75,27 +83,6 @@
       ],
       "geographies": [
         "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Andinoacara",
-      "scientific_name": "latifrons",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Andinoacara latifrons"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Aequidens latifrons"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=230",
-          "source_name": "NCS Artregister",
-          "title": "Andinoacara latifrons"
-        }
       ]
     },
     {
@@ -143,41 +130,6 @@
       ]
     },
     {
-      "genus": "Andinoacara",
-      "scientific_name": "pulcher",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Blå ciklid"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Aequidens pulcher"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=181",
-          "source_name": "NCS Artregister",
-          "title": "Andinoacara pulcher"
-        }
-      ]
-    },
-    {
-      "genus": "Andinoacara",
-      "scientific_name": "sapayensis",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Andinoacara sapayensis"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Aequidens sapayensis"
-      ]
-    },
-    {
       "genus": "Aequidens",
       "scientific_name": "sp cf rivulatus",
       "breeding_class": "bronze",
@@ -200,6 +152,99 @@
       ]
     },
     {
+      "genus": "Altolamprologus",
+      "scientific_name": "calvus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus calvus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=779",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus calvus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "compressiceps",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Altolamprologus compressiceps"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=222",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus compressiceps"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "fasciatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Altolamprologus fasciatus"
+      ],
+      "scientific_synonyms": [
+        "Neolamprologus fasciatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1121",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus fasciatus"
+        }
+      ]
+    },
+    {
+      "genus": "Altolamprologus",
+      "scientific_name": "sp. \"compressiceps shell\"",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Altolamprologus sp. \"compressiceps shell\""
+      ],
+      "scientific_synonyms": [
+        "Altolamprologus compressiceps, \"Sumbu\"",
+        "Altolamprologus sp. \"sumbu\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=2374",
+          "source_name": "NCS Artregister",
+          "title": "Altolamprologus sp. compressiceps shell"
+        }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "myrnae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Amatitlania myrnae"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus myrnae"
+      ]
+    },
+    {
       "genus": "Amatitlania",
       "scientific_name": "nanolutea",
       "breeding_class": "bronze",
@@ -219,6 +264,55 @@
           "source_name": "NCS Artregister",
           "title": "Amatitlania nanolutea"
         }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "nigrofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Zebraciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus nigrofasciatus"
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "sajica",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Sajica-ciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus sajica"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=377",
+          "source_name": "NCS Artregister",
+          "title": "Amatitlania sajica"
+        }
+      ]
+    },
+    {
+      "genus": "Amatitlania",
+      "scientific_name": "septemfasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Amatitlania septemfasciata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus septemfasciatus"
       ]
     },
     {
@@ -321,6 +415,94 @@
       ]
     },
     {
+      "genus": "Andinoacara",
+      "scientific_name": "biseriatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara biseriatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens biseriatus"
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "latifrons",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara latifrons"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens latifrons"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=230",
+          "source_name": "NCS Artregister",
+          "title": "Andinoacara latifrons"
+        }
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "pulcher",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Blå ciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens pulcher"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=181",
+          "source_name": "NCS Artregister",
+          "title": "Andinoacara pulcher"
+        }
+      ]
+    },
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "sapayensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Andinoacara sapayensis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Aequidens sapayensis"
+      ]
+    },
+    {
+      "genus": "Anomalochromis",
+      "scientific_name": "thomasi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Thomasciklid"
+      ],
+      "geographies": [
+        "Västafrika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=192",
+          "source_name": "NCS Artregister",
+          "title": "Anomalochromis thomasi"
+        }
+      ]
+    },
+    {
       "genus": "Apistogramma",
       "scientific_name": "agassizii",
       "breeding_class": "gold",
@@ -335,6 +517,24 @@
           "url": "https://www.ciklid.org/artregister/art.php?ID=253",
           "source_name": "NCS Artregister",
           "title": "Apistogramma agassizii"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "atahualpa",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Sunset Apistogramma"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1561",
+          "source_name": "NCS Artregister",
+          "title": "Apistogramma atahualpa"
         }
       ]
     },
@@ -854,20 +1054,6 @@
       ]
     },
     {
-      "genus": "Cryptoheros",
-      "scientific_name": "altoflavus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Cryptoheros altoflavus"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus altoflavus"
-      ]
-    },
-    {
       "genus": "Archocentrus",
       "scientific_name": "centrarchus",
       "breeding_class": "bronze",
@@ -879,576 +1065,81 @@
       ]
     },
     {
-      "genus": "Amatitlania",
-      "scientific_name": "myrnae",
+      "genus": "Aristochromis",
+      "scientific_name": "christyi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Aristochromis christyi"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Asprotilapia",
+      "scientific_name": "leptura",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Asprotilapia leptura"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Astatoreochromis",
+      "scientific_name": "alluaudi",
       "breeding_class": "bronze",
       "swedish_names": [
-        "Amatitlania myrnae"
+        "Astatoreochromis alluaudi"
       ],
       "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus myrnae"
+        "Viktoriasjön"
       ]
     },
     {
-      "genus": "Amatitlania",
-      "scientific_name": "nigrofasciata",
+      "genus": "Astatotilapia",
+      "scientific_name": "barbarae",
       "breeding_class": "bronze",
       "swedish_names": [
-        "Zebraciklid"
+        "Astatotilapia barbarae"
       ],
       "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus nigrofasciatus"
+        "Viktoriasjön"
       ]
     },
     {
-      "genus": "Amatitlania",
-      "scientific_name": "sajica",
+      "genus": "Astatotilapia",
+      "scientific_name": "burtoni",
       "breeding_class": "bronze",
       "swedish_names": [
-        "Sajica-ciklid"
+        "Astatotilapia burtoni"
       ],
       "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus sajica"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=377",
-          "source_name": "NCS Artregister",
-          "title": "Amatitlania sajica"
-        }
+        "Östafrika"
       ]
     },
     {
-      "genus": "Amatitlania",
-      "scientific_name": "septemfasciata",
+      "genus": "Astatotilapia",
+      "scientific_name": "calliptera",
       "breeding_class": "bronze",
       "swedish_names": [
-        "Amatitlania septemfasciata"
+        "Astatotilapia calliptera"
       ],
       "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus septemfasciatus"
+        "Östafrika",
+        "Malawisjön"
       ]
     },
     {
-      "genus": "Cryptoheros",
-      "scientific_name": "spilurus",
+      "genus": "Astatotilapia",
+      "scientific_name": "latifasciatus",
       "breeding_class": "bronze",
       "swedish_names": [
-        "Tigerciklid"
+        "Zebra obliquidens"
       ],
       "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus spilurus"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=379",
-          "source_name": "NCS Artregister",
-          "title": "Cryptoheros spilurus"
-        }
-      ]
-    },
-    {
-      "genus": "Rocio",
-      "scientific_name": "spinosissima",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Rocio spinosissima"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Archocentrus spinosissimus"
-      ]
-    },
-    {
-      "genus": "Astronotus",
-      "scientific_name": "crassipinnis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Apaiari"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Astronotus",
-      "scientific_name": "ocellatus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Påfågelciklid"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Biotodoma",
-      "scientific_name": "cupido",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Biotodoma cupido"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Biotodoma",
-      "scientific_name": "wavrini",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Biotodoma wavrini"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Biotoecus",
-      "scientific_name": "opercularis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Biotoecus opercularis"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Bujurquina",
-      "scientific_name": "mariae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Bujurquina mariae"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Bujurquina",
-      "scientific_name": "moriorum",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Bujurquina moriorum"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Bujurquina",
-      "scientific_name": "syspilus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Bujurquina syspilus"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Bujurquina",
-      "scientific_name": "vittata",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Bujurquina vittata"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Caquetaia",
-      "scientific_name": "kraussii",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Caquetaia kraussii"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Caquetaia",
-      "scientific_name": "myersi",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Caquetaia myersi"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Caquetaia",
-      "scientific_name": "spectabilis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Caquetaia spectabilis"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Caquetaia",
-      "scientific_name": "umbrifera",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Caquetaia umbrifera"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Chaetobranchopsis",
-      "scientific_name": "orbicularis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Chaetobranchopsis orbicularis"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Chaetobranchus",
-      "scientific_name": "flavescens",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Chaetobranchus flavescens"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Chaetobranchus",
-      "scientific_name": "semifasciatus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Chaetobranchus semifasciatus"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Cichla",
-      "scientific_name": "ocellaris",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Cichla ocellaris"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Cichla",
-      "scientific_name": "temensis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Cichla temensis"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Cichlasoma",
-      "scientific_name": "bimaculatum",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Cichlasoma bimaculatum"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Australoheros",
-      "scientific_name": "facetus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chanchito"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma facetum"
-      ]
-    },
-    {
-      "genus": "Mesoheros",
-      "scientific_name": "festae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Mesoheros festae"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma festae"
-      ]
-    },
-    {
-      "genus": "Chiapaheros",
-      "scientific_name": "grammodes",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chiapaheros grammodes"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma grammodes"
-      ]
-    },
-    {
-      "genus": "Rocio",
-      "scientific_name": "octofasciata",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Jack Dempsey"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma octofasciatum"
-      ]
-    },
-    {
-      "genus": "Cichlasoma",
-      "scientific_name": "portalegrense",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Bandciklid"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Trichromis",
-      "scientific_name": "salvini",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Trichromis salvini"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma salvini"
-      ]
-    },
-    {
-      "genus": "Mayaheros",
-      "scientific_name": "urophthalmus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Mayaheros urophthalmus"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Cichlasoma urophthalmus"
-      ]
-    },
-    {
-      "genus": "Cleithracara",
-      "scientific_name": "maronii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Nyckelhålsciklid"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=339",
-          "source_name": "NCS Artregister",
-          "title": "Cleithracara maronii"
-        }
-      ]
-    },
-    {
-      "genus": "Crenicara",
-      "scientific_name": "punctulata",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Crenicara punctulata"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ],
-      "scientific_synonyms": [
-        "Crenicara punculatum"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=340",
-          "source_name": "NCS Artregister",
-          "title": "Crenicara punctulata"
-        }
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "acutirostris",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla acutirostris"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "alta",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla alta"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "cametana",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla cametana"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "compressiceps",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla compressiceps"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "cyclostoma",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla cyclostoma"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "frenata",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla frenata"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "geayi",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla geayi"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "heckeli",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla heckeli"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "jegui",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla jegui"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "johanna",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla johanna"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "lenticulata",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla lenticulata"
-      ],
-      "geographies": [
-        "Sydamerika"
-      ]
-    },
-    {
-      "genus": "Crenicichla",
-      "scientific_name": "lepidota",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Crenicichla lepidota"
-      ],
-      "geographies": [
-        "Sydamerika"
+        "Viktoriasjön"
       ]
     }
   ]

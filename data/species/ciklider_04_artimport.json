@@ -3,39 +3,6 @@
   "species": [
     {
       "genus": "Haplochromis",
-      "scientific_name": "nubilus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Haplochromis nubilus"
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Haplochromis",
-      "scientific_name": "sp. \"Flameback\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Haplochromis sp. \"Flameback\""
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Haplochromis",
-      "scientific_name": "sp. \"Paradise Island\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Haplochromis sp. \"Paradise Island\""
-      ],
-      "geographies": [
-        "Afrika"
-      ]
-    },
-    {
-      "genus": "Haplochromis",
       "scientific_name": "sp. \"Thick skin\"",
       "breeding_class": "bronze",
       "swedish_names": [
@@ -68,20 +35,6 @@
       ]
     },
     {
-      "genus": "Rubricatochromis",
-      "scientific_name": "bimaculatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Röd ciklid"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Hemichromis bimaculatus"
-      ]
-    },
-    {
       "genus": "Hemichromis",
       "scientific_name": "elongatus",
       "breeding_class": "silver",
@@ -109,41 +62,6 @@
       ],
       "geographies": [
         "Afrika"
-      ]
-    },
-    {
-      "genus": "Rubricatochromis",
-      "scientific_name": "letourneuxi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Rubricatochromis letourneuxi"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Hemichromis letourneauxi"
-      ]
-    },
-    {
-      "genus": "Rubricatochromis",
-      "scientific_name": "lifalili",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Röd juvelciklid"
-      ],
-      "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Hemichromis lifalili"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=417",
-          "source_name": "NCS Artregister",
-          "title": "Rubricatochromis lifalili"
-        }
       ]
     },
     {
@@ -203,6 +121,20 @@
     },
     {
       "genus": "Herichthys",
+      "scientific_name": "cyanoguttatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Texasciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Herichtyhs cyanoguttatus"
+      ]
+    },
+    {
+      "genus": "Herichthys",
       "scientific_name": "labridens",
       "breeding_class": "silver",
       "swedish_names": [
@@ -221,20 +153,6 @@
       ],
       "geographies": [
         "Central- och Nordamerika"
-      ]
-    },
-    {
-      "genus": "Herichthys",
-      "scientific_name": "cyanoguttatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Texasciklid"
-      ],
-      "geographies": [
-        "Central- och Nordamerika"
-      ],
-      "scientific_synonyms": [
-        "Herichtyhs cyanoguttatus"
       ]
     },
     {
@@ -701,20 +619,6 @@
       ]
     },
     {
-      "genus": "Neolamprologus",
-      "scientific_name": "caudopunctatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Neolamprologus caudopunctatus"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ],
-      "scientific_synonyms": [
-        "Lamprologus caudopunctatus"
-      ]
-    },
-    {
       "genus": "Lamprologus",
       "scientific_name": "congoensis",
       "breeding_class": "silver",
@@ -723,20 +627,6 @@
       ],
       "geographies": [
         "Västafrika"
-      ]
-    },
-    {
-      "genus": "Neolamprologus",
-      "scientific_name": "leleupi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Neolamprologus leleupi"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ],
-      "scientific_synonyms": [
-        "Lamprologus leleoupi"
       ]
     },
     {
@@ -826,20 +716,6 @@
       ],
       "geographies": [
         "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Lethrinops",
-      "scientific_name": "auritus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Lethrinops auritus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Lehrinops auritus"
       ]
     },
     {
@@ -954,6 +830,20 @@
     },
     {
       "genus": "Lethrinops",
+      "scientific_name": "auritus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Lethrinops auritus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Lehrinops auritus"
+      ]
+    },
+    {
+      "genus": "Lethrinops",
       "scientific_name": "furcifer",
       "breeding_class": "gold",
       "swedish_names": [
@@ -1022,6 +912,153 @@
       ],
       "scientific_synonyms": [
         "Lethrinops sp. “nyassae”"
+      ]
+    },
+    {
+      "genus": "Mayaheros",
+      "scientific_name": "urophthalmus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mayaheros urophthalmus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma urophthalmus"
+      ]
+    },
+    {
+      "genus": "Mesoheros",
+      "scientific_name": "festae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Mesoheros festae"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma festae"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "caudopunctatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neolamprologus caudopunctatus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus caudopunctatus"
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "leleupi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neolamprologus leleupi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus leleoupi"
+      ]
+    },
+    {
+      "genus": "Rocio",
+      "scientific_name": "octofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Jack Dempsey"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma octofasciatum"
+      ]
+    },
+    {
+      "genus": "Rocio",
+      "scientific_name": "spinosissima",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rocio spinosissima"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus spinosissimus"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Röd ciklid"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis bimaculatus"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "letourneuxi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Rubricatochromis letourneuxi"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis letourneauxi"
+      ]
+    },
+    {
+      "genus": "Rubricatochromis",
+      "scientific_name": "lifalili",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Röd juvelciklid"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis lifalili"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=417",
+          "source_name": "NCS Artregister",
+          "title": "Rubricatochromis lifalili"
+        }
+      ]
+    },
+    {
+      "genus": "Trichromis",
+      "scientific_name": "salvini",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Trichromis salvini"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma salvini"
       ]
     }
   ]

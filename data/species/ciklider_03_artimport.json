@@ -2,737 +2,69 @@
   "version": 1,
   "species": [
     {
-      "genus": "Aristochromis",
-      "scientific_name": "christyi",
+      "genus": "Crenicichla",
+      "scientific_name": "geayi",
       "breeding_class": "gold",
       "swedish_names": [
-        "Aristochromis christyi"
+        "Crenicichla geayi"
       ],
       "geographies": [
-        "Malawisjön"
+        "Sydamerika"
       ]
     },
     {
-      "genus": "Asprotilapia",
-      "scientific_name": "leptura",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Asprotilapia leptura"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Astatoreochromis",
-      "scientific_name": "alluaudi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Astatoreochromis alluaudi"
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Astatotilapia",
-      "scientific_name": "barbarae",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Astatotilapia barbarae"
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Astatotilapia",
-      "scientific_name": "burtoni",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Astatotilapia burtoni"
-      ],
-      "geographies": [
-        "Östafrika"
-      ]
-    },
-    {
-      "genus": "Astatotilapia",
-      "scientific_name": "calliptera",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Astatotilapia calliptera"
-      ],
-      "geographies": [
-        "Östafrika",
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Astatotilapia",
-      "scientific_name": "latifasciatus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Zebra obliquidens"
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Astatotilapia",
-      "scientific_name": "nubila",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Astatotilapia nubila"
-      ],
-      "geographies": [
-        "Viktoriasjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "sp. \"Maleri\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara sp. \"Maleri\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Aulonocara \"Maleri\""
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "baenschi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara baenschi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "ethelwynnae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara ethelwynnae"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "gertrudae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara gertrudae"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "hansbaenschi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara hansbaenschi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "hueseri",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara hueseri"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "jacobfreibergi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara jacobfreibergi",
-        "Aulonocara jacobfreibergi \"Otter point\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "kandeense",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara kandeense"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "korneliae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara korneliae"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "maylandi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara maylandi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "rostratum",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara rostratum"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "saulosi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara saulosi"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "sp. \"chitande\"",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara sp. \"chitande\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "sp. \"iwanda\"",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocara sp. \"iwanda\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "steveni \"Usisya\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara steveni \"Usisya\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Aulonocara",
-      "scientific_name": "stuartgranti",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Aulonocara stuartgranti",
-        "Aulonocara stuartgranti \"Maulana\"",
-        "Aulonocara stuartgranti \"Mdoka\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=581",
-          "source_name": "NCS Artregister",
-          "title": "Aulonocara stuartgranti"
-        }
-      ]
-    },
-    {
-      "genus": "Aulonocranus",
-      "scientific_name": "dewindtii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Aulonocranus dewindtii"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Benitochromis",
-      "scientific_name": "batesii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Benitochromis batesii"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Benitochromis",
-      "scientific_name": "finleyi",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Benitochromis finleyi"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Benitochromis",
-      "scientific_name": "nigrodorsalis",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Benitochromis nigrodorsalis"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Benthochromis",
-      "scientific_name": "tricoti",
+      "genus": "Crenicichla",
+      "scientific_name": "heckeli",
       "breeding_class": "gold",
       "swedish_names": [
-        "Benthochromis tricoti"
+        "Crenicichla heckeli"
       ],
       "geographies": [
-        "Tanganyikasjön"
+        "Sydamerika"
       ]
     },
     {
-      "genus": "Benthochromis",
-      "scientific_name": "horii",
+      "genus": "Crenicichla",
+      "scientific_name": "jegui",
       "breeding_class": "gold",
       "swedish_names": [
-        "Benthochromis horii"
+        "Crenicichla jegui"
       ],
       "geographies": [
-        "Afrika"
-      ],
-      "scientific_synonyms": [
-        "Bentochromis horii"
-      ],
-      "links": [
-        {
-          "url": "https://www.ciklid.org/artregister/art.php?ID=2209",
-          "source_name": "NCS Artregister",
-          "title": "Benthochromis horii"
-        }
+        "Sydamerika"
       ]
     },
     {
-      "genus": "Boulengerochromis",
-      "scientific_name": "microlepis",
+      "genus": "Crenicichla",
+      "scientific_name": "johanna",
       "breeding_class": "gold",
       "swedish_names": [
-        "Boulengerochromis microlepis"
+        "Crenicichla johanna"
       ],
       "geographies": [
-        "Tanganyikasjön"
+        "Sydamerika"
       ]
     },
     {
-      "genus": "Buccochromis",
-      "scientific_name": "heterotaenia",
+      "genus": "Crenicichla",
+      "scientific_name": "lenticulata",
       "breeding_class": "gold",
       "swedish_names": [
-        "Buccochromis heterotaenia"
+        "Crenicichla lenticulata"
       ],
       "geographies": [
-        "Malawisjön"
+        "Sydamerika"
       ]
     },
     {
-      "genus": "Buccochromis",
-      "scientific_name": "lepturus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Buccochromis lepturus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Buccochromis",
-      "scientific_name": "nototaenia",
+      "genus": "Crenicichla",
+      "scientific_name": "lepidota",
       "breeding_class": "gold",
       "swedish_names": [
-        "Buccochromis nototaenia"
+        "Crenicichla lepidota"
       ],
       "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Buccochromis",
-      "scientific_name": "rhoadesii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Buccochromis rhoadesii"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Callochromis",
-      "scientific_name": "macrops",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Callochromis macrops"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Callochromis",
-      "scientific_name": "melanostigma",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Callochromis melanostigma"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Callochromis",
-      "scientific_name": "pleurospilus",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Callochromis pleurospilus",
-        "Callochromis pleurospilus \"Kigoma\""
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Callochromis",
-      "scientific_name": "stappersii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Callochromis stappersii"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Chalinochromis",
-      "scientific_name": "brichardi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chalinochromis brichardi"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Chalinochromis",
-      "scientific_name": "popelini",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chalinochromis popelini"
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Chalinochromis",
-      "scientific_name": "sp. \"ndobnoi\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Chalinochromis sp. \"ndobnoi\""
-      ],
-      "geographies": [
-        "Tanganyikasjön"
-      ]
-    },
-    {
-      "genus": "Champsochromis",
-      "scientific_name": "caeruleus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Champsochromis caeruleus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ],
-      "scientific_synonyms": [
-        "Champsochromis caerueleus"
-      ]
-    },
-    {
-      "genus": "Champsochromis",
-      "scientific_name": "spilorhynchus",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Champsochromis spilorhynchus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Chilotilapia",
-      "scientific_name": "euchilus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chilotilapia euchilus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Chilotilapia",
-      "scientific_name": "rhoadesii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chilotilapia rhoadesii"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Chromidotilapia",
-      "scientific_name": "guentheri",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Munruvande palettciklid"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Chromidotilapia",
-      "scientific_name": "kingsleyae",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chromidotilapia kingsleyae"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Chromidotilapia",
-      "scientific_name": "linkei",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Chromidotilapia linkei"
-      ],
-      "geographies": [
-        "Västafrika"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "azureus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis azureus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "borleyi",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Copadichromis borleyi",
-        "Copadichromis borleyi \"Kadango\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "chrysonotus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis chrysonotus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "cyaneus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis cyaneus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "jacksoni",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Copadichromis jacksoni"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "mbenjii",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis mbenjii"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "mloto",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis mloto"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "pleurostigmoides",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Copadichromis pleurostigmoides"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "quadrimaculatus",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis quadrimaculatus"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "sp. \"kawanga\"",
-      "breeding_class": "bronze",
-      "swedish_names": [
-        "Copadichromis sp. \"kawanga\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "sp. \"midnight mloto\"",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis sp. \"midnight mloto\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "sp. \"mloto goldcrest\"",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Copadichromis sp. \"mloto goldcrest\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "trewavasae",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Copadichromis trewavasae",
-        "Copadichromis trewavasae \"Likoma\""
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "verduyni",
-      "breeding_class": "silver",
-      "swedish_names": [
-        "Copadichromis verduyni"
-      ],
-      "geographies": [
-        "Malawisjön"
-      ]
-    },
-    {
-      "genus": "Copadichromis",
-      "scientific_name": "virginalis",
-      "breeding_class": "gold",
-      "swedish_names": [
-        "Copadichromis virginalis"
-      ],
-      "geographies": [
-        "Malawisjön"
+        "Sydamerika"
       ]
     },
     {
@@ -942,6 +274,41 @@
       ],
       "geographies": [
         "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Cryptoheros",
+      "scientific_name": "altoflavus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Cryptoheros altoflavus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus altoflavus"
+      ]
+    },
+    {
+      "genus": "Cryptoheros",
+      "scientific_name": "spilurus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tigerciklid"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Archocentrus spilurus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=379",
+          "source_name": "NCS Artregister",
+          "title": "Cryptoheros spilurus"
+        }
       ]
     },
     {
@@ -1571,6 +938,39 @@
       ],
       "geographies": [
         "Östafrika"
+      ]
+    },
+    {
+      "genus": "Haplochromis",
+      "scientific_name": "nubilus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Haplochromis nubilus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Haplochromis",
+      "scientific_name": "sp. \"Flameback\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Haplochromis sp. \"Flameback\""
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Haplochromis",
+      "scientific_name": "sp. \"Paradise Island\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Haplochromis sp. \"Paradise Island\""
+      ],
+      "geographies": [
+        "Afrika"
       ]
     }
   ]
