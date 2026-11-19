@@ -1,0 +1,819 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Thoracochromis",
+      "scientific_name": "brauschi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Thoracochromis brauschi"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "affinis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys affinis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "aureus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys aureus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "callolepis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys callolepis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "ellioti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys ellioti"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "helleri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys helleri"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "meeki",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Eldbuk"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "pasionis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys pasionis"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thorichthys",
+      "scientific_name": "socolofi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thorichthys socolofi"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Thysia",
+      "scientific_name": "ansorgii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Thysia ansorgii"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Tilapia",
+      "scientific_name": "bemini",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tilapia bemini"
+      ],
+      "geographies": [
+        "Västafrika"
+      ]
+    },
+    {
+      "genus": "Heterotilapia",
+      "scientific_name": "buttikoferi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Heterotilapia buttikoferi"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia buttikoferi"
+      ]
+    },
+    {
+      "genus": "Tilapia",
+      "scientific_name": "joka",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tilapia joka"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Pelmatolapia",
+      "scientific_name": "mariae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pelmatolapia mariae"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia mariae"
+      ]
+    },
+    {
+      "genus": "Coptodon",
+      "scientific_name": "rendalli",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Coptodon rendalli"
+      ],
+      "geographies": [
+        "Afrika",
+        "Malawisjön"
+      ],
+      "scientific_synonyms": [
+        "Tilapia rendalli"
+      ]
+    },
+    {
+      "genus": "Tilapia",
+      "scientific_name": "ruweti",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tilapia ruweti"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Tilapia",
+      "scientific_name": "tholloni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tilapia tholloni"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Coptodon",
+      "scientific_name": "zillii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Coptodon zillii"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Tilapia zilli"
+      ]
+    },
+    {
+      "genus": "Tomocichla",
+      "scientific_name": "sieboldii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tomocichla sieboldii"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Tomocichla",
+      "scientific_name": "tuba",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tomocichla tuba"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Tramitochromis",
+      "scientific_name": "sp.\"red flush\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tramitochromis sp.\"red flush\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Trematocranus",
+      "scientific_name": "placodon",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Trematocranus placodon"
+      ],
+      "geographies": [
+        "Östafrika",
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Triglachromis",
+      "scientific_name": "otostigma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Triglachromis otostigma"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "macrothalmus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheops macrothalmus"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "sp. \"black\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tropheops sp. \"black\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "sp. \"chilumba\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheops sp. \"chilumba\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "sp. \"lumessi blue\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tropheops sp. \"lumessi blue\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "sp. \"mauwe\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheops sp. \"mauwe\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheops",
+      "scientific_name": "sp. \"red cheek\"",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tropheops sp. \"red cheek\""
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "annectens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus annectens"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "brichardi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus brichardi"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "duboisi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Tropheus duboisi",
+        "Tropheus duboisi \"Maswa\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "moorii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus moorii"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Bemba\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Bemba\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"black Kirizi\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"black Kirizi\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"black\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"black\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Chilumba\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Chilumba\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Ikola\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Ikola\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Kashesa\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Kashesa\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Lufubu\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Lufubu\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Moliro\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Moliro\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Morago\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Morago\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Mpimbwe\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"Mpimbwe\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"Mpulungu\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "distrib: Kasakalawe"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tropheus",
+      "scientific_name": "sp. \"red\"",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Tropheus sp. \"red\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Tyrannochromis",
+      "scientific_name": "macrostoma",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tyrannochromis macrostoma"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Tyrannochromis",
+      "scientific_name": "nigriventer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tyrannochromis nigriventer"
+      ],
+      "geographies": [
+        "Malawisjön"
+      ]
+    },
+    {
+      "genus": "Uaru",
+      "scientific_name": "amphiacanthoides",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kilfläcksciklid"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Uaru",
+      "scientific_name": "fernandezyepezi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Uaru fernandezyepezi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Variabilichromis",
+      "scientific_name": "moorii",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Variabilichromis moorii"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "argentea",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja argentea"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "bifasciata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja bifasciata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "breidohri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja breidohri"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "fenestrata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja fenestrata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "godmanni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja godmanni"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "guttulata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja guttulata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "hartwegi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja hartwegi"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "heterospila",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja heterospila"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "intermedia",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja intermedia"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "maculicauda",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja maculicauda"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "melanurus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja melanurus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ],
+      "scientific_synonyms": [
+        "Vieja synspila"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "microphthalmus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja microphthalmus"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "regani",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja regani"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "zonata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Vieja zonata"
+      ],
+      "geographies": [
+        "Central- och Nordamerika"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "flavipinnis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotilapia flavipinnis"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "melanogenys",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xenotilapia melanogenys",
+        "Xenotilapia melanogenys \"Utinta\""
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Enantiopus melanogenys"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "ochrogenys",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xenotilapia ochrogenys"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "papilio",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xenotilapia papilio"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "sima",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xenotilapia sima"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "spilopterus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xenotilapia spilopterus"
+      ],
+      "geographies": [
+        "Tanganyikasjön"
+      ]
+    },
+    {
+      "genus": "Yssichromis",
+      "scientific_name": "piceatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Yssichromis piceatus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    },
+    {
+      "genus": "Yssichromis",
+      "scientific_name": "pyrrhocephalaus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Yssichromis pyrrhocephalaus"
+      ],
+      "geographies": [
+        "Viktoriasjön"
+      ]
+    }
+  ]
+}
