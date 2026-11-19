@@ -62,3 +62,23 @@ class SarfContrastTests(SimpleTestCase):
             CSS,
             r"\.form-control:focus-visible,[\s\S]*?\.site-form textarea:focus-visible\s*\{\s*outline:\s*3px solid var\(--sarf-accent\);",
         )
+
+    def test_bootstrap_buttons_and_navigation_keep_keyboard_focus_outline(self):
+        self.assertRegex(
+            CSS,
+            r"\.btn:focus-visible,\s*\.nav-link:focus-visible,\s*"
+            r"\.navbar-toggler:focus-visible\s*\{\s*"
+            r"outline:\s*3px solid var\(--sarf-accent\);",
+        )
+
+    def test_site_form_field_boundary_reaches_aa(self):
+        forms_css = (
+            Path(__file__).resolve().parents[1] / "static" / "css" / "forms.css"
+        ).read_text(encoding="utf-8")
+        self.assertRegex(
+            forms_css,
+            r"\.site-form textarea\s*\{[^}]*border:\s*1px solid var\(--sarf-muted\);",
+        )
+        for background in ("#ffffff", root_variable("--sarf-soft")):
+            with self.subTest(background=background):
+                self.assertGreaterEqual(contrast_ratio(root_variable("--sarf-muted"), background), 3.0)

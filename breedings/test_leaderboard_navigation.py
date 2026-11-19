@@ -57,3 +57,17 @@ class LeaderboardNavigationTests(TestCase):
         )
         self.assertEqual(response.context["view_mode"], "individual")
         self.assertEqual(response.context["selected_year"], self.previous_year)
+
+    def test_current_leaderboard_type_has_a_visible_and_programmatic_marker(self):
+        for mode, label in (("association", "Förening"), ("individual", "Individuell")):
+            with self.subTest(mode=mode):
+                response = self.client.get(
+                    reverse("leaderboards"), {"type": mode, "year": self.current_year}
+                )
+                self.assertContains(
+                    response,
+                    f'<a class="btn btn-primary text-decoration-underline" '
+                    f'href="?type={mode}&amp;year={self.current_year}" '
+                    f'aria-current="page">{label}</a>',
+                    html=True,
+                )

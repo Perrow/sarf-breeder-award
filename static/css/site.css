@@ -90,6 +90,14 @@ a:hover {
     outline-offset: 3px;
 }
 
+/* Bootstrap suppresses the outline on these components. */
+.btn:focus-visible,
+.nav-link:focus-visible,
+.navbar-toggler:focus-visible {
+    outline: 3px solid var(--sarf-accent);
+    outline-offset: 3px;
+}
+
 /* An opaque white outline remains visible against the dark footer. */
 .site-footer :focus-visible {
     outline-color: #fff;
