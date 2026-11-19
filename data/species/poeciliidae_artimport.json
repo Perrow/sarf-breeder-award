@@ -1,0 +1,802 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Alfaro",
+      "scientific_name": "cultratus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Alfaros knivfisk"
+      ]
+    },
+    {
+      "genus": "Alfaro",
+      "scientific_name": "huberi",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Alfaro huberi"
+      ]
+    },
+    {
+      "genus": "Belonesox",
+      "scientific_name": "belizanus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gäddtandkarp"
+      ]
+    },
+    {
+      "genus": "Brachyrhaphis",
+      "scientific_name": "episcopi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Brachyrhaphis episcopi"
+      ]
+    },
+    {
+      "genus": "Brachyrhaphis",
+      "scientific_name": "rhabdophora",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Brachyrhaphis rhabdophora"
+      ]
+    },
+    {
+      "genus": "Brachyrhaphis",
+      "scientific_name": "roseni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Brachyrhaphis roseni"
+      ]
+    },
+    {
+      "genus": "Brachyrhaphis",
+      "scientific_name": "terrabensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Brachyrhaphis terrabensis"
+      ]
+    },
+    {
+      "genus": "Carlhubbsia",
+      "scientific_name": "stuarti",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Carlhubbsia stuarti"
+      ]
+    },
+    {
+      "genus": "Cnesterodon",
+      "scientific_name": "carnegiei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Cnesterodon carnegiei"
+      ]
+    },
+    {
+      "genus": "Cnesterodon",
+      "scientific_name": "decemaculatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Cnesterodon decemaculatus"
+      ]
+    },
+    {
+      "genus": "Flexipenis",
+      "scientific_name": "vittatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Flexipenis vittatus"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "eurystoma",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia eurystoma"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "hispaniola",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia hispaniola"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "hurtadoi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia hurtadoi"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "krumholzi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia krumholzi"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "marshi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia marshi"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "melaplura",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia melaplura"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "panuco",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia panuco"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "punctata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia punctata"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "puncticulata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia puncticulata"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "regani",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia regani"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "rhizophorae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia rhizophorae"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "sexradiata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Gambusia sexradiata"
+      ]
+    },
+    {
+      "genus": "Gambusia",
+      "scientific_name": "xanthosoma",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gambusia xanthosoma"
+      ]
+    },
+    {
+      "genus": "Girardinus",
+      "scientific_name": "falcatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Girardinus falcatus"
+      ]
+    },
+    {
+      "genus": "Girardinus",
+      "scientific_name": "metallicus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Metalltandkarp"
+      ]
+    },
+    {
+      "genus": "Girardinus",
+      "scientific_name": "microdactylus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Girardinus microdactylus"
+      ]
+    },
+    {
+      "genus": "Heterandria",
+      "scientific_name": "formosa",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Dvärgtandkarp"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "caymanensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Limia caymanensis"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "dominicensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Limia dominicensis"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "melanogaster",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Blå limia"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "nigrofasciata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Gul limia"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "perugiae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Limia perugiae"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "tridens",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Limia tridens"
+      ],
+      "scientific_synonyms": [
+        "Limia Tridens"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "vittata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Bandlimia"
+      ]
+    },
+    {
+      "genus": "Limia",
+      "scientific_name": "zonata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Limia zonata"
+      ]
+    },
+    {
+      "genus": "Micropoecilia",
+      "scientific_name": "waiapi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Micropoecilia waiapi"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Neoheterandria",
+      "scientific_name": "elegans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Neoheterandria elegans"
+      ]
+    },
+    {
+      "genus": "Neoheterandria",
+      "scientific_name": "tridentiger",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Neoheterandria tridentiger"
+      ]
+    },
+    {
+      "genus": "Phallichthys",
+      "scientific_name": "amates",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Glada änkan"
+      ]
+    },
+    {
+      "genus": "Phallichthys",
+      "scientific_name": "fairweatheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Phallichthys fairweatheri"
+      ]
+    },
+    {
+      "genus": "Phallichthys",
+      "scientific_name": "quadripunctatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Phallichthys quadripunctatus"
+      ]
+    },
+    {
+      "genus": "Phalloceros",
+      "scientific_name": "caudimaculatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Fläckig kaudi"
+      ]
+    },
+    {
+      "genus": "Phalloptychus",
+      "scientific_name": "januarius",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Phalloptychus januarius"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "branneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Poecilia branneri"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "buttleri",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia buttleri"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "caucana",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia caucana"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "chica",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia chica"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "kempkesi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia kempkesi"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "latipinna",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Bredfensmolly"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "maylandi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia maylandi"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "mexicana",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia mexicana"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "obscura",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Poecilia obscura"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "picta",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia picta"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "reticulata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Guppy",
+        "Poecilia reticulata \"Panda\"",
+        "Poecilia reticulata Grundfärg Guld",
+        "Poecilia reticulata Grundfärg Silver",
+        "Poecilia reticulata odlingsvariant"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "salvatoris",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Poecilia salvatoris"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "sp. Endler",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Endlers guppy (ospecificerad)"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "sphenops",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Black molly"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "tridens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Poecilia tridens"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "velifera",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Segelfensmolly"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "vivipara",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ordenstandkarp"
+      ]
+    },
+    {
+      "genus": "Poecilia",
+      "scientific_name": "wingei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Endlersguppy",
+        "Poecilia wingei \"Santa Maria Bleeding Heart\""
+      ]
+    },
+    {
+      "genus": "Poeciliopsis",
+      "scientific_name": "baenschi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Poeciliopsis baenschi"
+      ]
+    },
+    {
+      "genus": "Poeciliopsis",
+      "scientific_name": "infans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Poeciliopsis infans"
+      ],
+      "scientific_synonyms": [
+        "Poecilopsis infans"
+      ]
+    },
+    {
+      "genus": "Poeciliopsis",
+      "scientific_name": "viriosa",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Poeciliopsis viriosa"
+      ],
+      "scientific_synonyms": [
+        "Poecilopsis viriosa"
+      ]
+    },
+    {
+      "genus": "Priapella",
+      "scientific_name": "compressa",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Priapella compressa"
+      ]
+    },
+    {
+      "genus": "Priapella",
+      "scientific_name": "intermedia",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Priapella"
+      ]
+    },
+    {
+      "genus": "Priapella",
+      "scientific_name": "olmecae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Priapella olmecae"
+      ]
+    },
+    {
+      "genus": "Priapichthys",
+      "scientific_name": "annectens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Priapichthys annectens"
+      ]
+    },
+    {
+      "genus": "Pseudopoecilia",
+      "scientific_name": "festae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pseudopoecilia festae"
+      ],
+      "scientific_synonyms": [
+        "Pseduopoecilia festae"
+      ]
+    },
+    {
+      "genus": "Pseudopoecilia",
+      "scientific_name": "nigroventralis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pseudopoecilia nigroventralis"
+      ]
+    },
+    {
+      "genus": "Pseudoxiphophorus",
+      "scientific_name": "bimaculatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pseudoxiphophorus bimaculatus"
+      ]
+    },
+    {
+      "genus": "Pseudoxiphophorus",
+      "scientific_name": "jonesi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pseudoxiphophorus jonesi"
+      ]
+    },
+    {
+      "genus": "Quintana",
+      "scientific_name": "atrizona",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Glastandkarp"
+      ]
+    },
+    {
+      "genus": "Scolichthys",
+      "scientific_name": "greenwayi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Scolichthys greenwayi"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "alvarezi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xiphophorus alvarezi"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "andersi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus andersi"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "birchmanni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus birchmanni"
+      ],
+      "scientific_synonyms": [
+        "Xiphophorus bircmanni"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "clemenciae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus clemenciae"
+      ],
+      "scientific_synonyms": [
+        "Xiphophorus clemensiae"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "continens",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus continens"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "cortesi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus cortesi"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "evelynae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xiphophorus evelynae"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "hellerii",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Svärdbärare"
+      ],
+      "scientific_synonyms": [
+        "Xiphophorus helleri"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "maculatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Platy"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "malinche",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Xiphophorus malinche"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "mayae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus mayae"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "meyeri",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xiphophorus meyeri"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "milleri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus milleri"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "montezumae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Montezumasvärdbärare"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "multilineatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus multilineatus"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "nezahualcoyotl",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xiphophorus nezahualcoyotl"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "nigrensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus nigrensis"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "pygmaeus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Dvärgsvärdbärare"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "signum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Xiphophorus signum"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "variatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Indianplaty"
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "xiphidum",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xiphophorus xiphidum"
+      ]
+    }
+  ]
+}
