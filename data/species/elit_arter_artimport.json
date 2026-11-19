@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Abramites",
+      "scientific_name": "hypselonotus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Bottentittare"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Chromobotia",
+      "scientific_name": "macracanthus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Praktbotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Balantiocheilus",
+      "scientific_name": "melanopterus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Silverhaj"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Epalzeorhynchus",
+      "scientific_name": "kallopterus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Guldbandsalgätare"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Rasbora",
+      "scientific_name": "kalochroma",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Clownrasbora"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Carnegiella",
+      "scientific_name": "marthae",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Dvärgbilfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Carnegiella",
+      "scientific_name": "myersi",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Myers bilfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Gasteropelecus",
+      "scientific_name": "maculatus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Gasteropelecus maculatus"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Gasteropelecus",
+      "scientific_name": "sternicla",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Vanlig bilfisk"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Thoracocharax",
+      "scientific_name": "securis",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Thoracocharax securis"
+      ],
+      "geographies": [
+        "Sydamerika"
+      ]
+    },
+    {
+      "genus": "Panaque",
+      "scientific_name": "nigrolineatus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Panaque nigrolineatus"
+      ]
+    },
+    {
+      "genus": "Gnathonemus",
+      "scientific_name": "petersii",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Elefantnosfisk"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Xenomystus",
+      "scientific_name": "nigri",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Afrikansk knivfisk"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Electrophorus",
+      "scientific_name": "electricus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Elektrisk ål"
+      ]
+    },
+    {
+      "genus": "Gymnotus",
+      "scientific_name": "carapo",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Knivfisk"
+      ]
+    },
+    {
+      "genus": "Kryptopterus",
+      "scientific_name": "minor",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Indisk glasmal"
+      ]
+    },
+    {
+      "genus": "Luciocephalus",
+      "scientific_name": "pulcher",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Gäddhuvudsfisk"
+      ]
+    },
+    {
+      "genus": "Macrognathus",
+      "scientific_name": "aculeatus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Macrognathus aculeatus"
+      ]
+    },
+    {
+      "genus": "Malapterurus",
+      "scientific_name": "electricus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Elektrisk mal"
+      ]
+    },
+    {
+      "genus": "Microphis",
+      "scientific_name": "smithi",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Microphis smithi"
+      ]
+    },
+    {
+      "genus": "Monodactylus",
+      "scientific_name": "argenteus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Månfisk"
+      ]
+    },
+    {
+      "genus": "Periophthalmus",
+      "scientific_name": "barbarus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Slamkrypare"
+      ]
+    },
+    {
+      "genus": "Scatophagus",
+      "scientific_name": "argus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Argusfisk"
+      ]
+    },
+    {
+      "genus": "Synodontis",
+      "scientific_name": "angelicus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Synodontis angelicus"
+      ]
+    },
+    {
+      "genus": "Tetraodon",
+      "scientific_name": "biocellatus",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Tetraodon biocellatus"
+      ]
+    },
+    {
+      "genus": "Toxotes",
+      "scientific_name": "jaculatrix",
+      "breeding_class": "elite",
+      "swedish_names": [
+        "Sprutfisk"
+      ]
+    }
+  ]
+}
