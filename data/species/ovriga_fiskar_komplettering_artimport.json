@@ -1,0 +1,172 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Distichodus",
+      "scientific_name": "sexfasciatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Sexbandad laxkarp"
+      ],
+      "geographies": [
+        "Afrika"
+      ]
+    },
+    {
+      "genus": "Neolebias",
+      "scientific_name": "ansorgii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Gröntetra"
+      ],
+      "geographies": [
+        "Afrika"
+      ],
+      "scientific_synonyms": [
+        "Neolebias ansorgei"
+      ]
+    },
+    {
+      "genus": "Acanthopsis",
+      "scientific_name": "choirorhynchus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tryngrönling"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Botia",
+      "scientific_name": "almorhae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pakistanbotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Botia",
+      "scientific_name": "dario",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Botia dario"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Botia",
+      "scientific_name": "kubotai",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Polka dot botia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Botia",
+      "scientific_name": "striata",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Zebrabotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Misgurnus",
+      "scientific_name": "anguillicauda",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Väderål"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Pangio",
+      "scientific_name": "kuhlii",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Kuhliål"
+      ]
+    },
+    {
+      "genus": "Syncrossus",
+      "scientific_name": "hymenophysa",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Tigerbotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Yasuhikotakia",
+      "scientific_name": "modesta",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Blågrön botia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Yasuhikotakia",
+      "scientific_name": "morleti",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Skunkbotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Yasuhikotakia",
+      "scientific_name": "sidthimunki",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Dvärgbotia"
+      ],
+      "geographies": [
+        "Asien"
+      ]
+    },
+    {
+      "genus": "Characidium",
+      "scientific_name": "fasciatum",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Characidium fasciatum"
+      ]
+    },
+    {
+      "genus": "Characidium",
+      "scientific_name": "rachovi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Characidium rachovi"
+      ]
+    },
+    {
+      "genus": "Crenuchus",
+      "scientific_name": "spilurus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Crenuchus spilurus"
+      ]
+    }
+  ]
+}
