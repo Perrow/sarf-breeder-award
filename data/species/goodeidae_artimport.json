@@ -1,0 +1,192 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Ameca",
+      "scientific_name": "splendens",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ameca splendens"
+      ]
+    },
+    {
+      "genus": "Chapalichthys",
+      "scientific_name": "encaustus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chapalichthys encaustus"
+      ]
+    },
+    {
+      "genus": "Chapalichthys",
+      "scientific_name": "pardalis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Chapalichthys pardalis"
+      ],
+      "scientific_synonyms": [
+        "Chapalichthys paradalis"
+      ]
+    },
+    {
+      "genus": "Characodon",
+      "scientific_name": "audax",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Characodon audax",
+        "Characodon audax \"El Toboso\""
+      ]
+    },
+    {
+      "genus": "Characodon",
+      "scientific_name": "lateralis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Characodon lateralis",
+        "Characodon lateralis \"Los Berros\""
+      ]
+    },
+    {
+      "genus": "Girardinichthys",
+      "scientific_name": "multiradiatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Girardinichthys multiradiatus"
+      ]
+    },
+    {
+      "genus": "Girardinichthys",
+      "scientific_name": "viviparus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Amarilo"
+      ]
+    },
+    {
+      "genus": "Goodea",
+      "scientific_name": "atripinnis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Goodea atripinnis"
+      ]
+    },
+    {
+      "genus": "Ilyodon",
+      "scientific_name": "furcidens",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ilyodon furcidens"
+      ]
+    },
+    {
+      "genus": "Ilyodon",
+      "scientific_name": "lennoni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ilyodon lennoni"
+      ]
+    },
+    {
+      "genus": "Ilyodon",
+      "scientific_name": "whitei",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ilyodon whitei"
+      ]
+    },
+    {
+      "genus": "Ilyodon",
+      "scientific_name": "xantusi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Ilyodon xantusi"
+      ]
+    },
+    {
+      "genus": "Skiffia",
+      "scientific_name": "bilineata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Skiffia bilineata"
+      ]
+    },
+    {
+      "genus": "Skiffia",
+      "scientific_name": "francesae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Skiffia francesae"
+      ],
+      "scientific_synonyms": [
+        "Skiffia francessae"
+      ]
+    },
+    {
+      "genus": "Skiffia",
+      "scientific_name": "multipunctata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Skiffia multipunctata"
+      ],
+      "scientific_synonyms": [
+        "Skiffia multipunctatus"
+      ]
+    },
+    {
+      "genus": "Xenoophorus",
+      "scientific_name": "captivus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenoophorus captivus"
+      ]
+    },
+    {
+      "genus": "Xenotaenia",
+      "scientific_name": "resolanae",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotaenia resolanae"
+      ]
+    },
+    {
+      "genus": "Xenotoca",
+      "scientific_name": "eiseni",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotoca eiseni"
+      ]
+    },
+    {
+      "genus": "Xenotoca",
+      "scientific_name": "melanosoma",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotoca melanosoma"
+      ]
+    },
+    {
+      "genus": "Xenotoca",
+      "scientific_name": "variata",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Xenotoca variata"
+      ]
+    },
+    {
+      "genus": "Zoogoneticus",
+      "scientific_name": "quitzepensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Zoogoneticus quitzepensis"
+      ]
+    },
+    {
+      "genus": "Zoogoneticus",
+      "scientific_name": "tequila",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Zoogoneticus tequila"
+      ]
+    }
+  ]
+}
