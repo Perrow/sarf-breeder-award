@@ -210,6 +210,14 @@
     },
     {
       "genus": "Pseudomugil",
+      "scientific_name": "luminatus",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Pseudomugil luminatus"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
       "scientific_name": "mellis",
       "breeding_class": "silver",
       "swedish_names": [

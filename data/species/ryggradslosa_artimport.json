@@ -2,6 +2,14 @@
   "version": 1,
   "species": [
     {
+      "genus": "Atyoida",
+      "scientific_name": "sulcatepis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "solfjädersräka"
+      ]
+    },
+    {
       "genus": "Clea",
       "scientific_name": "helena",
       "breeding_class": "bronze",
@@ -13,11 +21,11 @@
       ]
     },
     {
-      "genus": "Atyoida",
-      "scientific_name": "sulcatepis",
-      "breeding_class": "gold",
+      "genus": "Desmocaris",
+      "scientific_name": "trispinosa",
+      "breeding_class": "bronze",
       "swedish_names": [
-        "solfjädersräka"
+        "Desmocaris trispinosa"
       ]
     },
     {
@@ -58,6 +66,41 @@
       "breeding_class": "silver",
       "swedish_names": [
         "glasräka"
+      ]
+    },
+    {
+      "genus": "Neritina",
+      "scientific_name": "natalensis",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "zebra aldae eating snail"
+      ]
+    },
+    {
+      "genus": "Neritina",
+      "scientific_name": "pulligera",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Helmet snail"
+      ]
+    },
+    {
+      "genus": "Palaemonetes",
+      "scientific_name": "paludosus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Amerikansk glasräka"
+      ]
+    },
+    {
+      "genus": "Tylomelania",
+      "scientific_name": "sp.",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Elefant snäcka"
+      ],
+      "scientific_synonyms": [
+        "Tylomelania sp"
       ]
     }
   ]
