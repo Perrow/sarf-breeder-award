@@ -1,0 +1,241 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Chilaterina",
+      "scientific_name": "bleheri",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chilaterina bleheri"
+      ]
+    },
+    {
+      "genus": "Chilaterina",
+      "scientific_name": "campsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chilaterina campsi"
+      ]
+    },
+    {
+      "genus": "Chilaterina",
+      "scientific_name": "fasciata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Chilaterina fasciata"
+      ]
+    },
+    {
+      "genus": "Glossolepis",
+      "scientific_name": "incisus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Röd regnbågsfisk"
+      ]
+    },
+    {
+      "genus": "Iriatherina",
+      "scientific_name": "werneri",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Iriatherina werneri"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "affinis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia affinis"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "boesemani",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia boesemani"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "coatsi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia coatsi"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "duboulayi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia duboulayi"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "eachamensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia eachamensis"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "goldiei",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia goldiei"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "herbertaxelrodi",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia herbertaxelrodi"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "lacustris",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia lacustris"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "maccullochi",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Liten regnbågsfisk"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "nigrans",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia nigrans"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "oktediensis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia oktediensis"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "papuae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia papuae"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "parkinsoni",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia parkinsoni"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "praecox",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia praecox"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "sahulensis",
+      "breeding_class": "bronze",
+      "swedish_names": [
+        "Melanotaenia sahulensis"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "splendida",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Stor regnbågsfisk"
+      ]
+    },
+    {
+      "genus": "Melanotaenia",
+      "scientific_name": "trifasciata",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Melanotaenia trifasciata"
+      ]
+    },
+    {
+      "genus": "Popondetta",
+      "scientific_name": "connieae",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Popondetta connieae"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "furcatus",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pseudomugil furcatus"
+      ],
+      "scientific_synonyms": [
+        "Popondetta furcata",
+        "Popondichthys furcatus"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "gertrudae",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pseudomugil gertrudae"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "mellis",
+      "breeding_class": "silver",
+      "swedish_names": [
+        "Pseudomugil mellis"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "signifer",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pseudomugil signifer"
+      ]
+    },
+    {
+      "genus": "Pseudomugil",
+      "scientific_name": "tenellus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Pseudomugil tenellus"
+      ]
+    },
+    {
+      "genus": "Rhadinocentrus",
+      "scientific_name": "ornatus",
+      "breeding_class": "gold",
+      "swedish_names": [
+        "Rhadinocentrus ornatus"
+      ]
+    }
+  ]
+}
