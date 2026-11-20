@@ -18,7 +18,7 @@ class AssociationAdminFormTests(SimpleTestCase):
 
         self.assertEqual(
             fields,
-            ("name", "description", "website_url", "email", "contact_person", "note"),
+            ("name", "description", "website_url", "facebook_url", "instagram_url", "email", "contact_person", "note"),
         )
         self.assertNotIn("organization_number", fields)
         self.assertNotIn("phone", fields)

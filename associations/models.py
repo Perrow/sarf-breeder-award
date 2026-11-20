@@ -15,7 +15,7 @@ def _validate_social_url(value, hosts, platform):
 
 
 def validate_facebook_url(value):
-    _validate_social_url(value, {"facebook.com", "www.facebook.com", "m.facebook.com"}, "Facebook")
+    _validate_social_url(value, {"facebook.com", "www.facebook.com", "m.facebook.com", "web.facebook.com"}, "Facebook")
 
 
 def validate_instagram_url(value):

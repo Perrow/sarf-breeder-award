@@ -80,7 +80,7 @@ class AssociationWebsiteTests(TestCase):
         self.assertContains(response, 'href="https://www.instagram.com/testforeningen/"')
         self.assertContains(response, "Instagram – Testföreningen")
         self.assertContains(response, 'rel="noopener noreferrer"')
-        self.assertContains(response, 'aria-hidden="true"', count=2)
+        self.assertContains(response, '<svg class="flex-shrink-0"', count=2)
         self.assertContains(response, 'focusable="false"', count=2)
         self.assertContains(response, 'viewBox="0 0 24 24"', count=2)
 
@@ -92,6 +92,19 @@ class AssociationWebsiteTests(TestCase):
 
     def test_social_url_fields_are_optional(self):
         Association(name="Testföreningen").full_clean()
+
+    def test_facebook_web_subdomain_is_accepted(self):
+        association = Association(
+            name="Uppsala Akvarieförening",
+            facebook_url="https://web.facebook.com/uaf.uppsala",
+        )
+        association.full_clean()
+        association.save()
+        association.refresh_from_db()
+        self.assertEqual(
+            association.facebook_url,
+            "https://web.facebook.com/uaf.uppsala",
+        )
 
     def test_social_url_validation_rejects_wrong_platform_and_http(self):
         for field, invalid in (
