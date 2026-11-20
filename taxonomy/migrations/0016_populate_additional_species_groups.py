@@ -1,7 +1,7 @@
 """Add the remaining aquarium species groups without modifying existing groups.
 
-Genera are created when absent so this migration works before or after species
-imports. Subsequent imports reuse the genera and inherit their group membership.
+Only already-existing genera are linked. Later genus creation is handled by the
+species-group membership receiver, without seeding unused genera in test databases.
 """
 
 from django.db import migrations
@@ -120,11 +120,8 @@ def populate_species_groups(apps, schema_editor):
             genus = Genus.objects.using(alias).filter(
                 scientific_name__iexact=scientific_name
             ).first()
-            if genus is None:
-                genus = Genus.objects.using(alias).create(
-                    scientific_name=scientific_name
-                )
-            group.genera.add(genus)
+            if genus is not None:
+                group.genera.add(genus)
 
 
 class Migration(migrations.Migration):
