@@ -8,7 +8,13 @@
 <p>{{ association.description|linebreaksbr }}</p>
 {% endif %}
 {% if association.website_url %}
-<p><a href="{{ association.website_url }}" target="_blank" rel="noopener">Besök föreningens hemsida</a></p>
+<p><a href="{{ association.website_url }}" target="_blank" rel="noopener noreferrer">Besök föreningens hemsida</a></p>
+{% endif %}
+{% if association.facebook_url %}
+<p><a href="{{ association.facebook_url }}" target="_blank" rel="noopener noreferrer">Facebook – {{ association.name }}</a></p>
+{% endif %}
+{% if association.instagram_url %}
+<p><a href="{{ association.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram – {{ association.name }}</a></p>
 {% endif %}
 
 {% if association_achievements %}

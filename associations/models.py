@@ -1,6 +1,25 @@
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.core.validators import URLValidator
+from urllib.parse import urlsplit
+
+
+def _validate_social_url(value, hosts, platform):
+    if not value:
+        return
+    URLValidator(schemes=["https"])(value)
+    url = urlsplit(value)
+    if (url.hostname or "").lower() not in hosts or url.username or url.password or url.port:
+        raise ValidationError(f"Ange en giltig HTTPS-länk till {platform}.")
+
+
+def validate_facebook_url(value):
+    _validate_social_url(value, {"facebook.com", "www.facebook.com", "m.facebook.com"}, "Facebook")
+
+
+def validate_instagram_url(value):
+    _validate_social_url(value, {"instagram.com", "www.instagram.com"}, "Instagram")
 
 
 class Association(models.Model):
@@ -10,6 +29,8 @@ class Association(models.Model):
     phone = models.CharField(max_length=50, blank=True, verbose_name="telefon")
     description = models.CharField(max_length=500, blank=True, verbose_name="beskrivning")
     website_url = models.URLField(max_length=500, blank=True, verbose_name="hemsida")
+    facebook_url = models.URLField(max_length=500, blank=True, validators=[validate_facebook_url], verbose_name="Facebook")
+    instagram_url = models.URLField(max_length=500, blank=True, validators=[validate_instagram_url], verbose_name="Instagram")
     address = models.CharField(max_length=255, blank=True, verbose_name="adress")
     postal_code = models.CharField(max_length=20, blank=True, verbose_name="postnummer")
     city = models.CharField(max_length=100, blank=True, verbose_name="ort")

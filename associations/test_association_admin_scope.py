@@ -245,3 +245,68 @@ class AssociationSpecificAdministrationTests(TestCase):
                 self.assertContains(response, ">Administration</a>", html=False)
                 self.assertNotContains(response, ">Föreningsadministration</a>", html=False)
                 self.assertNotContains(response, reverse("system_association_admins"))
+
+    def test_association_admin_can_save_edit_and_clear_social_links(self):
+        self.client.force_login(self.association_admin)
+        url = reverse("association_edit", args=[self.first.pk])
+        data = {
+            "name": self.first.name,
+            "website_url": self.first.website_url,
+            "description": self.first.description,
+            "facebook_url": "https://www.facebook.com/firstassociation",
+            "instagram_url": "https://www.instagram.com/firstassociation/",
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.first.refresh_from_db()
+        self.assertEqual(self.first.facebook_url, data["facebook_url"])
+        self.assertEqual(self.first.instagram_url, data["instagram_url"])
+
+        data["facebook_url"] = "https://m.facebook.com/newassociation"
+        data["instagram_url"] = ""
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.first.refresh_from_db()
+        self.assertEqual(self.first.facebook_url, data["facebook_url"])
+        self.assertEqual(self.first.instagram_url, "")
+
+        data["facebook_url"] = ""
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, 302)
+        self.first.refresh_from_db()
+        self.assertEqual(self.first.facebook_url, "")
+
+    def test_invalid_social_link_is_rejected_without_saving(self):
+        self.client.force_login(self.association_admin)
+        response = self.client.post(
+            reverse("association_edit", args=[self.first.pk]),
+            {
+                "name": self.first.name,
+                "website_url": self.first.website_url,
+                "description": self.first.description,
+                "facebook_url": "https://example.com/not-facebook",
+                "instagram_url": "https://www.instagram.com/valid/",
+            },
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Facebook")
+        self.first.refresh_from_db()
+        self.assertEqual(self.first.facebook_url, "")
+        self.assertEqual(self.first.instagram_url, "")
+
+    def test_other_association_social_links_cannot_be_edited(self):
+        self.client.force_login(self.association_admin)
+        response = self.client.post(
+            reverse("association_edit", args=[self.second.pk]),
+            {
+                "name": "Andra föreningen",
+                "website_url": "",
+                "description": "",
+                "facebook_url": "https://www.facebook.com/unauthorized",
+                "instagram_url": "https://www.instagram.com/unauthorized/",
+            },
+        )
+        self.assertEqual(response.status_code, 403)
+        self.second.refresh_from_db()
+        self.assertEqual(self.second.facebook_url, "")
+        self.assertEqual(self.second.instagram_url, "")

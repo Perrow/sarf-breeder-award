@@ -38,7 +38,7 @@ class AssociationAdmin(admin.ModelAdmin):
         (
             "Förening",
             {
-                "fields": ("name", "description", "website_url"),
+                "fields": ("name", "description", "website_url", "facebook_url", "instagram_url"),
             },
         ),
         (
