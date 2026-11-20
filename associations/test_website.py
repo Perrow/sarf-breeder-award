@@ -58,6 +58,8 @@ class AssociationWebsiteTests(TestCase):
         self.assertContains(response, "En förening för akvarister<br>i Uppsala.", html=True)
         self.assertContains(response, 'href="https://example.org/foreningen"')
         self.assertContains(response, "Besök föreningens hemsida")
+        self.assertContains(response, '<svg class="flex-shrink-0"', count=1)
+        self.assertContains(response, 'focusable="false"', count=1)
         self.assertContains(response, "<h2>Medlemstopplista</h2>", html=True)
 
     def test_public_member_leaderboard_has_no_website_link_without_url(self):
@@ -83,6 +85,24 @@ class AssociationWebsiteTests(TestCase):
         self.assertContains(response, '<svg class="flex-shrink-0"', count=2)
         self.assertContains(response, 'focusable="false"', count=2)
         self.assertContains(response, 'viewBox="0 0 24 24"', count=2)
+
+    def test_website_and_social_links_share_the_same_block(self):
+        association = Association.objects.create(
+            name="Testföreningen",
+            website_url="https://example.org/foreningen",
+            facebook_url="https://www.facebook.com/testforeningen",
+            instagram_url="https://www.instagram.com/testforeningen/",
+        )
+        response = self.client.get(reverse("association_member_leaderboard", args=[association.pk]))
+
+        self.assertContains(response, '<div class="d-flex flex-wrap gap-3 mb-3">', count=1)
+        self.assertContains(response, '<a class="d-inline-flex align-items-center gap-2"', count=3)
+        self.assertContains(response, '<svg class="flex-shrink-0"', count=3)
+        self.assertContains(response, 'focusable="false"', count=3)
+        self.assertContains(response, 'href="https://example.org/foreningen"')
+        self.assertContains(response, "Besök föreningens hemsida")
+        self.assertContains(response, "Facebook – Testföreningen")
+        self.assertContains(response, "Instagram – Testföreningen")
 
     def test_missing_social_links_are_not_rendered(self):
         association = Association.objects.create(name="Testföreningen")
