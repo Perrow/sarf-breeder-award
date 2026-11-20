@@ -9,10 +9,12 @@ from .models import Association, Membership
 class AssociationManagementForm(forms.ModelForm):
     class Meta:
         model = Association
-        fields = ("name", "website_url", "description")
+        fields = ("name", "website_url", "facebook_url", "instagram_url", "description")
         widgets = {
             "name": forms.TextInput(attrs={"class": "form-control"}),
             "website_url": forms.URLInput(attrs={"class": "form-control"}),
+            "facebook_url": forms.URLInput(attrs={"class": "form-control"}),
+            "instagram_url": forms.URLInput(attrs={"class": "form-control"}),
             "description": forms.Textarea(attrs={"class": "form-control", "rows": 5}),
         }
 

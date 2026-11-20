@@ -40,6 +40,22 @@
                         {% endfor %}
                     </div>
 
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.facebook_url.id_for_label }}">{{ form.facebook_url.label }}</label>
+                        {{ form.facebook_url }}
+                        {% for error in form.facebook_url.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="{{ form.instagram_url.id_for_label }}">{{ form.instagram_url.label }}</label>
+                        {{ form.instagram_url }}
+                        {% for error in form.instagram_url.errors %}
+                            <div class="invalid-feedback d-block">{{ error }}</div>
+                        {% endfor %}
+                    </div>
+
                     <div class="mb-4">
                         <label class="form-label" for="{{ form.description.id_for_label }}">{{ form.description.label }}</label>
                         {{ form.description }}

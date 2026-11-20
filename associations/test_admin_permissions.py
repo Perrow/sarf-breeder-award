@@ -182,7 +182,7 @@ class AssociationAdministrationTests(TestCase):
             for field in options["fields"]
         )
 
-        self.assertEqual(fields, ("name", "description", "website_url"))
+        self.assertEqual(fields, ("name", "description", "website_url", "facebook_url", "instagram_url"))
 
     def test_association_admin_can_change_own_association(self):
         self.client.force_login(self.association_admin)
