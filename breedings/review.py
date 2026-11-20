@@ -65,6 +65,15 @@ class ReviewDecisionForm(forms.Form):
     )
 
 
+class TaxonomyRejectionForm(forms.Form):
+    review_comment = forms.CharField(
+        label="Granskningskommentar",
+        required=False,
+        max_length=2000,
+        widget=forms.Textarea(attrs={"class": "form-control", "rows": 4}),
+    )
+
+
 class TaxonomyResolutionForm(forms.Form):
     species = forms.ModelChoiceField(
         label="Art",
@@ -249,8 +258,37 @@ def resolve_taxonomy(request, pk):
         messages.info(request, "Odlingsregistreringen har redan löst taxonomi.")
         return redirect("breeding_review", pk=registration.pk)
 
-    if request.method == "POST":
+    if request.method == "POST" and "reject" in request.POST:
+        rejection_form = TaxonomyRejectionForm(request.POST)
+        if rejection_form.is_valid():
+            registration.status = BreedingRegistration.Status.REJECTED
+            registration.reviewer = request.user
+            registration.review_comment = rejection_form.cleaned_data["review_comment"]
+            registration.approved_at = None
+            registration.awarded_breeding_class = ""
+            registration.awarded_points = None
+            registration.publication_status = (
+                BreedingRegistration.PublicationStatus.NOT_PUBLISHED
+            )
+            registration.save(
+                update_fields=(
+                    "status",
+                    "reviewer",
+                    "review_comment",
+                    "approved_at",
+                    "awarded_breeding_class",
+                    "awarded_points",
+                    "publication_status",
+                )
+            )
+            messages.success(request, "Odlingsregistreringen har avslagits.")
+            return redirect("breeding_review_list")
+        form = TaxonomyResolutionForm()
+    elif request.method == "POST":
         form = TaxonomyResolutionForm(request.POST)
+        rejection_form = TaxonomyRejectionForm(
+            initial={"review_comment": registration.review_comment}
+        )
         if form.is_valid():
             registration.species = form.cleaned_data["species"]
             registration.save(update_fields=("species", "taxonomy_needs_resolution"))
@@ -261,6 +299,9 @@ def resolve_taxonomy(request, pk):
             return redirect("breeding_review", pk=registration.pk)
     else:
         form = TaxonomyResolutionForm()
+        rejection_form = TaxonomyRejectionForm(
+            initial={"review_comment": registration.review_comment}
+        )
 
     species_add_url = None
     if request.user.is_staff and request.user.has_perm("taxonomy.add_species"):
@@ -285,6 +326,7 @@ def resolve_taxonomy(request, pk):
             "registration": registration,
             "form": form,
             "species_add_url": species_add_url,
+            "rejection_form": rejection_form,
         },
     )
 

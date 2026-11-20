@@ -39,6 +39,23 @@
     </div>
 </div>
 
+<div class="card shadow-sm mt-4">
+    <div class="card-body">
+        <h2 class="h5">Avslå odlingen utan att lösa taxonomin</h2>
+        <p class="text-body-secondary">Avslaget sparas utan att en art behöver kopplas. Du kan lämna en kommentar till odlaren.</p>
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {% include "includes/form_error_summary.html" with form=rejection_form %}
+            <div class="mb-3">
+                <label class="form-label" for="{{ rejection_form.review_comment.id_for_label }}">{{ rejection_form.review_comment.label }}</label>
+                {{ rejection_form.review_comment }}
+                {% for error in rejection_form.review_comment.errors %}<div class="invalid-feedback d-block">{{ error }}</div>{% endfor %}
+            </div>
+            <button class="btn btn-outline-danger" type="submit" name="reject" value="Avslå">Avslå odlingen</button>
+        </form>
+    </div>
+</div>
+
 <script>
 (function () {
     const input = document.getElementById("species-search");
