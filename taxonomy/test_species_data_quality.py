@@ -31,7 +31,7 @@ class SpeciesDataQualityAdminTests(TestCase):
 
     def test_four_criteria_and_descending_score(self):
         complete = self.add_species("complete", "Komplett", "English name")
-        missing_one = self.add_species("one", "Svenskt namn", "English name")
+        missing_one = self.add_species("one", english_name="English name")
         missing_two = self.add_species("two", "Svenskt namn", "")
         missing_three = self.add_species("three", "Svenskt namn", "")
         missing_four = self.add_species("four")
@@ -59,8 +59,8 @@ class SpeciesDataQualityAdminTests(TestCase):
             [(item.pk, item.quality_score) for item in rows],
             [
                 (missing_four.pk, 4),
-                (missing_two.pk, 2),
                 (missing_three.pk, 2),
+                (missing_two.pk, 2),
                 (missing_one.pk, 1),
                 (complete.pk, 0),
             ],

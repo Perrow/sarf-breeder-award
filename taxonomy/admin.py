@@ -4,7 +4,7 @@ from pathlib import Path
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Case, Exists, F, IntegerField, OuterRef, Value, When
-from django.db.models.functions import Concat, Trim
+from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
