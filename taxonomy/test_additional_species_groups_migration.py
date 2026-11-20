@@ -110,15 +110,7 @@ class AdditionalSpeciesGroupsMigrationTests(TestCase):
         self.run_population()
         self.assertEqual(Genus.objects.count(), genus_count)
 
-    def test_new_genus_added_after_migration_gets_group_memberships(self):
+    def test_new_genus_after_migration_is_not_automatically_assigned(self):
         self.run_population()
         genus = Genus.objects.create(scientific_name="Chromobotia")
-        self.assertTrue(
-            SpeciesGroup.objects.get(name="Grönlingar").genera.filter(pk=genus.pk).exists()
-        )
-        self.assertTrue(
-            SpeciesGroup.objects.get(name="Karpliknande fiskar").genera.filter(pk=genus.pk).exists()
-        )
-        self.assertFalse(
-            SpeciesGroup.objects.filter(name="Tetror", genera=genus).exists()
-        )
+        self.assertFalse(SpeciesGroup.objects.filter(genera=genus).exists())

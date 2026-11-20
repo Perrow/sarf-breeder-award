@@ -6,5 +6,3 @@ class TaxonomyConfig(AppConfig):
     name = "taxonomy"
     verbose_name = "Taxonomi"
 
-    def ready(self):
-        from . import species_group_membership  # noqa: F401

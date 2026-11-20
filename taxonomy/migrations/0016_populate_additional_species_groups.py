@@ -1,7 +1,7 @@
 """Add the remaining aquarium species groups without modifying existing groups.
 
-Only already-existing genera are linked. Later genus creation is handled by the
-species-group membership receiver, without seeding unused genera in test databases.
+Only already-existing genera are linked. Run this after importing genera; no
+automatic assignments are made for genera created after the migration.
 """
 
 from django.db import migrations
