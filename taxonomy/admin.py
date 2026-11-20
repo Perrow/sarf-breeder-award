@@ -3,8 +3,6 @@ from pathlib import Path
 
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
-from django.db.models import Case, Exists, F, IntegerField, OuterRef, Value, When
-from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -26,6 +24,7 @@ from .models import (
     SpeciesGroup,
     SpeciesLink,
 )
+from .data_quality import annotate_species_data_quality
 from .species_import import SpeciesImportError, import_species_file
 from .species_merge import merge_species
 
@@ -297,61 +296,10 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
         return False
 
     def get_queryset(self, request):
-        species_geographies = Species.geographies.through.objects.filter(
-            species_id=OuterRef("pk")
-        )
-        species_links = SpeciesLink.objects.filter(species_id=OuterRef("pk"))
-
-        # Avoid ModelAdmin.get_queryset(): it applies get_ordering() before
-        # quality_score is annotated, which raises FieldError.
-        queryset = self.model._default_manager.get_queryset().select_related("genus").annotate(
-            has_geography=Exists(species_geographies),
-            has_link=Exists(species_links),
-        )
-        return (
-            queryset.annotate(
-                swedish_name_gap=Case(
-                    When(
-                        common_name__iexact=Concat(
-                            F("genus__scientific_name"),
-                            Value(" "),
-                            F("scientific_name"),
-                        ),
-                        then=Value(1),
-                    ),
-                    default=Value(0),
-                    output_field=IntegerField(),
-                ),
-                english_name_gap=Case(
-                    When(english_name="", then=Value(1)),
-                    default=Value(0),
-                    output_field=IntegerField(),
-                ),
-                geography_gap=Case(
-                    When(has_geography=False, then=Value(1)),
-                    default=Value(0),
-                    output_field=IntegerField(),
-                ),
-                link_gap=Case(
-                    When(has_link=False, then=Value(1)),
-                    default=Value(0),
-                    output_field=IntegerField(),
-                ),
-            )
-            .annotate(
-                quality_score=(
-                    F("swedish_name_gap")
-                    + F("english_name_gap")
-                    + F("geography_gap")
-                    + F("link_gap")
-                )
-            )
-            .order_by(
-                "-quality_score",
-                "genus__scientific_name",
-                "scientific_name",
-                "pk",
-            )
+        return annotate_species_data_quality(
+            self.model._default_manager.get_queryset().select_related("genus")
+        ).order_by(
+            "-quality_score", "genus__scientific_name", "scientific_name", "pk"
         )
 
     @admin.display(description="Art")
