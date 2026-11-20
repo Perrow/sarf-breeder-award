@@ -129,3 +129,86 @@ class TaxonomyResolutionTests(TestCase):
         self.assertRedirects(response, self.resolve_url())
         self.registration.refresh_from_db()
         self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
+
+    def test_reviewer_can_reject_unresolved_taxonomy_with_comment(self):
+        self.client.force_login(self.reviewer)
+
+        response = self.client.post(
+            self.resolve_url(),
+            {"reject": "Avslå", "review_comment": "Arten kan inte verifieras."},
+        )
+
+        self.assertRedirects(response, reverse("breeding_review_list"))
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.REJECTED)
+        self.assertEqual(self.registration.reviewer, self.reviewer)
+        self.assertEqual(self.registration.review_comment, "Arten kan inte verifieras.")
+        self.assertIsNone(self.registration.species)
+        self.assertTrue(self.registration.taxonomy_needs_resolution)
+        self.assertIsNone(self.registration.approved_at)
+        self.assertEqual(self.registration.awarded_breeding_class, "")
+        self.assertIsNone(self.registration.awarded_points)
+        self.assertEqual(
+            self.registration.publication_status,
+            BreedingRegistration.PublicationStatus.NOT_PUBLISHED,
+        )
+
+        self.client.force_login(self.owner)
+        detail = self.client.get(reverse("breeding_detail", args=[self.registration.pk]))
+        self.assertContains(detail, "Arten kan inte verifieras.")
+
+    def test_reviewer_can_reject_unresolved_taxonomy_without_comment(self):
+        self.client.force_login(self.reviewer)
+        response = self.client.post(self.resolve_url(), {"reject": "Avslå"})
+
+        self.assertRedirects(response, reverse("breeding_review_list"))
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.REJECTED)
+        self.assertEqual(self.registration.review_comment, "")
+
+    def test_rejection_form_is_available_without_selecting_species(self):
+        self.client.force_login(self.reviewer)
+        response = self.client.get(self.resolve_url())
+
+        self.assertContains(response, 'name="reject" value="Avslå"')
+        self.assertContains(response, 'name="review_comment"')
+
+    def test_rejection_comment_too_long_is_not_saved(self):
+        self.client.force_login(self.reviewer)
+        response = self.client.post(
+            self.resolve_url(),
+            {"reject": "Avslå", "review_comment": "x" * 2001},
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "2000")
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
+        self.assertIsNone(self.registration.reviewer)
+
+    def test_reviewer_cannot_reject_other_association_unresolved_taxonomy(self):
+        self.client.force_login(self.other_reviewer)
+        response = self.client.post(
+            self.resolve_url(), {"reject": "Avslå", "review_comment": "Ej behörig"}
+        )
+        self.assertEqual(response.status_code, 403)
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
+
+    def test_unresolved_taxonomy_cannot_be_approved_via_rejection_endpoint(self):
+        self.client.force_login(self.reviewer)
+        response = self.client.post(
+            self.resolve_url(), {"approve": "Godkänn", "review_comment": "Försök"}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.registration.refresh_from_db()
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.SUBMITTED)
+
+    def test_rejected_taxonomy_cannot_be_resolved_after_decision(self):
+        self.client.force_login(self.reviewer)
+        self.client.post(self.resolve_url(), {"reject": "Avslå"})
+        response = self.client.post(self.resolve_url(), {"species": self.species.pk})
+        self.assertRedirects(response, reverse("breeding_review_list"))
+        self.registration.refresh_from_db()
+        self.assertIsNone(self.registration.species)
+        self.assertEqual(self.registration.status, BreedingRegistration.Status.REJECTED)
