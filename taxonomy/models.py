@@ -237,3 +237,12 @@ class SpeciesLink(models.Model):
 
     def __str__(self):
         return f"{self.source_name}: {self.title or self.url}"
+
+
+class SpeciesDataQuality(Species):
+    """Read-only admin overview of missing species catalogue information."""
+
+    class Meta:
+        proxy = True
+        verbose_name = "datakvalitet"
+        verbose_name_plural = "Datakvalitet"

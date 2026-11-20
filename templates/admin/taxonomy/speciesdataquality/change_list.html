@@ -1,0 +1,11 @@
+{% extends "admin/change_list.html" %}
+{% block result_list %}
+    <p>Varje art får en bristpoäng för vart och ett av följande:
+        svenskt namn är samma som det fullständiga vetenskapliga namnet,
+        engelskt namn saknas, geografi saknas eller ingen extern länk finns.
+        Maximalt 4 poäng per art. Listan sorteras med flest bristpoäng först
+        och därefter alfabetiskt efter vetenskapligt namn.
+        Markeringarna i kolumnerna visar vilka uppgifter som behöver kompletteras.
+    </p>
+    {{ block.super }}
+{% endblock %}
