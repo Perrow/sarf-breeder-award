@@ -302,7 +302,9 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
         )
         species_links = SpeciesLink.objects.filter(species_id=OuterRef("pk"))
 
-        queryset = super().get_queryset(request).select_related("genus").annotate(
+        # Avoid ModelAdmin.get_queryset(): it applies get_ordering() before
+        # quality_score is annotated, which raises FieldError.
+        queryset = self.model._default_manager.get_queryset().select_related("genus").annotate(
             has_geography=Exists(species_geographies),
             has_link=Exists(species_links),
         )

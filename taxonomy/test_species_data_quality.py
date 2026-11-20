@@ -79,6 +79,15 @@ class SpeciesDataQualityAdminTests(TestCase):
         self.assertContains(response, "Maximalt 4 poäng")
         self.assertContains(response, reverse("admin:taxonomy_species_change", args=[missing_four.pk]))
 
+    def test_admin_changelist_can_sort_by_annotated_quality_score(self):
+        better = self.add_species("better", "Svenskt namn", "English name")
+        worse = self.add_species("worse")
+        _, rows = self.results()
+        self.assertEqual(
+            [(item.pk, item.quality_score) for item in rows],
+            [(worse.pk, 4), (better.pk, 2)],
+        )
+
     def test_ties_are_sorted_alphabetically_and_inactive_species_are_included(self):
         zulu = self.add_species("zulu")
         alpha = self.add_species("alpha")
