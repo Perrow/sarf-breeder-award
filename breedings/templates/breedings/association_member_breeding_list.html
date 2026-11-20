@@ -11,8 +11,8 @@
 </p>
 
 <div class="btn-group mb-4" role="group" aria-label="Typ av odlingslista">
-    <a class="btn {% if list_mode == 'contribution' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=contribution&leaderboard={{ leaderboard_view }}">Bidragit med poäng</a>
-    <a class="btn {% if list_mode == 'full' %}btn-primary{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=full&leaderboard={{ leaderboard_view }}">Fullständig lista</a>
+    <a class="btn {% if list_mode == 'contribution' %}btn-primary text-decoration-underline{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=contribution&leaderboard={{ leaderboard_view }}" {% if list_mode == 'contribution' %}aria-current="page"{% endif %}>Bidragit med poäng</a>
+    <a class="btn {% if list_mode == 'full' %}btn-primary text-decoration-underline{% else %}btn-outline-primary{% endif %}" href="?year={{ selected_year }}&list=full&leaderboard={{ leaderboard_view }}" {% if list_mode == 'full' %}aria-current="page"{% endif %}>Fullständig lista</a>
 </div>
 
 {% if rows %}
