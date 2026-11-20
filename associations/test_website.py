@@ -80,6 +80,9 @@ class AssociationWebsiteTests(TestCase):
         self.assertContains(response, 'href="https://www.instagram.com/testforeningen/"')
         self.assertContains(response, "Instagram – Testföreningen")
         self.assertContains(response, 'rel="noopener noreferrer"')
+        self.assertContains(response, 'aria-hidden="true"', count=2)
+        self.assertContains(response, 'focusable="false"', count=2)
+        self.assertContains(response, 'viewBox="0 0 24 24"', count=2)
 
     def test_missing_social_links_are_not_rendered(self):
         association = Association.objects.create(name="Testföreningen")
