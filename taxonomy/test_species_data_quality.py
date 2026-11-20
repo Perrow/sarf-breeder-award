@@ -69,6 +69,13 @@ class SpeciesDataQualityAdminTests(TestCase):
         self.assertEqual(rows[0].english_name_gap, 1)
         self.assertEqual(rows[0].geography_gap, 1)
         self.assertEqual(rows[0].link_gap, 1)
+        model_admin = admin.site._registry[SpeciesDataQuality]
+        for item in rows:
+            self.assertEqual(model_admin.missing_swedish_name(item), item.swedish_name_gap == 0)
+            self.assertEqual(model_admin.missing_english_name(item), item.english_name_gap == 0)
+            self.assertEqual(model_admin.missing_geography(item), item.geography_gap == 0)
+            self.assertEqual(model_admin.missing_link(item), item.link_gap == 0)
+        self.assertContains(response, "Grön bock betyder att uppgiften finns")
         self.assertContains(response, "Maximalt 4 poäng")
         self.assertContains(response, reverse("admin:taxonomy_species_change", args=[missing_four.pk]))
 

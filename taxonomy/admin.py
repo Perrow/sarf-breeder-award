@@ -268,6 +268,16 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
     list_per_page = 100
     actions = None
 
+    def get_ordering(self, request):
+        # ChangeList otherwise falls back to Species.Meta.ordering, overriding
+        # the score-based ordering applied in get_queryset().
+        return (
+            "-quality_score",
+            "genus__scientific_name",
+            "scientific_name",
+            "pk",
+        )
+
     def has_module_permission(self, request):
         return self.has_view_permission(request)
 
@@ -356,16 +366,16 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
 
     @admin.display(boolean=True, description="Svenskt namn", ordering="swedish_name_gap")
     def missing_swedish_name(self, obj):
-        return bool(obj.swedish_name_gap)
+        return not bool(obj.swedish_name_gap)
 
     @admin.display(boolean=True, description="Engelskt namn", ordering="english_name_gap")
     def missing_english_name(self, obj):
-        return bool(obj.english_name_gap)
+        return not bool(obj.english_name_gap)
 
     @admin.display(boolean=True, description="Geografi", ordering="geography_gap")
     def missing_geography(self, obj):
-        return bool(obj.geography_gap)
+        return not bool(obj.geography_gap)
 
     @admin.display(boolean=True, description="Länk", ordering="link_gap")
     def missing_link(self, obj):
-        return bool(obj.link_gap)
+        return not bool(obj.link_gap)
