@@ -1,6 +1,7 @@
 """Regression tests for the additive species-group data migration."""
 
 import importlib
+from types import SimpleNamespace
 
 from django.apps import apps
 from django.db import connection
@@ -16,8 +17,9 @@ migration = importlib.import_module(
 
 class AdditionalSpeciesGroupsMigrationTests(TestCase):
     def run_population(self):
-        with connection.schema_editor() as schema_editor:
-            migration.populate_species_groups(apps, schema_editor)
+        migration.populate_species_groups(
+            apps, SimpleNamespace(connection=connection)
+        )
 
     def test_creates_groups_and_links_genera(self):
         self.run_population()
@@ -73,8 +75,8 @@ class AdditionalSpeciesGroupsMigrationTests(TestCase):
         )
 
     def test_repeated_population_is_idempotent_and_keeps_extra_memberships(self):
-        group = SpeciesGroup.objects.create(name="Sugmalar")
-        genus = Genus.objects.create(scientific_name="Ancistrus")
+        group = SpeciesGroup.objects.get(name="Sugmalar")
+        genus = Genus.objects.get(scientific_name="Ancistrus")
         custom = Genus.objects.create(scientific_name="Customloricaria")
         group.genera.add(custom)
 
