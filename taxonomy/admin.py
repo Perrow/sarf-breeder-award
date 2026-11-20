@@ -3,6 +3,8 @@ from pathlib import Path
 
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
+from django.db.models import Case, Exists, F, IntegerField, OuterRef, Value, When
+from django.db.models.functions import Concat
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -20,6 +22,7 @@ from .models import (
     Genus,
     ScientificSpeciesSynonym,
     Species,
+    SpeciesDataQuality,
     SpeciesGroup,
     SpeciesLink,
 )
@@ -246,3 +249,135 @@ class SpeciesAdmin(admin.ModelAdmin):
         return ", ".join(
             obj.get_species_groups(include_hidden=True).values_list("name", flat=True)
         )
+
+
+@admin.register(SpeciesDataQuality)
+class SpeciesDataQualityAdmin(admin.ModelAdmin):
+    """Rank species by missing catalogue metadata without editing through the proxy."""
+
+    change_list_template = "admin/taxonomy/speciesdataquality/change_list.html"
+    list_display = (
+        "species_edit_link",
+        "missing_count",
+        "missing_swedish_name",
+        "missing_english_name",
+        "missing_geography",
+        "missing_link",
+    )
+    list_display_links = ()
+    list_per_page = 100
+    actions = None
+
+    def get_ordering(self, request):
+        # ChangeList otherwise falls back to Species.Meta.ordering, overriding
+        # the score-based ordering applied in get_queryset().
+        return (
+            "-quality_score",
+            "genus__scientific_name",
+            "scientific_name",
+            "pk",
+        )
+
+    def has_module_permission(self, request):
+        return self.has_view_permission(request)
+
+    def has_view_permission(self, request, obj=None):
+        return (
+            request.user.has_perm("taxonomy.view_species")
+            or request.user.has_perm("taxonomy.change_species")
+        )
+
+    def has_add_permission(self, request):
+        return False
+
+    def has_change_permission(self, request, obj=None):
+        return False
+
+    def has_delete_permission(self, request, obj=None):
+        return False
+
+    def get_queryset(self, request):
+        species_geographies = Species.geographies.through.objects.filter(
+            species_id=OuterRef("pk")
+        )
+        species_links = SpeciesLink.objects.filter(species_id=OuterRef("pk"))
+
+        # Avoid ModelAdmin.get_queryset(): it applies get_ordering() before
+        # quality_score is annotated, which raises FieldError.
+        queryset = self.model._default_manager.get_queryset().select_related("genus").annotate(
+            has_geography=Exists(species_geographies),
+            has_link=Exists(species_links),
+        )
+        return (
+            queryset.annotate(
+                swedish_name_gap=Case(
+                    When(
+                        common_name__iexact=Concat(
+                            F("genus__scientific_name"),
+                            Value(" "),
+                            F("scientific_name"),
+                        ),
+                        then=Value(1),
+                    ),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+                english_name_gap=Case(
+                    When(english_name="", then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+                geography_gap=Case(
+                    When(has_geography=False, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+                link_gap=Case(
+                    When(has_link=False, then=Value(1)),
+                    default=Value(0),
+                    output_field=IntegerField(),
+                ),
+            )
+            .annotate(
+                quality_score=(
+                    F("swedish_name_gap")
+                    + F("english_name_gap")
+                    + F("geography_gap")
+                    + F("link_gap")
+                )
+            )
+            .order_by(
+                "-quality_score",
+                "genus__scientific_name",
+                "scientific_name",
+                "pk",
+            )
+        )
+
+    @admin.display(description="Art")
+    def species_edit_link(self, obj):
+        return format_html(
+            '<a href="{}">{}</a>',
+            reverse("admin:taxonomy_species_change", args=(obj.pk,)),
+            str(obj),
+        )
+
+    @admin.display(description="Bristpoäng", ordering="quality_score")
+    def missing_count(self, obj):
+        return obj.quality_score
+
+    @admin.display(boolean=True, description="Svenskt namn", ordering="swedish_name_gap")
+    def missing_swedish_name(self, obj):
+        return not bool(obj.swedish_name_gap)
+
+    @admin.display(boolean=True, description="Engelskt namn", ordering="english_name_gap")
+    def missing_english_name(self, obj):
+        return not bool(obj.english_name_gap)
+
+    @admin.display(boolean=True, description="Geografi", ordering="geography_gap")
+    def missing_geography(self, obj):
+        return not bool(obj.geography_gap)
+
+    @admin.display(boolean=True, description="Länk", ordering="link_gap")
+    def missing_link(self, obj):
+        return not bool(obj.link_gap)
