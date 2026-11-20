@@ -56,7 +56,10 @@ class SpeciesGroupModelTests(TestCase):
             breeding_class=Species.BreedingClass.BRONZE,
         )
         self.group.species.add(species)
-        self.assertEqual(list(species.get_species_groups()), [self.group])
+        self.assertEqual(
+            set(species.get_species_groups()),
+            {self.group, SpeciesGroup.objects.get(name="Sugmalar")},
+        )
 
     def test_group_membership_combines_genus_and_direct_membership_without_duplicates(self):
         self.group.genera.add(self.genus)
