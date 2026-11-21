@@ -25,6 +25,11 @@
         <div class="form-text">Detta är namnet som visas publikt på webbplatsen, bland annat i topplistor.</div>
     </dd>
 
+    {% if user.instagram_url %}
+    <dt class="col-sm-3">Instagram</dt>
+    <dd class="col-sm-9"><a href="{{ user.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram – {{ user.public_display_name }}</a></dd>
+    {% endif %}
+
     <dt class="col-sm-3">E-post</dt>
     <dd class="col-sm-9">{{ user.email }}</dd>
 </dl>
