@@ -57,10 +57,10 @@ def _transfer_quality_review(source, target):
         "notes": source_review.notes,
         "manual_review_comment": source_review.manual_review_comment,
     }
-    record = "Tidigare artgranskning vid sammanslagning:\\n" + json.dumps(
+    record = "Tidigare artgranskning vid sammanslagning:\n" + json.dumps(
         snapshot, ensure_ascii=False, indent=2
     )
-    target_review.notes = "\\n\\n".join(filter(None, [target_review.notes, record]))
+    target_review.notes = "\n\n".join(filter(None, [target_review.notes, record]))
     target_review.sources = list(dict.fromkeys([
         *(target_review.sources if isinstance(target_review.sources, list) else []),
         *(source_review.sources if isinstance(source_review.sources, list) else []),
@@ -76,7 +76,7 @@ def _transfer_quality_review(source, target):
     ):
         target_review.status = SpeciesQualityReview.Status.MANUAL_REVIEW
         target_review.review_again_after = None
-        target_review.manual_review_comment = "\\n\\n".join(filter(None, [
+        target_review.manual_review_comment = "\n\n".join(filter(None, [
             target_review.manual_review_comment,
             f"Granska sammanslagen artdata från {source}." if conflict else "",
             source_review.manual_review_comment,
