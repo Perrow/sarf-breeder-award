@@ -3,7 +3,7 @@ from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.urls import reverse
 
-from .models import Geography, Genus, Species, SpeciesDataQuality, SpeciesLink
+from .models import Geography, Genus, Species, SpeciesDataQuality, SpeciesLink, SpeciesQualityReview
 
 
 class SpeciesDataQualityAdminTests(TestCase):
@@ -162,6 +162,34 @@ class SpeciesDataQualityAdminTests(TestCase):
                 self.assertEqual(response.status_code, 200)
                 self.assertEqual(response.context["total_quality_score"], 404)
                 self.assertEqual(response.context["complete_species_count"], 0)
+
+    def test_review_statistics_include_unreviewed_and_manual_species(self):
+        from datetime import date
+
+        reviewed = self.add_species("reviewed")
+        manual = self.add_species("manual")
+        self.add_species("unreviewed")
+        SpeciesQualityReview.objects.create(
+            species=reviewed, status="reviewed",
+            reviewed_at=date(2026, 11, 21),
+        )
+        SpeciesQualityReview.objects.create(
+            species=manual, status="manual_review",
+            reviewed_at=date(2026, 11, 21),
+        )
+        response = self.client.get(self.url)
+        self.assertEqual(response.context["reviewed_species_count"], 1)
+        self.assertEqual(response.context["unreviewed_species_count"], 1)
+        self.assertEqual(response.context["manual_review_species_count"], 1)
+        self.assertContains(response, "<strong>Granskade arter:</strong> 1", html=False)
+        self.assertContains(response, "<strong>Ej granskade arter:</strong> 1", html=False)
+        self.assertContains(response, "<strong>Behöver manuell granskning:</strong> 1", html=False)
+
+    def test_empty_review_statistics_are_zero(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.context["reviewed_species_count"], 0)
+        self.assertEqual(response.context["unreviewed_species_count"], 0)
+        self.assertEqual(response.context["manual_review_species_count"], 0)
 
     def test_user_without_species_permission_cannot_see_data_quality(self):
         user = get_user_model().objects.create_user(
