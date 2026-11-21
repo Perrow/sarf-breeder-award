@@ -69,7 +69,7 @@ def _transfer_quality_review(source, target):
     # combined review; an administrator must verify the resulting species.
     target_review.status = SpeciesQualityReview.Status.MANUAL_REVIEW
     target_review.review_again_after = None
-    target_review.manual_review_comment = "\\n\\n".join(filter(None, [
+    target_review.manual_review_comment = "\n\n".join(filter(None, [
         target_review.manual_review_comment,
         f"Kontrollera sammanslagen artgranskning från {source}.",
         source_review.manual_review_comment,
