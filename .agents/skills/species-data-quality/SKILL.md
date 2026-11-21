@@ -1,13 +1,13 @@
 ---
 name: species-data-quality
-description: "Hämta tio slumpmässiga arter med databrister från Odlingskampanjen, kontrollera FishBase/NCS Artregister och andra källor och skapa granskbara kompletteringar av artdata, vetenskapliga synonymer, vanliga namn, geografier och källänkar via importfil och pull request."
+description: "Arbeta systematiskt igenom ogranskade arter från Odlingskampanjen, föra granskningslogg i samma Datakvalitet-PR, prioritera innehållsrika artprofiler hos FishBase och Zoopet och komplettera verifierade namn, geografier och synonymer via JSON-import."
 ---
 
 # Komplettera artregistret från Datakvalitet
 
 ## Förutsättning och datakälla
 
-1. Hämta **live** JSON från `https://odlingskampanjen.se/api/species/data-quality/random/` med GET. Svaret är en ögonblicksbild och innehåller högst tio slumpmässiga arter med `quality_score >= 1`.
+1. Hämta **live** JSON från `https://odlingskampanjen.se/api/species/data-quality/random/` med GET. Adressen behålls av kompatibilitetsskäl, men urvalet är numera **systematiskt**: högst tio arter per sida (`?page=2` för nästa sida), med störst bristpoäng först och därefter alfabetisk ordning. Endpointen filtrerar bort granskade arter tills planerad omgranskning.
 2. Om endpointen inte är driftsatt, svarar med fel eller inte kan hämtas: **stoppa**. Använd inte gissade arter eller exempeldata som ersättning. Endpointen kan bara läsas; den uppdaterar inte databasen.
 3. Arbeta i `Perrow/sarf-breeder-award` via **en återanvänd, öppen PR** mot `main`, enligt arbetsflödet nedan. Skapa inte en ny PR vid varje körning. **Skriv aldrig direkt till produktionsdatabasen**, och gör inga commits till `main`.
 4. Läs alltid aktuell `taxonomy/species_import.md`, `taxonomy/species_import.py` och `.agents/skills/species-import/SKILL.md` **innan** en fil skapas. Den befintliga artimportören är det enda stödda skrivgränssnittet.
@@ -26,9 +26,56 @@ description: "Hämta tio slumpmässiga arter med databrister från Odlingskampan
 **Vid fortsatt arbete i samma PR:**
 
 - Jämför det nya urvalet både med endpointens befintliga data och med **samtliga tidigare kompletteringar på PR-branchen** (inklusive redan skapade JSON-filer). Undvik att lägga samma art eller uppgift i flera filer. Uppdatera befintliga artposter i lämplig fil när det går; håll varje fil under 100 artposter.
-- Synkronisera branchen innan du skriver för att undvika att tidigare ändringar skrivs över. Om en parallell körning har pushat nya commits: hämta om branchen, jämför och applicera din ändring på den nya head-committen. Skriv **aldrig över** någon annans commits eller använd force-push för att lösa en konflikt.
+- Hämta alltid den senaste versionen av PR-branchen innan du ändrar filer. Bevara tidigare commits, importfiler och granskningslogg. **Ingen parallell körning eller låsmekanism behövs** i nuvarande arbetssätt; använd inte force-push.
 - Efter att ändringarna pushats: **uppdatera beskrivningen på samma PR** med denna körnings arter, källor, tillägg och återstående osäkerheter. Bevara tidigare körningars beskrivningar och källredovisning; lägg till en ny omgång. Kontrollera att PR-numret är oförändrat och att titeln fortfarande börjar med `Datakvalitet`.
-- Om en annan körning arbetar samtidigt, eller ändringarna krockar: stoppa och redovisa konflikten i stället för att skapa en alternativ PR.
+- Om en ändring ändå krockar med befintliga data: redovisa konflikten i stället för att skapa en alternativ PR.
+
+## Systematisk arbetskö och granskningslogg
+
+**Det här avsnittet är obligatoriskt före varje batch och ska följas även om inga uppgifter hittas.**
+
+1. Hämta först den enda öppna Datakvalitet-PR:en enligt reglerna ovan och läs **hela** `data/species/data_quality_review_log.json` från dess branch om filen finns. Den är en vanlig importfil med `{"version": 1, "species": [...]}` och en granskningsrad per art. Läs också övriga kompletteringsfiler för att undvika dubletter. När en ny PR behövs används samma filnamn.
+2. Hämta sida 1 från live-endpointen, och fortsätt genom `next_page` tills **tio arter som inte redan finns i granskningsloggen eller pågående kompletteringsfiler** har hittats. Om bara färre finns, ta dessa. **Stoppa när `next_page` är `null`**. Sök i loggen med exakt kombination av `genus`, `scientific_name`, `cl_number` och vid behov API-id för kontroll. Ett högt bristpoängtal är inte anledning att ompröva en redan undersökt art under samma PR.
+3. Granska varje utvald art även om inga nya uppgifter hittas. Spara **alltid** ett `quality_review`-objekt i den gemensamma loggfilen:
+   - `status: "reviewed"` när källsökningen har slutförts, oavsett om något hittades; `"manual_review"` om osäkerhet behöver mänskligt beslut.
+   - `reviewed_at`: dagens datum `YYYY-MM-DD`. Ange `review_again_after` om omgranskning önskas vid annat datum än **365 dagar efter granskningen**. Manuellt flaggade arter får ingen automatisk omgranskning.
+   - `fields` ska ha **samtliga fyra nycklar** `swedish_name`, `english_name`, `geography`, `links`. För var och en välj `found`, `not_found`, `uncertain` eller `not_checked`. `found` betyder att en tillförlitlig uppgift finns eller har verifierats; inte att någon godtycklig text fylldes i.
+   - `sources`: lista över **verkligt använda och verifierade HTTPS-källor** (inte generiska sökresultat). `notes`: kort dokumentation om kvarvarande luckor, taxonomiska konflikter och varför källor valdes/valdes bort.
+4. Loggfilen ska ha **exakt en post per identitet**. Behåll gamla granskningsposter och komplettera med den nya omgångens poster; skriv inte över loggen med bara dagens batch. Ändra inte redan behandlade arter utan uttrycklig omgranskning. Håll högst 100 artposter i varje importfil; vid större logg dela i numrerade filer och läs samtliga (använd då `data_quality_review_log_01.json`, `_02.json` osv. och följ samma regler).
+5. Lägg verifierade nya artuppgifter i ordinarie kompletteringsfil(er), separerat från granskningsloggen. Vid import applicerar importmotorn loggens `quality_review` på respektive **befintliga** art. Den kan importeras separat och återimporteras säkert. Enbart loggning betyder alltså inte att nya namn behöver hittas.
+6. Redovisa batchens **antal granskade arter**, antal med nya uppgifter, antal utan hittade uppgifter och antal som kräver manuell granskning. Vid nästa körning fortsätt där den gemensamma loggen slutade. Om endpointen inte längre har några kvalificerade arter, rapportera att arbetskön är tom.
+
+### Exempel på granskningspost (endast schema)
+
+```json
+{
+  "genus": "Exempelgenus",
+  "scientific_name": "exempelart",
+  "quality_review": {
+    "status": "reviewed",
+    "reviewed_at": "2026-11-21",
+    "fields": {
+      "swedish_name": "not_found",
+      "english_name": "found",
+      "geography": "found",
+      "links": "found"
+    },
+    "sources": [],
+    "notes": "Exempelinnehåll, inte verklig granskning."
+  }
+}
+```
+
+**Driftsättningsordning:** merge/deploy applikationsändring och kör migreringen före import av loggar med `quality_review`. Fram till dess hålls statusen i PR-branchen, inte i databasen.
+
+## Välj externa artlänkar efter **källkvalitet, inte antal**
+
+- **Prioritera FishBase och Zoopet** om de har **verkliga, relevanta och innehållsrika artprofiler** för exakt den art/C/L-variant som granskas. Kontrollera själva sidan, inte bara att domänen är känd. En felaktig eller tunn träff från FishBase/Zoopet ska väljas bort.
+- Om någon av dessa saknar en relevant artprofil: leta efter andra **utförliga, tillförlitliga** artpresentationer, exempelvis NCS Artregister för ciklider, vetenskapliga artbeskrivningar, seriösa artregister, Catalog of Fishes eller välunderbyggda specialistkällor. En källa kan vara bra för taxonomisk synonymi men svag för akvariehållning, eller tvärtom.
+- Bedöm identitet, taxonomisk precision, täckning av naturlig utbredning och namn, vetenskapliga referenser, uppdateringsgrad och hur mycket faktisk information **artens egen sida** innehåller. En taxonomisk databas som enbart ger namnet är ibland en nödvändig källa för synonymi men inte en heltäckande artprofil.
+- Spara hellre **en eller två starka kompletterande artlänkar** än många svaga. Fler länkar förbättrar inte kvaliteten i sig. Behåll redan etablerade korrekta länkar; gallra inte bort befintliga länkar automatiskt.
+- Spara bara **direktlänkar till relevant artinformation** med korrekt `source_name` och `title`; aldrig generiska startsidor, sökresultat, automatiskt konstruerade URL:er eller sidor som inte går att verifiera. Dokumentera varför en vald källa är relevant.
+- Komplettera även verifierade vetenskapliga synonymer och namn/geografier från relevanta källor, utan att föra över ogrundade formuleringar eller låta länkar styra odlingsklass eller taxonomisk identitet.
 
 ## Svarsformat (översikt)
 
@@ -44,7 +91,7 @@ Detta är **endast ett schemaexempel**; det innehåller inga verifierade artuppg
 4. Även om en flagga är `false`, kontrollera om en **säker vetenskaplig synonym**, alternativa trivialnamn, mer precis geografi eller kompletterande relevanta länkar finns. Lägg bara till sådant som faktiskt stöds av källor. Skilj giltiga synonymer från felstavningar, felidentifieringar, homonymer och accepterade namn; kontrollera namnens artidentitet.
 5. Dokumentera källa och dess exakta URL **för varje föreslagen ändring**, samt konflikter och kvarvarande osäkerheter. Om källorna motsäger varandra, avstå från automatisk uppdatering och markera posten för manuell granskning.
 6. Jämför med `data/species/` i **den återanvända PR-branchen** (eller i den nya branchen om ingen öppen PR finns), inklusive filer från tidigare körningar, och med befintliga värden från endpointen. Undvik att skapa dubbletter eller skriva över bättre uppgifter. Lämna `breeding_class` utanför kompletteringsposter: den får **inte** ändras som bieffekt. Ändra inte identifierande släkte, artepitet eller C/L-nummer automatiskt.
-7. Skriv verifierade kompletteringar i `data/species/` med formatversion 1. Använd `genus`, `scientific_name` och vid behov `cl_number` för exakt träff; fyll endast relevanta värden i `swedish_names`, `english_names`, `geographies`, `scientific_synonyms`, `links` och eventuella synonymer för populärnamn enligt importkontraktet. Högst **100 artposter per fil**. Testa att JSON-format och identiteter stämmer innan PR.
+7. Skriv verifierade kompletteringar i `data/species/` med formatversion 1 och **en granskningspost för varje undersökt art i granskningsloggen även om inget nytt hittades**. Använd `genus`, `scientific_name` och vid behov `cl_number` för exakt träff; fyll endast relevanta värden i `swedish_names`, `english_names`, `geographies`, `scientific_synonyms`, `links` och eventuella synonymer för populärnamn enligt importkontraktet. Högst **100 artposter per fil**. Testa att JSON-format och identiteter stämmer innan PR.
 8. Återanvänd och **uppdatera befintlig öppen Datakvalitet-PR**, eller skapa en ny sådan PR **endast om ingen finns**. Beskriv varje omgång med källförteckning per art, faktiskt tillagda fält, kontroverser och instruktion om granskning/import; behåll tidigare omgångars redovisning. **Ingen import i produktion sker genom att skillen körs.** Återkör endpointen före ny batch för uppdaterat urval.
 
 ## Viktiga gränser
@@ -54,4 +101,4 @@ Detta är **endast ett schemaexempel**; det innehåller inga verifierade artuppg
 - Varje extern länk ska vara en verklig, verifierad art-/taxonsida och ha korrekt `source_name` och gärna `title`. Länka inte bara en generell startsida för att förbättra poängen.
 - Importeraren kan bevara tillagda uppgifter men kan även uppdatera existerande fält. Läs implementeringen och säkerställ att en komplettering inte raderar eller försämrar värden.
 - Kör inte projektets testsvit om användaren uttryckligen bett att den inte ska köras. Påminn om samtliga tester och provimport före merge.
-- Avsluta varje körning med **nummer och länk till samma PR**, om en sådan återanvänts, samt antal nytillkomna respektive redan hanterade arter.
+- Avsluta varje körning med **nummer och länk till samma PR**, om en sådan återanvänts, samt antal nytillkomna respektive redan hanterade arter. Rapportera även antalet granskningsposter, antal utan fynd och väntande manuella beslut.
