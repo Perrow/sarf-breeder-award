@@ -1,0 +1,238 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Aulonocara",
+      "scientific_name": "hueseri",
+      "swedish_names": [
+        "Dvärglikoma"
+      ],
+      "english_names": [
+        "Night aulonocara"
+      ],
+      "geographies": [
+        "Likoma",
+        "Domwe",
+        "Thumbi West",
+        "Nkhata Bay"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/2183",
+          "source_name": "FishBase",
+          "title": "Aulonocara hueseri"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=68",
+          "source_name": "Zoopet",
+          "title": "Aulonocara hueseri"
+        }
+      ]
+    },
+    {
+      "genus": "Badis",
+      "scientific_name": "badis",
+      "swedish_names": [
+        "Kameleontfisk"
+      ],
+      "english_names": [
+        "Dwarf chameleonfish"
+      ],
+      "geographies": [
+        "Indien",
+        "Bangladesh",
+        "Nepal",
+        "Ganges avrinningsområde",
+        "Mahanadis avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Badis badis bengalensis"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/11016",
+          "source_name": "FishBase",
+          "title": "Badis badis"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=372",
+          "source_name": "Zoopet",
+          "title": "Badis badis"
+        }
+      ]
+    },
+    {
+      "genus": "Cliton",
+      "scientific_name": "diadema",
+      "scientific_synonyms": [
+        "Nerita (Clithon) diadema"
+      ],
+      "links": [
+        {
+          "url": "https://www.gbif.org/taxon/W85W",
+          "source_name": "Catalogue of Life via GBIF",
+          "title": "Clithon diadema"
+        }
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "tretocephalus",
+      "swedish_names": [
+        "Fembandad tanganyikaciklid",
+        "Tanganyikazebra"
+      ],
+      "geographies": [
+        "Norra Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus tretocephalus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/8759",
+          "source_name": "FishBase",
+          "title": "Neolamprologus tretocephalus"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=800",
+          "source_name": "NCS Artregister",
+          "title": "Neolamprologus tretocephalus"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=743",
+          "source_name": "Zoopet",
+          "title": "Neolamprologus tretocephalus"
+        },
+        {
+          "url": "https://www.fishkeeper.co.uk/fish/freshwater/cichlids/five-bar-cichlid",
+          "source_name": "Fishkeeper",
+          "title": "Neolamprologus tretocephalus"
+        }
+      ],
+      "english_names": [
+        "Five-bar cichlid"
+      ]
+    },
+    {
+      "genus": "Nomorhamphus",
+      "scientific_name": "celebensis",
+      "english_names": [
+        "Poso halfbeak"
+      ],
+      "geographies": [
+        "Indonesien",
+        "Pososjöns avrinningsområde"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/6272",
+          "source_name": "FishBase",
+          "title": "Nomorhamphus celebensis"
+        }
+      ]
+    },
+    {
+      "genus": "Paretroplus",
+      "scientific_name": "petiti",
+      "english_names": [
+        "Red Madagascar cichlid"
+      ],
+      "geographies": [
+        "Betsikobafloden"
+      ],
+      "links": [
+        {
+          "url": "https://fishbase.se/summary/8790",
+          "source_name": "FishBase",
+          "title": "Paretroplus petiti"
+        }
+      ]
+    },
+    {
+      "genus": "Puntius",
+      "scientific_name": "narayani",
+      "geographies": [
+        "Indien"
+      ],
+      "scientific_synonyms": [
+        "Barbus narayani"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/24152",
+          "source_name": "FishBase",
+          "title": "Pethia narayani"
+        }
+      ]
+    },
+    {
+      "genus": "Vieja",
+      "scientific_name": "zonata",
+      "swedish_names": [
+        "Zonatumciklid",
+        "Bandciklid"
+      ],
+      "english_names": [
+        "Oaxaca cichlid"
+      ],
+      "geographies": [
+        "Mexiko",
+        "Tehuantepecflodens avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Cichlasoma zonatum"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/26792",
+          "source_name": "FishBase",
+          "title": "Vieja zonata"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=564",
+          "source_name": "NCS Artregister",
+          "title": "Vieja zonata"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=870",
+          "source_name": "Zoopet",
+          "title": "Vieja zonata"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=673034&mode=Info",
+          "source_name": "NCBI Taxonomy",
+          "title": "Vieja zonata"
+        }
+      ]
+    },
+    {
+      "genus": "Xenotilapia",
+      "scientific_name": "ochrogenys",
+      "swedish_names": [
+        "Rödrandig xenotilapia"
+      ],
+      "scientific_synonyms": [
+        "Enantiopus ochrogenys",
+        "Stappersia singularis"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/9177",
+          "source_name": "FishBase",
+          "title": "Xenotilapia ochrogenys"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=201",
+          "source_name": "NCS Artregister",
+          "title": "Xenotilapia ochrogenys"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=762",
+          "source_name": "Zoopet",
+          "title": "Xenotilapia ochrogenys"
+        }
+      ]
+    }
+  ]
+}
