@@ -423,7 +423,7 @@ def _import_quality_review(species, review):
             raise SpeciesImportError(
                 "Förslag om vetenskapligt namnbyte kräver status 'manual_review'."
             )
-        notes = review.get("notes", "")
+    notes = review.get("notes", "")
     if not isinstance(notes, str):
         raise SpeciesImportError("'quality_review.notes' måste vara text.")
     manual_review_comment = review.get("manual_review_comment", "")
