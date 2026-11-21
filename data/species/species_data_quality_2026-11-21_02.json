@@ -1,0 +1,265 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "agassizii",
+      "english_names": [
+        "Agassiz's dwarf cichlid"
+      ],
+      "geographies": [
+        "Peru",
+        "Brasilien",
+        "Amazonas avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Geophagus agassizii"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/26703",
+          "source_name": "FishBase",
+          "title": "Apistogramma agassizii"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=65",
+          "source_name": "Zoopet",
+          "title": "Apistogramma agassizii"
+        }
+      ]
+    },
+    {
+      "genus": "Copadichromis",
+      "scientific_name": "sp. \"kawanga\"",
+      "swedish_names": [
+        "Blå copadichromis"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1320",
+          "source_name": "NCS Artregister",
+          "title": "Copadichromis sp. \"kawanga\""
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=1449",
+          "source_name": "Zoopet",
+          "title": "Copadichromis sp. \"kawanga\""
+        }
+      ]
+    },
+    {
+      "genus": "Danio",
+      "scientific_name": "kerri",
+      "english_names": [
+        "Blue danio"
+      ],
+      "geographies": [
+        "Malackahalvön"
+      ],
+      "scientific_synonyms": [
+        "Brachydanio kerri"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/12066",
+          "source_name": "FishBase",
+          "title": "Danio kerri"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=2453",
+          "source_name": "Zoopet",
+          "title": "Danio kerri"
+        }
+      ]
+    },
+    {
+      "genus": "Heros",
+      "scientific_name": "notatus",
+      "geographies": [
+        "Brasilien",
+        "Rio Negros avrinningsområde"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/57739",
+          "source_name": "FishBase",
+          "title": "Heros notatus"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=425",
+          "source_name": "NCS Artregister",
+          "title": "Heros notatus"
+        }
+      ]
+    },
+    {
+      "genus": "Lepidiolamprologus",
+      "scientific_name": "kendalli",
+      "geographies": [
+        "Nkambabukten",
+        "Kala"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus kendalli",
+        "Lamprologus nkambae",
+        "Lepidiolamprologus nkambae"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/8629",
+          "source_name": "FishBase",
+          "title": "Lepidiolamprologus kendalli"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=933",
+          "source_name": "NCS Artregister",
+          "title": "Lepidiolamprologus kendalli"
+        }
+      ]
+    },
+    {
+      "genus": "Lobochilotes",
+      "scientific_name": "labiatus",
+      "swedish_names": [
+        "Tjockläppad labiatus"
+      ],
+      "scientific_synonyms": [
+        "Tilapia labiata"
+      ],
+      "links": [
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=915",
+          "source_name": "Zoopet",
+          "title": "Lobochilotes labiatus"
+        },
+        {
+          "url": "https://www.itis.gov/servlet/SingleRpt/SingleRpt?print_version=PRT&search_topic=TSN&search_value=169966&source=to_print",
+          "source_name": "ITIS",
+          "title": "Lobochilotes labiatus"
+        }
+      ]
+    },
+    {
+      "genus": "Melanochromis",
+      "scientific_name": "simulans",
+      "swedish_names": [
+        "Långnosad mbuna",
+        "Långnosad auratus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/2351",
+          "source_name": "FishBase",
+          "title": "Melanochromis simulans"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=1678",
+          "source_name": "NCS Artregister",
+          "title": "Melanochromis simulans"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=1124",
+          "source_name": "Zoopet",
+          "title": "Melanochromis simulans"
+        }
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "leleupi",
+      "swedish_names": [
+        "Apelsinciklid"
+      ],
+      "english_names": [
+        "Lemon cichlid"
+      ],
+      "geographies": [
+        "Södra Tanganyikasjön"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus leleupi",
+        "Lamprologus leleupi melas"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.org/summary/8670",
+          "source_name": "FishBase",
+          "title": "Neolamprologus leleupi"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=207",
+          "source_name": "NCS Artregister",
+          "title": "Neolamprologus leleupi"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=579",
+          "source_name": "Zoopet",
+          "title": "Neolamprologus leleupi"
+        },
+        {
+          "url": "https://www.fishbase.se/Nomenclature/8670",
+          "source_name": "FishBase, synonymik",
+          "title": "Neolamprologus leleupi"
+        },
+        {
+          "url": "https://www.aquaristatlas.com/species/neolamprologus-leleupi/",
+          "source_name": "Aquarist Atlas",
+          "title": "Neolamprologus leleupi"
+        }
+      ]
+    },
+    {
+      "genus": "Neolamprologus",
+      "scientific_name": "niger",
+      "swedish_names": [
+        "Dy lamprologus"
+      ],
+      "geographies": [
+        "Demokratiska republiken Kongo",
+        "Tanzania",
+        "Bulu Point"
+      ],
+      "scientific_synonyms": [
+        "Lamprologus niger"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/8746",
+          "source_name": "FishBase",
+          "title": "Neolamprologus niger"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=1405",
+          "source_name": "Zoopet",
+          "title": "Neolamprologus niger"
+        }
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "signum",
+      "geographies": [
+        "Guatemala",
+        "Río de la Pasións avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Xiphophorus helleri signum"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/47355",
+          "source_name": "FishBase",
+          "title": "Xiphophorus signum"
+        },
+        {
+          "url": "https://www.aquaticcommunity.com/fish/commaswordtail.php",
+          "source_name": "Aquatic Community",
+          "title": "Xiphophorus signum"
+        }
+      ],
+      "english_names": [
+        "Comma swordtail"
+      ]
+    }
+  ]
+}
