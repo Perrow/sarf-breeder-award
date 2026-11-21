@@ -51,6 +51,72 @@ class SpeciesImportTests(TestCase):
         self.assertEqual(stats["species_created"], 1)
         self.assertEqual(stats["synonyms_created"], 3)
 
+
+    def test_promote_verified_scientific_and_common_names_preserves_old_synonyms(self):
+        original = self._write_file([self._row()])
+        import_species_file(original)
+        species = Species.objects.get(scientific_name="reticulata")
+        prior_class = species.breeding_class
+        updated = self._write_file([{
+            "genus": "Poecilia", "scientific_name": "reticulata",
+            "primary_scientific_name": "Lebistes reticulatus",
+            "primary_swedish_name": "Ny guppy",
+            "primary_english_name": "New guppy",
+            "scientific_synonyms": ["Poecilia reticulata"],
+        }])
+        import_species_file(updated)
+        species.refresh_from_db()
+        self.assertEqual(species.genus.scientific_name, "Lebistes")
+        self.assertEqual(species.scientific_name, "reticulatus")
+        self.assertEqual(species.common_name, "Ny guppy")
+        self.assertEqual(species.english_name, "New guppy")
+        self.assertEqual(species.breeding_class, prior_class)
+        self.assertTrue(species.scientific_synonyms.filter(
+            scientific_name="Poecilia reticulata"
+        ).exists())
+        self.assertFalse(species.scientific_synonyms.filter(
+            scientific_name="Lebistes reticulatus"
+        ).exists())
+        self.assertTrue(species.common_name_synonyms.filter(common_name="Guppy").exists())
+
+        import_species_file(updated)
+        species.refresh_from_db()
+        self.assertEqual(Species.objects.count(), 1)
+        self.assertEqual(species.scientific_synonyms.count(), 1)
+        self.assertFalse(species.common_name_synonyms.filter(
+            common_name="Ny guppy"
+        ).exists())
+
+    def test_name_promotion_rejects_collision_with_another_species(self):
+        import_species_file(self._write_file([self._row()]))
+        import_species_file(self._write_file([{
+            "genus": "Poecilia", "scientific_name": "wingei",
+            "breeding_class": "silver", "swedish_names": ["Endler"],
+        }]))
+        path = self._write_file([{
+            "genus": "Poecilia", "scientific_name": "reticulata",
+            "primary_scientific_name": "Poecilia wingei",
+        }])
+        with self.assertRaisesRegex(SpeciesImportError, "används redan"):
+            import_species_file(path)
+        self.assertEqual(Species.objects.get(common_name="Guppy").scientific_name, "reticulata")
+
+    def test_name_promotion_requires_explicit_field(self):
+        import_species_file(self._write_file([self._row()]))
+        import_species_file(self._write_file([{
+            "genus": "Poecilia", "scientific_name": "reticulata",
+            "scientific_synonyms": ["Poecilia example"],
+            "swedish_names": ["Nytt alternativnamn"],
+        }]))
+        species = Species.objects.get(scientific_name="reticulata")
+        self.assertEqual(species.common_name, "Guppy")
+        self.assertTrue(species.scientific_synonyms.filter(
+            scientific_name="Poecilia example"
+        ).exists())
+        self.assertTrue(species.common_name_synonyms.filter(
+            common_name="Nytt alternativnamn"
+        ).exists())
+
     def test_reimport_is_idempotent(self):
         path = self._write_file([self._row()])
         import_species_file(path)
