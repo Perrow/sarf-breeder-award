@@ -246,3 +246,34 @@ class SpeciesDataQuality(Species):
         proxy = True
         verbose_name = "datakvalitet"
         verbose_name_plural = "Datakvalitet"
+
+
+class SpeciesQualityReview(models.Model):
+    """Document an enrichment attempt independently from the remaining gaps."""
+
+    class Status(models.TextChoices):
+        REVIEWED = "reviewed", "Granskad"
+        MANUAL_REVIEW = "manual_review", "Behöver manuell granskning"
+
+    species = models.OneToOneField(
+        Species, on_delete=models.CASCADE, related_name="quality_review",
+        verbose_name="art",
+    )
+    status = models.CharField(max_length=20, choices=Status.choices)
+    reviewed_at = models.DateField(verbose_name="granskad datum")
+    review_again_after = models.DateField(
+        null=True, blank=True, verbose_name="granska igen tidigast"
+    )
+    field_results = models.JSONField(default=dict, verbose_name="resultat per uppgift")
+    sources = models.JSONField(default=list, verbose_name="granskade källor")
+    notes = models.TextField(blank=True, verbose_name="anteckningar")
+    manual_review_comment = models.TextField(
+        blank=True, verbose_name="kommentar för manuell granskning"
+    )
+
+    class Meta:
+        verbose_name = "artgranskning"
+        verbose_name_plural = "artgranskningar"
+
+    def __str__(self):
+        return f"{self.species} – {self.get_status_display()}"

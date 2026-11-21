@@ -99,3 +99,161 @@ Om samma gamla vetenskapliga namn finns som synonym för flera arter betraktas m
 ## Resultat och output
 
 `import_species_file(path)` returnerar strukturerad statistik över skapade och återanvända genera, arter, synonymer, geografier, geografikopplingar och länkar. Själva importmotorn skriver inte till stdout eller stderr. Management-kommandot ansvarar själv för eventuell konsoloutput, och adminvyn presenterar samma returvärde i webbgränssnittet.
+
+
+## Systematisk datakvalitetsgranskning
+
+En kompletteringsrad för en **befintlig** art kan också ange `quality_review`. Det
+registrerar en granskningsstatus även om ingen ytterligare uppgift har hittats.
+Odlingsklass och befintliga artuppgifter påverkas inte när de utelämnas.
+
+```json
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Exempelgenus",
+      "scientific_name": "exempelart",
+      "quality_review": {
+        "status": "reviewed",
+        "reviewed_at": "2026-11-21",
+        "fields": {
+          "swedish_name": "not_found",
+          "english_name": "found",
+          "geography": "found",
+          "links": "found"
+        },
+        "sources": ["https://example.org/species"],
+        "notes": "Svenskt trivialnamn kunde inte beläggas."
+      }
+    }
+  ]
+}
+```
+
+Exemplet visar **format**, inte verifierade uppgifter eller källor. Använd
+verkliga HTTPS-källor i riktiga filer. `status` är `reviewed` eller
+`manual_review`. Varje fält måste ha ett av värdena `found`, `not_found`,
+`uncertain` eller `not_checked`. `review_again_after` kan anges som
+`YYYY-MM-DD`; för `reviewed` är standard 365 dagar efter `reviewed_at`,
+medan `manual_review` saknar automatiskt omgranskningsdatum. Endast nyare
+granskningsdatum uppdaterar en befintlig status; återimport av samma fil är
+idempotent. Enbart existerande arter kan registreras på detta vis; använd rätt
+C/L-nummer för tvetydiga identifieringar.
+
+Skillen sparar en gemensam `data/species/data_quality_review_log.json` med
+formatversion 1 på sin öppna PR-branch. Denna importfil innehåller en rad
+per granskad art, även när inga kompletterande artuppgifter har hittats.
+Efter godkänd PR/import blir granskningsstatus beständig i databasen.
+Endpointen `/api/species/data-quality/random/` har kvar sin adress av
+kompatibilitetsskäl men returnerar numera en prioriterad, sidindelad lista
+med högst tio arter per sida, valbar via `?page=2`, och ett `next_page`-fält.
+Granskade arter tas bort från urvalet tills omgranskning är aktuell.
+
+### Kommentar när manuell granskning krävs
+
+Om `quality_review.status` är `manual_review` måste importposten innehålla
+`manual_review_comment` med en **icke-tom text** som förklarar vad en administratör
+behöver bedöma. Kommentaren lagras separat från de allmänna anteckningarna
+(`notes`) och visas i administrationsgränssnittet. För övriga granskningsstatusar
+är kommentaren valfri. Exempel:
+
+```json
+{
+  "quality_review": {
+    "status": "manual_review",
+    "reviewed_at": "2026-11-21",
+    "fields": {
+      "swedish_name": "uncertain",
+      "english_name": "found",
+      "geography": "found",
+      "links": "uncertain"
+    },
+    "sources": ["https://example.org/species"],
+    "manual_review_comment": "Kontrollera om den befintliga artlänken behöver tas bort och om artens svenska namn behöver ändras; jämför med källorna före beslut."
+  }
+}
+```
+
+Detta är ett **schemaexempel**, inte ett konkret ändringsförslag. För verkliga
+ärenden ska kommentaren namnge berörda befintliga värden och länkar, föreslå
+vad som behöver ändras eller tas bort, motivera bedömningen och referera till
+verifierade källor. Import av granskningskommentaren genomför **inga** automatiska
+namnbyten, borttagningar av länkar eller andra ändringar som kräver beslut.
+
+
+## Primärnamn och verifierade namnbyten
+
+De vanliga `scientific_synonyms` och `swedish_names`/`english_names`
+registrerar alternativa namn. De **byter inte** befintligt primärnamn.
+
+En komplettering kan uttryckligen ändra primärnamn med:
+- `primary_scientific_name`: nytt, fullständigt vetenskapligt namn (`"Släkte artepitet"`).
+- `primary_swedish_name`: nytt primärt svenskt populärnamn.
+- `primary_english_name`: nytt primärt engelskt namn.
+
+Identifiera alltid befintlig art med `genus`, `scientific_name` och eventuellt
+`cl_number` enligt uppgifterna **före** namnbytet. Importen ändrar sedan
+primärnamnet och lägger det tidigare namnet bland vetenskapliga respektive
+populärnamnssynonymer. En befintlig synonym som promoveras till primärnamn
+tas bort från synonymtabellen. Detta är en uttrycklig ändring, inte vanlig
+additiv komplettering. Vetenskapliga namnbyten avvisas vid kollision med en
+annan arts primärnamn eller vetenskapliga synonym. Ändra inte odlingsklass.
+
+```json
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "TidigareSlakte",
+      "scientific_name": "tidigareart",
+      "primary_scientific_name": "NyttSlakte nyart",
+      "primary_swedish_name": "Nytt verifierat populärnamn",
+      "scientific_synonyms": ["Annan äldre vetenskaplig kombination"]
+    }
+  ]
+}
+```
+
+Detta är ett *formatexempel*, inte faktiska taxonomiska uppgifter.
+Dokumentera den verifierade FishBase-källan i PR och artens granskningslogg.
+Ett osäkert namnbyte ska fortfarande flaggas för manuell granskning; skriv inte
+en obekräftad uppgift i något primärnamnsfält.
+
+
+### Föreslå namnbyte utan att förlora synonymen
+
+När källor använder olika primära vetenskapliga namn för **samma verifierade art**
+kan `quality_review.proposed_scientific_name` användas som ett strukturerat
+förslag till manuell bedömning. Det är **obligatoriskt** att samma fullständiga
+namn finns i artpostens `scientific_synonyms`; importen avvisar annars
+förslaget. Den vetenskapliga synonymen importeras som data direkt, medan det
+primära namnet lämnas orört fram till beslut. Fältet får bara användas vid
+`status: "manual_review"` och tillsammans med en tydlig
+`manual_review_comment`.
+
+Exempel (endast format, inte taxonomiskt ställningstagande):
+
+```json
+{
+  "genus": "Exempelgenus",
+  "scientific_name": "exempelart",
+  "scientific_synonyms": ["Alternativtgenus exempelart"],
+  "quality_review": {
+    "status": "manual_review",
+    "reviewed_at": "2026-11-21",
+    "fields": {
+      "swedish_name": "found",
+      "english_name": "not_found",
+      "geography": "found",
+      "links": "found"
+    },
+    "sources": ["https://example.org/species"],
+    "proposed_scientific_name": "Alternativtgenus exempelart",
+    "manual_review_comment": "Bedöm vilket av de verifierade vetenskapliga namnen som ska vara primärt."
+  }
+}
+```
+
+Om namnen inte säkert avser samma art ska varken synonym eller
+namnbytesförslag registreras; dokumentera i stället identifieringsosäkerheten.

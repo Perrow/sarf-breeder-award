@@ -1,10 +1,12 @@
 import json
+from datetime import date, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.db import transaction
 
 from .models import (
@@ -14,6 +16,7 @@ from .models import (
     ScientificSpeciesSynonym,
     Species,
     SpeciesLink,
+    SpeciesQualityReview,
     normalize_cl_number,
 )
 
@@ -177,6 +180,69 @@ def _ensure_common_synonym(species, common_name, stats):
     stats["synonyms_created" if created else "synonyms_reused"] += 1
 
 
+def _promote_species_names(species, primary_scientific_name, primary_swedish_name,
+                           primary_english_name, stats):
+    """Promote verified names without losing the previous primary names."""
+    if primary_scientific_name:
+        parts = primary_scientific_name.split()
+        if len(parts) != 2 or not all(parts):
+            raise SpeciesImportError(
+                "'primary_scientific_name' ska vara 'Släkte artepitet'."
+            )
+        genus_name, scientific_name = parts
+        if len(genus_name) > 100 or len(scientific_name) > 100:
+            raise SpeciesImportError("Det nya vetenskapliga namnet är för långt.")
+        if (species.genus.scientific_name.casefold(), species.scientific_name.casefold()) != (
+            genus_name.casefold(), scientific_name.casefold()
+        ):
+            target_genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
+            if target_genus is not None:
+                if Species.objects.filter(
+                    genus=target_genus, scientific_name__iexact=scientific_name,
+                    cl_number=species.cl_number,
+                ).exclude(pk=species.pk).exists():
+                    raise SpeciesImportError(
+                        "Det nya vetenskapliga namnet används redan av en annan art."
+                    )
+            if ScientificSpeciesSynonym.objects.filter(
+                scientific_name__iexact=primary_scientific_name
+            ).exclude(species=species).exists():
+                raise SpeciesImportError(
+                    "Det nya vetenskapliga namnet är synonym till en annan art."
+                )
+            old_full_name = f"{species.genus.scientific_name} {species.scientific_name}"
+            if target_genus is None:
+                target_genus = Genus.objects.create(scientific_name=genus_name)
+                stats["genera_created"] += 1
+            species.genus = target_genus
+            species.scientific_name = scientific_name
+            species.save(update_fields=["genus", "scientific_name"])
+            ScientificSpeciesSynonym.objects.filter(
+                species=species, scientific_name__iexact=primary_scientific_name
+            ).delete()
+            _, created = ScientificSpeciesSynonym.objects.get_or_create(
+                species=species, scientific_name=old_full_name
+            )
+            stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+    for field, new_name in (
+        ("common_name", primary_swedish_name),
+        ("english_name", primary_english_name),
+    ):
+        if new_name is None or getattr(species, field) == new_name:
+            continue
+        if len(new_name) > 200:
+            raise SpeciesImportError("Det nya populärnamnet är för långt.")
+        old_name = getattr(species, field)
+        setattr(species, field, new_name)
+        species.save(update_fields=[field])
+        CommonNameSpeciesSynonym.objects.filter(
+            species=species, common_name__iexact=new_name
+        ).delete()
+        if old_name and old_name.casefold() != new_name.casefold():
+            _ensure_common_synonym(species, old_name, stats)
+
+
 def _import_link(species, data, stats):
     source_name = data["source_name"] or _source_name_from_url(data["url"])
     title = data["title"] or _fetch_page_title(data["url"])
@@ -295,6 +361,105 @@ def _find_existing_species(
     return None
 
 
+
+
+REVIEW_FIELDS = frozenset(("swedish_name", "english_name", "geography", "links"))
+REVIEW_RESULTS = frozenset(("found", "not_found", "uncertain", "not_checked"))
+
+
+def _parse_review_date(value, key):
+    if not isinstance(value, str):
+        raise SpeciesImportError(f"'{key}' måste vara datum i YYYY-MM-DD-format.")
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise SpeciesImportError(f"Ogiltigt datum i '{key}'.") from exc
+
+
+def _import_quality_review(species, review):
+    """Apply a vetted review even when no new species metadata was found."""
+    if not isinstance(review, dict):
+        raise SpeciesImportError("'quality_review' måste vara ett JSON-objekt.")
+    status = review.get("status")
+    if status not in SpeciesQualityReview.Status.values:
+        raise SpeciesImportError("Ogiltig status i 'quality_review'.")
+    reviewed_at = _parse_review_date(review.get("reviewed_at"), "reviewed_at")
+    fields = review.get("fields")
+    if (
+        not isinstance(fields, dict)
+        or set(fields) != REVIEW_FIELDS
+        or any(value not in REVIEW_RESULTS for value in fields.values())
+    ):
+        raise SpeciesImportError(
+            "'quality_review.fields' måste ange ett giltigt resultat "
+            "för swedish_name, english_name, geography och links."
+        )
+    sources = review.get("sources", [])
+    if not isinstance(sources, list) or any(
+        not isinstance(url, str) or not url.startswith("https://")
+        for url in sources
+    ):
+        raise SpeciesImportError("'quality_review.sources' ska innehålla HTTPS-länkar.")
+    url_validator = URLValidator(schemes=["https"])
+    for url in sources:
+        try:
+            url_validator(url)
+        except ValidationError as exc:
+            raise SpeciesImportError("Ogiltig käll-URL i 'quality_review'.") from exc
+    # A proposed primary-name change must have a verified synonym in this
+    # import row. A prose-only comment is never an actionable name proposal.
+    proposed_name = review.get("proposed_scientific_name")
+    if proposed_name is not None:
+        if not isinstance(proposed_name, str) or not proposed_name.strip():
+            raise SpeciesImportError(
+                "'quality_review.proposed_scientific_name' måste vara ett fullständigt namn."
+            )
+        synonyms = [value.casefold() for value in review.get("_row_synonyms", [])]
+        if proposed_name.strip().casefold() not in synonyms:
+            raise SpeciesImportError(
+                "Föreslaget vetenskapligt namn måste även finnas i scientific_synonyms."
+            )
+        if status != SpeciesQualityReview.Status.MANUAL_REVIEW:
+            raise SpeciesImportError(
+                "Förslag om vetenskapligt namnbyte kräver status 'manual_review'."
+            )
+    notes = review.get("notes", "")
+    if not isinstance(notes, str):
+        raise SpeciesImportError("'quality_review.notes' måste vara text.")
+    manual_review_comment = review.get("manual_review_comment", "")
+    if not isinstance(manual_review_comment, str):
+        raise SpeciesImportError("'quality_review.manual_review_comment' måste vara text.")
+    manual_review_comment = manual_review_comment.strip()
+    if status == SpeciesQualityReview.Status.MANUAL_REVIEW and not manual_review_comment:
+        raise SpeciesImportError(
+            "'quality_review.manual_review_comment' krävs när status är 'manual_review'."
+        )
+    if "review_again_after" in review and review["review_again_after"] is not None:
+        review_again_after = _parse_review_date(
+            review["review_again_after"], "review_again_after"
+        )
+    elif status == SpeciesQualityReview.Status.REVIEWED:
+        review_again_after = reviewed_at + timedelta(days=365)
+    else:
+        review_again_after = None
+
+    existing = SpeciesQualityReview.objects.filter(species=species).first()
+    # Do not regress a newer imported review when old files are re-imported.
+    if existing and existing.reviewed_at >= reviewed_at:
+        return
+    SpeciesQualityReview.objects.update_or_create(
+        species=species,
+        defaults={
+            "status": status,
+            "reviewed_at": reviewed_at,
+            "review_again_after": review_again_after,
+            "field_results": fields,
+            "sources": list(dict.fromkeys(sources)),
+            "notes": notes,
+            "manual_review_comment": manual_review_comment,
+        },
+    )
+
 @transaction.atomic
 def _import_species_row(row, stats):
     if not isinstance(row, dict):
@@ -317,6 +482,10 @@ def _import_species_row(row, stats):
     scientific_synonyms = _name_list(row, "scientific_synonyms")
     geographies = _name_list(row, "geographies")
     links = _link_list(row)
+    quality_review = row.get("quality_review")
+    primary_scientific_name = _optional_text(row, "primary_scientific_name")
+    primary_swedish_name = _optional_text(row, "primary_swedish_name")
+    primary_english_name = _optional_text(row, "primary_english_name")
 
     genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
     species = _find_existing_species(
@@ -377,10 +546,23 @@ def _import_species_row(row, stats):
             elif species.english_name != english_names[0]:
                 _ensure_common_synonym(species, english_names[0], stats)
 
+    if species is not None:
+        _promote_species_names(
+            species, primary_scientific_name, primary_swedish_name,
+            primary_english_name, stats,
+        )
+
     for common_name in swedish_names[1:] + english_names[1:]:
-        _ensure_common_synonym(species, common_name, stats)
+        if common_name.casefold() not in (
+            species.common_name.casefold(), species.english_name.casefold()
+        ):
+            _ensure_common_synonym(species, common_name, stats)
 
     for synonym in scientific_synonyms:
+        if synonym.casefold() == (
+            f"{species.genus.scientific_name} {species.scientific_name}".casefold()
+        ):
+            continue
         _, created = ScientificSpeciesSynonym.objects.get_or_create(
             species=species,
             scientific_name=synonym,
@@ -392,3 +574,10 @@ def _import_species_row(row, stats):
 
     for link in links:
         _import_link(species, link, stats)
+
+    if quality_review is not None:
+        # The proposal must correspond to a synonym saved by this very row.
+        review_data = dict(quality_review) if isinstance(quality_review, dict) else quality_review
+        if isinstance(review_data, dict):
+            review_data["_row_synonyms"] = scientific_synonyms
+        _import_quality_review(species, review_data)

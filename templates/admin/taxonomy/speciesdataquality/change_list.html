@@ -3,6 +3,9 @@
     <div class="mb-3" aria-label="Sammanfattning av datakvalitet">
         <p><strong>Total bristpoäng:</strong> {{ total_quality_score }}</p>
         <p><strong>Arter med 0 bristpoäng:</strong> {{ complete_species_count }}</p>
+        <p><strong>Granskade arter:</strong> {{ reviewed_species_count }}</p>
+        <p><strong>Ej granskade arter:</strong> {{ unreviewed_species_count }}</p>
+        <p><strong>Behöver manuell granskning:</strong> {{ manual_review_species_count }}</p>
     </div>
     <p>Varje art får en bristpoäng för vart och ett av följande:
         svenskt namn är samma som det fullständiga vetenskapliga namnet,
