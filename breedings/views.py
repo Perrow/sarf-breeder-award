@@ -112,6 +112,10 @@ def _association_leaderboard_rows(selected_year):
     return leaderboard
 
 
+def _associations_without_registrations():
+    return Association.objects.filter(breeding_registrations__isnull=True).order_by("name", "pk")
+
+
 def leaderboards(request):
     selected_year = _leaderboard_year(request.GET.get("year"))
     leaderboard_type = request.GET.get("type", "association")
@@ -129,6 +133,10 @@ def leaderboards(request):
         {
             "leaderboard": leaderboard,
             "leaderboard_type": leaderboard_type,
+            "associations_without_registrations": (
+                _associations_without_registrations()
+                if leaderboard_type == "association" else []
+            ),
             "selected_year": selected_year,
             "available_years": _available_leaderboard_years(selected_year),
         },
@@ -155,6 +163,7 @@ def association_leaderboard(request):
         "breedings/association_leaderboard.html",
         {
             "leaderboard": _association_leaderboard_rows(selected_year),
+            "associations_without_registrations": _associations_without_registrations(),
             "selected_year": selected_year,
             "available_years": _available_leaderboard_years(selected_year),
         },
