@@ -2,13 +2,14 @@ from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.views import LoginView, LogoutView
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse_lazy
 
 from associations.permissions import is_system_admin, managed_associations
 from progression.services import all_achievement_presentations_for_user
 
 from .forms import EmailAuthenticationForm, ProfileForm, RegistrationForm
+from .models import User
 
 
 def register(request):
@@ -52,6 +53,11 @@ def account(request):
             "is_system_admin": is_system_admin(request.user),
         },
     )
+
+
+def public_profile(request, user_id):
+    profile_user = get_object_or_404(User, pk=user_id)
+    return render(request, "users/public_profile.html", {"profile_user": profile_user})
 
 
 @login_required
