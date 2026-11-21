@@ -194,22 +194,31 @@ class SpeciesAdmin(admin.ModelAdmin):
         form = SpeciesMergeForm(request.POST or None, source_species=source)
         preview = None
         target = None
+        session_key = f"species_merge_preview_{source.pk}"
+        if request.method != "POST":
+            request.session.pop(session_key, None)
         if request.method == "POST" and form.is_valid():
             target = form.cleaned_data["target_species"]
             if not self.has_change_permission(request, target):
                 raise PermissionDenied
-            if request.POST.get("confirm_merge") == "yes":
+            confirmed = request.POST.get("confirm_merge") == "yes"
+            if confirmed and request.session.get(session_key) != target.pk:
+                form.add_error(None, "Förhandsgranska sammanslagningen innan du bekräftar.")
+            elif confirmed:
                 try:
                     merge_species(source, target)
                 except ValidationError as error:
                     form.add_error(None, error)
                 else:
+                    request.session.pop(session_key, None)
                     self.message_user(
                         request,
                         f"Arten {source} slogs ihop med {target}.",
                         level=messages.SUCCESS,
                     )
                     return redirect("admin:taxonomy_species_change", target.pk)
+            if not confirmed:
+                request.session[session_key] = target.pk
             preview = species_merge_preview(source, target)
 
         context = {
