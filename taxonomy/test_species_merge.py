@@ -131,6 +131,31 @@ class SpeciesMergeTests(TestCase):
         self.assertEqual(self.target.external_links.filter(url="https://example.org/shared").count(), 1)
         self.assertEqual(self.target.geographies.filter(pk=geography.pk).count(), 1)
 
+    def test_merge_preserves_report_points_class_and_owner_with_cl_numbers(self):
+        self.source.cl_number = "L123"
+        self.source.save(update_fields=["cl_number"])
+        self.target.cl_number = "C045"
+        self.target.save(update_fields=["cl_number"])
+        breeding = BreedingRegistration.objects.create(
+            owner=self.user, association=self.association, species=self.source,
+            breeding_date=date(2025, 5, 6), description="Historisk odling",
+            status=BreedingRegistration.Status.APPROVED,
+            awarded_breeding_class=Species.BreedingClass.SILVER,
+            awarded_points=3,
+        )
+        merge_species(self.source, self.target)
+        breeding.refresh_from_db()
+        self.target.refresh_from_db()
+        self.assertEqual(breeding.owner_id, self.user.pk)
+        self.assertEqual(breeding.association_id, self.association.pk)
+        self.assertEqual(breeding.species_id, self.target.pk)
+        self.assertEqual(breeding.awarded_breeding_class, Species.BreedingClass.SILVER)
+        self.assertEqual(breeding.awarded_points, 3)
+        self.assertEqual(self.target.cl_number, "C045")
+        self.assertTrue(self.target.scientific_synonyms.filter(
+            scientific_name="Corydoras aeneus"
+        ).exists())
+
     def test_species_cannot_be_merged_with_itself(self):
         with self.assertRaisesRegex(ValueError, "inte slås ihop med sig själv"):
             merge_species(self.source, self.source)
