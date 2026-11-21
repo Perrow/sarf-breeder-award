@@ -236,6 +236,15 @@ class SpeciesMergeAdminTests(TestCase):
         registration.refresh_from_db()
         self.assertEqual(registration.species, self.source)
 
+    def test_confirm_requires_previous_preview_in_same_session(self):
+        url = reverse("admin:taxonomy_species_merge", args=(self.source.pk,))
+        response = self.client.post(url, {
+            "target_species": self.target.pk, "confirm_merge": "yes",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Förhandsgranska sammanslagningen innan du bekräftar")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
     def test_invalid_target_and_self_merge_are_rejected(self):
         url = reverse("admin:taxonomy_species_merge", args=[self.source.pk])
         for value in (self.source.pk, 9999999, "invalid"):
