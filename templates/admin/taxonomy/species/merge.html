@@ -26,12 +26,14 @@
       ({{ preview.source_review.reviewed_at }}).</p>
       {% if preview.source_review.manual_review_comment %}<p>{{ preview.source_review.manual_review_comment }}</p>{% endif %}
       {% if preview.source_review.notes %}<p>{{ preview.source_review.notes }}</p>{% endif %}
+      <ul>{% for url in preview.source_review.sources %}<li>{{ url }}</li>{% endfor %}</ul>
     {% else %}<p>Källarten saknar artgranskning.</p>{% endif %}
     {% if preview.target_review %}
       <p>Målartens granskning: <strong>{{ preview.target_review.get_status_display }}</strong>
       ({{ preview.target_review.reviewed_at }}).</p>
       {% if preview.target_review.manual_review_comment %}<p>{{ preview.target_review.manual_review_comment }}</p>{% endif %}
       {% if preview.target_review.notes %}<p>{{ preview.target_review.notes }}</p>{% endif %}
+      <ul>{% for url in preview.target_review.sources %}<li>{{ url }}</li>{% endfor %}</ul>
     {% else %}<p>Målarten saknar artgranskning.</p>{% endif %}
     {% if preview.source_review and preview.target_review %}
     <p><strong>Observera:</strong> Båda arterna har granskningar. Källartens granskning bevaras i målartens anteckningar med alla fält, och vid konflikt krävs manuell granskning.</p>
