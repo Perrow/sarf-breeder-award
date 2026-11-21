@@ -339,3 +339,23 @@ class SpeciesMergeQualityReviewTests(SpeciesMergeTests):
         self.assertIn("Källkommentar", target_review.manual_review_comment)
         self.assertIn("uncertain", target_review.notes)
         self.assertFalse(SpeciesQualityReview.objects.filter(pk=original.pk).exists())
+
+    def test_two_reviewed_records_also_require_manual_reconciliation(self):
+        SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 1), field_results={"links": "found"},
+            sources=["https://example.org/source"],
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2), field_results={"links": "found"},
+            sources=["https://example.org/target"],
+        )
+        merge_species(self.source, self.target)
+        review = SpeciesQualityReview.objects.get(species=self.target)
+        self.assertEqual(review.status, SpeciesQualityReview.Status.MANUAL_REVIEW)
+        self.assertIn("Kontrollera sammanslagen artgranskning", review.manual_review_comment)
+        self.assertCountEqual(
+            review.sources,
+            ["https://example.org/source", "https://example.org/target"],
+        )
