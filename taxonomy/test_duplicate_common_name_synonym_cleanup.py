@@ -1,4 +1,5 @@
 from importlib import import_module
+from types import SimpleNamespace
 
 from django.apps import apps
 from django.db import connection
@@ -39,9 +40,9 @@ class DuplicateCommonNameSynonymCleanupTests(TestCase):
         cleanup = import_module(
             "taxonomy.migrations.0020_remove_scientific_common_name_synonyms"
         ).remove_scientific_names_from_common_synonyms
-        with connection.schema_editor() as schema_editor:
-            cleanup(apps, schema_editor)
-            cleanup(apps, schema_editor)
+        schema_editor = SimpleNamespace(connection=connection)
+        cleanup(apps, schema_editor)
+        cleanup(apps, schema_editor)
 
         self.assertFalse(
             CommonNameSpeciesSynonym.objects.filter(
