@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from associations.models import Association
-from breedings.models import BreedingRegistration
+from breedings.models import BreedingRegistration, SpeciesReclassificationRequest
 from .models import (
     CommonNameSpeciesSynonym,
     Geography,
@@ -155,6 +155,25 @@ class SpeciesMergeTests(TestCase):
         self.assertTrue(self.target.scientific_synonyms.filter(
             scientific_name="Corydoras aeneus"
         ).exists())
+
+    def test_competing_pending_reclassifications_block_merge_without_data_loss(self):
+        for species in (self.source, self.target):
+            SpeciesReclassificationRequest.objects.create(
+                species=species,
+                requester=self.user,
+                current_breeding_class=Species.BreedingClass.BRONZE,
+                requested_breeding_class=Species.BreedingClass.SILVER,
+                reason="Kontroll av klassning",
+                status=SpeciesReclassificationRequest.Status.PENDING,
+            )
+        with self.assertRaisesMessage(
+            Exception, "Båda arterna har en pågående omklassningsbegäran"
+        ):
+            merge_species(self.source, self.target)
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        self.assertEqual(
+            SpeciesReclassificationRequest.objects.filter(species=self.source).count(), 1
+        )
 
     def test_species_cannot_be_merged_with_itself(self):
         with self.assertRaisesRegex(ValueError, "inte slås ihop med sig själv"):
