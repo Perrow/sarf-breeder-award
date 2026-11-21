@@ -180,6 +180,69 @@ def _ensure_common_synonym(species, common_name, stats):
     stats["synonyms_created" if created else "synonyms_reused"] += 1
 
 
+def _promote_species_names(species, primary_scientific_name, primary_swedish_name,
+                           primary_english_name, stats):
+    """Promote verified names without losing the previous primary names."""
+    if primary_scientific_name:
+        parts = primary_scientific_name.split()
+        if len(parts) != 2 or not all(parts):
+            raise SpeciesImportError(
+                "'primary_scientific_name' ska vara 'Släkte artepitet'."
+            )
+        genus_name, scientific_name = parts
+        if len(genus_name) > 100 or len(scientific_name) > 100:
+            raise SpeciesImportError("Det nya vetenskapliga namnet är för långt.")
+        if (species.genus.scientific_name.casefold(), species.scientific_name.casefold()) != (
+            genus_name.casefold(), scientific_name.casefold()
+        ):
+            target_genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
+            if target_genus is not None:
+                if Species.objects.filter(
+                    genus=target_genus, scientific_name__iexact=scientific_name,
+                    cl_number=species.cl_number,
+                ).exclude(pk=species.pk).exists():
+                    raise SpeciesImportError(
+                        "Det nya vetenskapliga namnet används redan av en annan art."
+                    )
+            if ScientificSpeciesSynonym.objects.filter(
+                scientific_name__iexact=primary_scientific_name
+            ).exclude(species=species).exists():
+                raise SpeciesImportError(
+                    "Det nya vetenskapliga namnet är synonym till en annan art."
+                )
+            old_full_name = f"{species.genus.scientific_name} {species.scientific_name}"
+            if target_genus is None:
+                target_genus = Genus.objects.create(scientific_name=genus_name)
+                stats["genera_created"] += 1
+            species.genus = target_genus
+            species.scientific_name = scientific_name
+            species.save(update_fields=["genus", "scientific_name"])
+            ScientificSpeciesSynonym.objects.filter(
+                species=species, scientific_name__iexact=primary_scientific_name
+            ).delete()
+            _, created = ScientificSpeciesSynonym.objects.get_or_create(
+                species=species, scientific_name=old_full_name
+            )
+            stats["synonyms_created" if created else "synonyms_reused"] += 1
+
+    for field, new_name in (
+        ("common_name", primary_swedish_name),
+        ("english_name", primary_english_name),
+    ):
+        if new_name is None or getattr(species, field) == new_name:
+            continue
+        if len(new_name) > 200:
+            raise SpeciesImportError("Det nya populärnamnet är för långt.")
+        old_name = getattr(species, field)
+        setattr(species, field, new_name)
+        species.save(update_fields=[field])
+        CommonNameSpeciesSynonym.objects.filter(
+            species=species, common_name__iexact=new_name
+        ).delete()
+        if old_name and old_name.casefold() != new_name.casefold():
+            _ensure_common_synonym(species, old_name, stats)
+
+
 def _import_link(species, data, stats):
     source_name = data["source_name"] or _source_name_from_url(data["url"])
     title = data["title"] or _fetch_page_title(data["url"])
@@ -403,6 +466,9 @@ def _import_species_row(row, stats):
     geographies = _name_list(row, "geographies")
     links = _link_list(row)
     quality_review = row.get("quality_review")
+    primary_scientific_name = _optional_text(row, "primary_scientific_name")
+    primary_swedish_name = _optional_text(row, "primary_swedish_name")
+    primary_english_name = _optional_text(row, "primary_english_name")
 
     genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
     species = _find_existing_species(
@@ -462,6 +528,12 @@ def _import_species_row(row, stats):
                 species.save(update_fields=["english_name"])
             elif species.english_name != english_names[0]:
                 _ensure_common_synonym(species, english_names[0], stats)
+
+    if species is not None:
+        _promote_species_names(
+            species, primary_scientific_name, primary_swedish_name,
+            primary_english_name, stats,
+        )
 
     for common_name in swedish_names[1:] + english_names[1:]:
         _ensure_common_synonym(species, common_name, stats)

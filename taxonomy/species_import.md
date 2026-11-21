@@ -180,3 +180,42 @@ Detta är ett **schemaexempel**, inte ett konkret ändringsförslag. För verkli
 vad som behöver ändras eller tas bort, motivera bedömningen och referera till
 verifierade källor. Import av granskningskommentaren genomför **inga** automatiska
 namnbyten, borttagningar av länkar eller andra ändringar som kräver beslut.
+
+
+## Primärnamn och verifierade namnbyten
+
+De vanliga `scientific_synonyms` och `swedish_names`/`english_names`
+registrerar alternativa namn. De **byter inte** befintligt primärnamn.
+
+En komplettering kan uttryckligen ändra primärnamn med:
+- `primary_scientific_name`: nytt, fullständigt vetenskapligt namn (`"Släkte artepitet"`).
+- `primary_swedish_name`: nytt primärt svenskt populärnamn.
+- `primary_english_name`: nytt primärt engelskt namn.
+
+Identifiera alltid befintlig art med `genus`, `scientific_name` och eventuellt
+`cl_number` enligt uppgifterna **före** namnbytet. Importen ändrar sedan
+primärnamnet och lägger det tidigare namnet bland vetenskapliga respektive
+populärnamnssynonymer. En befintlig synonym som promoveras till primärnamn
+tas bort från synonymtabellen. Detta är en uttrycklig ändring, inte vanlig
+additiv komplettering. Vetenskapliga namnbyten avvisas vid kollision med en
+annan arts primärnamn eller vetenskapliga synonym. Ändra inte odlingsklass.
+
+```json
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "TidigareSlakte",
+      "scientific_name": "tidigareart",
+      "primary_scientific_name": "NyttSlakte nyart",
+      "primary_swedish_name": "Nytt verifierat populärnamn",
+      "scientific_synonyms": ["Annan äldre vetenskaplig kombination"]
+    }
+  ]
+}
+```
+
+Detta är ett *formatexempel*, inte faktiska taxonomiska uppgifter.
+Dokumentera den verifierade FishBase-källan i PR och artens granskningslogg.
+Ett osäkert namnbyte ska fortfarande flaggas för manuell granskning; skriv inte
+en obekräftad uppgift i något primärnamnsfält.
