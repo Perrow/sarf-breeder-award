@@ -204,6 +204,7 @@ class SpeciesAdmin(admin.ModelAdmin):
             confirmed = request.POST.get("confirm_merge") == "yes"
             if confirmed and request.session.get(session_key) != target.pk:
                 form.add_error(None, "Förhandsgranska sammanslagningen innan du bekräftar.")
+                request.session[session_key] = target.pk
             elif confirmed:
                 try:
                     merge_species(source, target)
