@@ -375,12 +375,12 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
 class SpeciesQualityReviewAdmin(admin.ModelAdmin):
     """Let administrators inspect reviews and schedule a new review."""
 
-    list_display = ("species", "status", "reviewed_at", "review_again_after")
+    list_display = ("species", "status", "reviewed_at", "review_again_after", "manual_review_comment")
     list_filter = ("status",)
     search_fields = ("species__genus__scientific_name", "species__scientific_name")
     readonly_fields = ("species", "reviewed_at", "field_results", "sources", "notes")
     fields = ("species", "status", "reviewed_at", "review_again_after",
-              "field_results", "sources", "notes")
+              "field_results", "sources", "notes", "manual_review_comment")
 
     def has_add_permission(self, request):
         return False

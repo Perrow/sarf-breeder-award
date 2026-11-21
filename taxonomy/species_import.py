@@ -346,6 +346,14 @@ def _import_quality_review(species, review):
     notes = review.get("notes", "")
     if not isinstance(notes, str):
         raise SpeciesImportError("'quality_review.notes' måste vara text.")
+    manual_review_comment = review.get("manual_review_comment", "")
+    if not isinstance(manual_review_comment, str):
+        raise SpeciesImportError("'quality_review.manual_review_comment' måste vara text.")
+    manual_review_comment = manual_review_comment.strip()
+    if status == SpeciesQualityReview.Status.MANUAL_REVIEW and not manual_review_comment:
+        raise SpeciesImportError(
+            "'quality_review.manual_review_comment' krävs när status är 'manual_review'."
+        )
     if "review_again_after" in review and review["review_again_after"] is not None:
         review_again_after = _parse_review_date(
             review["review_again_after"], "review_again_after"
@@ -368,6 +376,7 @@ def _import_quality_review(species, review):
             "field_results": fields,
             "sources": list(dict.fromkeys(sources)),
             "notes": notes,
+            "manual_review_comment": manual_review_comment,
         },
     )
 

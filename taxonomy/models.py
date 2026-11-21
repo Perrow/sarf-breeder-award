@@ -267,6 +267,9 @@ class SpeciesQualityReview(models.Model):
     field_results = models.JSONField(default=dict, verbose_name="resultat per uppgift")
     sources = models.JSONField(default=list, verbose_name="granskade källor")
     notes = models.TextField(blank=True, verbose_name="anteckningar")
+    manual_review_comment = models.TextField(
+        blank=True, verbose_name="kommentar för manuell granskning"
+    )
 
     class Meta:
         verbose_name = "artgranskning"

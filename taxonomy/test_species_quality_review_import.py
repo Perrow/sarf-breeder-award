@@ -57,10 +57,17 @@ class SpeciesQualityReviewImportTests(TestCase):
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.BRONZE)
 
     def test_manual_review_does_not_get_automatic_due_date(self):
-        self.import_rows([self.review_row(status="manual_review")])
+        self.import_rows([self.review_row(
+            status="manual_review",
+            manual_review_comment=(
+                "Kontrollera befintlig artlänk och vetenskapligt namn mot "
+                "https://example.org/species före eventuell ändring."
+            ),
+        )])
         review = SpeciesQualityReview.objects.get(species=self.species)
         self.assertEqual(review.status, "manual_review")
         self.assertIsNone(review.review_again_after)
+        self.assertIn("Kontrollera befintlig artlänk", review.manual_review_comment)
 
     def test_newer_review_replaces_old_review_but_older_import_does_not(self):
         old = self.review_row()
@@ -80,6 +87,9 @@ class SpeciesQualityReviewImportTests(TestCase):
             {"fields": {"swedish_name": "invented", "english_name": "found",
                         "geography": "found", "links": "found"}},
             {"sources": ["http://example.org/source"]},
+            {"status": "manual_review"},
+            {"status": "manual_review", "manual_review_comment": "   "},
+            {"status": "manual_review", "manual_review_comment": 123},
         ]
         for changes in cases:
             with self.subTest(changes=changes):
@@ -93,3 +103,32 @@ class SpeciesQualityReviewImportTests(TestCase):
         with self.assertRaises(SpeciesImportError):
             self.import_rows([row])
         self.assertEqual(Species.objects.count(), 1)
+
+    def test_manual_review_comment_is_preserved_on_reimport_and_updated_by_new_review(self):
+        original = self.review_row(
+            status="manual_review",
+            manual_review_comment="Granska länken https://example.org/old före borttagning.",
+        )
+        self.import_rows([original])
+        self.import_rows([original])
+        review = SpeciesQualityReview.objects.get(species=self.species)
+        self.assertEqual(
+            review.manual_review_comment,
+            "Granska länken https://example.org/old före borttagning.",
+        )
+        newer = self.review_row(
+            status="manual_review",
+            reviewed_at="2027-01-01",
+            manual_review_comment="Granska nytt vetenskapligt namn enligt https://example.org/new.",
+        )
+        self.import_rows([newer])
+        review.refresh_from_db()
+        self.assertIn("nytt vetenskapligt namn", review.manual_review_comment)
+        self.import_rows([original])
+        review.refresh_from_db()
+        self.assertIn("nytt vetenskapligt namn", review.manual_review_comment)
+
+    def test_regular_review_can_omit_manual_comment(self):
+        self.import_rows([self.review_row()])
+        review = SpeciesQualityReview.objects.get(species=self.species)
+        self.assertEqual(review.manual_review_comment, "")

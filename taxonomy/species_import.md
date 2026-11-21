@@ -149,3 +149,34 @@ Endpointen `/api/species/data-quality/random/` har kvar sin adress av
 kompatibilitetsskäl men returnerar numera en prioriterad, sidindelad lista
 med högst tio arter per sida, valbar via `?page=2`, och ett `next_page`-fält.
 Granskade arter tas bort från urvalet tills omgranskning är aktuell.
+
+### Kommentar när manuell granskning krävs
+
+Om `quality_review.status` är `manual_review` måste importposten innehålla
+`manual_review_comment` med en **icke-tom text** som förklarar vad en administratör
+behöver bedöma. Kommentaren lagras separat från de allmänna anteckningarna
+(`notes`) och visas i administrationsgränssnittet. För övriga granskningsstatusar
+är kommentaren valfri. Exempel:
+
+```json
+{
+  "quality_review": {
+    "status": "manual_review",
+    "reviewed_at": "2026-11-21",
+    "fields": {
+      "swedish_name": "uncertain",
+      "english_name": "found",
+      "geography": "found",
+      "links": "uncertain"
+    },
+    "sources": ["https://example.org/species"],
+    "manual_review_comment": "Kontrollera om den befintliga artlänken behöver tas bort och om artens svenska namn behöver ändras; jämför med källorna före beslut."
+  }
+}
+```
+
+Detta är ett **schemaexempel**, inte ett konkret ändringsförslag. För verkliga
+ärenden ska kommentaren namnge berörda befintliga värden och länkar, föreslå
+vad som behöver ändras eller tas bort, motivera bedömningen och referera till
+verifierade källor. Import av granskningskommentaren genomför **inga** automatiska
+namnbyten, borttagningar av länkar eller andra ändringar som kräver beslut.
