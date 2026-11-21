@@ -250,3 +250,73 @@ class SpeciesDataQualityAdminTests(TestCase):
             '<strong>Artlänkar</strong><span style="color:#666">Inte granskad</span>',
             html=False,
         )
+
+    def test_manual_review_approval_sets_next_review_one_year_from_today(self):
+        from datetime import date, timedelta
+        from unittest.mock import patch
+
+        species = self.add_species("approve")
+        review = SpeciesQualityReview.objects.create(
+            species=species, status="manual_review",
+            reviewed_at=date(2026, 1, 1),
+            manual_review_comment="Kontrollera uppgifterna.",
+        )
+        with patch("taxonomy.admin.timezone.localdate", return_value=date(2026, 11, 21)):
+            response = self.client.post(
+                reverse("admin:taxonomy_speciesqualityreview_change", args=[review.pk]),
+                {"status": "reviewed", "review_again_after": "", "manual_review_comment": "",
+                 "_save": "Spara"},
+            )
+        self.assertEqual(response.status_code, 302)
+        review.refresh_from_db()
+        self.assertEqual(review.status, "reviewed")
+        self.assertEqual(review.review_again_after, date(2026, 11, 21) + timedelta(days=365))
+
+    def test_review_source_can_be_added_to_species_without_duplicates(self):
+        from datetime import date
+
+        species = self.add_species("addlink")
+        source = "https://www.fishbase.se/summary/123"
+        review = SpeciesQualityReview.objects.create(
+            species=species, status="reviewed",
+            reviewed_at=date(2026, 11, 21),
+            sources=[source],
+        )
+        url = reverse("admin:taxonomy_speciesqualityreview_change", args=[review.pk])
+        response = self.client.get(url)
+        self.assertContains(response, 'name="_add_source_url"')
+        for _ in range(2):
+            response = self.client.post(
+                url,
+                {"status": "reviewed", "review_again_after": "",
+                 "manual_review_comment": "",
+                 "_add_source_url": source},
+            )
+            self.assertEqual(response.status_code, 302)
+        self.assertEqual(
+            SpeciesLink.objects.filter(species=species, url=source).count(), 1
+        )
+        self.assertEqual(
+            SpeciesLink.objects.get(species=species, url=source).source_name,
+            "FishBase",
+        )
+        response = self.client.get(url)
+        self.assertContains(response, "Finns på arten")
+
+    def test_review_source_action_rejects_urls_not_in_review(self):
+        from datetime import date
+
+        species = self.add_species("otherlink")
+        review = SpeciesQualityReview.objects.create(
+            species=species, status="reviewed",
+            reviewed_at=date(2026, 11, 21),
+            sources=["https://example.org/species"],
+        )
+        response = self.client.post(
+            reverse("admin:taxonomy_speciesqualityreview_change", args=[review.pk]),
+            {"status": "reviewed", "review_again_after": "",
+             "manual_review_comment": "",
+             "_add_source_url": "https://evil.example/species"},
+        )
+        self.assertEqual(response.status_code, 302)
+        self.assertFalse(SpeciesLink.objects.filter(species=species).exists())

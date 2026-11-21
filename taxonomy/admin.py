@@ -1,11 +1,14 @@
 import tempfile
+from datetime import timedelta
 from pathlib import Path
 from urllib.parse import urlsplit
 
 from django.contrib import admin, messages
-from django.core.exceptions import PermissionDenied
+from django.core.exceptions import PermissionDenied, ValidationError
 from django.db.models import Count, Q, Sum
+from django.utils import timezone
 from django.shortcuts import get_object_or_404, redirect, render
+from django.core.validators import URLValidator
 from django.urls import path, reverse
 from django.utils.html import format_html, format_html_join
 
@@ -387,6 +390,66 @@ class SpeciesQualityReviewAdmin(admin.ModelAdmin):
         "review_field_results", "review_sources", "notes", "manual_review_comment",
     )
 
+    def save_model(self, request, obj, form, change):
+        if change and "status" in form.changed_data:
+            previous_status = (
+                SpeciesQualityReview.objects.filter(pk=obj.pk)
+                .values_list("status", flat=True).first()
+            )
+            if (
+                previous_status == SpeciesQualityReview.Status.MANUAL_REVIEW
+                and obj.status == SpeciesQualityReview.Status.REVIEWED
+            ):
+                obj.review_again_after = timezone.localdate() + timedelta(days=365)
+        super().save_model(request, obj, form, change)
+
+    def response_change(self, request, obj):
+        url = request.POST.get("_add_source_url")
+        if url is not None:
+            # Never accept an arbitrary URL from the form: only sources
+            # already recorded on this review can become species links.
+            if (
+                isinstance(obj.sources, list)
+                and url in obj.sources
+                and urlsplit(url).scheme == "https"
+                and urlsplit(url).hostname
+                and len(url) <= 500
+            ):
+                try:
+                    URLValidator(schemes=["https"])(url)
+                except ValidationError:
+                    self.message_user(
+                        request, "Ogiltig källadress.", level=messages.ERROR
+                    )
+                else:
+                    hostname = urlsplit(url).hostname.lower().removeprefix("www.")
+                    source_name = {
+                        "fishbase.se": "FishBase",
+                        "planetcatfish.com": "PlanetCatfish",
+                        "scotcat.com": "ScotCat",
+                        "ciklid.org": "NCS Artregister",
+                        "zoopet.com": "Zoopet",
+                    }.get(hostname, hostname[:100])
+                    _, created = SpeciesLink.objects.get_or_create(
+                        species=obj.species,
+                        url=url,
+                        defaults={"source_name": source_name},
+                    )
+                    self.message_user(
+                        request,
+                        "Källänken har lagts till på arten." if created
+                        else "Källänken finns redan på arten.",
+                    )
+            else:
+                self.message_user(
+                    request, "Källänken finns inte i granskningen eller är ogiltig.",
+                    level=messages.ERROR,
+                )
+            return redirect(
+                reverse("admin:taxonomy_speciesqualityreview_change", args=[obj.pk])
+            )
+        return super().response_change(request, obj)
+
     @admin.display(description="Resultat per uppgift")
     def review_field_results(self, obj):
         labels = {
@@ -427,12 +490,27 @@ class SpeciesQualityReviewAdmin(admin.ModelAdmin):
         ]
         if not valid_urls:
             return "Inga källor"
+        existing_links = set(
+            obj.species.external_links.values_list("url", flat=True)
+        )
+        items = []
+        for url in valid_urls:
+            link = format_html(
+                '<a href="{}" target="_blank" rel="noopener noreferrer">{}</a>',
+                url, url,
+            )
+            if url in existing_links:
+                items.append(format_html('<li>{} <span>(Finns på arten)</span></li>', link))
+            else:
+                button = format_html(
+                    '<button type="submit" class="button" name="_add_source_url"'
+                    ' value="{}">Lägg till på arten</button>',
+                    url,
+                )
+                items.append(format_html('<li>{} {}</li>', link, button))
         return format_html(
             '<ul style="margin:0;padding-left:1.5em">{}</ul>',
-            format_html_join(
-                "", '<li><a href="{}" target="_blank" rel="noopener noreferrer">{}</a></li>',
-                ((url, url) for url in valid_urls),
-            ),
+            format_html_join("", "{}", ((item,) for item in items)),
         )
 
     def has_add_permission(self, request):
