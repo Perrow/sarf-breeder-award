@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.db import models
 
 from breeder_awards.db_collations import CASE_INSENSITIVE_COLLATION
+from associations.models import validate_instagram_url
 
 
 class UserManager(BaseUserManager):
@@ -56,6 +57,7 @@ class User(AbstractUser):
         verbose_name="användarnamn",
     )
     avatar_url = models.URLField(blank=True, verbose_name="profilbild")
+    instagram_url = models.URLField(max_length=500, blank=True, validators=[validate_instagram_url], verbose_name="Instagram")
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []
