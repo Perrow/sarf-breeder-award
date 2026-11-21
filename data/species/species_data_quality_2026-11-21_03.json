@@ -1,0 +1,269 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Betta",
+      "scientific_name": "akarensis",
+      "english_names": [
+        "Akar betta"
+      ],
+      "geographies": [
+        "Borneo"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/12033",
+          "source_name": "FishBase",
+          "title": "Betta akarensis"
+        }
+      ]
+    },
+    {
+      "genus": "Carinotetraodon",
+      "scientific_name": "imitator",
+      "english_names": [
+        "Dwarf Malabar puffer"
+      ],
+      "geographies": [
+        "Indien",
+        "Kerala"
+      ],
+      "links": [
+        {
+          "url": "https://fishbase.se/summary/59837",
+          "source_name": "FishBase",
+          "title": "Carinotetraodon imitator"
+        },
+        {
+          "url": "https://www.ncbi.nlm.nih.gov/Taxonomy/Browser/wwwtax.cgi?id=1328949&mode=Info",
+          "source_name": "NCBI Taxonomy",
+          "title": "Carinotetraodon imitator"
+        }
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "asiatica",
+      "english_names": [
+        "Small snakehead"
+      ],
+      "geographies": [
+        "Kina",
+        "Taiwan",
+        "Vietnam",
+        "Yangtzes avrinningsområde",
+        "Röda flodens avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Gymnotus asiaticus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/7756",
+          "source_name": "FishBase",
+          "title": "Channa asiatica"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=374",
+          "source_name": "Zoopet",
+          "title": "Channa asiatica"
+        },
+        {
+          "url": "https://www.marinespecies.org/aphia.php?id=1018804&p=taxdetails",
+          "source_name": "WoRMS",
+          "title": "Channa asiatica"
+        }
+      ]
+    },
+    {
+      "genus": "Channa",
+      "scientific_name": "obscura",
+      "swedish_names": [
+        "Mörk ormhuvudsfisk"
+      ],
+      "english_names": [
+        "African snakehead"
+      ],
+      "geographies": [
+        "Västafrika",
+        "Senegals avrinningsområde",
+        "Voltas avrinningsområde",
+        "Nigers avrinningsområde",
+        "Tchadsjöns avrinningsområde",
+        "Nilens avrinningsområde",
+        "Kongoflodens avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Ophiocephalus obscurus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/Parachanna-obscura.html",
+          "source_name": "FishBase",
+          "title": "Parachanna obscura"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=1106",
+          "source_name": "Zoopet",
+          "title": "Parachanna obscura"
+        },
+        {
+          "url": "https://pubs.usgs.gov/circ/2004/1251/report.pdf",
+          "source_name": "USGS",
+          "title": "Parachanna obscura"
+        }
+      ]
+    },
+    {
+      "genus": "Chilaterina",
+      "scientific_name": "campsi",
+      "english_names": [
+        "Highlands rainbowfish"
+      ],
+      "geographies": [
+        "Papua Nya Guinea",
+        "Markhams avrinningsområde",
+        "Ramus avrinningsområde",
+        "Sepiks avrinningsområde",
+        "Puraris avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Anisocentrus campsi"
+      ],
+      "links": [
+        {
+          "url": "https://fishbase.se/summary/25605",
+          "source_name": "FishBase",
+          "title": "Chilatherina campsi"
+        }
+      ]
+    },
+    {
+      "genus": "Ctenobrycon",
+      "scientific_name": "spilurus",
+      "english_names": [
+        "Silver tetra"
+      ],
+      "geographies": [
+        "Orinocos avrinningsområde",
+        "Guyana",
+        "Suriname",
+        "Franska Guyana"
+      ],
+      "scientific_synonyms": [
+        "Tetragonopterus spilurus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/10629",
+          "source_name": "FishBase",
+          "title": "Ctenobrycon spilurus"
+        }
+      ]
+    },
+    {
+      "genus": "Limnochromis",
+      "scientific_name": "auritus",
+      "swedish_names": [
+        "Dyciklid"
+      ],
+      "english_names": [
+        "Spangled cichlid"
+      ],
+      "links": [
+        {
+          "url": "https://fishbase.se/summary/8636",
+          "source_name": "FishBase",
+          "title": "Limnochromis auritus"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=749",
+          "source_name": "Zoopet",
+          "title": "Limnochromis auritus"
+        },
+        {
+          "url": "https://faunafri.africamuseum.be/cloffa/table/taxon2/view?idtaxon%3Aint=3539",
+          "source_name": "Faunafri",
+          "title": "Limnochromis auritus"
+        }
+      ],
+      "scientific_synonyms": [
+        "Paratilapia aurita"
+      ]
+    },
+    {
+      "genus": "Nannacara",
+      "scientific_name": "anomala",
+      "english_names": [
+        "Goldeneye cichlid"
+      ],
+      "geographies": [
+        "Guyana",
+        "Suriname"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=447",
+          "source_name": "NCS Artregister",
+          "title": "Nannacara anomala"
+        },
+        {
+          "url": "https://www.fishbase.se/Fieldguide/FieldGuideSummary.php?c_code=328&genusname=Nannacara&speciesname=anomala",
+          "source_name": "FishBase",
+          "title": "Nannacara anomala"
+        }
+      ]
+    },
+    {
+      "genus": "Pterygoplichthys",
+      "scientific_name": "gibbiceps",
+      "english_names": [
+        "Leopard pleco",
+        "Sailfin pleco"
+      ],
+      "geographies": [
+        "Amazonas avrinningsområde",
+        "Orinocos avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Glyptoperichthys gibbiceps"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/Pterygoplichthys-gibbiceps",
+          "source_name": "FishBase",
+          "title": "Pterygoplichthys gibbiceps"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=318",
+          "source_name": "Zoopet",
+          "title": "Glyptoperichthys gibbiceps"
+        }
+      ],
+      "swedish_names": [
+        "Segelfenspleco"
+      ]
+    },
+    {
+      "genus": "Sciaenochromis",
+      "scientific_name": "fryeri",
+      "geographies": [
+        "Taiwan Reef",
+        "Chinyankwazi",
+        "Chinyamwezi"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/60051",
+          "source_name": "FishBase",
+          "title": "Sciaenochromis fryeri"
+        },
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?ID=724",
+          "source_name": "NCS Artregister",
+          "title": "Sciaenochromis fryeri"
+        }
+      ]
+    }
+  ]
+}
