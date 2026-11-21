@@ -115,6 +115,54 @@ class SpeciesDataQualityAdminTests(TestCase):
         request.user = self.admin_user
         return request
 
+
+    def test_summary_totals_include_all_species_and_update_with_data(self):
+        complete = self.add_species("complete", "Komplett", "English")
+        partial = self.add_species("partial", "Svenskt namn", "")
+        missing = self.add_species("missing")
+        geography = Geography.objects.create(name="Sydamerika")
+        complete.geographies.add(geography)
+        partial.geographies.add(geography)
+        SpeciesLink.objects.create(
+            species=complete, url="https://example.org/complete", source_name="Källa"
+        )
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["total_quality_score"], 6)
+        self.assertEqual(response.context["complete_species_count"], 1)
+        self.assertContains(response, "<strong>Total bristpoäng:</strong> 6", html=False)
+        self.assertContains(response, "<strong>Arter med 0 bristpoäng:</strong> 1", html=False)
+
+        missing.common_name = "Annat svenskt namn"
+        missing.english_name = "English"
+        missing.save(update_fields=["common_name", "english_name"])
+        response = self.client.get(self.url)
+        self.assertEqual(response.context["total_quality_score"], 4)
+        self.assertEqual(response.context["complete_species_count"], 1)
+
+    def test_summary_shows_zero_for_empty_registry(self):
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.context["total_quality_score"], 0)
+        self.assertEqual(response.context["complete_species_count"], 0)
+
+    def test_summary_is_not_limited_to_current_page(self):
+        Species.objects.bulk_create([
+            Species(
+                genus=self.genus,
+                scientific_name=f"species{index:03d}",
+                common_name=f"Apistogramma species{index:03d}",
+                breeding_class=Species.BreedingClass.SILVER,
+            )
+            for index in range(101)
+        ])
+        for page in (None, "1"):
+            with self.subTest(page=page):
+                response = self.client.get(self.url, {"p": page} if page else {})
+                self.assertEqual(response.status_code, 200)
+                self.assertEqual(response.context["total_quality_score"], 404)
+                self.assertEqual(response.context["complete_species_count"], 0)
+
     def test_user_without_species_permission_cannot_see_data_quality(self):
         user = get_user_model().objects.create_user(
             email="no-quality-permission@example.com",
