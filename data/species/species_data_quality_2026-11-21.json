@@ -1,0 +1,238 @@
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Andinoacara",
+      "scientific_name": "biseriatus",
+      "swedish_names": [
+        "San Juan-ciklid"
+      ],
+      "geographies": [
+        "Colombia",
+        "Río Atratos avrinningsområde",
+        "Río San Juans avrinningsområde",
+        "Río Baudós avrinningsområde"
+      ],
+      "scientific_synonyms": [
+        "Cichlosoma biseriatum"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?id=227",
+          "source_name": "NCS Artregister",
+          "title": "Andinoacara biseriatus"
+        },
+        {
+          "url": "https://fishbase.se/summary/SpeciesSummary.php?id=46569&lang=swedish",
+          "source_name": "FishBase",
+          "title": "Andinoacara biseriatus"
+        }
+      ]
+    },
+    {
+      "genus": "Apistogramma",
+      "scientific_name": "meinkeni",
+      "geographies": [
+        "Brasilien",
+        "Río Uaupés avrinningsområde"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/Apistogramma-meinkeni.html",
+          "source_name": "FishBase",
+          "title": "Apistogramma meinkeni"
+        }
+      ]
+    },
+    {
+      "genus": "Crenicichla",
+      "scientific_name": "saxatilis",
+      "swedish_names": [
+        "Vitprickig gäddciklid"
+      ],
+      "english_names": [
+        "Ringtail pike cichlid"
+      ],
+      "geographies": [
+        "Suriname"
+      ],
+      "scientific_synonyms": [
+        "Sparus saxatilis",
+        "Sparus biocellatus"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?id=361",
+          "source_name": "NCS Artregister",
+          "title": "Crenicichla saxatilis"
+        },
+        {
+          "url": "https://www.fishbase.se/summary/12312",
+          "source_name": "FishBase",
+          "title": "Crenicichla saxatilis"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=2116",
+          "source_name": "Zoopet",
+          "title": "Crenicichla saxatilis"
+        }
+      ]
+    },
+    {
+      "genus": "Cynotilapia",
+      "scientific_name": "afra",
+      "english_names": [
+        "Afra cichlid"
+      ],
+      "geographies": [
+        "Likoma",
+        "Chizumulu"
+      ],
+      "scientific_synonyms": [
+        "Hemichromis afer",
+        "Paratilapia afra"
+      ],
+      "links": [
+        {
+          "url": "https://www.ciklid.org/artregister/art.php?id=708",
+          "source_name": "NCS Artregister",
+          "title": "Cynotilapia afra"
+        },
+        {
+          "url": "https://fishbase.se/ComNames/CommonNamesList.php?GenusName=Cynotilapia&ID=2323&SpeciesName=afra&StockCode=2518",
+          "source_name": "FishBase",
+          "title": "Cynotilapia afra"
+        }
+      ]
+    },
+    {
+      "genus": "Desmopuntius",
+      "scientific_name": "rhomboocellatus",
+      "swedish_names": [
+        "Rundbandad barb"
+      ],
+      "english_names": [
+        "Snakeskin barb"
+      ],
+      "geographies": [
+        "Borneo"
+      ],
+      "scientific_synonyms": [
+        "Barbus rhomboocellatus",
+        "Systomus rhomboocellatus",
+        "Barbus kahajani"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/17474",
+          "source_name": "FishBase",
+          "title": "Desmopuntius rhomboocellatus"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=672",
+          "source_name": "Zoopet",
+          "title": "Desmopuntius rhomboocellatus"
+        }
+      ]
+    },
+    {
+      "genus": "Fundulopanchax",
+      "scientific_name": "marmoratus",
+      "english_names": [
+        "Marbled lyretail"
+      ],
+      "geographies": [
+        "Kamerun",
+        "Mbonge"
+      ],
+      "scientific_synonyms": [
+        "Aphyosemion marmoratum"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/9758",
+          "source_name": "FishBase",
+          "title": "Fundulopanchax marmoratus"
+        }
+      ]
+    },
+    {
+      "genus": "Hemitaeniochromis",
+      "scientific_name": "spilopterus",
+      "scientific_synonyms": [
+        "Haplochromis spilopterus"
+      ],
+      "links": [
+        {
+          "url": "https://fishbase.se/summary/Protomelas-spilopterus",
+          "source_name": "FishBase",
+          "title": "Protomelas spilopterus"
+        },
+        {
+          "url": "https://www.zoopet.com/fiskar/fisk.php?NR=798",
+          "source_name": "Zoopet",
+          "title": "Hemitaeniochromis spilopterus"
+        }
+      ]
+    },
+    {
+      "genus": "Procatopus",
+      "scientific_name": "abberans",
+      "english_names": [
+        "Bluegreen lampeye"
+      ],
+      "geographies": [
+        "Kamerun",
+        "Nigeria"
+      ],
+      "scientific_synonyms": [
+        "Procatopus plumosus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/Procatopus-aberrans.html",
+          "source_name": "FishBase",
+          "title": "Procatopus aberrans"
+        }
+      ]
+    },
+    {
+      "genus": "Telmatochromis",
+      "scientific_name": "dhonti",
+      "scientific_synonyms": [
+        "Lamprologus dhonti",
+        "Telmatochromis caninus"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.org/summary/8886",
+          "source_name": "FishBase",
+          "title": "Telmatochromis dhonti"
+        },
+        {
+          "url": "https://ciklid.org/artregister/art.php?id=1235",
+          "source_name": "NCS Artregister",
+          "title": "Telmatochromis dhonti"
+        }
+      ]
+    },
+    {
+      "genus": "Xiphophorus",
+      "scientific_name": "andersi",
+      "english_names": [
+        "Spiketail platyfish"
+      ],
+      "geographies": [
+        "Mexiko",
+        "Río Atoyac (Veracruz)"
+      ],
+      "links": [
+        {
+          "url": "https://www.fishbase.se/summary/Xiphophorus-andersi",
+          "source_name": "FishBase",
+          "title": "Xiphophorus andersi"
+        }
+      ]
+    }
+  ]
+}
