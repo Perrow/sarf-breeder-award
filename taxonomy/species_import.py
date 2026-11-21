@@ -536,9 +536,16 @@ def _import_species_row(row, stats):
         )
 
     for common_name in swedish_names[1:] + english_names[1:]:
-        _ensure_common_synonym(species, common_name, stats)
+        if common_name.casefold() not in (
+            species.common_name.casefold(), species.english_name.casefold()
+        ):
+            _ensure_common_synonym(species, common_name, stats)
 
     for synonym in scientific_synonyms:
+        if synonym.casefold() == (
+            f"{species.genus.scientific_name} {species.scientific_name}".casefold()
+        ):
+            continue
         _, created = ScientificSpeciesSynonym.objects.get_or_create(
             species=species,
             scientific_name=synonym,
