@@ -381,7 +381,12 @@ class SpeciesQualityReviewAdmin(admin.ModelAdmin):
 
     list_display = ("species", "status", "reviewed_at", "review_again_after", "manual_review_comment")
     list_filter = ("status",)
-    search_fields = ("species__genus__scientific_name", "species__scientific_name")
+    search_fields = (
+        "species__genus__scientific_name",
+        "species__scientific_name",
+        "manual_review_comment",
+        "notes",
+    )
     readonly_fields = (
         "species", "reviewed_at", "review_field_results", "review_sources", "notes",
     )
