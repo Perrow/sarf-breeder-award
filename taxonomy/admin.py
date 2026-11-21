@@ -1,12 +1,13 @@
 import tempfile
 from pathlib import Path
+from urllib.parse import urlsplit
 
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
 from django.db.models import Count, Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
-from django.utils.html import format_html
+from django.utils.html import format_html, format_html_join
 
 from .forms import (
     CommonNameSynonymForm,
@@ -378,9 +379,61 @@ class SpeciesQualityReviewAdmin(admin.ModelAdmin):
     list_display = ("species", "status", "reviewed_at", "review_again_after", "manual_review_comment")
     list_filter = ("status",)
     search_fields = ("species__genus__scientific_name", "species__scientific_name")
-    readonly_fields = ("species", "reviewed_at", "field_results", "sources", "notes")
-    fields = ("species", "status", "reviewed_at", "review_again_after",
-              "field_results", "sources", "notes", "manual_review_comment")
+    readonly_fields = (
+        "species", "reviewed_at", "review_field_results", "review_sources", "notes",
+    )
+    fields = (
+        "species", "status", "reviewed_at", "review_again_after",
+        "review_field_results", "review_sources", "notes", "manual_review_comment",
+    )
+
+    @admin.display(description="Resultat per uppgift")
+    def review_field_results(self, obj):
+        labels = {
+            "swedish_name": "Svenskt namn",
+            "english_name": "Engelskt namn",
+            "geography": "Geografi",
+            "links": "Artlänkar",
+        }
+        statuses = {
+            "found": ("Finns / verifierad", "#167347"),
+            "not_found": ("Inte hittad", "#a15c00"),
+            "uncertain": ("Osäker", "#ad3030"),
+            "not_checked": ("Inte granskad", "#666"),
+        }
+        results = obj.field_results if isinstance(obj.field_results, dict) else {}
+        rows = []
+        for key, label in labels.items():
+            status, color = statuses.get(results.get(key), ("Okänd", "#666"))
+            rows.append((label, status, color))
+        return format_html(
+            '<div style="display:grid;grid-template-columns:max-content auto;'
+            'gap:.5rem 1.5rem;align-items:center">{}</div>',
+            format_html_join(
+                "",
+                '<strong>{}</strong><span style="color:{}">{}</span>',
+                rows,
+            ),
+        )
+
+    @admin.display(description="Källor")
+    def review_sources(self, obj):
+        sources = obj.sources if isinstance(obj.sources, list) else []
+        valid_urls = [
+            url for url in sources
+            if isinstance(url, str)
+            and urlsplit(url).scheme == "https"
+            and urlsplit(url).hostname
+        ]
+        if not valid_urls:
+            return "Inga källor"
+        return format_html(
+            '<ul style="margin:0;padding-left:1.5em">{}</ul>',
+            format_html_join(
+                "", '<li><a href="{}" target="_blank" rel="noopener noreferrer">{}</a></li>',
+                ((url, url) for url in valid_urls),
+            ),
+        )
 
     def has_add_permission(self, request):
         return False

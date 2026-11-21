@@ -406,7 +406,24 @@ def _import_quality_review(species, review):
             url_validator(url)
         except ValidationError as exc:
             raise SpeciesImportError("Ogiltig käll-URL i 'quality_review'.") from exc
-    notes = review.get("notes", "")
+    # A proposed primary-name change must have a verified synonym in this
+    # import row. A prose-only comment is never an actionable name proposal.
+    proposed_name = review.get("proposed_scientific_name")
+    if proposed_name is not None:
+        if not isinstance(proposed_name, str) or not proposed_name.strip():
+            raise SpeciesImportError(
+                "'quality_review.proposed_scientific_name' måste vara ett fullständigt namn."
+            )
+        synonyms = [value.casefold() for value in review.get("_row_synonyms", [])]
+        if proposed_name.strip().casefold() not in synonyms:
+            raise SpeciesImportError(
+                "Föreslaget vetenskapligt namn måste även finnas i scientific_synonyms."
+            )
+        if status != SpeciesQualityReview.Status.MANUAL_REVIEW:
+            raise SpeciesImportError(
+                "Förslag om vetenskapligt namnbyte kräver status 'manual_review'."
+            )
+        notes = review.get("notes", "")
     if not isinstance(notes, str):
         raise SpeciesImportError("'quality_review.notes' måste vara text.")
     manual_review_comment = review.get("manual_review_comment", "")
@@ -559,4 +576,8 @@ def _import_species_row(row, stats):
         _import_link(species, link, stats)
 
     if quality_review is not None:
-        _import_quality_review(species, quality_review)
+        # The proposal must correspond to a synonym saved by this very row.
+        review_data = dict(quality_review) if isinstance(quality_review, dict) else quality_review
+        if isinstance(review_data, dict):
+            review_data["_row_synonyms"] = scientific_synonyms
+        _import_quality_review(species, review_data)

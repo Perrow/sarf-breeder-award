@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 
 from django.test import TestCase
 
-from .models import Genus, Species, SpeciesLink, SpeciesQualityReview
+from .models import Genus, Species, SpeciesLink, SpeciesQualityReview, ScientificSpeciesSynonym
 from .species_import import SpeciesImportError, import_species_file
 
 
@@ -156,3 +156,26 @@ class SpeciesQualityReviewImportTests(TestCase):
                 species=self.species
             ).manual_review_comment,
         )
+
+    def test_proposed_name_must_also_be_imported_as_synonym(self):
+        row = self.review_row(
+            status="manual_review",
+            proposed_scientific_name="Hoplisoma aeneum",
+            manual_review_comment="Kontrollera accepterad kombination.",
+        )
+        with self.assertRaisesRegex(SpeciesImportError, "scientific_synonyms"):
+            self.import_rows([row])
+        self.assertFalse(SpeciesQualityReview.objects.exists())
+        row["scientific_synonyms"] = ["Hoplisoma aeneum"]
+        self.import_rows([row])
+        self.assertTrue(ScientificSpeciesSynonym.objects.filter(
+            species=self.species, scientific_name="Hoplisoma aeneum"
+        ).exists())
+        self.species.refresh_from_db()
+        self.assertEqual(self.species.scientific_name, "aeneus")
+
+    def test_reviewed_status_rejects_proposed_primary_name(self):
+        row = self.review_row(proposed_scientific_name="Hoplisoma aeneum")
+        row["scientific_synonyms"] = ["Hoplisoma aeneum"]
+        with self.assertRaisesRegex(SpeciesImportError, "manual_review"):
+            self.import_rows([row])

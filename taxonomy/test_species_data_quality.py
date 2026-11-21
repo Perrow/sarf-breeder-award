@@ -200,3 +200,33 @@ class SpeciesDataQualityAdminTests(TestCase):
         self.client.force_login(user)
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 403)
+
+    def test_review_admin_formats_sources_as_safe_links_and_results_as_labels(self):
+        from datetime import date
+
+        species = self.add_species("reviewexample")
+        review = SpeciesQualityReview.objects.create(
+            species=species,
+            status="manual_review",
+            reviewed_at=date(2026, 11, 21),
+            field_results={
+                "swedish_name": "found",
+                "english_name": "not_found",
+                "geography": "uncertain",
+                "links": "not_checked",
+            },
+            sources=[
+                "https://www.fishbase.se/summary/123",
+                'javascript:alert("x")',
+            ],
+            manual_review_comment="Bedöm synonymi.",
+        )
+        response = self.client.get(
+            reverse("admin:taxonomy_speciesqualityreview_change", args=[review.pk])
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'href="https://www.fishbase.se/summary/123"')
+        self.assertNotContains(response, 'href="javascript:')
+        for label in ("Svenskt namn", "Engelskt namn", "Geografi", "Artlänkar",
+                      "Finns / verifierad", "Inte hittad", "Osäker", "Inte granskad"):
+            self.assertContains(response, label)

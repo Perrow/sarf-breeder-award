@@ -219,3 +219,41 @@ Detta är ett *formatexempel*, inte faktiska taxonomiska uppgifter.
 Dokumentera den verifierade FishBase-källan i PR och artens granskningslogg.
 Ett osäkert namnbyte ska fortfarande flaggas för manuell granskning; skriv inte
 en obekräftad uppgift i något primärnamnsfält.
+
+
+### Föreslå namnbyte utan att förlora synonymen
+
+När källor använder olika primära vetenskapliga namn för **samma verifierade art**
+kan `quality_review.proposed_scientific_name` användas som ett strukturerat
+förslag till manuell bedömning. Det är **obligatoriskt** att samma fullständiga
+namn finns i artpostens `scientific_synonyms`; importen avvisar annars
+förslaget. Den vetenskapliga synonymen importeras som data direkt, medan det
+primära namnet lämnas orört fram till beslut. Fältet får bara användas vid
+`status: "manual_review"` och tillsammans med en tydlig
+`manual_review_comment`.
+
+Exempel (endast format, inte taxonomiskt ställningstagande):
+
+```json
+{
+  "genus": "Exempelgenus",
+  "scientific_name": "exempelart",
+  "scientific_synonyms": ["Alternativtgenus exempelart"],
+  "quality_review": {
+    "status": "manual_review",
+    "reviewed_at": "2026-11-21",
+    "fields": {
+      "swedish_name": "found",
+      "english_name": "not_found",
+      "geography": "found",
+      "links": "found"
+    },
+    "sources": ["https://example.org/species"],
+    "proposed_scientific_name": "Alternativtgenus exempelart",
+    "manual_review_comment": "Bedöm vilket av de verifierade vetenskapliga namnen som ska vara primärt."
+  }
+}
+```
+
+Om namnen inte säkert avser samma art ska varken synonym eller
+namnbytesförslag registreras; dokumentera i stället identifieringsosäkerheten.
