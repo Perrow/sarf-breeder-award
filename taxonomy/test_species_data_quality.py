@@ -230,3 +230,23 @@ class SpeciesDataQualityAdminTests(TestCase):
         for label in ("Svenskt namn", "Engelskt namn", "Geografi", "Artlänkar",
                       "Finns / verifierad", "Inte hittad", "Osäker", "Inte granskad"):
             self.assertContains(response, label)
+        self.assertContains(
+            response,
+            '<strong>Svenskt namn</strong><span style="color:#167347">Finns / verifierad</span>',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            '<strong>Engelskt namn</strong><span style="color:#a15c00">Inte hittad</span>',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            '<strong>Geografi</strong><span style="color:#ad3030">Osäker</span>',
+            html=False,
+        )
+        self.assertContains(
+            response,
+            '<strong>Artlänkar</strong><span style="color:#666">Inte granskad</span>',
+            html=False,
+        )

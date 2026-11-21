@@ -405,7 +405,7 @@ class SpeciesQualityReviewAdmin(admin.ModelAdmin):
         rows = []
         for key, label in labels.items():
             status, color = statuses.get(results.get(key), ("Okänd", "#666"))
-            rows.append((label, status, color))
+            rows.append((label, color, status))
         return format_html(
             '<div style="display:grid;grid-template-columns:max-content auto;'
             'gap:.5rem 1.5rem;align-items:center">{}</div>',
