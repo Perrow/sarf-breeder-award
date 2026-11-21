@@ -68,7 +68,7 @@
     <tbody>
         {% for row in leaderboard %}
         <tr>
-            <th scope="row" class="fw-normal"><a href="{% url 'association_member_breeding_list' association.pk row.user.pk %}?year={{ selected_year }}&list=contribution&leaderboard={{ view_mode }}">{{ row.name }}</a></th>
+            <th scope="row" class="fw-normal"><a href="{% url 'association_member_breeding_list' association.pk row.user.pk %}?year={{ selected_year }}&list=contribution&leaderboard={{ view_mode }}">{{ row.name }}</a> <a class="small" href="{% url 'public_profile' row.user.pk %}">(profil)</a></th>
             <td class="text-end">{% if view_mode == 'contribution' %}{{ row.contribution_points }}{% else %}{{ row.individual_points }}{% endif %}</td>
         </tr>
         {% endfor %}
