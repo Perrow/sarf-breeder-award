@@ -3,6 +3,7 @@ from pathlib import Path
 
 from django.contrib import admin, messages
 from django.core.exceptions import PermissionDenied
+from django.db.models import Count, Q, Sum
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import path, reverse
 from django.utils.html import format_html
@@ -300,6 +301,20 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
             self.model._default_manager.get_queryset().select_related("genus")
         ).order_by(
             "-quality_score", "genus__scientific_name", "scientific_name", "pk"
+        )
+
+    def changelist_view(self, request, extra_context=None):
+        if not self.has_view_permission(request):
+            return super().changelist_view(request, extra_context=extra_context)
+
+        # Sum all species, not just the current page.
+        totals = self.get_queryset(request).aggregate(
+            total_quality_score=Sum("quality_score", default=0),
+            complete_species_count=Count("pk", filter=Q(quality_score=0)),
+        )
+        return super().changelist_view(
+            request,
+            extra_context={**totals, **(extra_context or {})},
         )
 
     @admin.display(description="Art")
