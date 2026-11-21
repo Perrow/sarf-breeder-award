@@ -41,7 +41,7 @@
         <thead><tr><th scope="col">Användare</th><th scope="col" class="text-end">Poäng</th></tr></thead>
         <tbody>
         {% for row in leaderboard %}
-            <tr><th scope="row" class="fw-normal">{{ row.name }}</th><td class="text-end">{{ row.points }}</td></tr>
+            <tr><th scope="row" class="fw-normal"><a href="{% url 'public_profile' row.user.pk %}">{{ row.name }}</a></th><td class="text-end">{{ row.points }}</td></tr>
         {% endfor %}
         </tbody>
     </table>
