@@ -65,29 +65,15 @@ def _transfer_quality_review(source, target):
         *(target_review.sources if isinstance(target_review.sources, list) else []),
         *(source_review.sources if isinstance(source_review.sources, list) else []),
     ]))
-    conflict = (
-        target_review.status != source_review.status
-        or target_review.field_results != source_review.field_results
-    )
-    if (
-        conflict
-        or source_review.status == SpeciesQualityReview.Status.MANUAL_REVIEW
-        or target_review.status == SpeciesQualityReview.Status.MANUAL_REVIEW
-    ):
-        target_review.status = SpeciesQualityReview.Status.MANUAL_REVIEW
-        target_review.review_again_after = None
-        target_review.manual_review_comment = "\n\n".join(filter(None, [
-            target_review.manual_review_comment,
-            f"Granska sammanslagen artdata från {source}." if conflict else "",
-            source_review.manual_review_comment,
-        ]))
-    elif source_review.review_again_after is not None:
-        if target_review.review_again_after is None:
-            target_review.review_again_after = source_review.review_again_after
-        else:
-            target_review.review_again_after = min(
-                target_review.review_again_after, source_review.review_again_after
-            )
+    # Both records have different provenance. Never automatically approve the
+    # combined review; an administrator must verify the resulting species.
+    target_review.status = SpeciesQualityReview.Status.MANUAL_REVIEW
+    target_review.review_again_after = None
+    target_review.manual_review_comment = "\\n\\n".join(filter(None, [
+        target_review.manual_review_comment,
+        f"Kontrollera sammanslagen artgranskning från {source}.",
+        source_review.manual_review_comment,
+    ]))
     target_review.reviewed_at = max(target_review.reviewed_at, source_review.reviewed_at)
     target_review.save()
     source_review.delete()
@@ -117,7 +103,7 @@ def merge_species(source, target):
 
     source_full_name = f"{source.genus.scientific_name} {source.scientific_name}"
     target_full_name = f"{target.genus.scientific_name} {target.scientific_name}"
-    if source_full_name != target_full_name:
+    if source_full_name.casefold() != target_full_name.casefold():
         ScientificSpeciesSynonym.objects.get_or_create(
             species=target,
             scientific_name=source_full_name,
