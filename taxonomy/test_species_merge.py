@@ -15,6 +15,7 @@ from .models import (
     Species,
     SpeciesGroup,
     SpeciesLink,
+    SpeciesQualityReview,
 )
 from .species_merge import merge_species
 
@@ -191,8 +192,116 @@ class SpeciesMergeAdminTests(TestCase):
             reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
             {"target_species": self.target.pk},
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Förhandsgranska sammanslagning")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        response = self.client.post(
+            reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
+            {"target_species": self.target.pk, "confirm_merge": "yes"},
+        )
         self.assertRedirects(
             response,
             reverse("admin:taxonomy_species_change", args=(self.target.pk,)),
         )
         self.assertFalse(Species.objects.filter(pk=self.source.pk).exists())
+
+
+    def test_preview_shows_counts_names_and_conflicting_reviews(self):
+        user = get_user_model().objects.create_user(
+            email="merge-preview@example.com", password="secret"
+        )
+        association = Association.objects.create(name="Testförening")
+        registration = BreedingRegistration.objects.create(
+            owner=user, association=association, species=self.source,
+            breeding_date=date(2026, 1, 1), description="Källodling",
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 1),
+            manual_review_comment="Kontrollera ursprunget", sources=["https://example.org/source"],
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2),
+        )
+        response = self.client.post(
+            reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
+            {"target_species": self.target.pk},
+        )
+        self.assertContains(response, str(self.source))
+        self.assertContains(response, str(self.target))
+        self.assertContains(response, "Kontrollera ursprunget")
+        self.assertContains(response, "Odlingsrapporter som flyttas:")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        registration.refresh_from_db()
+        self.assertEqual(registration.species, self.source)
+
+    def test_invalid_target_and_self_merge_are_rejected(self):
+        url = reverse("admin:taxonomy_species_merge", args=[self.source.pk])
+        for value in (self.source.pk, 9999999, "invalid"):
+            with self.subTest(value=value):
+                response = self.client.post(url, {
+                    "target_species": value, "confirm_merge": "yes",
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
+    def test_non_admin_cannot_merge_species(self):
+        user = get_user_model().objects.create_user(
+            email="non-admin@example.com", password="secret"
+        )
+        self.client.force_login(user)
+        url = reverse("admin:taxonomy_species_merge", args=[self.source.pk])
+        response = self.client.post(url, {
+            "target_species": self.target.pk, "confirm_merge": "yes",
+        })
+        self.assertIn(response.status_code, (302, 403))
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
+
+class SpeciesMergeQualityReviewTests(SpeciesMergeTests):
+    def test_source_review_moves_if_target_has_none(self):
+        review = SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 2),
+            manual_review_comment="Kontrollera identitet",
+        )
+        merge_species(self.source, self.target)
+        review.refresh_from_db()
+        self.assertEqual(review.species, self.target)
+        self.assertEqual(review.manual_review_comment, "Kontrollera identitet")
+
+    def test_conflicting_reviews_preserve_all_source_details_and_require_manual_review(self):
+        original = SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 1),
+            review_again_after=date(2027, 1, 1),
+            field_results={"swedish_name": "uncertain"},
+            sources=["https://example.org/old"],
+            notes="Källanteckning",
+            manual_review_comment="Källkommentar",
+        )
+        target_review = SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2),
+            field_results={"swedish_name": "found"},
+            sources=["https://example.org/new"],
+            notes="Målanteckning",
+            manual_review_comment="Målkommentar",
+        )
+        merge_species(self.source, self.target)
+        target_review.refresh_from_db()
+        self.assertEqual(SpeciesQualityReview.objects.count(), 1)
+        self.assertEqual(target_review.status, SpeciesQualityReview.Status.MANUAL_REVIEW)
+        self.assertIsNone(target_review.review_again_after)
+        self.assertEqual(target_review.field_results, {"swedish_name": "found"})
+        self.assertCountEqual(
+            target_review.sources, ["https://example.org/new", "https://example.org/old"]
+        )
+        self.assertIn("Källanteckning", target_review.notes)
+        self.assertIn("Källkommentar", target_review.notes)
+        self.assertIn("Målanteckning", target_review.notes)
+        self.assertIn("Målkommentar", target_review.manual_review_comment)
+        self.assertIn("Källkommentar", target_review.manual_review_comment)
+        self.assertIn("uncertain", target_review.notes)
+        self.assertFalse(SpeciesQualityReview.objects.filter(pk=original.pk).exists())
