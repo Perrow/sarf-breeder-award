@@ -24,6 +24,7 @@ from .models import (
     SpeciesDataQuality,
     SpeciesGroup,
     SpeciesLink,
+    SpeciesQualityReview,
 )
 from .data_quality import annotate_species_data_quality
 from .species_import import SpeciesImportError, import_species_file
@@ -312,6 +313,16 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
             total_quality_score=Sum("quality_score", default=0),
             complete_species_count=Count("pk", filter=Q(quality_score=0)),
         )
+        reviews = SpeciesQualityReview.objects.aggregate(
+            reviewed_species_count=Count("pk", filter=Q(status=SpeciesQualityReview.Status.REVIEWED)),
+            manual_review_species_count=Count("pk", filter=Q(status=SpeciesQualityReview.Status.MANUAL_REVIEW)),
+        )
+        totals.update(reviews)
+        totals["unreviewed_species_count"] = (
+            Species.objects.count()
+            - reviews["reviewed_species_count"]
+            - reviews["manual_review_species_count"]
+        )
         return super().changelist_view(
             request,
             extra_context={**totals, **(extra_context or {})},
@@ -344,3 +355,18 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
     @admin.display(boolean=True, description="Länk", ordering="link_gap")
     def missing_link(self, obj):
         return not bool(obj.link_gap)
+
+
+@admin.register(SpeciesQualityReview)
+class SpeciesQualityReviewAdmin(admin.ModelAdmin):
+    """Let administrators inspect reviews and schedule a new review."""
+
+    list_display = ("species", "status", "reviewed_at", "review_again_after")
+    list_filter = ("status",)
+    search_fields = ("species__genus__scientific_name", "species__scientific_name")
+    readonly_fields = ("species", "reviewed_at", "field_results", "sources", "notes")
+    fields = ("species", "status", "reviewed_at", "review_again_after",
+              "field_results", "sources", "notes")
+
+    def has_add_permission(self, request):
+        return False

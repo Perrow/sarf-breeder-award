@@ -99,3 +99,53 @@ Om samma gamla vetenskapliga namn finns som synonym för flera arter betraktas m
 ## Resultat och output
 
 `import_species_file(path)` returnerar strukturerad statistik över skapade och återanvända genera, arter, synonymer, geografier, geografikopplingar och länkar. Själva importmotorn skriver inte till stdout eller stderr. Management-kommandot ansvarar själv för eventuell konsoloutput, och adminvyn presenterar samma returvärde i webbgränssnittet.
+
+
+## Systematisk datakvalitetsgranskning
+
+En kompletteringsrad för en **befintlig** art kan också ange `quality_review`. Det
+registrerar en granskningsstatus även om ingen ytterligare uppgift har hittats.
+Odlingsklass och befintliga artuppgifter påverkas inte när de utelämnas.
+
+```json
+{
+  "version": 1,
+  "species": [
+    {
+      "genus": "Exempelgenus",
+      "scientific_name": "exempelart",
+      "quality_review": {
+        "status": "reviewed",
+        "reviewed_at": "2026-11-21",
+        "fields": {
+          "swedish_name": "not_found",
+          "english_name": "found",
+          "geography": "found",
+          "links": "found"
+        },
+        "sources": ["https://example.org/species"],
+        "notes": "Svenskt trivialnamn kunde inte beläggas."
+      }
+    }
+  ]
+}
+```
+
+Exemplet visar **format**, inte verifierade uppgifter eller källor. Använd
+verkliga HTTPS-källor i riktiga filer. `status` är `reviewed` eller
+`manual_review`. Varje fält måste ha ett av värdena `found`, `not_found`,
+`uncertain` eller `not_checked`. `review_again_after` kan anges som
+`YYYY-MM-DD`; för `reviewed` är standard 365 dagar efter `reviewed_at`,
+medan `manual_review` saknar automatiskt omgranskningsdatum. Endast nyare
+granskningsdatum uppdaterar en befintlig status; återimport av samma fil är
+idempotent. Enbart existerande arter kan registreras på detta vis; använd rätt
+C/L-nummer för tvetydiga identifieringar.
+
+Skillen sparar en gemensam `data/species/data_quality_review_log.json` med
+formatversion 1 på sin öppna PR-branch. Denna importfil innehåller en rad
+per granskad art, även när inga kompletterande artuppgifter har hittats.
+Efter godkänd PR/import blir granskningsstatus beständig i databasen.
+Endpointen `/api/species/data-quality/random/` har kvar sin adress av
+kompatibilitetsskäl men returnerar numera en prioriterad, sidindelad lista
+med högst tio arter per sida, valbar via `?page=2`, och ett `next_page`-fält.
+Granskade arter tas bort från urvalet tills omgranskning är aktuell.

@@ -1,10 +1,12 @@
 import json
+from datetime import date, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
 from urllib.parse import urlparse
 from urllib.request import Request, urlopen
 
 from django.core.exceptions import ValidationError
+from django.core.validators import URLValidator
 from django.db import transaction
 
 from .models import (
@@ -14,6 +16,7 @@ from .models import (
     ScientificSpeciesSynonym,
     Species,
     SpeciesLink,
+    SpeciesQualityReview,
     normalize_cl_number,
 )
 
@@ -295,6 +298,79 @@ def _find_existing_species(
     return None
 
 
+
+
+REVIEW_FIELDS = frozenset(("swedish_name", "english_name", "geography", "links"))
+REVIEW_RESULTS = frozenset(("found", "not_found", "uncertain", "not_checked"))
+
+
+def _parse_review_date(value, key):
+    if not isinstance(value, str):
+        raise SpeciesImportError(f"'{key}' måste vara datum i YYYY-MM-DD-format.")
+    try:
+        return date.fromisoformat(value)
+    except ValueError as exc:
+        raise SpeciesImportError(f"Ogiltigt datum i '{key}'.") from exc
+
+
+def _import_quality_review(species, review):
+    """Apply a vetted review even when no new species metadata was found."""
+    if not isinstance(review, dict):
+        raise SpeciesImportError("'quality_review' måste vara ett JSON-objekt.")
+    status = review.get("status")
+    if status not in SpeciesQualityReview.Status.values:
+        raise SpeciesImportError("Ogiltig status i 'quality_review'.")
+    reviewed_at = _parse_review_date(review.get("reviewed_at"), "reviewed_at")
+    fields = review.get("fields")
+    if (
+        not isinstance(fields, dict)
+        or set(fields) != REVIEW_FIELDS
+        or any(value not in REVIEW_RESULTS for value in fields.values())
+    ):
+        raise SpeciesImportError(
+            "'quality_review.fields' måste ange ett giltigt resultat "
+            "för swedish_name, english_name, geography och links."
+        )
+    sources = review.get("sources", [])
+    if not isinstance(sources, list) or any(
+        not isinstance(url, str) or not url.startswith("https://")
+        for url in sources
+    ):
+        raise SpeciesImportError("'quality_review.sources' ska innehålla HTTPS-länkar.")
+    url_validator = URLValidator(schemes=["https"])
+    for url in sources:
+        try:
+            url_validator(url)
+        except ValidationError as exc:
+            raise SpeciesImportError("Ogiltig käll-URL i 'quality_review'.") from exc
+    notes = review.get("notes", "")
+    if not isinstance(notes, str):
+        raise SpeciesImportError("'quality_review.notes' måste vara text.")
+    if "review_again_after" in review and review["review_again_after"] is not None:
+        review_again_after = _parse_review_date(
+            review["review_again_after"], "review_again_after"
+        )
+    elif status == SpeciesQualityReview.Status.REVIEWED:
+        review_again_after = reviewed_at + timedelta(days=365)
+    else:
+        review_again_after = None
+
+    existing = SpeciesQualityReview.objects.filter(species=species).first()
+    # Do not regress a newer imported review when old files are re-imported.
+    if existing and existing.reviewed_at >= reviewed_at:
+        return
+    SpeciesQualityReview.objects.update_or_create(
+        species=species,
+        defaults={
+            "status": status,
+            "reviewed_at": reviewed_at,
+            "review_again_after": review_again_after,
+            "field_results": fields,
+            "sources": list(dict.fromkeys(sources)),
+            "notes": notes,
+        },
+    )
+
 @transaction.atomic
 def _import_species_row(row, stats):
     if not isinstance(row, dict):
@@ -317,6 +393,7 @@ def _import_species_row(row, stats):
     scientific_synonyms = _name_list(row, "scientific_synonyms")
     geographies = _name_list(row, "geographies")
     links = _link_list(row)
+    quality_review = row.get("quality_review")
 
     genus = Genus.objects.filter(scientific_name__iexact=genus_name).first()
     species = _find_existing_species(
@@ -392,3 +469,6 @@ def _import_species_row(row, stats):
 
     for link in links:
         _import_link(species, link, stats)
+
+    if quality_review is not None:
+        _import_quality_review(species, quality_review)
