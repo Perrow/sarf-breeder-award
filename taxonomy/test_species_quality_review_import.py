@@ -5,7 +5,7 @@ from tempfile import TemporaryDirectory
 
 from django.test import TestCase
 
-from .models import Genus, Species, SpeciesQualityReview
+from .models import Genus, Species, SpeciesLink, SpeciesQualityReview
 from .species_import import SpeciesImportError, import_species_file
 
 
@@ -132,3 +132,27 @@ class SpeciesQualityReviewImportTests(TestCase):
         self.import_rows([self.review_row()])
         review = SpeciesQualityReview.objects.get(species=self.species)
         self.assertEqual(review.manual_review_comment, "")
+
+    def test_manual_review_comment_does_not_apply_proposed_deletion_or_rename(self):
+        link = SpeciesLink.objects.create(
+            species=self.species,
+            source_name="Befintlig källa",
+            url="https://example.org/old",
+        )
+        original_name = self.species.common_name
+        self.import_rows([self.review_row(
+            status="manual_review",
+            manual_review_comment=(
+                "Ta eventuellt bort https://example.org/old och byt "
+                "populärnamn efter kontroll mot https://example.org/new."
+            ),
+        )])
+        self.species.refresh_from_db()
+        self.assertEqual(self.species.common_name, original_name)
+        self.assertTrue(SpeciesLink.objects.filter(pk=link.pk).exists())
+        self.assertIn(
+            "Ta eventuellt bort",
+            SpeciesQualityReview.objects.get(
+                species=self.species
+            ).manual_review_comment,
+        )
