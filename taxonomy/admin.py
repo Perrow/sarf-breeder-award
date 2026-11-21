@@ -264,6 +264,7 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
         "missing_english_name",
         "missing_geography",
         "missing_link",
+        "review_state",
     )
     list_display_links = ()
     list_per_page = 100
@@ -299,7 +300,7 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
 
     def get_queryset(self, request):
         return annotate_species_data_quality(
-            self.model._default_manager.get_queryset().select_related("genus")
+            self.model._default_manager.get_queryset().select_related("genus", "quality_review")
         ).order_by(
             "-quality_score", "genus__scientific_name", "scientific_name", "pk"
         )
@@ -355,6 +356,19 @@ class SpeciesDataQualityAdmin(admin.ModelAdmin):
     @admin.display(boolean=True, description="Länk", ordering="link_gap")
     def missing_link(self, obj):
         return not bool(obj.link_gap)
+
+    @admin.display(description="Granskningsstatus")
+    def review_state(self, obj):
+        from django.utils import timezone
+
+        review = getattr(obj, "quality_review", None)
+        if review is None:
+            return "Ej granskad"
+        if review.status == SpeciesQualityReview.Status.MANUAL_REVIEW:
+            return "Behöver manuell granskning"
+        if review.review_again_after and review.review_again_after <= timezone.localdate():
+            return "Granska igen"
+        return "Granskad"
 
 
 @admin.register(SpeciesQualityReview)
