@@ -1,15 +1,65 @@
 {% extends "admin/base_site.html" %}
 
 {% block content %}
-  <div id="content-main">
-    <p>Välj vilken art som ska finnas kvar. Odlingar och övriga artkopplingar flyttas till målarten och {{ source }} tas sedan bort.</p>
+<div id="content-main">
+  <p><strong>Art som tas bort:</strong> {{ source }} ({{ source.common_name }})</p>
+  {% if preview %}
+    <h2>Förhandsgranska sammanslagning</h2>
+    <p><strong>Art som behålls:</strong> {{ target }} ({{ target.common_name }})</p>
+    <p><strong>Varning:</strong> {{ source }} raderas permanent efter att uppgifterna flyttats till {{ target }}. Målartens namn och odlingsklass ändras inte.</p>
+    <p><strong>Odlingsrapporter som flyttas:</strong> {{ preview.breeding_count }}</p>
+
+    <h3>Vetenskapliga namn och synonymer att överföra</h3>
+    <ul>{% for name in preview.scientific_names %}<li>{{ name }}</li>{% empty %}<li>Inga</li>{% endfor %}</ul>
+    <h3>Populärnamn att överföra</h3>
+    <ul>{% for name in preview.common_names %}<li>{{ name }}</li>{% empty %}<li>Inga</li>{% endfor %}</ul>
+    <h3>Geografier</h3>
+    <ul>{% for name in preview.geographies %}<li>{{ name }}</li>{% empty %}<li>Inga</li>{% endfor %}</ul>
+    <h3>Direktkopplade artgrupper</h3>
+    <ul>{% for name in preview.groups %}<li>{{ name }}</li>{% empty %}<li>Inga</li>{% endfor %}</ul>
+    <h3>Externa länkar</h3>
+    <ul>{% for link in preview.links %}<li>{{ link.source_name }}: {{ link.title }} ({{ link.url }})</li>{% empty %}<li>Inga</li>{% endfor %}</ul>
+
+    <h3>Artgranskningar</h3>
+    {% if preview.source_review %}
+      <p>Källartens granskning: <strong>{{ preview.source_review.get_status_display }}</strong>
+      ({{ preview.source_review.reviewed_at }}).</p>
+      {% if preview.source_review.manual_review_comment %}<p>{{ preview.source_review.manual_review_comment }}</p>{% endif %}
+      {% if preview.source_review.notes %}<p>{{ preview.source_review.notes }}</p>{% endif %}
+      <ul>{% for url in preview.source_review.sources %}<li>{{ url }}</li>{% endfor %}</ul>
+    {% else %}<p>Källarten saknar artgranskning.</p>{% endif %}
+    {% if preview.target_review %}
+      <p>Målartens granskning: <strong>{{ preview.target_review.get_status_display }}</strong>
+      ({{ preview.target_review.reviewed_at }}).</p>
+      {% if preview.target_review.manual_review_comment %}<p>{{ preview.target_review.manual_review_comment }}</p>{% endif %}
+      {% if preview.target_review.notes %}<p>{{ preview.target_review.notes }}</p>{% endif %}
+      <ul>{% for url in preview.target_review.sources %}<li>{{ url }}</li>{% endfor %}</ul>
+    {% else %}<p>Målarten saknar artgranskning.</p>{% endif %}
+    {% if preview.source_review and preview.target_review %}
+    <p><strong>Observera:</strong> Båda arterna har granskningar. Källartens granskning bevaras i målartens anteckningar med alla fält, och vid konflikt krävs manuell granskning.</p>
+    {% endif %}
+
+    <form method="post">
+      {% csrf_token %}
+      {{ form.non_field_errors }}
+      <input type="hidden" name="target_species" value="{{ target.pk }}">
+      <input type="hidden" name="confirm_merge" value="yes">
+      <div class="submit-row">
+        <input type="submit" class="default" value="Ja, slå ihop och radera {{ source }}">
+        <a href="{{ change_url }}" class="button cancel-link">Avbryt</a>
+      </div>
+    </form>
+    <p><a href="{% url 'admin:taxonomy_species_merge' source.pk %}">Välj en annan målart</a></p>
+  {% else %}
+    <p>Välj vilken art som ska finnas kvar. Du får se vilka uppgifter som påverkas innan du bekräftar sammanslagningen.</p>
     <form method="post">
       {% csrf_token %}
       {{ form.as_p }}
       <div class="submit-row">
-        <input type="submit" value="Slå ihop arter" class="default">
+        <input type="submit" value="Förhandsgranska sammanslagning" class="default">
         <a href="{{ change_url }}" class="button cancel-link">Avbryt</a>
       </div>
     </form>
-  </div>
+  {% endif %}
+</div>
 {% endblock %}

@@ -32,7 +32,7 @@ from .models import (
 )
 from .data_quality import annotate_species_data_quality
 from .species_import import SpeciesImportError, import_species_file
-from .species_merge import merge_species
+from .species_merge import merge_species, species_merge_preview
 
 
 @admin.register(Genus)
@@ -192,21 +192,43 @@ class SpeciesAdmin(admin.ModelAdmin):
             raise PermissionDenied
 
         form = SpeciesMergeForm(request.POST or None, source_species=source)
+        preview = None
+        target = None
+        session_key = f"species_merge_preview_{source.pk}"
+        if request.method != "POST":
+            request.session.pop(session_key, None)
         if request.method == "POST" and form.is_valid():
             target = form.cleaned_data["target_species"]
-            merge_species(source, target)
-            self.message_user(
-                request,
-                f"Arten slogs ihop med {target}.",
-                level=messages.SUCCESS,
-            )
-            return redirect("admin:taxonomy_species_change", target.pk)
+            if not self.has_change_permission(request, target):
+                raise PermissionDenied
+            confirmed = request.POST.get("confirm_merge") == "yes"
+            if confirmed and request.session.get(session_key) != target.pk:
+                form.add_error(None, "Förhandsgranska sammanslagningen innan du bekräftar.")
+                request.session[session_key] = target.pk
+            elif confirmed:
+                try:
+                    merge_species(source, target)
+                except ValidationError as error:
+                    form.add_error(None, error)
+                else:
+                    request.session.pop(session_key, None)
+                    self.message_user(
+                        request,
+                        f"Arten {source} slogs ihop med {target}.",
+                        level=messages.SUCCESS,
+                    )
+                    return redirect("admin:taxonomy_species_change", target.pk)
+            if not confirmed:
+                request.session[session_key] = target.pk
+            preview = species_merge_preview(source, target)
 
         context = {
             **self.admin_site.each_context(request),
             "opts": self.model._meta,
             "title": f"Slå ihop {source}",
             "source": source,
+            "target": target,
+            "preview": preview,
             "form": form,
             "change_url": reverse("admin:taxonomy_species_change", args=(source.pk,)),
         }

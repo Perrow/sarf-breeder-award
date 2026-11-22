@@ -6,7 +6,7 @@ from django.test import TestCase
 from django.urls import reverse
 
 from associations.models import Association
-from breedings.models import BreedingRegistration
+from breedings.models import BreedingRegistration, SpeciesReclassificationRequest
 from .models import (
     CommonNameSpeciesSynonym,
     Geography,
@@ -15,6 +15,7 @@ from .models import (
     Species,
     SpeciesGroup,
     SpeciesLink,
+    SpeciesQualityReview,
 )
 from .species_merge import merge_species
 
@@ -130,6 +131,50 @@ class SpeciesMergeTests(TestCase):
         self.assertEqual(self.target.external_links.filter(url="https://example.org/shared").count(), 1)
         self.assertEqual(self.target.geographies.filter(pk=geography.pk).count(), 1)
 
+    def test_merge_preserves_report_points_class_and_owner_with_cl_numbers(self):
+        self.source.cl_number = "L123"
+        self.source.save(update_fields=["cl_number"])
+        self.target.cl_number = "C045"
+        self.target.save(update_fields=["cl_number"])
+        breeding = BreedingRegistration.objects.create(
+            owner=self.user, association=self.association, species=self.source,
+            breeding_date=date(2025, 5, 6), description="Historisk odling",
+            status=BreedingRegistration.Status.APPROVED,
+            awarded_breeding_class=Species.BreedingClass.SILVER,
+            awarded_points=3,
+        )
+        merge_species(self.source, self.target)
+        breeding.refresh_from_db()
+        self.target.refresh_from_db()
+        self.assertEqual(breeding.owner_id, self.user.pk)
+        self.assertEqual(breeding.association_id, self.association.pk)
+        self.assertEqual(breeding.species_id, self.target.pk)
+        self.assertEqual(breeding.awarded_breeding_class, Species.BreedingClass.SILVER)
+        self.assertEqual(breeding.awarded_points, 3)
+        self.assertEqual(self.target.cl_number, "C045")
+        self.assertTrue(self.target.scientific_synonyms.filter(
+            scientific_name="Corydoras aeneus"
+        ).exists())
+
+    def test_competing_pending_reclassifications_block_merge_without_data_loss(self):
+        for species in (self.source, self.target):
+            SpeciesReclassificationRequest.objects.create(
+                species=species,
+                requester=self.user,
+                current_breeding_class=Species.BreedingClass.BRONZE,
+                requested_breeding_class=Species.BreedingClass.SILVER,
+                reason="Kontroll av klassning",
+                status=SpeciesReclassificationRequest.Status.PENDING,
+            )
+        with self.assertRaisesMessage(
+            Exception, "Båda arterna har en pågående omklassningsbegäran"
+        ):
+            merge_species(self.source, self.target)
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        self.assertEqual(
+            SpeciesReclassificationRequest.objects.filter(species=self.source).count(), 1
+        )
+
     def test_species_cannot_be_merged_with_itself(self):
         with self.assertRaisesRegex(ValueError, "inte slås ihop med sig själv"):
             merge_species(self.source, self.source)
@@ -191,8 +236,145 @@ class SpeciesMergeAdminTests(TestCase):
             reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
             {"target_species": self.target.pk},
         )
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Förhandsgranska sammanslagning")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        response = self.client.post(
+            reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
+            {"target_species": self.target.pk, "confirm_merge": "yes"},
+        )
         self.assertRedirects(
             response,
             reverse("admin:taxonomy_species_change", args=(self.target.pk,)),
         )
         self.assertFalse(Species.objects.filter(pk=self.source.pk).exists())
+
+
+    def test_preview_shows_counts_names_and_conflicting_reviews(self):
+        user = get_user_model().objects.create_user(
+            email="merge-preview@example.com", password="secret"
+        )
+        association = Association.objects.create(name="Testförening")
+        registration = BreedingRegistration.objects.create(
+            owner=user, association=association, species=self.source,
+            breeding_date=date(2026, 1, 1), description="Källodling",
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 1),
+            manual_review_comment="Kontrollera ursprunget", sources=["https://example.org/source"],
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2),
+        )
+        response = self.client.post(
+            reverse("admin:taxonomy_species_merge", args=(self.source.pk,)),
+            {"target_species": self.target.pk},
+        )
+        self.assertContains(response, str(self.source))
+        self.assertContains(response, str(self.target))
+        self.assertContains(response, "Kontrollera ursprunget")
+        self.assertContains(response, "Odlingsrapporter som flyttas:")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+        registration.refresh_from_db()
+        self.assertEqual(registration.species, self.source)
+
+    def test_confirm_requires_previous_preview_in_same_session(self):
+        url = reverse("admin:taxonomy_species_merge", args=(self.source.pk,))
+        response = self.client.post(url, {
+            "target_species": self.target.pk, "confirm_merge": "yes",
+        })
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "Förhandsgranska sammanslagningen innan du bekräftar")
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
+    def test_invalid_target_and_self_merge_are_rejected(self):
+        url = reverse("admin:taxonomy_species_merge", args=[self.source.pk])
+        for value in (self.source.pk, 9999999, "invalid"):
+            with self.subTest(value=value):
+                response = self.client.post(url, {
+                    "target_species": value, "confirm_merge": "yes",
+                })
+                self.assertEqual(response.status_code, 200)
+                self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
+    def test_non_admin_cannot_merge_species(self):
+        user = get_user_model().objects.create_user(
+            email="non-admin@example.com", password="secret"
+        )
+        self.client.force_login(user)
+        url = reverse("admin:taxonomy_species_merge", args=[self.source.pk])
+        response = self.client.post(url, {
+            "target_species": self.target.pk, "confirm_merge": "yes",
+        })
+        self.assertIn(response.status_code, (302, 403))
+        self.assertTrue(Species.objects.filter(pk=self.source.pk).exists())
+
+
+class SpeciesMergeQualityReviewTests(SpeciesMergeTests):
+    def test_source_review_moves_if_target_has_none(self):
+        review = SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 2),
+            manual_review_comment="Kontrollera identitet",
+        )
+        merge_species(self.source, self.target)
+        review.refresh_from_db()
+        self.assertEqual(review.species, self.target)
+        self.assertEqual(review.manual_review_comment, "Kontrollera identitet")
+
+    def test_conflicting_reviews_preserve_all_source_details_and_require_manual_review(self):
+        original = SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.MANUAL_REVIEW,
+            reviewed_at=date(2026, 11, 1),
+            review_again_after=date(2027, 1, 1),
+            field_results={"swedish_name": "uncertain"},
+            sources=["https://example.org/old"],
+            notes="Källanteckning",
+            manual_review_comment="Källkommentar",
+        )
+        target_review = SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2),
+            field_results={"swedish_name": "found"},
+            sources=["https://example.org/new"],
+            notes="Målanteckning",
+            manual_review_comment="Målkommentar",
+        )
+        merge_species(self.source, self.target)
+        target_review.refresh_from_db()
+        self.assertEqual(SpeciesQualityReview.objects.count(), 1)
+        self.assertEqual(target_review.status, SpeciesQualityReview.Status.MANUAL_REVIEW)
+        self.assertIsNone(target_review.review_again_after)
+        self.assertEqual(target_review.field_results, {"swedish_name": "found"})
+        self.assertCountEqual(
+            target_review.sources, ["https://example.org/new", "https://example.org/old"]
+        )
+        self.assertIn("Källanteckning", target_review.notes)
+        self.assertIn("Källkommentar", target_review.notes)
+        self.assertIn("Målanteckning", target_review.notes)
+        self.assertIn("Målkommentar", target_review.manual_review_comment)
+        self.assertIn("Källkommentar", target_review.manual_review_comment)
+        self.assertIn("uncertain", target_review.notes)
+        self.assertFalse(SpeciesQualityReview.objects.filter(pk=original.pk).exists())
+
+    def test_two_reviewed_records_also_require_manual_reconciliation(self):
+        SpeciesQualityReview.objects.create(
+            species=self.source, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 1), field_results={"links": "found"},
+            sources=["https://example.org/source"],
+        )
+        SpeciesQualityReview.objects.create(
+            species=self.target, status=SpeciesQualityReview.Status.REVIEWED,
+            reviewed_at=date(2026, 11, 2), field_results={"links": "found"},
+            sources=["https://example.org/target"],
+        )
+        merge_species(self.source, self.target)
+        review = SpeciesQualityReview.objects.get(species=self.target)
+        self.assertEqual(review.status, SpeciesQualityReview.Status.MANUAL_REVIEW)
+        self.assertIn("Kontrollera sammanslagen artgranskning", review.manual_review_comment)
+        self.assertCountEqual(
+            review.sources,
+            ["https://example.org/source", "https://example.org/target"],
+        )
