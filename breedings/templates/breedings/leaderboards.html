@@ -35,7 +35,7 @@
     {% endif %}
     {% if associations_without_registrations %}
 <section class="mt-4" aria-labelledby="associations-without-breedings-heading">
-    <h2 class="h4" id="associations-without-breedings-heading">Föreningar utan registrerade odlingar</h2>
+    <h2 class="h4" id="associations-without-breedings-heading">Föreningar utan registrerade odlingar {{ selected_year }}</h2>
     <ul>
         {% for association in associations_without_registrations %}
         <li><a href="{% url 'association_member_leaderboard' association.pk %}?year={{ selected_year }}">{{ association.name }}</a></li>
