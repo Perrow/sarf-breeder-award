@@ -54,6 +54,7 @@ def account(request):
     )
 
 
+
 @login_required
 def account_edit(request):
     if request.method == "POST":

@@ -4,6 +4,9 @@
 
 {% block content %}
 <h1>{{ member_name }}</h1>
+{% if member.instagram_url %}
+<p><a href="{{ member.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram – {{ member_name }}</a></p>
+{% endif %}
 <p class="text-body-secondary">{{ association.name }} – odlingar för {{ selected_year }}.</p>
 
 <p>

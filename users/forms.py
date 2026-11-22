@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 
-from associations.models import Association, Membership
+from associations.models import Association, Membership, validate_instagram_url
 
 from .models import User
 
@@ -151,6 +151,7 @@ class ProfileForm(forms.ModelForm):
             "name",
             "public_username",
             "avatar_url",
+            "instagram_url",
         )
         labels = {
             "avatar_url": "Profilbild (URL)",
@@ -174,6 +175,15 @@ class ProfileForm(forms.ModelForm):
         ):
             raise forms.ValidationError("Användarnamnet används redan.")
         return public_username
+
+    def clean_instagram_url(self):
+        url = self.cleaned_data["instagram_url"].strip()
+        if url:
+            try:
+                validate_instagram_url(url)
+            except forms.ValidationError:
+                raise forms.ValidationError("Ange en giltig HTTPS-länk till Instagram.")
+        return url
 
     def clean_name(self):
         return self.cleaned_data["name"].strip()
