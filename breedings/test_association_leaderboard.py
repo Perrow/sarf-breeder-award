@@ -110,8 +110,16 @@ class AssociationLeaderboardTests(TestCase):
             reverse("association_leaderboard"), {"year": historical_year}
         )
 
+        self.assertEqual(
+            [row["association"] for row in response.context["leaderboard"]],
+            [self.association_a],
+        )
         self.assertContains(response, "Akvarieförening A")
-        self.assertNotContains(response, "Akvarieförening B")
+        self.assertContains(response, "Akvarieförening B")
+        self.assertIn(
+            self.association_b,
+            response.context["associations_without_registrations"],
+        )
         self.assertEqual(response.context["selected_year"], historical_year)
 
     def test_only_approved_registrations_are_counted(self):
@@ -134,8 +142,16 @@ class AssociationLeaderboardTests(TestCase):
 
         response = self.client.get(reverse("association_leaderboard"))
 
+        self.assertEqual(
+            [row["association"] for row in response.context["leaderboard"]],
+            [self.association_a],
+        )
         self.assertContains(response, "Akvarieförening A")
         self.assertNotContains(response, "Akvarieförening B")
+        self.assertNotIn(
+            self.association_b,
+            response.context["associations_without_registrations"],
+        )
 
     def test_genus_limit_is_per_member_and_keeps_highest_scoring_breeding(self):
         year = timezone.localdate().year
