@@ -73,7 +73,7 @@ class InstagramProfileTests(TestCase):
 
     def test_no_empty_instagram_link_and_other_user_cannot_modify_account(self):
         self.client.force_login(self.other)
-        response = self.client.get(reverse("public_profile", args=[self.user.pk]))
+        response = self.client.get(self.breeding_list_url())
         self.assertNotContains(response, "Instagram –")
         self.assertContains(response, "Akvaristen")
         self.client.post(reverse("account_edit"), {
