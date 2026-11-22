@@ -18,7 +18,7 @@
     <tbody>
         {% for row in leaderboard %}
         <tr>
-            <th scope="row" class="fw-normal"><a href="{% url 'public_profile' row.user.pk %}">{{ row.name }}</a></th>
+            <th scope="row" class="fw-normal">{{ row.name }}</th>
             <td>{{ row.points }}</td>
         </tr>
         {% endfor %}
