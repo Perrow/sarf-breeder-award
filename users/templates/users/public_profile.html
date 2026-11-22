@@ -1,8 +1,0 @@
-{% extends "base.html" %}
-{% block title %}{{ profile_user.public_display_name }} | Odlingskampanjen{% endblock %}
-{% block content %}
-<h1>{{ profile_user.public_display_name }}</h1>
-{% if profile_user.instagram_url %}
-<p><a href="{{ profile_user.instagram_url }}" target="_blank" rel="noopener noreferrer">Instagram – {{ profile_user.public_display_name }}</a></p>
-{% endif %}
-{% endblock %}
