@@ -240,3 +240,13 @@ Run Django's system checks and the test suite:
 python manage.py check
 python manage.py test
 ```
+
+## Kontroller vid pull request
+
+GitHub Actions kör `./mariadbtest` med MariaDB och Python 3.10 respektive 3.12.
+Lokalt kör `./pulltest` samma kontroller efter att den hämtat kod och tillämpat
+migreringar. Se [MariaDB lokalt och på server](docs/mariadb.md) för miljövariabler.
+
+Kör `ruff check .` för att hitta bland annat syntaxfel och odefinierade namn.
+Nya Python-filer kontrolleras också med `ruff format --check`. Formatera berörda
+filer med `ruff format <fil>`. Ruff använder en mållängd på 100 tecken per rad.

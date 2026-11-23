@@ -1,0 +1,67 @@
+name: Django
+
+on:
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  mariadb:
+    name: Django-tester med MariaDB
+    runs-on: ubuntu-24.04
+    strategy:
+      matrix:
+        python-version: ['3.10', '3.12']
+    env:
+      MARIADB_DATABASE: breeder_awards
+      MARIADB_USER: breeder_ci
+      MARIADB_PASSWORD: local-ci-database-only
+      MARIADB_HOST: 127.0.0.1
+      MARIADB_PORT: '3306'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python-version }}
+          cache: pip
+      - name: Installera MariaDB och byggberoenden
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y mariadb-server default-libmysqlclient-dev build-essential pkg-config
+          sudo systemctl start mariadb
+          sudo mariadb-tzinfo-to-sql /usr/share/zoneinfo | sudo mariadb mysql
+          sudo mariadb <<'SQL'
+          CREATE DATABASE breeder_awards CHARACTER SET utf8mb4 COLLATE utf8mb4_uca1400_swedish_as_ci;
+          CREATE USER 'breeder_ci'@'127.0.0.1' IDENTIFIED BY 'local-ci-database-only';
+          GRANT ALL PRIVILEGES ON breeder_awards.* TO 'breeder_ci'@'127.0.0.1';
+          GRANT ALL PRIVILEGES ON test_breeder_awards.* TO 'breeder_ci'@'127.0.0.1';
+          SQL
+      - name: Installera Python-beroenden
+        run: python -m pip install -r requirements.txt
+      - name: Kontrollera Django, migrationsfiler och tester
+        run: ./mariadbtest
+
+  lint:
+    name: Python-lint och format
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installera Ruff
+        run: python -m pip install ruff==0.17.6
+      - name: Kontrollera Python-koden
+        run: ruff check .
+      - name: Kontrollera formatet för nya Python-filer
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: |
+          git diff --diff-filter=A --name-only -z "$BASE_SHA"...HEAD -- '*.py' |
+            xargs -0 -r ruff format --check --
