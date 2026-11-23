@@ -117,6 +117,24 @@ class AchievementRevalidationTests(TestCase):
             {2025, 2026},
         )
 
+    def test_sync_and_revalidation_award_same_years(self):
+        achievement, level, _ = self._achievement(
+            "Gemensam årsutvärdering",
+            achievement_type=Achievement.Type.YEARLY,
+        )
+        self._approve(2025)
+        self._approve(2026)
+
+        sync_achievements(self.user)
+        earned = UserAchievement.objects.filter(user=self.user, level=level)
+        expected = set(earned.values_list("calendar_year", flat=True))
+        self.assertEqual(expected, {2025, 2026})
+        self.assertEqual(revalidate_achievement(achievement), {"removed": 0, "created": 0})
+
+        earned.delete()
+        self.assertEqual(revalidate_achievement(achievement), {"removed": 0, "created": 2})
+        self.assertEqual(set(earned.values_list("calendar_year", flat=True)), expected)
+
     def test_normal_sync_does_not_revoke_historical_award(self):
         achievement, level, requirement = self._achievement("Permanent")
         self._approve(2026)
