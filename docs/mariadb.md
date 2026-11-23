@@ -81,6 +81,27 @@ Verifiera vid problem med drivrutinen:
 python -c "import MySQLdb; print('mysqlclient fungerar')"
 ```
 
+### Uppdatera de låsta Python-paketen
+
+`requirements.in` innehåller de direkta beroendena. `requirements.txt` låser
+även transitiva paket för Python 3.10 och senare. Pillow-versionen styrs av
+paketets egen Python-kompatibilitet. Låset kan därför välja olika Pillow-versioner
+för utvecklingsmiljön med Python 3.10 och servern med Python 3.12.
+
+Med [uv](https://docs.astral.sh/uv/) installerat, kör från projektroten:
+
+```bash
+uv pip compile --python-version 3.10 --universal --upgrade requirements.in --output-file requirements.txt
+python -m pip install -r requirements.txt
+python -m pip check
+./mariadbtest
+```
+
+Granska versionsändringarna och testa med Python 3.10 och 3.12 före merge.
+Serverinstallationen använder `requirements.txt`. Uppdatera den lokala
+virtuella miljön med samma fil innan du kör `./pulltest` efter en ändring av
+låset.
+
 ## Läs in tidszonsdata
 
 Projektet använder `USE_TZ=True`. MariaDB-serverns tidszonstabeller måste läsas
