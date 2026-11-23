@@ -70,6 +70,11 @@ class RegistrationForm(UserCreationForm):
             "password2",
         )
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        # UserCreationForm focuses the field used as Django's username.
+        self.fields["email"].widget.attrs.pop("autofocus", None)
+
     def clean_country(self):
         country = self.cleaned_data["country"].strip()
         if country:

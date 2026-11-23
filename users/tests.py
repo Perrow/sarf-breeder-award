@@ -74,6 +74,11 @@ class UserAccountTests(TestCase):
         self.assertEqual(user.get_full_name(), "Test User")
         self.assertTrue(response.wsgi_request.user.is_authenticated)
 
+    def test_registration_form_has_no_autofocus(self):
+        response = self.client.get(reverse("register"))
+
+        self.assertNotContains(response, "autofocus")
+
     def test_registration_form_contains_hidden_country_honeypot(self):
         response = self.client.get(reverse("register"))
 
