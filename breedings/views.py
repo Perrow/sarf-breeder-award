@@ -20,11 +20,10 @@ from .scoring import (
     association_leaderboard_scores,
     association_member_year_registration_ids,
     association_year_scores,
-    competition_points,
-    competition_points_for_registration,
+    available_competition_years,
+    individual_leaderboard_scores,
     points_for_breeding_class,
     points_for_registration,
-    registration_is_timely_for_competition_year,
 )
 
 
@@ -41,51 +40,18 @@ def _leaderboard_year(raw_year):
     return year
 
 
-def _available_leaderboard_years(selected_year, queryset=None):
+def _available_leaderboard_years(queryset=None):
     registrations = BreedingRegistration.objects.all() if queryset is None else queryset
-    approved = registrations.filter(
-        status=BreedingRegistration.Status.APPROVED,
-    )
-    candidate_years = [
-        value.year
-        for value in approved.dates("breeding_date", "year", order="DESC")
-    ]
-
-    available_years = []
-    for year in candidate_years:
-        year_registrations = (
-            approved.filter(breeding_date__year=year)
-            .select_related("species")
-            .only(
-                "species_id",
-                "species__breeding_class",
-                "status",
-                "awarded_breeding_class",
-                "breeding_date",
-                "submitted_at",
-            )
-        )
-        if any(
-            registration.species_id is not None
-            and registration_is_timely_for_competition_year(registration, year)
-            and competition_points_for_registration(registration, year) is not None
-            for registration in year_registrations
-        ):
-            available_years.append(year)
-
-    return available_years
+    return available_competition_years(registrations)
 
 
 def _individual_leaderboard_rows(selected_year):
-    owner_ids = BreedingRegistration.objects.filter(
-        status=BreedingRegistration.Status.APPROVED,
-        breeding_date__year=selected_year,
-    ).values_list("owner_id", flat=True).distinct()
-    users = get_user_model().objects.filter(pk__in=owner_ids)
+    points_by_user = individual_leaderboard_scores(selected_year)
+    users = get_user_model().objects.filter(pk__in=points_by_user)
 
     leaderboard = []
     for user in users:
-        points = competition_points(user, selected_year)
+        points = points_by_user[user.pk]
         if points:
             leaderboard.append(
                 {
@@ -143,7 +109,7 @@ def leaderboards(request):
                 if leaderboard_type == "association" else []
             ),
             "selected_year": selected_year,
-            "available_years": _available_leaderboard_years(selected_year),
+            "available_years": _available_leaderboard_years(),
         },
     )
 
@@ -156,7 +122,7 @@ def individual_leaderboard(request):
         {
             "leaderboard": _individual_leaderboard_rows(selected_year),
             "selected_year": selected_year,
-            "available_years": _available_leaderboard_years(selected_year),
+            "available_years": _available_leaderboard_years(),
         },
     )
 
@@ -170,7 +136,7 @@ def association_leaderboard(request):
             "leaderboard": _association_leaderboard_rows(selected_year),
             "associations_without_registrations": _associations_without_registrations(selected_year),
             "selected_year": selected_year,
-            "available_years": _available_leaderboard_years(selected_year),
+            "available_years": _available_leaderboard_years(),
         },
     )
 
@@ -182,7 +148,7 @@ def association_scoring_rules(request):
         "breedings/association_scoring_rules.html",
         {
             "selected_year": selected_year,
-            "available_years": _available_leaderboard_years(selected_year),
+            "available_years": _available_leaderboard_years(),
             "rules": association_competition_rules(selected_year),
         },
     )
@@ -197,11 +163,12 @@ def association_member_leaderboard(request, association_id):
 
     contribution_by_user = association_year_scores(association, selected_year)
     members = get_user_model().objects.filter(memberships__association=association).distinct()
+    individual_by_user = individual_leaderboard_scores(selected_year, members)
 
     leaderboard = []
     for user in members:
         contribution_points = contribution_by_user.get(user.pk, 0)
-        individual_points = competition_points(user, selected_year)
+        individual_points = individual_by_user.get(user.pk, 0)
         if not contribution_points and not individual_points:
             continue
         leaderboard.append(
@@ -229,9 +196,7 @@ def association_member_leaderboard(request, association_id):
             "association_achievements": association_achievement_presentations(association),
             "leaderboard": leaderboard,
             "selected_year": selected_year,
-            "available_years": _available_leaderboard_years(
-                selected_year, member_registrations
-            ),
+            "available_years": _available_leaderboard_years(member_registrations),
             "view_mode": view_mode,
             "score_key": score_key,
         },
