@@ -1,9 +1,10 @@
 from collections import defaultdict
 from datetime import date, timedelta
 
+from django.db.models import Prefetch
 from django.utils import timezone
 
-from associations.models import Association
+from associations.models import Association, Membership
 from taxonomy.models import Species
 
 from .models import (
@@ -45,28 +46,30 @@ def competition_points_for_registration(registration, year):
     return points_for_registration(registration)
 
 
-def competition_late_reporting_days(year):
-    settings = (
+def _competition_settings(year):
+    return (
         AssociationCompetitionSettings.objects.filter(effective_from_year__lte=year)
         .order_by("-effective_from_year", "-pk")
         .first()
     )
+
+
+def competition_late_reporting_days(year):
+    settings = _competition_settings(year)
     return settings.late_reporting_days if settings is not None else 30
 
 
-def registration_is_timely_for_competition_year(registration, year):
+def registration_is_timely_for_competition_year(registration, year, *, late_reporting_days=None):
     if registration.breeding_date.year != year:
         return False
 
-    # Legacy approved rows created before submitted_at was introduced keep their
-    # historical result. All registrations submitted through the application
-    # have submitted_at and are subject to the deadline below.
+    # Legacy approved rows without a submission date keep their historical result.
     if registration.submitted_at is None:
         return True
 
-    deadline = date(year, 12, 31) + timedelta(
-        days=competition_late_reporting_days(year)
-    )
+    if late_reporting_days is None:
+        late_reporting_days = competition_late_reporting_days(year)
+    deadline = date(year, 12, 31) + timedelta(days=late_reporting_days)
     submitted_date = timezone.localtime(registration.submitted_at).date()
     return submitted_date <= deadline
 
@@ -91,39 +94,65 @@ def career_points(user):
     return sum(best_points_by_species.values())
 
 
-def competition_points(user, year):
-    registrations = (
-        BreedingRegistration.objects.filter(
-            owner=user,
-            status=BreedingRegistration.Status.APPROVED,
-            breeding_date__year=year,
-        )
+def _competition_registrations(queryset):
+    return (
+        queryset.filter(status=BreedingRegistration.Status.APPROVED, species__isnull=False)
         .select_related("species")
+        .order_by()
         .only(
-            "species_id",
-            "species__breeding_class",
-            "status",
-            "awarded_breeding_class",
-            "breeding_date",
-            "submitted_at",
+            "owner_id", "association_id", "species_id", "species__genus_id",
+            "species__breeding_class", "status", "awarded_breeding_class",
+            "breeding_date", "submitted_at",
         )
     )
 
-    best_points_by_species = {}
-    for registration in registrations:
-        if not registration_is_timely_for_competition_year(registration, year):
+
+def _individual_year_scores(year, queryset):
+    reporting_days = competition_late_reporting_days(year)
+    best_points_by_owner = defaultdict(dict)
+    registrations = _competition_registrations(queryset.filter(breeding_date__year=year))
+    for registration in registrations.iterator():
+        if not registration_is_timely_for_competition_year(
+            registration, year, late_reporting_days=reporting_days
+        ):
             continue
         points = competition_points_for_registration(registration, year)
-        if points is None:
-            continue
-        if registration.species_id is None:
-            continue
-        best_points_by_species[registration.species_id] = max(
-            points,
-            best_points_by_species.get(registration.species_id, 0),
-        )
+        if points is not None:
+            by_species = best_points_by_owner[registration.owner_id]
+            by_species[registration.species_id] = max(points, by_species.get(registration.species_id, 0))
 
-    return sum(best_points_by_species.values())
+    return {owner_id: sum(by_species.values()) for owner_id, by_species in best_points_by_owner.items()}
+
+
+def individual_leaderboard_scores(year, users=None):
+    queryset = BreedingRegistration.objects.all()
+    if users is not None:
+        queryset = queryset.filter(owner__in=users)
+    return _individual_year_scores(year, queryset)
+
+
+def competition_points(user, year):
+    return _individual_year_scores(year, BreedingRegistration.objects.filter(owner=user)).get(user.pk, 0)
+
+
+def available_competition_years(queryset):
+    settings = iter(AssociationCompetitionSettings.objects.order_by("effective_from_year", "pk"))
+    next_settings = next(settings, None)
+    reporting_days = 30
+    years = set()
+    registrations = _competition_registrations(queryset).order_by("breeding_date")
+    for registration in registrations.iterator():
+        year = registration.breeding_date.year
+        if year in years:
+            continue
+        while next_settings is not None and next_settings.effective_from_year <= year:
+            reporting_days = next_settings.late_reporting_days
+            next_settings = next(settings, None)
+        if registration_is_timely_for_competition_year(
+            registration, year, late_reporting_days=reporting_days
+        ) and competition_points_for_registration(registration, year) is not None:
+            years.add(year)
+    return sorted(years, reverse=True)
 
 
 def user_year_points(user, year):
@@ -156,11 +185,7 @@ def _competition_limits(year):
 
 
 def _default_genus_limit(year):
-    settings = (
-        AssociationCompetitionSettings.objects.filter(effective_from_year__lte=year)
-        .order_by("-effective_from_year", "-pk")
-        .first()
-    )
+    settings = _competition_settings(year)
     if settings is None:
         return None
     return settings.default_max_registrations_per_genus
@@ -194,36 +219,19 @@ def _matching_limit_ids(registration, limits, group_genus_ids):
     return result
 
 
-def _association_year_results(association, year):
-    limits, group_genus_ids = _competition_limits(year)
+def _association_year_results(registrations, year, limits, group_genus_ids, settings):
     limits_by_id = {limit.pk: limit for limit in limits}
-    default_genus_limit = _default_genus_limit(year)
+    default_genus_limit = settings.default_max_registrations_per_genus if settings else None
+    reporting_days = settings.late_reporting_days if settings else 30
     registrations_by_user = defaultdict(list)
 
-    registrations = (
-        BreedingRegistration.objects.filter(
-            association=association,
-            status=BreedingRegistration.Status.APPROVED,
-            breeding_date__year=year,
-        )
-        .select_related("species__genus")
-        .only(
-            "owner_id",
-            "species_id",
-            "species__genus_id",
-            "species__breeding_class",
-            "status",
-            "awarded_breeding_class",
-            "breeding_date",
-            "submitted_at",
-        )
-    )
-
     for registration in registrations:
-        if not registration_is_timely_for_competition_year(registration, year):
+        if not registration_is_timely_for_competition_year(
+            registration, year, late_reporting_days=reporting_days
+        ):
             continue
         points = competition_points_for_registration(registration, year)
-        if points is not None and registration.species_id is not None:
+        if points is not None:
             registrations_by_user[registration.owner_id].append((registration, points))
 
     totals = {}
@@ -276,15 +284,21 @@ def _association_year_results(association, year):
     return totals, dict(eligible_registration_ids), dict(counted_registration_ids)
 
 
+def _association_results(association, year):
+    limits, group_genus_ids = _competition_limits(year)
+    registrations = _competition_registrations(
+        BreedingRegistration.objects.filter(association=association, breeding_date__year=year)
+    )
+    return _association_year_results(registrations, year, limits, group_genus_ids, _competition_settings(year))
+
+
 def association_year_scores(association, year):
-    totals, _, _ = _association_year_results(association, year)
+    totals, _, _ = _association_results(association, year)
     return totals
 
 
 def association_member_year_registration_ids(association, user, year, contribution_only):
-    _, eligible_registration_ids, counted_registration_ids = _association_year_results(
-        association, year
-    )
+    _, eligible_registration_ids, counted_registration_ids = _association_results(association, year)
     source = counted_registration_ids if contribution_only else eligible_registration_ids
     return source.get(user.pk, [])
 
@@ -294,24 +308,36 @@ def association_competition_points(association, year):
 
 
 def association_leaderboard_scores(year):
-    associations = Association.objects.filter(
-        breeding_registrations__status=BreedingRegistration.Status.APPROVED,
-        breeding_registrations__breeding_date__year=year,
-    ).distinct()
+    registrations_by_association = defaultdict(list)
+    registrations = _competition_registrations(
+        BreedingRegistration.objects.filter(breeding_date__year=year)
+    )
+    for registration in registrations.iterator():
+        registrations_by_association[registration.association_id].append(registration)
+    if not registrations_by_association:
+        return []
+
+    associations = Association.objects.filter(pk__in=registrations_by_association).prefetch_related(
+        Prefetch("memberships", queryset=Membership.objects.only("association_id", "user_id"))
+    )
+    limits, group_genus_ids = _competition_limits(year)
+    settings = _competition_settings(year)
 
     result = []
     for association in associations:
-        scores = association_year_scores(association, year)
-        points = sum(scores.values())
-        if not points:
-            continue
-        member_ids = set(association.memberships.values_list("user_id", flat=True))
-        grower_count = len(member_ids.intersection(scores.keys()))
-        result.append(
-            {
-                "association": association,
-                "points": points,
-                "grower_count": grower_count,
-            }
+        scores, _, _ = _association_year_results(
+            registrations_by_association[association.pk], year, limits, group_genus_ids, settings
         )
+        points = sum(scores.values())
+        if points:
+            result.append(
+                {
+                    "association": association,
+                    "points": points,
+                    "grower_count": len({
+                        membership.user_id for membership in association.memberships.all()
+                        if membership.user_id in scores
+                    }),
+                }
+            )
     return result
