@@ -45,12 +45,12 @@ def _registrations_for_achievement(achievement, registrations):
 
 
 def _target_species_ids(requirement):
-    genus_ids = set(requirement.genera.values_list("pk", flat=True))
-    groups = requirement.species_groups.prefetch_related("genera", "species").all()
+    genus_ids = {genus.pk for genus in requirement.genera.all()}
+    groups = requirement.species_groups.all()
     species_ids = set()
     for group in groups:
-        genus_ids.update(group.genera.values_list("pk", flat=True))
-        species_ids.update(group.species.values_list("pk", flat=True))
+        genus_ids.update(genus.pk for genus in group.genera.all())
+        species_ids.update(species.pk for species in group.species.all())
     return genus_ids, species_ids
 
 
@@ -101,13 +101,7 @@ def _requirement_is_met(requirement, registrations):
 
 
 def _level_is_met(level, registrations):
-    requirements = list(
-        level.requirements.prefetch_related(
-            "genera",
-            "species_groups__genera",
-            "species_groups__species",
-        )
-    )
+    requirements = list(level.requirements.all())
     if not requirements or any(
         requirement.kind not in AchievementRequirement.AUTOMATIC_KINDS
         for requirement in requirements
@@ -116,12 +110,12 @@ def _level_is_met(level, registrations):
     return all(_requirement_is_met(requirement, registrations) for requirement in requirements)
 
 
-def _expected_achievement_keys(achievement, registrations):
+def _expected_achievement_levels(achievement, registrations):
     if achievement.achievement_type not in {
         Achievement.Type.CAREER,
         Achievement.Type.YEARLY,
     }:
-        return set(), {}
+        return {}
     years = sorted({registration.breeding_date.year for registration in registrations})
     if achievement.achievement_type == Achievement.Type.YEARLY:
         evaluation_years = (
@@ -131,15 +125,9 @@ def _expected_achievement_keys(achievement, registrations):
         )
     else:
         evaluation_years = [None]
-    expected = set()
+    expected = {}
 
-    levels = list(
-        achievement.levels.prefetch_related(
-            "requirements__genera",
-            "requirements__species_groups__genera",
-            "requirements__species_groups__species",
-        )
-    )
+    levels = list(achievement.levels.all())
     for year in evaluation_years:
         if achievement.available_year is not None:
             period_registrations = _registrations_for_achievement(
@@ -158,8 +146,8 @@ def _expected_achievement_keys(achievement, registrations):
             )
         for level in levels:
             if _level_is_met(level, period_registrations):
-                expected.add((level.pk, year))
-    return expected, {level.pk: level for level in levels}
+                expected[level.pk, year] = level
+    return expected
 
 
 def sync_achievements(user):
@@ -171,47 +159,20 @@ def sync_achievements(user):
         "levels__requirements__species_groups__genera",
         "levels__requirements__species_groups__species",
     )
-    all_registrations = _registrations_for(user)
-    years = sorted({registration.breeding_date.year for registration in all_registrations})
-
+    registrations = _registrations_for(user)
     for achievement in achievements:
-        if achievement.achievement_type == Achievement.Type.YEARLY:
-            evaluation_years = (
-                [achievement.available_year]
-                if achievement.available_year is not None
-                else years
+        expected = _expected_achievement_levels(achievement, registrations)
+        for (_, year), level in expected.items():
+            UserAchievement.objects.get_or_create(
+                user=user,
+                level=level,
+                calendar_year=year,
+                defaults={
+                    "achievement_name": achievement.name,
+                    "level_name": level.name,
+                    "level_description": level.description,
+                },
             )
-        else:
-            evaluation_years = [None]
-        for year in evaluation_years:
-            if achievement.available_year is not None:
-                registrations = _registrations_for_achievement(
-                    achievement,
-                    all_registrations,
-                )
-            else:
-                registrations = (
-                    [
-                        registration
-                        for registration in all_registrations
-                        if registration.breeding_date.year == year
-                    ]
-                    if year is not None
-                    else all_registrations
-                )
-            for level in achievement.levels.all():
-                if not _level_is_met(level, registrations):
-                    continue
-                UserAchievement.objects.get_or_create(
-                    user=user,
-                    level=level,
-                    calendar_year=year,
-                    defaults={
-                        "achievement_name": achievement.name,
-                        "level_name": level.name,
-                        "level_description": level.description,
-                    },
-                )
 
 
 def _validate_explicit_level(level, achievement_type, requirement_kind):
@@ -317,6 +278,11 @@ def revalidate_achievement(achievement):
     }:
         return {"removed": 0, "created": 0}
 
+    achievement = Achievement.objects.prefetch_related(
+        "levels__requirements__genera",
+        "levels__requirements__species_groups__genera",
+        "levels__requirements__species_groups__species",
+    ).get(pk=achievement.pk)
     existing_queryset = UserAchievement.objects.filter(level__achievement=achievement)
     user_ids = set(existing_queryset.values_list("user_id", flat=True))
     user_ids.update(
@@ -336,7 +302,7 @@ def revalidate_achievement(achievement):
                 species__isnull=False,
             ).select_related("species__genus")
         )
-        expected, levels_by_id = _expected_achievement_keys(achievement, registrations)
+        expected = _expected_achievement_levels(achievement, registrations)
         existing = {
             (earned.level_id, earned.calendar_year): earned
             for earned in existing_queryset.filter(user_id=user_id)
@@ -347,8 +313,10 @@ def revalidate_achievement(achievement):
             deleted, _ = UserAchievement.objects.filter(pk__in=invalid_ids).delete()
             removed += deleted
 
-        for level_id, year in expected - set(existing):
-            level = levels_by_id[level_id]
+        for key, level in expected.items():
+            if key in existing:
+                continue
+            _, year = key
             UserAchievement.objects.create(
                 user_id=user_id,
                 level=level,
