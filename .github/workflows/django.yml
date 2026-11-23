@@ -1,4 +1,4 @@
-name: Mät topplistor
+name: Django
 
 on:
   pull_request:
@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-24.04
     strategy:
       matrix:
-        python-version: ['3.12']
+        python-version: ['3.10', '3.12']
     env:
       MARIADB_DATABASE: breeder_awards
       MARIADB_USER: breeder_ci
@@ -41,78 +41,27 @@ jobs:
           SQL
       - name: Installera Python-beroenden
         run: python -m pip install -r requirements.txt
-      - name: Mät main och optimeringen med samma exempeldata
+      - name: Kontrollera Django, migrationsfiler och tester
+        run: ./mariadbtest
+
+  lint:
+    name: Python-lint och format
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Installera Ruff
+        run: python -m pip install ruff==0.17.6
+      - name: Kontrollera Python-koden
+        run: ruff check .
+      - name: Kontrollera formatet för nya Python-filer
+        if: github.event_name == 'pull_request'
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
         run: |
-          cat > "$RUNNER_TEMP/test_leaderboard_benchmark.py" <<'PY'
-          from datetime import date, datetime
-          from inspect import signature
-          from statistics import median
-          from time import perf_counter
-          
-          from django.contrib.auth import get_user_model
-          from django.db import connection
-          from django.test import TestCase
-          from django.test.utils import CaptureQueriesContext
-          from django.utils import timezone
-          
-          from associations.models import Association, Membership
-          from breedings.models import BreedingRegistration
-          from breedings.views import _association_leaderboard_rows, _available_leaderboard_years, _individual_leaderboard_rows
-          from taxonomy.models import Genus, Species
-          
-          
-          class LeaderboardBench(TestCase):
-              def test_timings(self):
-                  year = timezone.localdate().year
-                  species = Species.objects.create(
-                      genus=Genus.objects.create(scientific_name="Corydoras"),
-                      scientific_name="panda",
-                      breeding_class=Species.BreedingClass.SILVER,
-                  )
-          
-                  def add_report(index, report_year):
-                      association = Association.objects.create(name=f"Club {index}")
-                      user = get_user_model().objects.create_user(email=f"owner{index}@example.com")
-                      Membership.objects.create(user=user, association=association)
-                      BreedingRegistration.objects.create(
-                          owner=user, association=association, species=species,
-                          breeding_date=date(report_year, 3, 1),
-                          submitted_at=timezone.make_aware(datetime(report_year, 3, 2)),
-                          status=BreedingRegistration.Status.APPROVED,
-                          awarded_breeding_class=Species.BreedingClass.SILVER,
-                      )
-          
-                  def measure(label):
-                      functions = (
-                          ("individual", lambda: _individual_leaderboard_rows(year)),
-                          ("association", lambda: _association_leaderboard_rows(year)),
-                          ("years", lambda: _available_leaderboard_years(year)
-                              if "selected_year" in signature(_available_leaderboard_years).parameters
-                              else _available_leaderboard_years()),
-                      )
-                      for name, function in functions:
-                          with CaptureQueriesContext(connection) as queries:
-                              function()
-                          times = []
-                          for _ in range(7):
-                              started = perf_counter()
-                              function()
-                              times.append((perf_counter() - started) * 1000)
-                          print(f"BENCH {label} {name} {len(queries)} queries {median(times):.2f} ms")
-          
-                  add_report(0, year)
-                  measure("small")
-                  for index in range(1, 151):
-                      add_report(index, year)
-                  for index in range(1, 41):
-                      add_report(1000 + index, year - index)
-                  measure("large")
-          PY
-          for ref in e899dd53b3c0eea55805112e6026176be4f7c02f feature/520-batch-leaderboards; do
-            git fetch --depth 1 origin "$ref"
-            target=$(mktemp -d)
-            git worktree add --detach "$target" FETCH_HEAD
-            cp "$RUNNER_TEMP/test_leaderboard_benchmark.py" "$target/"
-            echo "BENCH $ref"
-            (cd "$target" && python manage.py test --noinput test_leaderboard_benchmark)
-          done
+          git diff --diff-filter=A --name-only -z "$BASE_SHA"...HEAD -- '*.py' |
+            xargs -0 -r ruff format --check --
