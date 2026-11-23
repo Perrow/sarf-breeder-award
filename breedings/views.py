@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.contrib.auth import get_user_model
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseNotAllowed, JsonResponse
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
@@ -323,20 +324,23 @@ def breeding_detail(request, pk):
 
 @login_required
 def breeding_return_to_draft(request, pk):
-    registration = get_object_or_404(
-        BreedingRegistration,
-        pk=pk,
-        owner=request.user,
-    )
     if request.method != "POST":
-        return redirect("breeding_detail", pk=registration.pk)
-    if registration.status != BreedingRegistration.Status.SUBMITTED:
-        messages.error(request, "Endast en inskickad odlingsregistrering kan återgå till utkast.")
+        registration = get_object_or_404(BreedingRegistration, pk=pk, owner=request.user)
         return redirect("breeding_detail", pk=registration.pk)
 
-    registration.status = BreedingRegistration.Status.DRAFT
-    registration.submitted_at = None
-    registration.save(update_fields=("status", "submitted_at"))
+    with transaction.atomic():
+        registration = get_object_or_404(
+            BreedingRegistration.objects.select_for_update(),
+            pk=pk,
+            owner=request.user,
+        )
+        if registration.status != BreedingRegistration.Status.SUBMITTED:
+            messages.error(request, "Endast en inskickad odlingsregistrering kan återgå till utkast.")
+            return redirect("breeding_detail", pk=registration.pk)
+
+        registration.status = BreedingRegistration.Status.DRAFT
+        registration.submitted_at = None
+        registration.save(update_fields=("status", "submitted_at"))
     messages.success(request, "Odlingsregistreringen har återställts till utkast.")
     return redirect("breeding_edit", pk=registration.pk)
 

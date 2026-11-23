@@ -4,6 +4,7 @@ from django import forms
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from django.core.exceptions import PermissionDenied
+from django.db import transaction
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.utils import timezone
@@ -130,6 +131,13 @@ def review_list(request):
 
 @login_required
 def review_registration(request, pk):
+    if request.method == "POST":
+        with transaction.atomic():
+            registration = get_object_or_404(
+                BreedingRegistration.objects.select_for_update(), pk=pk
+            )
+            return _review_registration(request, registration)
+
     registration = get_object_or_404(
         BreedingRegistration.objects.select_related(
             "owner", "association", "species__genus"
@@ -139,6 +147,10 @@ def review_registration(request, pk):
         ),
         pk=pk,
     )
+    return _review_registration(request, registration)
+
+
+def _review_registration(request, registration):
     _require_review_access(request.user, registration)
 
     if registration.status != BreedingRegistration.Status.SUBMITTED:
@@ -244,7 +256,18 @@ def review_registration(request, pk):
 
 @login_required
 def resolve_taxonomy(request, pk):
+    if request.method == "POST":
+        with transaction.atomic():
+            registration = get_object_or_404(
+                BreedingRegistration.objects.select_for_update(), pk=pk
+            )
+            return _resolve_taxonomy(request, registration)
+
     registration = get_object_or_404(BreedingRegistration, pk=pk)
+    return _resolve_taxonomy(request, registration)
+
+
+def _resolve_taxonomy(request, registration):
     _require_review_access(request.user, registration)
 
     if registration.status != BreedingRegistration.Status.SUBMITTED:
