@@ -2,13 +2,14 @@ import json
 from datetime import date, timedelta
 from html.parser import HTMLParser
 from pathlib import Path
-from urllib.parse import urlparse
-from urllib.request import Request, urlopen
+from http.client import HTTPException
+from urllib.parse import urljoin, urlparse
 
 from django.core.exceptions import ValidationError
 from django.core.validators import URLValidator
 from django.db import transaction
 
+from .link_metadata import open_public_https, parse_https_url
 from .models import (
     CommonNameSpeciesSynonym,
     Geography,
@@ -134,13 +135,20 @@ def _link_list(row):
         url = value.get("url")
         if not isinstance(url, str) or not url.strip():
             raise SpeciesImportError("Varje länk måste innehålla en icke-tom 'url'.")
+        url = url.strip()
+        try:
+            parse_https_url(url)
+        except (ValidationError, ValueError) as error:
+            raise SpeciesImportError(
+                "Artlänkens 'url' måste vara en giltig HTTPS-adress på port 443."
+            ) from error
         title = value.get("title", "")
         source_name = value.get("source_name", "")
         if not isinstance(title, str) or not isinstance(source_name, str):
             raise SpeciesImportError("Länkens 'title' och 'source_name' måste vara text.")
         result.append(
             {
-                "url": url.strip(),
+                "url": url,
                 "title": title.strip(),
                 "source_name": source_name.strip(),
             }
@@ -159,17 +167,24 @@ def _source_name_from_url(url):
 
 def _fetch_page_title(url):
     try:
-        request = Request(url, headers={"User-Agent": "BreederAwardsSpeciesImporter/1.0"})
-        with urlopen(request, timeout=5) as response:
-            if response.headers.get_content_type() != "text/html":
-                return ""
-            charset = response.headers.get_content_charset() or "utf-8"
-            html = response.read(262144).decode(charset, errors="replace")
-        parser = _TitleParser()
-        parser.feed(html)
-        return parser.title[:300]
-    except (OSError, ValueError, UnicodeError):
-        return ""
+        for _ in range(4):
+            with open_public_https(parse_https_url(url)) as response:
+                if response.status in {301, 302, 303, 307, 308}:
+                    location = response.getheader("Location")
+                    if not location:
+                        return ""
+                    url = urljoin(url, location)
+                    continue
+                if response.status != 200 or response.headers.get_content_type() != "text/html":
+                    return ""
+                charset = response.headers.get_content_charset() or "utf-8"
+                html = response.read(262144).decode(charset, errors="replace")
+            parser = _TitleParser()
+            parser.feed(html)
+            return parser.title[:300]
+    except (HTTPException, LookupError, OSError, ValidationError, ValueError):
+        pass
+    return ""
 
 
 def _ensure_common_synonym(species, common_name, stats):

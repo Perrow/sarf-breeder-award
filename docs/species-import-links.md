@@ -59,3 +59,11 @@ Exempel på en import som endast lägger till en ny extern länk:
 Om `genus` + `scientific_name` inte motsvarar en befintlig art måste posten fortfarande innehålla `breeding_class` och minst ett värde i `swedish_names`, eftersom de behövs för att skapa en ny art. En ofullständig post för en ny art ger valideringsfel och ska inte lämna kvar någon delvis skapad genus- eller artpost.
 
 Om `genus` + `scientific_name` i stället motsvarar ett gammalt vetenskapligt namn som finns registrerat som synonym används den befintliga arten och kompletterande data läggs på den. Om samma vetenskapliga synonym finns på flera arter avbryts den posten med ett tydligt fel i stället för att välja en art godtyckligt.
+
+Nya länkar i importfilens `links` ska använda HTTPS på port 443. Äldre HTTP-länkar
+som redan finns i databasen kan ligga kvar. Utelämna dem vid en ny import eller
+ange motsvarande HTTPS-adress om källan stöder det.
+
+Om en titel saknas försöker importen hämta den från webbsidan. Hämtningen använder
+publika IP-adresser och kontrollerar även varje omdirigering. Om sidan inte går att
+hämta kan länken fortfarande sparas med importens befintliga reservtitel.
