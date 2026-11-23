@@ -2,7 +2,10 @@ import json
 import tempfile
 from datetime import date
 from pathlib import Path
+from types import SimpleNamespace
+from unittest.mock import patch
 
+from django.contrib.admin import site
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
@@ -10,6 +13,7 @@ from django.utils import timezone
 from associations.models import Association
 from breedings.models import BreedingRegistration
 from breedings.scoring import career_points, competition_points, points_for_registration
+from taxonomy.admin import SpeciesAdmin
 from taxonomy.models import Genus, Species
 from taxonomy.species_import import import_species_file
 
@@ -106,6 +110,32 @@ class UnratedBreedingClassTests(TestCase):
         self.assertEqual(self.species.breeding_class, Species.BreedingClass.SILVER)
         self.assertEqual(registration.awarded_breeding_class, Species.BreedingClass.SILVER)
         self.assertEqual(registration.awarded_points, 3)
+
+    def test_admin_classification_updates_approved_history(self):
+        registration = self.add_registration(timezone.localdate().year - 1)
+        self.species.breeding_class = Species.BreedingClass.SILVER
+
+        SpeciesAdmin(Species, site).save_model(
+            None, self.species, SimpleNamespace(cleaned_data={}), change=True
+        )
+
+        registration.refresh_from_db()
+        self.assertEqual(registration.awarded_breeding_class, Species.BreedingClass.SILVER)
+        self.assertEqual(registration.awarded_points, 3)
+
+    def test_classification_rolls_back_if_report_points_cannot_be_updated(self):
+        registration = self.add_registration(timezone.localdate().year - 1)
+        self.species.breeding_class = Species.BreedingClass.SILVER
+
+        with patch("breedings.scoring.points_for_breeding_class", side_effect=ValueError):
+            with self.assertRaises(ValueError):
+                self.species.save(update_fields=["breeding_class"])
+
+        self.species.refresh_from_db()
+        registration.refresh_from_db()
+        self.assertEqual(self.species.breeding_class, Species.BreedingClass.UNRATED)
+        self.assertEqual(registration.awarded_breeding_class, Species.BreedingClass.UNRATED)
+        self.assertEqual(registration.awarded_points, 1)
 
     def test_changing_from_one_assessed_class_does_not_rewrite_history(self):
         self.species.breeding_class = Species.BreedingClass.GOLD

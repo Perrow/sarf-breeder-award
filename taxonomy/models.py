@@ -140,6 +140,12 @@ class Species(models.Model):
             raise ValidationError(errors)
 
     def save(self, *args, **kwargs):
+        """Save the species and apply the initial classification to eligible reports.
+
+        Admin and import use this path. A change from UNRATED also assigns the
+        new class and its points to approved reports still awarded UNRATED,
+        including reports from previous years. Both writes commit together.
+        """
         from django.db import transaction
 
         self.cl_number = normalize_cl_number(self.cl_number)
@@ -158,17 +164,20 @@ class Species(models.Model):
                 previous_class == self.BreedingClass.UNRATED
                 and self.breeding_class != self.BreedingClass.UNRATED
             ):
-                from breedings.models import BreedingRegistration
-                from breedings.scoring import points_for_breeding_class
+                self._classify_approved_unrated_reports()
 
-                BreedingRegistration.objects.filter(
-                    species=self,
-                    status=BreedingRegistration.Status.APPROVED,
-                    awarded_breeding_class=self.BreedingClass.UNRATED,
-                ).update(
-                    awarded_breeding_class=self.breeding_class,
-                    awarded_points=points_for_breeding_class(self.breeding_class),
-                )
+    def _classify_approved_unrated_reports(self):
+        from breedings.models import BreedingRegistration
+        from breedings.scoring import points_for_breeding_class
+
+        BreedingRegistration.objects.filter(
+            species=self,
+            status=BreedingRegistration.Status.APPROVED,
+            awarded_breeding_class=self.BreedingClass.UNRATED,
+        ).update(
+            awarded_breeding_class=self.breeding_class,
+            awarded_points=points_for_breeding_class(self.breeding_class),
+        )
 
     def get_species_groups(self, include_hidden=False):
         groups = SpeciesGroup.objects.filter(Q(genera=self.genus) | Q(species=self)).distinct()
