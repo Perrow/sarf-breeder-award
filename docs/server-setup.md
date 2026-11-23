@@ -1,17 +1,17 @@
 # Serverinstallation
 
 Den här guiden beskriver en enkel installation på en Ubuntu 24.04-server där
-Nginx terminerar HTTPS och skickar anrop till Gunicorn/Django. MariaDB körs på
+Apache terminerar HTTPS och skickar anrop till Gunicorn/Django. MariaDB körs på
 samma server. Anpassa domännamn, lösenord och sökvägar till driftmiljön.
 
 ## 1. Installera systempaket
 
 ```bash
 sudo apt update
-sudo apt install git python3 python3-venv python3-dev nginx certbot \
-    python3-certbot-nginx mariadb-server mariadb-client \
+sudo apt install git python3 python3-venv python3-dev apache2 certbot \
+    python3-certbot-apache mariadb-server mariadb-client \
     default-libmysqlclient-dev build-essential pkg-config
-sudo systemctl enable --now mariadb nginx
+sudo systemctl enable --now mariadb apache2
 ```
 
 Ubuntu 24.04 innehåller MariaDB 10.11. Kontrollera att versionen och projektets
@@ -167,11 +167,9 @@ User=breeder-awards
 Group=www-data
 WorkingDirectory=/var/www/breeder-awards
 EnvironmentFile=/etc/breeder-awards.env
-RuntimeDirectory=breeder-awards
-RuntimeDirectoryMode=0755
 ExecStart=/var/www/breeder-awards/.venv/bin/gunicorn \
     --workers 3 \
-    --bind unix:/run/breeder-awards/gunicorn.sock \
+    --bind 127.0.0.1:8001 \
     --umask 007 \
     breeder_awards.wsgi:application
 Restart=on-failure
@@ -195,53 +193,82 @@ Loggar visas med:
 sudo journalctl -u breeder-awards -f
 ```
 
-## 6. Konfigurera Nginx och HTTPS
+## 6. Konfigurera Apache, HTTPS och HSTS
 
-Skapa `/etc/nginx/sites-available/breeder-awards` och byt domännamnen:
+Gunicorn lyssnar på `127.0.0.1:8001`. På Odlingskampanjen hanterar Apache
+`odlingskampanjen.se` och `www.odlingskampanjen.se` i egna virtuella värdar.
+Kontrollera vilka filer och värdar Apache faktiskt läser med `sudo apache2ctl -S`.
 
-```nginx
-server {
-    listen 80;
-    listen [::]:80;
-    server_name example.org www.example.org;
-
-    client_max_body_size 20M;
-
-    location /static/ {
-        alias /var/www/breeder-awards/staticfiles/;
-    }
-
-    location /media/ {
-        alias /var/www/breeder-awards/media/;
-    }
-
-    location / {
-        include proxy_params;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_pass http://unix:/run/breeder-awards/gunicorn.sock;
-    }
-}
-```
-
-Aktivera webbplatsen och kontrollera konfigurationen:
+För en ny installation, aktivera modulerna och skapa webbplatsens HTTP-värd:
 
 ```bash
-sudo ln -s /etc/nginx/sites-available/breeder-awards \
-    /etc/nginx/sites-enabled/breeder-awards
-sudo nginx -t
-sudo systemctl reload nginx
+sudo a2enmod proxy proxy_http headers ssl
 ```
 
-När DNS pekar på servern hämtas och konfigureras certifikatet:
+I `/etc/apache2/sites-available/breeder-awards.conf`:
+
+```apache
+<VirtualHost *:80>
+    ServerName odlingskampanjen.se
+    ServerAlias www.odlingskampanjen.se
+</VirtualHost>
+```
+
+Aktivera värden och låt Certbot skapa HTTPS-värden och HTTP-redirecten:
 
 ```bash
-sudo certbot --nginx -d example.org -d www.example.org
+sudo a2ensite breeder-awards
+sudo apache2ctl configtest
+sudo systemctl reload apache2
+sudo certbot --apache --redirect -d odlingskampanjen.se -d www.odlingskampanjen.se
 sudo certbot renew --dry-run
 ```
 
-Django litar i produktionsläge på `X-Forwarded-Proto` från proxyn. Nginx måste
-därför sätta headern enligt konfigurationen ovan.
+Använd följande direktiv i den befintliga HTTPS-värden i
+`breeder-awards-le-ssl.conf`. Behåll Certbots certifikatdirektiv och anpassa
+sökvägarna till den faktiska installationen.
+
+```apache
+ProxyPreserveHost On
+RequestHeader set X-Forwarded-Proto "https"
+
+ProxyPass "/static/" "!"
+ProxyPass "/media/" "!"
+Alias "/static/" "/var/www/breeder-awards/staticfiles/"
+Alias "/media/" "/var/www/breeder-awards/media/"
+
+<Directory "/var/www/breeder-awards/staticfiles/">
+    Require all granted
+</Directory>
+<Directory "/var/www/breeder-awards/media/">
+    Require all granted
+</Directory>
+
+ProxyPass "/" "http://127.0.0.1:8001/"
+ProxyPassReverse "/" "http://127.0.0.1:8001/"
+
+Header onsuccess unset Strict-Transport-Security
+Header always set Strict-Transport-Security "max-age=300"
+```
+
+Apache äger HSTS för den här HTTPS-värden. Börja med fem minuter och höj vid
+en separat driftändring efter att HTTPS och certifikatförnyelsen har
+verifierats. `includeSubDomains` och `preload` kräver separat verifiering
+av andra värdar och tjänster.
+
+```bash
+sudo apache2ctl configtest
+sudo systemctl reload apache2
+curl -sSI https://odlingskampanjen.se/
+curl -sSI https://www.odlingskampanjen.se/
+curl -sSI https://odlingskampanjen.se/hsts-kontroll-sidan-finns-inte/
+curl -sSI http://odlingskampanjen.se/
+```
+
+Varje HTTPS-svar, inklusive omdirigeringar och 404-svar, ska innehålla exakt
+en `Strict-Transport-Security: max-age=300`. HTTP ska omdirigera till HTTPS
+utan HSTS-headern. Vid återställning kan Apache skicka `max-age=0` över
+fungerande HTTPS så att klienter tömmer sin tidigare policy.
 
 ## 7. Uppdatera servern
 
