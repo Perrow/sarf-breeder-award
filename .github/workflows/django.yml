@@ -44,6 +44,29 @@ jobs:
       - name: Kontrollera Django, migrationsfiler och tester
         run: ./mariadbtest
 
+      - name: Verifiera separata ändringar
+        if: matrix.python-version == '3.12'
+        run: |
+          result=0
+          verify() {
+            name="$1"
+            shift
+            git fetch --depth 1 origin "$name" || { result=1; return; }
+            git worktree add --detach "$RUNNER_TEMP/$name" FETCH_HEAD || { result=1; return; }
+            (
+              cd "$RUNNER_TEMP/$name"
+              python manage.py test --noinput "$@"
+            ) || result=1
+          }
+          verify feature/483-registration-focus-order users.tests.UserAccountTests
+          verify feature/520-batch-leaderboards breedings.test_leaderboard_queries breedings.test_individual_leaderboard breedings.test_association_leaderboard breedings.test_association_member_leaderboard breedings.test_leaderboard_year_selector breedings.test_species_reclassification
+          verify feature/522-shared-achievement-evaluation progression
+          verify feature/523-lock-review-decisions breedings.test_review_concurrency breedings.test_review breedings.test_taxonomy_resolution
+          verify feature/524-safe-species-link-fetch taxonomy.test_species_link_metadata taxonomy.test_species_links taxonomy.test_species_data_files
+          verify feature/525-audit-awarded-points breedings.test_awarded_points_audit
+          verify feature/530-document-unrated-reclassification taxonomy.test_unrated_breeding_class
+          exit "$result"
+
   lint:
     name: Python-lint och format
     runs-on: ubuntu-24.04
